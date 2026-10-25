@@ -45,7 +45,13 @@ export function createRenderPipeline(
   return {
     render(
       paused: boolean,
-      timing: { physicsMs: number; physicsSteps: number; alpha: number; networkDelayMs: number },
+      timing: {
+        physicsMs: number;
+        physicsSteps: number;
+        alpha: number;
+        networkDelayMs: number;
+        snapshotAgeMs: number;
+      },
     ) {
       const now = performance.now();
       if (paused || previouslyPaused !== paused) {
@@ -84,6 +90,7 @@ export function createRenderPipeline(
           physicsSteps: simulatedSteps,
           interpolationAlpha: timing.alpha,
           networkInterpolationDelayMs: timing.networkDelayMs,
+          networkSnapshotAgeMs: timing.snapshotAgeMs,
           gpuMemory: 'UNAVAILABLE_WEBGL',
           frameP95Ms: sorted[Math.max(0, Math.ceil(sorted.length * 0.95) - 1)] ?? 0,
           frameTimesMs: [...frames],
@@ -103,7 +110,7 @@ export function createRenderPipeline(
 Frame ${detail.frameMs.toFixed(2)} ms · p95 ${detail.frameP95Ms.toFixed(2)} · max ${detail.frameMaxMs.toFixed(2)}
 Physics ${detail.physicsCpuMsPerStep.toFixed(3)} ms/step · 30 Hz
 Render CPU ${detail.renderCpuMs.toFixed(2)} ms · calls ${detail.drawCalls}
-Network buffer ${detail.networkInterpolationDelayMs} ms · DPR ${dpr.toFixed(2)}`;
+Network buffer ${detail.networkInterpolationDelayMs} ms · age ${detail.networkSnapshotAgeMs.toFixed(0)} ms · DPR ${dpr.toFixed(2)}`;
         renderer.domElement.dataset.fps = detail.fps.toFixed(1);
         renderer.domElement.dataset.drawCalls = String(detail.drawCalls);
         if (requested === 'auto' && !paused && !document.hidden) {

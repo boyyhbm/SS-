@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createRoadWear } from './road-wear';
+import { stableLightTargets } from './light-pool';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { RaceAssets } from './assets';
 import { qualityPresets, type RenderTier } from './quality';
@@ -546,6 +547,7 @@ export function createCityWorld(
     lampZ = Infinity;
   const lampTargets = lamps.map(() => ({
     current: undefined as (typeof fixturePositions)[number] | undefined,
+    target: undefined as (typeof fixturePositions)[number] | undefined,
   }));
   return {
     clipCamera(target: THREE.Vector3, desired: THREE.Vector3) {
@@ -595,12 +597,21 @@ export function createCityWorld(
             (b.point.x - race.x) ** 2 -
             (b.point.z - race.z) ** 2,
         );
+        const targets = stableLightTargets(lampTargets, fixturePositions.slice(0, lamps.length));
+        lampTargets.forEach((slot, i) => (slot.target = targets[i]));
         lampX = race.x;
         lampZ = race.z;
       }
       lamps.forEach((lamp, i) => {
         const target = lampTargets[i],
-          p = fixturePositions[i];
+          p = target.target;
+        if (!p) return;
+        if (!target.current) {
+          lamp.position.copy(p.point);
+          lamp.color.set(p.warm ? '#ffd19a' : '#dce3d4');
+          lamp.intensity = 100;
+          target.current = p;
+        }
         if (target.current !== p) {
           lamp.intensity *= Math.exp(-dt * 10);
           if (lamp.intensity < 2) {

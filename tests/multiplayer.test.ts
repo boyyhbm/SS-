@@ -192,3 +192,11 @@ it('reconciles local yaw over the short arc instead of snapping rotation at each
   ).toBeLessThan(0.04);
   expect(p.state.heading).toBeCloseTo(-Math.PI + 0.15);
 });
+it('reports snapshot age from the synchronized server clock separately from its interpolation buffer', () => {
+  let now = 1000;
+  vi.spyOn(Date, 'now').mockImplementation(() => now);
+  const p = new RacePrediction('local', () => {});
+  p.receive(snapshot(1000));
+  now = 1175;
+  expect(p.snapshotAgeMs()).toBe(175);
+});

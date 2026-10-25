@@ -83,7 +83,7 @@ export function createRacingLine(scene: THREE.Scene) {
       for (const segment of selected) {
         const p = data.samples[segment.index],
           ahead = assistAhead(p, progress, data.length, data.closed),
-          visible = ahead >= -5 && ahead <= 145 && (mode === 'full' || p.targetSpeed < 38),
+          visible = ahead >= 2 && ahead <= 145 && (mode === 'full' || p.targetSpeed < 38),
           key = racingLineColor(state.speed, p, Math.max(0, ahead)),
           color = palette[key];
         if (visible) stats[key]++;

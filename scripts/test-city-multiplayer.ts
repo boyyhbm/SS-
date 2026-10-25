@@ -101,6 +101,7 @@ try {
         prediction: RacePrediction;
         reconnects: number;
         errors: number[];
+        rtts: number[];
       };
       async function connect(i: number, roomId?: string): Promise<Peer> {
         const ticket = await control(
@@ -125,6 +126,7 @@ try {
           snapshot: null,
           reconnects: 0,
           errors: [],
+          rtts: [],
           prediction: new RacePrediction(users[i].id, (input) => {
             if (random() < profile.loss) return;
             schedule(() => {
@@ -144,7 +146,17 @@ try {
         );
         room.onMessage('event', () => {});
         room.onMessage('notice', () => {});
-        room.onMessage('pong', () => {});
+        room.onMessage('pong', (p: { echo: number }) =>
+          schedule(() => peer.rtts.push(Date.now() - p.echo)),
+        );
+        timers.push(
+          setInterval(() => {
+            const stamp = Date.now();
+            schedule(() => {
+              if (room.connection.isOpen) room.send('ping', stamp);
+            });
+          }, 1000),
+        );
         room.onDrop(() => {
           peer.prediction.connected = false;
         });
@@ -223,6 +235,10 @@ try {
         routeVersion: match.routeVersion,
         carContacts: contactMode,
         networkSimulation: profile,
+        measuredRttMedianMs:
+          [...a.rtts, ...b.rtts].sort((a, b) => a - b)[
+            Math.floor((a.rtts.length + b.rtts.length) / 2)
+          ] ?? null,
         simulationScope:
           'Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark',
         reconnects: b.reconnects,

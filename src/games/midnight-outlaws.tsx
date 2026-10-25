@@ -456,6 +456,7 @@ export function MidnightOutlaws({
             physicsSteps,
             alpha,
             networkDelayMs: network ? 120 : 0,
+            snapshotAgeMs: network?.snapshotAgeMs?.() ?? 0,
           });
           physicsMs = 0;
           physicsSteps = 0;

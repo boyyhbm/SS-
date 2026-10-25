@@ -8,6 +8,7 @@ export interface RaceNetworkDriver {
   remotePlayers(): NetworkPlayer[];
   car(): string;
   route(): RouteSelection;
+  snapshotAgeMs?(): number;
 }
 export class RacePrediction implements RaceNetworkDriver {
   state = initialRace();
@@ -127,6 +128,9 @@ export class RacePrediction implements RaceNetworkDriver {
   }
   resetPending() {
     this.pending = [];
+  }
+  snapshotAgeMs() {
+    return this.snapshot ? Math.max(0, Date.now() + this.offset - this.snapshot.serverTime) : 0;
   }
   route() {
     return this.snapshot?.route ?? selectRoute();
