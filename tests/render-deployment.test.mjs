@@ -117,6 +117,8 @@ describe('Render deployment', () => {
       expect(s.region).toBe('frankfurt');
       expect(s.autoDeployTrigger).toBe('checksPass');
       expect(s.numInstances).toBe(1);
+      // Render rejects a custom shutdown delay on disk-backed services.
+      if (s.disk) expect(s).not.toHaveProperty('maxShutdownDelaySeconds');
       expect(s.envVars.find((v) => v.key === 'DATABASE_URL').fromDatabase.property).toBe(
         'connectionString',
       );

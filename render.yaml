@@ -59,7 +59,6 @@ services:
     dockerContext: .
     preDeployCommand: node scripts/release.mjs
     healthCheckPath: /api/health
-    maxShutdownDelaySeconds: 10
     disk:
       name: nexus-uploads
       mountPath: /var/data

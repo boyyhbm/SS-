@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T10:50:56.676Z",
+  "updatedAt": "2026-10-25T11:12:31.388Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": null,
@@ -15,7 +15,7 @@
   "blockers": [
     "No Render authorization configured for the agent",
     "Render API requests blocked by environment proxy: CONNECT 403",
-    "Render account connection and live Blueprint validation have not been performed"
+    "Corrected Blueprint awaits retry in the owner dashboard; services are not yet deployed"
   ],
   "prepared": [
     "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
@@ -33,5 +33,11 @@
   "historicalLocalHttpsReport": "railway-local-https-tests.json",
   "runbook": "render-production.md",
   "localValidationReport": "render-local-tests.json",
-  "localRestoreReport": "deployment-local-tests.json"
+  "localRestoreReport": "deployment-local-tests.json",
+  "blueprintValidation": {
+    "lastHostResponse": "REJECTED",
+    "reason": "Render does not support maxShutdownDelaySeconds for services with a disk",
+    "fix": "Removed the unsupported field from disk-backed nexus-web; retained it for nexus-multiplayer",
+    "status": "AWAITING_DASHBOARD_RETRY"
+  }
 }
