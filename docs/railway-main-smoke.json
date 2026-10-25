@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-25T01:37:35.784Z",
+  "scope": "LOCAL main database; not a public production deployment",
+  "home": 200,
+  "consoleApi": 200,
+  "webHealth": 200,
+  "multiplayerHealth": 200,
+  "guestUser": null,
+  "guestLibraryCount": 0,
+  "availableGames": 1,
+  "comingSoonGames": 3
+}

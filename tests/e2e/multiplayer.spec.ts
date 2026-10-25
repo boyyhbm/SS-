@@ -198,6 +198,11 @@ test('real accounts → friends → party → private invitation → synchronize
       w.nexusDriverPaused = true;
       w.nexusTestPads.connected = false;
     });
+    // Wait for the input manager to observe the absent device. Neutral throttle
+    // can already be visible from the preceding pause and is not a disconnect acknowledgement.
+    await expect(
+      a.getByText('Контроллер отключён · DualSense virtual test', { exact: true }),
+    ).toBeVisible();
     await expect(a.locator('canvas')).toHaveAttribute('data-throttle', '0');
     await expect(a.getByTestId('online-player')).toHaveAttribute('data-phase', 'racing');
     await expect(a.locator('.pause-overlay')).toHaveCount(0);

@@ -28,5 +28,7 @@
   ],
   "localRehearsalReport": "railway-local-tests.json",
   "localHttpsReport": "railway-local-https-tests.json",
+  "localValidationReport": "railway-validation.json",
+  "localMainSmoke": "railway-main-smoke.json",
   "runbook": "railway-production.md"
 }

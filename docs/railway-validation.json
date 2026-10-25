@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-25T01:38:01.909Z",
+  "scope": "LOCAL validation; public Railway deployment not performed",
+  "publicUrl": null,
+  "publicDeploymentVerified": false,
+  "node": "v24.19.0",
+  "productionBuild": "PASS",
+  "typecheck": "PASS",
+  "eslint": "PASS",
+  "unit": {
+    "passed": 59,
+    "files": 8
+  },
+  "browser": {
+    "lastFullRun": {
+      "passed": 15,
+      "failed": 1,
+      "duration": "7.5m",
+      "failure": "One vehicle DNF in multiplayer scenario"
+    },
+    "afterFixtureFix": {
+      "passed": 1,
+      "failed": 0,
+      "duration": "2.9m",
+      "scenario": "Two accounts, private race, controller disconnect/reconnect, both server-verified finishes and rematch"
+    },
+    "all16RepeatedTogetherAfterFixtureFix": false
+  },
+  "docker": {
+    "build": "PASS",
+    "images": {
+      "web": "sha256:e3a077af50f54a1c0bf48486e5517c4d888d7293f19f5fc6d59d7f5e70315725",
+      "multiplayer": "sha256:7be87c301c597313e11ad3d95b79f5cd83978e89badd849860dc9087a65d2c24"
+    },
+    "publicMultiplayerBuildArgument": "Local fixture only; rebuild with assigned public WSS origin on Railway"
+  },
+  "railwayIaC": {
+    "sdk": "3.16.0",
+    "bootstrapGraph": "VALID",
+    "fullGraph": "VALID",
+    "livePlanOrApply": "NOT_RUN"
+  },
+  "backupAndOwnership": "railway-local-tests.json",
+  "httpsWssAndActualRestart": "railway-local-https-tests.json",
+  "mainEnvironment": "railway-main-smoke.json",
+  "physicalControllers": "UNVERIFIED",
+  "githubActionsResult": "NOT_VERIFIED_FROM_ENVIRONMENT"
+}
