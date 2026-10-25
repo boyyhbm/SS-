@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T13:33:09.853Z",
+  "updatedAt": "2026-10-25T17:24:52.313093+00:00",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -39,8 +39,9 @@
     }
   },
   "publicAcceptanceTests": {
-    "status": "PASSED_BEFORE_AND_AFTER_ACTUAL_HOST_RESTART",
-    "report": "render-public-tests.json"
+    "status": "PASSED_NEW_CODE_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
+    "report": "world-update/public-tests.json",
+    "historicalReport": "render-public-tests.json"
   },
   "physicalControllers": "UNVERIFIED",
   "blockers": [],
@@ -83,28 +84,39 @@
     "checksOnApplicationCommit": "SUCCESS",
     "autoDeployTrigger": "checksPass",
     "observedAutomaticTrigger": "new_commit after passing checks; both services reached LIVE and readiness 200",
-    "lastVerifiedCodeCommit": "623019a1b5ffea271a18b339add2bbe712773952",
+    "lastVerifiedCodeCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
     "checksOnLastVerifiedCodeCommit": "SUCCESS",
-    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40197091776"
+    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40214485818"
   },
   "knownLimitations": [
     "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
-    "Public GPU performance and capacity not benchmarked",
     "Active rooms are lost during a game server restart",
-    "Restart temporarily interrupts availability; observed multiplayer readiness recovery took about 3.5 minutes"
+    "Restart temporarily interrupts availability; observed multiplayer readiness recovery took about 3.5 minutes",
+    "Physical gaming GPU performance and production capacity unverified; measured software High/1080p is about 0.31 FPS",
+    "New city routes single-player only; existing online circuit preserved"
   ],
   "latestVerifiedRollout": {
     "web": {
       "status": "LIVE",
-      "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+      "commit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
       "trigger": "new_commit",
       "healthStatus": 200
     },
     "multiplayer": {
       "status": "LIVE",
-      "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+      "commit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
       "trigger": "new_commit",
       "healthStatus": 200
     }
+  },
+  "worldUpdate": {
+    "report": "world-update/validation.json",
+    "cityRoutes": 3,
+    "newCityRoutesMultiplayer": false,
+    "originalOnlineCircuitRegression": "PASSED_PUBLIC_WSS",
+    "graphicsPerformance": "world-update/performance.md",
+    "high1080p60FpsOnGamingPc": "UNVERIFIED",
+    "gameplayVideo": "world-update/gameplay.mp4",
+    "screenshots": "world-update/gallery.md"
   }
 }

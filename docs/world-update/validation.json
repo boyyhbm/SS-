@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-25T17:23:26.850935+00:00",
+  "sourceCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+  "ci": {
+    "url": "https://github.com/boyyhbm/SS-/actions/runs/40214485818",
+    "conclusion": "SUCCESS",
+    "build": "PASSED",
+    "typescript": "PASSED",
+    "eslint": "PASSED",
+    "unit": {
+      "passed": 88,
+      "files": 12
+    },
+    "browserScenarios": {
+      "passed": 19
+    },
+    "backupRestoreAndOwnership": "PASSED"
+  },
+  "local": {
+    "productionBuild": "PASSED",
+    "typescript": "PASSED",
+    "eslint": "PASSED",
+    "unitPassed": 88,
+    "newCityScenarios": {
+      "passed": 3,
+      "durationSeconds": 228,
+      "checks": [
+        "ordered checkpoints",
+        "actual lap/sprint finish",
+        "route-scoped durable record",
+        "finish-menu keyboard return"
+      ]
+    },
+    "runtimeAuditKnownVulnerabilities": 0,
+    "isolatedQaDatabaseRemoved": true,
+    "mainDatabaseAndPrivateBackupsPreserved": true,
+    "mainServicesRestored": true
+  },
+  "camera": {
+    "report": "camera-report.json",
+    "actualSpeedSamplesKph": [0, 50, 100, 151],
+    "distanceMeters": 7.8,
+    "fovDegrees": 58,
+    "measurement": "Projected GLB bounds, not pixel-segmented silhouette",
+    "obstacles": ["facades", "parked cars", "lamp poles", "shelters and bins"]
+  },
+  "video": {
+    "file": "gameplay.mp4",
+    "codec": "H.264",
+    "durationSeconds": 230,
+    "width": 1280,
+    "height": 720,
+    "containerFps": 25,
+    "gameFpsIsNotContainerFps": true,
+    "decodedWithoutErrors": true,
+    "source": "Actual browser captures; normal timing, no generated frames",
+    "contains": [
+      "camera acceleration",
+      "Downtown Circuit section",
+      "Midnight Sprint section",
+      "Industrial Run section"
+    ],
+    "fullRaceVideo": false
+  },
+  "screenshots": [
+    "straight-markings.png",
+    "curved-markings.png",
+    "junction.png",
+    "car-close.png",
+    "industrial-environment.png",
+    "route-map.png"
+  ],
+  "performance": {
+    "report": "performance-summary.json",
+    "details": "performance.md",
+    "physicalGpuTested": false,
+    "high1080pSoftwareFps": 0.3140481592852019,
+    "high1080p60Fps": "NOT_VERIFIED_ON_GAMING_PC"
+  },
+  "limitations": [
+    "New city routes are single-player only; existing multiplayer retains original circuit",
+    "No physical gamepad, USB/Bluetooth, Safari or Firefox validation",
+    "Software WebGL is very slow; gaming GPU performance remains unverified",
+    "Some blank facades and open blocks remain; no traffic or pedestrians",
+    "Single-player records are private client simulation results with server bounds/session validation; multiplayer results are server authoritative"
+  ],
+  "production": {
+    "web": "LIVE; readiness 200",
+    "multiplayer": "LIVE; readiness 200",
+    "report": "public-tests.json",
+    "newSinglePlayerRoute": "PASSED_PUBLIC_DOWNTOWN_CIRCUIT",
+    "twoIndependentWssClients": "PASSED",
+    "serverVerifiedFinishesAndRematch": "PASSED",
+    "persistenceAcrossAutomaticRollout": "PASSED_EXACT_SNAPSHOT_COMPARISON",
+    "verificationAccountsRemoved": 4,
+    "privateCredentialLedgersRemoved": true
+  }
+}

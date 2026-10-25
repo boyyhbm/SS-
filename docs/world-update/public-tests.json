@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-25T17:24:52.313093+00:00",
+  "scope": "Actual public HTTPS/WSS; normal certificate validation",
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
+  "multiplayerUrl": "https://nexus-multiplayer.onrender.com",
+  "sourceCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+  "passed": true,
+  "baselineBeforeRollout": {
+    "date": "2026-10-25T16:55:05.462Z",
+    "scope": "PUBLIC HTTPS/WSS",
+    "publicDeploymentVerified": false,
+    "passed": true,
+    "checks": [
+      "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+      "Logout/re-login retains library and favorite; account-owned controller profile saved",
+      "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+      "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+      "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+    ],
+    "controllerHardware": "Physical controllers not tested; virtual Gamepad API only"
+  },
+  "persistenceAcrossActualRollout": {
+    "date": "2026-10-25T17:20:41.795Z",
+    "scope": "PUBLIC HTTPS/WSS",
+    "publicDeploymentVerified": true,
+    "passed": true,
+    "checks": [
+      "Re-login after an externally triggered restart preserves accounts, library, favorites, controller profile, saves, friends and server-verified results"
+    ],
+    "controllerHardware": "Physical controllers not tested; virtual Gamepad API only"
+  },
+  "newCodeAcceptance": {
+    "date": "2026-10-25T17:23:34.271Z",
+    "scope": "PUBLIC HTTPS/WSS",
+    "publicDeploymentVerified": false,
+    "passed": true,
+    "checks": [
+      "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+      "Logout/re-login retains library and favorite; account-owned controller profile saved",
+      "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+      "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+      "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+    ],
+    "controllerHardware": "Physical controllers not tested; virtual Gamepad API only"
+  },
+  "restartScope": "Old-code fixture created before deployment; both real instance IDs changed during automatic deployment; exact durable snapshots preserved. New-code acceptance then used two new independent accounts; no second restart claimed.",
+  "newCodeSinglePlayerRoute": "downtown-circuit",
+  "multiplayerTrack": "Existing original circuit; new city routes not exposed online",
+  "clientMethod": "Two independent Chromium processes on one cloud runner; account A virtual analog Gamepad API, account B keyboard; no position or result injection",
+  "performanceScope": "Functional checks at DPR 0.15, not a GPU benchmark",
+  "cleanup": {
+    "status": "SUCCEEDED",
+    "ownAccountsRemoved": 4,
+    "guard": "Exact ledger IDs; recent USER fixtures only; associated own records only"
+  },
+  "physicalControllers": "NOT_TESTED"
+}

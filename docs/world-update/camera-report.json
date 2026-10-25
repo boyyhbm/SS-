@@ -1,10 +1,11 @@
 {
-  "date": "2026-10-25T16:30:29.101Z",
+  "date": "2026-10-25T17:01:53.361Z",
   "mode": "camera",
   "origin": "http://localhost:3000",
   "physicalController": "NOT_TESTED",
   "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
   "errors": [],
+  "motionPreference": "reduce",
   "machine": {
     "platform": "linux",
     "release": "6.18.55",
@@ -26,35 +27,35 @@
     {
       "targetKph": 50,
       "kph": 50,
-      "height": 0.2920407414228453,
-      "distance": 7.799999999999996,
+      "height": 0.29204074142284353,
+      "distance": 7.800000000000009,
       "fov": 58,
-      "x": -205.3956329637268,
-      "z": -100.00789205072782,
-      "heading": -4.711873524992956
+      "x": -211.34704976163965,
+      "z": -100.00003406656434,
+      "heading": -4.710254249870656
     },
     {
       "targetKph": 100,
       "kph": 100,
-      "height": 0.2920407414228449,
-      "distance": 7.799999999999996,
+      "height": 0.29204074142284425,
+      "distance": 7.799999999999998,
       "fov": 58,
-      "x": -56.24207007894529,
-      "z": -99.99171154858703,
-      "heading": -4.712409694023901
+      "x": -37.1866611955072,
+      "z": -99.99485686745977,
+      "heading": -4.712374026062878
     },
     {
       "targetKph": 150,
-      "kph": 149,
-      "height": 0.29204074142284586,
-      "distance": 7.7999999999999945,
+      "kph": 151,
+      "height": 0.29204074142284414,
+      "distance": 7.799999999999998,
       "fov": 58,
-      "x": 126.77448187271197,
-      "z": -99.99476837544532,
-      "heading": -4.712351884778661
+      "x": 180.1183914892252,
+      "z": -99.99810651714935,
+      "heading": -4.712374026062878
     }
   ],
   "measurement": "Projected bounding height of the loaded GLB, accompanied by actual gameplay screenshots and video; not a segmented pixel-silhouette measurement",
-  "relativeHeightDeviation": 7.79328661265871e-15,
+  "relativeHeightDeviation": 2.4710420966966643e-15,
   "passed": true
 }
