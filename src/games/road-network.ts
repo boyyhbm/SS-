@@ -195,7 +195,21 @@ export function roadClearance(p: Point) {
       p.z > Math.max(a.z, b.z) + 80
     )
       continue;
-    clearance = Math.max(clearance, e.width / 2 - closestOnPolyline(p, points).distance);
+    let squared = Infinity;
+    for (let i = 1; i < points.length; i++) {
+      const a = points[i - 1],
+        b = points[i],
+        dx = b.x - a.x,
+        dz = b.z - a.z;
+      const t = Math.max(
+        0,
+        Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / (dx * dx + dz * dz || 1)),
+      );
+      const ex = p.x - a.x - dx * t,
+        ez = p.z - a.z - dz * t;
+      squared = Math.min(squared, ex * ex + ez * ez);
+    }
+    clearance = Math.max(clearance, e.width / 2 - Math.sqrt(squared));
   }
   for (const n of roadNodes) clearance = Math.max(clearance, junctionRadius(n.id) - distance(p, n));
   return clearance;

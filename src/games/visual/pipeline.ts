@@ -23,7 +23,8 @@ export function createRenderPipeline(
   let last = 0,
     statsAt = performance.now(),
     dpr = renderer.getPixelRatio(),
-    slow = 0;
+    slow = 0,
+    previouslyPaused = true;
   const frames: number[] = [],
     cpu: number[] = [],
     physics: number[] = [];
@@ -47,6 +48,15 @@ export function createRenderPipeline(
       timing: { physicsMs: number; physicsSteps: number; alpha: number; networkDelayMs: number },
     ) {
       const now = performance.now();
+      if (paused || previouslyPaused !== paused) {
+        last = 0;
+        frames.length = 0;
+        cpu.length = 0;
+        physics.length = 0;
+        simulatedSteps = 0;
+        statsAt = now;
+      }
+      previouslyPaused = paused;
       if (last) frames.push(now - last);
       last = now;
       renderer.info.reset();
@@ -56,7 +66,7 @@ export function createRenderPipeline(
       cpu.push(performance.now() - start);
       physics.push(timing.physicsMs);
       simulatedSteps += timing.physicsSteps;
-      if (now - statsAt > 1000) {
+      if (!paused && frames.length >= 2 && now - statsAt > 1000) {
         const resources = performance
           .getEntriesByType('resource')
           .filter((e) => e.name.includes('/game-assets/')) as PerformanceResourceTiming[];

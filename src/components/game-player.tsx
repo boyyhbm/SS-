@@ -397,8 +397,8 @@ export function GamePlayer({
                 ))}
                 <small>
                   {language === 'ru'
-                    ? 'Новая сеть дорог: одиночная игра. Онлайн пока использует прежнюю трассу.'
-                    : 'New road network: single player. Online currently uses the original circuit.'}
+                    ? 'Все три маршрута доступны также в сетевом лобби.'
+                    : 'All three routes are also available in the online lobby.'}
                 </small>
               </div>
             )}

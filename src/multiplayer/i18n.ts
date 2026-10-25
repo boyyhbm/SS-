@@ -1,5 +1,7 @@
 import type { Language } from '../lib/i18n';
 const ru = {
+  route: 'Трасса',
+  routeMismatch: 'Версия трассы изменилась. Обновите страницу и подключитесь снова.',
   friends: 'Друзья',
   social: 'На одной волне',
   socialBody: 'Следующий заезд лучше разделить с друзьями.',
@@ -126,6 +128,8 @@ const ru = {
 } as const;
 export type MultiplayerText = keyof typeof ru;
 const en: Record<MultiplayerText, string> = {
+  route: 'Track',
+  routeMismatch: 'Track version changed. Refresh the page and reconnect.',
   friends: 'Friends',
   social: 'On the same frequency',
   socialBody: 'The next race is better together.',

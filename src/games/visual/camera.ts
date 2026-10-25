@@ -24,11 +24,23 @@ export function avoidCameraObstacles(
   const ray = clipRay.set(target, direction),
     hit = clipHit;
   let allowed = length;
-  for (const box of boxes)
+  for (const box of boxes) {
+    // A thin pole can occlude a few pixels without obstructing the camera.
+    // Only shorten the boom for it when the camera volume actually approaches it.
+    const thin = box.max.x - box.min.x < 0.65 && box.max.z - box.min.z < 0.65;
+    if (
+      thin &&
+      (desired.x < box.min.x - 0.35 ||
+        desired.x > box.max.x + 0.35 ||
+        desired.z < box.min.z - 0.35 ||
+        desired.z > box.max.z + 0.35)
+    )
+      continue;
     if (ray.intersectBox(box, hit)) {
       const distance = hit.distanceTo(target) - 0.35;
       if (distance >= 0) allowed = Math.min(allowed, distance);
     }
+  }
   if (allowed < length) desired.copy(target).addScaledVector(direction, Math.max(0.25, allowed));
 }
 export class ChaseCameraRig {
@@ -36,9 +48,13 @@ export class ChaseCameraRig {
   private initialized = false;
   private mode = -1;
   private target = new THREE.Vector3();
+  private anchor = new THREE.Vector3();
+  private boom = new THREE.Vector3();
+  private boomLength = 0;
   constructor(readonly camera: THREE.PerspectiveCamera) {}
   reset() {
     this.initialized = false;
+    this.boomLength = 0;
   }
   update(
     pose: CameraPose,
@@ -57,6 +73,7 @@ export class ChaseCameraRig {
       );
       this.heading += delta * (1 - Math.exp(-cameraTuning.headingResponse * dt));
     }
+    if (this.mode !== mode) this.boomLength = 0;
     this.initialized = true;
     this.mode = mode;
     const sin = Math.sin(this.heading),
@@ -77,7 +94,25 @@ export class ChaseCameraRig {
       profile.targetHeight,
       pose.z + cos * profile.lookAhead,
     );
-    clip?.(this.target, this.camera.position);
+    // Collision is measured from the vehicle, not the look-ahead point. An
+    // obstacle in front of the car must not pull a camera that sits behind it.
+    this.anchor.set(pose.x, profile.targetHeight, pose.z);
+    clip?.(this.anchor, this.camera.position);
+    this.boom.subVectors(this.camera.position, this.anchor);
+    const desiredLength = this.boom.length();
+    if (!this.boomLength || this.mode !== mode || desiredLength <= this.boomLength)
+      this.boomLength = desiredLength;
+    else
+      this.boomLength += Math.min(
+        desiredLength - this.boomLength,
+        (desiredLength - this.boomLength) * (1 - Math.exp(-8 * dt)),
+        6 * dt,
+      );
+    if (desiredLength > 0.001)
+      this.camera.position
+        .copy(this.anchor)
+        .addScaledVector(this.boom, this.boomLength / desiredLength);
+    if (mode < 2) this.camera.position.y = Math.max(1.6, this.camera.position.y);
     this.camera.lookAt(this.target);
     const fov =
       cameraTuning.baseFov +

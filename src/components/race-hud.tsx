@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { useRacingPreferences } from '@/games/racing-preferences';
+import type { RacingLineMode } from '@/games/racing-line';
 import type { RaceTelemetry } from '@/games/midnight-outlaws';
 import { timeLabel } from '@/games/racing-physics';
 import { visualText } from '@/games/visual/i18n';
@@ -8,6 +10,7 @@ import { Modal } from './modal';
 import { InputGlyph } from './input-system';
 import { GameRouteMap } from './game-route-map';
 import { getCityRoute } from '@/games/road-network';
+import { isCityRoute } from '@/games/route-registry';
 const route = Array.from({ length: 97 }, (_, i) => {
   const a = (i / 96) * Math.PI * 2;
   return `${i ? 'L' : 'M'} ${90 + Math.cos(a) * 62} ${65 + Math.sin(a) * 43}`;
@@ -19,6 +22,7 @@ export function RaceHUD({
   mode = 'timeTrial',
   position,
   players,
+  laps,
 }: {
   telemetry: RaceTelemetry;
   language: 'ru' | 'en';
@@ -26,12 +30,15 @@ export function RaceHUD({
   mode?: 'practice' | 'timeTrial';
   position?: number;
   players?: number;
+  laps?: number;
 }) {
   const t = (key: Parameters<typeof visualText>[1]) => visualText(language, key),
     speed = Math.round(Math.abs(telemetry.speed) * 3.6),
     gear = Math.max(1, Math.min(6, Math.ceil(speed / 38))),
     revs = speed ? Math.min(1, 0.25 + (speed - (gear - 1) * 38) / 45) : 0.17,
-    currentRoute = telemetry.routeId ? getCityRoute(telemetry.routeId) : null,
+    currentRoute =
+      telemetry.routeId && isCityRoute(telemetry.routeId) ? getCityRoute(telemetry.routeId) : null,
+    totalLaps = laps ?? currentRoute?.laps,
     checkpointCount = telemetry.checkpointCount ?? 4;
   return (
     <div className="race-instruments">
@@ -40,8 +47,8 @@ export function RaceHUD({
           <span>
             {currentRoute?.kind === 'sprint' ? (language === 'ru' ? 'Спринт' : 'Sprint') : t('lap')}{' '}
             <i>
-              {String(Math.min(telemetry.lap, currentRoute?.laps ?? 99)).padStart(2, '0')}
-              {currentRoute?.kind === 'circuit' ? ` / ${currentRoute.laps}` : ''}
+              {String(Math.min(telemetry.lap, totalLaps ?? 99)).padStart(2, '0')}
+              {currentRoute?.kind === 'circuit' ? ` / ${totalLaps}` : ''}
             </i>
           </span>
           <strong data-testid="lap-time">{timeLabel(telemetry.lapTime)}</strong>
@@ -174,12 +181,33 @@ export function RaceHUD({
   );
 }
 export function GraphicsSettings({ language }: { language: 'ru' | 'en' }) {
+  const assist = useRacingPreferences();
   const settings = useRenderSettings(),
     [credits, setCredits] = useState(false),
     t = (k: Parameters<typeof visualText>[1]) => visualText(language, k);
   return (
     <>
       <div className="graphics-settings">
+        <label>
+          {language === 'ru' ? 'Гоночная траектория' : 'Racing line'}
+          <select
+            aria-label={language === 'ru' ? 'Гоночная траектория' : 'Racing line'}
+            value={assist.mode}
+            disabled={assist.busy}
+            onChange={(e) => void assist.save(e.target.value as RacingLineMode)}
+          >
+            <option value="off">{language === 'ru' ? 'Выкл.' : 'Off'}</option>
+            <option value="corners">
+              {language === 'ru' ? 'Перед поворотами' : 'Corners Only'}
+            </option>
+            <option value="full">{language === 'ru' ? 'Вся траектория' : 'Full'}</option>
+          </select>
+        </label>
+        {assist.error && (
+          <span role="status">
+            {language === 'ru' ? 'Не удалось сохранить настройку' : 'Could not save preference'}
+          </span>
+        )}
         <label>
           <input
             type="checkbox"

@@ -170,6 +170,7 @@ model GameSave {
 }
 
 model UserSettings {
+  racingLine               String             @default("corners")
   userId                   String             @id
   language                 String             @default("ru")
   uiSoundEnabled           Boolean            @default(false)
@@ -281,10 +282,14 @@ enum MatchStatus {
 }
 
 model MultiplayerMatch {
+  carContacts  Boolean            @default(false)
   id           String             @id @default(cuid())
   gameId       String
   roomId       String
   mode         String             @default("circuit")
+  routeId      String             @default("legacy-circuit")
+  routeVersion Int                @default(1)
+  laps         Int                @default(1)
   region       String             @default("europe")
   status       MatchStatus        @default(COUNTDOWN)
   startedAt    DateTime           @default(now())

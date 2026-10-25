@@ -6,8 +6,9 @@ export async function installDriver(
   kind: 'online' | 'single' = 'online',
   cruiseSpeed?: number,
 ) {
-  const routeId =
-    kind === 'single' ? await page.getByTestId('race-player').getAttribute('data-route') : null;
+  const routeId = await page
+    .getByTestId(kind === 'single' ? 'race-player' : 'online-player')
+    .getAttribute('data-route');
   const route = cityRoutes.find((r) => r.id === routeId);
   await page.evaluate(
     ({ method, kind, cruiseSpeed, route }) => {

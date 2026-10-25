@@ -1,4 +1,5 @@
 'use client';
+import { compatibleRoute, type RouteId } from '../games/route-registry';
 import { Client, type Room, type SeatReservation } from '@colyseus/sdk';
 import type { MultiplayerAction, RoomSnapshot } from './contracts';
 export interface NetworkPrediction<State> {
@@ -16,6 +17,7 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
   latestSnapshot: RoomSnapshot<State> | null = null;
   connected = false;
   rtt = 0;
+  lastDisconnectCode: number | null = null;
   jitter = 0;
   private pingTimer: ReturnType<typeof setInterval> | null = null;
   private snapshotListeners = new Set<(snapshot: RoomSnapshot<State>) => void>();
@@ -48,12 +50,18 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
     }
     this.room = room;
     this.connected = true;
+    this.lastDisconnectCode = null;
     room.reconnection.minUptime = 0;
     room.reconnection.maxRetries = 20;
     room.reconnection.maxDelay = 2000;
     room.reconnection.maxEnqueuedMessages = 0;
     this.prediction = this.createPrediction(ticket.userId, (command) => this.sendInput(command));
     room.onMessage('snapshot', (snapshot: RoomSnapshot<State>) => {
+      if (snapshot.route && !compatibleRoute(snapshot.route)) {
+        this.emit('routeMismatch');
+        void this.leaveRoom();
+        return;
+      }
       if (this.latestSnapshot && snapshot.serverTime < this.latestSnapshot.serverTime) return;
       this.latestSnapshot = snapshot;
       this.prediction?.receive(snapshot);
@@ -63,7 +71,13 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
       const measured = Date.now() - data.echo;
       this.jitter = this.jitter * 0.8 + Math.abs(measured - this.rtt) * 0.2;
       this.rtt = this.rtt ? this.rtt * 0.7 + measured * 0.3 : measured;
-      if (this.prediction) this.prediction.offset = data.serverTime - (data.echo + Date.now()) / 2;
+      if (this.prediction) {
+        const measuredOffset = data.serverTime - (data.echo + Date.now()) / 2;
+        this.prediction.offset += Math.max(
+          -5,
+          Math.min(5, (measuredOffset - this.prediction.offset) * 0.15),
+        );
+      }
     });
     room.onMessage('event', (event: { type: string; username?: string }) =>
       this.emit(event.type, event.username),
@@ -82,7 +96,8 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
       }
       this.emit('reconnected');
     });
-    room.onLeave(() => {
+    room.onLeave((code) => {
+      this.lastDisconnectCode = code;
       if (this.room === room) this.room = null;
       if (this.pingTimer) clearInterval(this.pingTimer);
       this.pingTimer = null;
@@ -95,14 +110,27 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
     }, 1000);
     return room;
   }
-  createRoom(gameId: string, privateRoom = true, maxPlayers = 6) {
-    return this.connect({ action: 'create', gameId, private: privateRoom, maxPlayers });
+  createRoom(
+    gameId: string,
+    privateRoom = true,
+    maxPlayers = 6,
+    routeId?: RouteId,
+    carContacts = false,
+  ) {
+    return this.connect({
+      action: 'create',
+      gameId,
+      private: privateRoom,
+      maxPlayers,
+      routeId,
+      carContacts,
+    });
   }
   joinRoom(gameId: string, roomId: string) {
     return this.connect({ action: 'join', gameId, roomId });
   }
-  quickMatch(gameId: string, party = false) {
-    return this.connect({ action: 'quick', gameId, party });
+  quickMatch(gameId: string, party = false, routeId?: RouteId) {
+    return this.connect({ action: 'quick', gameId, party, routeId });
   }
   async leaveRoom() {
     this.connectionEpoch++;
@@ -128,8 +156,12 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
   chooseCar(car: string) {
     this.room?.send('car', car);
   }
-  configure(laps: number) {
-    this.room?.send('settings', { laps });
+  configure(laps: number, routeId?: RouteId, carContacts?: boolean) {
+    this.room?.send('settings', {
+      laps,
+      ...(routeId ? { routeId } : {}),
+      ...(carContacts !== undefined ? { carContacts } : {}),
+    });
   }
   startMatch() {
     this.room?.send('start');

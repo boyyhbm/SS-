@@ -24,7 +24,8 @@
     "visual:qa": "node scripts/visual-qa.mjs",
     "production:backup": "node scripts/backup-local.mjs",
     "test:deployment": "tsx scripts/test-deployment.ts",
-    "test:production": "node --experimental-strip-types scripts/test-production.ts"
+    "test:production": "node --experimental-strip-types scripts/test-production.ts",
+    "test:city-multiplayer": "tsx scripts/test-city-multiplayer.ts"
   },
   "engines": {
     "node": ">=24.0.0"

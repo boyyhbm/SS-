@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createRoadWear } from './road-wear';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { RaceAssets } from './assets';
 import { qualityPresets, type RenderTier } from './quality';
@@ -133,6 +134,7 @@ export function createCityWorld(
   ground.receiveShadow = true;
   scene.add(ground);
   const furnitureBoxes = addStreetFurniture(scene);
+  const roadWear = createRoadWear(scene);
   const surfaces = roadSurfaces(),
     road = new THREE.Mesh(polygonSurface(surfaces.asphalt, 0.02), asphaltMaterial(assets, tier));
   road.receiveShadow = true;
@@ -189,7 +191,8 @@ export function createCityWorld(
     model.traverse((o) => {
       if (!(o instanceof THREE.Mesh)) return;
       const original = o.material as THREE.MeshStandardMaterial;
-      let material = cityMaterials.get(original) as THREE.MeshStandardMaterial | undefined;
+      let material = cityMaterials.get(original) as
+        THREE.MeshStandardMaterial | THREE.MeshLambertMaterial | undefined;
       if (!material) {
         material = original.clone();
         material.envMapIntensity = 0.35;
@@ -201,7 +204,24 @@ export function createCityWorld(
         }
         cityMaterials.set(original, material);
       }
-      o.material = material;
+      if (tier === 'low' && material instanceof THREE.MeshStandardMaterial) {
+        const cheap = new THREE.MeshLambertMaterial({
+          color: material.color,
+          map: material.map,
+          alphaMap: material.alphaMap,
+          alphaTest: material.alphaTest,
+          transparent: material.transparent,
+          opacity: material.opacity,
+          side: material.side,
+          emissive: material.emissive,
+          emissiveMap: material.emissiveMap,
+          emissiveIntensity: material.emissiveIntensity,
+        });
+        cheap.name = material.name;
+        cityMaterials.set(original, cheap);
+        material.dispose();
+        o.material = cheap;
+      } else o.material = material;
     });
     batchStaticMeshes(model);
     templates.set(cacheKey, model);
@@ -246,7 +266,7 @@ export function createCityWorld(
           mesh.computeBoundingSphere();
           group.add(mesh);
         });
-        lod.addLevel(group, low && tier !== 'low' ? 65 : 0);
+        lod.addLevel(group, low && tier !== 'low' ? 65 : 0, 0.15);
       }
       scene.add(lod);
     }
@@ -409,7 +429,7 @@ export function createCityWorld(
   });
   scene.add(poles, lenses);
   const lamps = Array.from({ length: preset.lamps }, () => {
-    const l = new THREE.PointLight('#f4c58f', 100, 28, 2);
+    const l = new THREE.PointLight('#f4c58f', 0, 28, 2);
     scene.add(l);
     return l;
   });
@@ -515,6 +535,18 @@ export function createCityWorld(
     scene.add(light, light.target);
     return { x, light };
   });
+  const shadowDirection = new THREE.Vector3(-30, 45, -18),
+    shadowRight = new THREE.Vector3()
+      .crossVectors(shadowDirection, new THREE.Vector3(0, 1, 0))
+      .normalize(),
+    shadowUp = new THREE.Vector3().crossVectors(shadowRight, shadowDirection).normalize(),
+    shadowFocus = new THREE.Vector3(),
+    shadowTexel = 56 / key.shadow.mapSize.x;
+  let lampX = Infinity,
+    lampZ = Infinity;
+  const lampTargets = lamps.map(() => ({
+    current: undefined as (typeof fixturePositions)[number] | undefined,
+  }));
   return {
     clipCamera(target: THREE.Vector3, desired: THREE.Vector3) {
       avoidCameraObstacles(target, desired, colliders);
@@ -545,16 +577,38 @@ export function createCityWorld(
       void braking;
       void dt;
       void boost;
-      key.position.set(race.x - 30, 45, race.z - 18);
-      key.target.position.set(race.x, 0, race.z);
-      const nearest = [...fixturePositions].sort(
-        (a, b) =>
-          a.point.distanceToSquared(new THREE.Vector3(race.x, 0, race.z)) -
-          b.point.distanceToSquared(new THREE.Vector3(race.x, 0, race.z)),
+      shadowFocus.set(race.x, 0, race.z);
+      const right = shadowFocus.dot(shadowRight),
+        up = shadowFocus.dot(shadowUp);
+      shadowFocus.addScaledVector(
+        shadowRight,
+        Math.round(right / shadowTexel) * shadowTexel - right,
       );
+      shadowFocus.addScaledVector(shadowUp, Math.round(up / shadowTexel) * shadowTexel - up);
+      key.target.position.copy(shadowFocus);
+      key.position.copy(shadowFocus).add(shadowDirection);
+      if (lamps.length && Math.hypot(race.x - lampX, race.z - lampZ) > 6) {
+        fixturePositions.sort(
+          (a, b) =>
+            (a.point.x - race.x) ** 2 +
+            (a.point.z - race.z) ** 2 -
+            (b.point.x - race.x) ** 2 -
+            (b.point.z - race.z) ** 2,
+        );
+        lampX = race.x;
+        lampZ = race.z;
+      }
       lamps.forEach((lamp, i) => {
-        lamp.position.copy(nearest[i].point);
-        lamp.color.set(nearest[i].warm ? '#ffd19a' : '#dce3d4');
+        const target = lampTargets[i],
+          p = fixturePositions[i];
+        if (target.current !== p) {
+          lamp.intensity *= Math.exp(-dt * 10);
+          if (lamp.intensity < 2) {
+            lamp.position.copy(p.point);
+            lamp.color.set(p.warm ? '#ffd19a' : '#dce3d4');
+            target.current = p;
+          }
+        } else lamp.intensity += (100 - lamp.intensity) * (1 - Math.exp(-dt * 7));
       });
       for (const { x, light } of headlights) {
         const sin = Math.sin(race.heading),
@@ -564,6 +618,7 @@ export function createCityWorld(
       }
     },
     dispose() {
+      roadWear.dispose();
       env.dispose();
       routeMaterial.dispose();
       batch.geometries.forEach((g) => g.dispose());

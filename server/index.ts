@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { selectRoute } from '../src/games/route-registry';
 import { randomUUID } from 'node:crypto';
 import { Server, matchMaker } from '@colyseus/core';
 import { WebSocketTransport } from '@colyseus/ws-transport';
@@ -242,7 +243,8 @@ const gameServer = new Server({
               if (
                 candidate.privateRoom ||
                 candidate.phase !== 'lobby' ||
-                candidate.gameId !== entry.gameId
+                candidate.gameId !== entry.gameId ||
+                candidate.route?.routeId !== selectRoute(body.routeId).routeId
               )
                 continue;
               const listing = await matchMaker.getRoomById(candidate.roomId);
@@ -265,6 +267,9 @@ const gameServer = new Server({
               gameServerAdapter(entry.game.runtimeKey).roomName,
               {
                 gameId: entry.gameId,
+                routeId: body.routeId,
+                carContacts:
+                  body.action === 'create' && (body.private ?? true) && body.carContacts === true,
                 runtimeKey: entry.game.runtimeKey,
                 ownerId: user.id,
                 private: body.action === 'quick' ? false : (body.private ?? true),

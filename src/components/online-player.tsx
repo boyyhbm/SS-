@@ -25,6 +25,7 @@ import {
 import { AnimatePresence, motion } from 'motion/react';
 import { NexusMultiplayerSDK } from '@/multiplayer/sdk';
 import { RacePrediction } from '@/multiplayer/prediction';
+import { routeRegistry, getRoute, type RouteId } from '@/games/route-registry';
 import type { InputCommand } from '@/multiplayer/contracts';
 import type { RaceState } from '@/games/racing-physics';
 import { multiplayerText, multiplayerError, type MultiplayerText } from '@/multiplayer/i18n';
@@ -75,6 +76,7 @@ export function OnlinePlayer({
   const [busy, setBusy] = useState(false),
     [notice, setNotice] = useState(''),
     [error, setError] = useState('');
+  const [selectedRoute, setSelectedRoute] = useState<RouteId>('downtown-circuit');
   const [privateRoom, setPrivateRoom] = useState(true),
     [maxPlayers, setMaxPlayers] = useState(6),
     [code, setCode] = useState('');
@@ -175,8 +177,9 @@ export function OnlinePlayer({
     setError('');
     setRenderReady(false);
     try {
-      if (kind === 'quick') await sdk.quickMatch(gameId, !!partySearch);
-      else if (kind === 'create') await sdk.createRoom(gameId, privateRoom, maxPlayers);
+      if (kind === 'quick') await sdk.quickMatch(gameId, !!partySearch, selectedRoute);
+      else if (kind === 'create')
+        await sdk.createRoom(gameId, privateRoom, maxPlayers, selectedRoute);
       else if (byCode) await sdk.connect({ action: 'join', gameId, code });
       else await sdk.connect({ action: 'join', gameId, roomId: roomId!, party: !!partySearch });
       network.current = sdk.prediction;
@@ -223,6 +226,10 @@ export function OnlinePlayer({
       data-speed={telemetry.speed}
       data-heading={telemetry.heading}
       data-remote-x={snapshot?.players.find((p) => p.id !== userId)?.state.x}
+      data-route={snapshot?.route?.routeId ?? 'legacy-circuit'}
+      data-disconnect-code={sdk.lastDisconnectCode ?? undefined}
+      data-contact-events={snapshot?.contactEvents ?? 0}
+      data-car-contacts={String(snapshot?.route?.carContacts ?? false)}
       data-ready={renderReady}
     >
       <InputNavigation suspended={!!playing && !menu} />
@@ -240,6 +247,7 @@ export function OnlinePlayer({
           onPause={pause}
           restartKey={0}
           initialBestLap={null}
+          routeId={snapshot.route?.routeId ?? 'legacy-circuit'}
           networkRef={network}
         />
       )}
@@ -389,6 +397,20 @@ export function OnlinePlayer({
               <div className="room-setup">
                 <div>
                   <h3>{t('createRoom')}</h3>
+                  <label className="lap-settings">
+                    {t('route')}
+                    <select
+                      aria-label={t('route')}
+                      value={selectedRoute}
+                      onChange={(e) => setSelectedRoute(e.target.value as RouteId)}
+                    >
+                      {routeRegistry.map((r) => (
+                        <option key={r.routeId} value={r.routeId}>
+                          {language === 'ru' ? r.nameRu : r.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                   <div className="visibility-switch">
                     <button
                       className={privateRoom ? 'selected' : ''}
@@ -472,7 +494,12 @@ export function OnlinePlayer({
                         <Flag size={22} />
                       </span>
                       <div>
-                        <strong>NIGHT CIRCUIT / {room.code}</strong>
+                        <strong>
+                          {language === 'ru'
+                            ? getRoute(room.route?.routeId ?? 'legacy-circuit').nameRu
+                            : getRoute(room.route?.routeId ?? 'legacy-circuit').name}{' '}
+                          / {room.code}
+                        </strong>
                         <span>
                           Europe · {room.players}/{room.maxPlayers}
                         </span>
@@ -593,20 +620,48 @@ export function OnlinePlayer({
                   </button>
                 ))}
               </div>
-              {leader && (
+              <label className="lap-settings">
+                {t('route')}
+                <select
+                  aria-label={t('route')}
+                  disabled={!leader}
+                  value={snapshot.route?.routeId ?? 'legacy-circuit'}
+                  onChange={(e) => sdk.configure(snapshot.laps, e.target.value as RouteId)}
+                >
+                  {routeRegistry.map((r) => (
+                    <option key={r.routeId} value={r.routeId}>
+                      {language === 'ru' ? r.nameRu : r.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {snapshot.privateContactsAvailable && (
                 <label className="lap-settings">
-                  {t('laps')}
-                  <select
-                    aria-label={t('laps')}
-                    value={snapshot.laps}
-                    onChange={(e) => sdk.configure(Number(e.target.value))}
-                  >
-                    {[1, 2, 3].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
-                  </select>
+                  <input
+                    type="checkbox"
+                    aria-label={
+                      language === 'ru' ? 'Столкновения автомобилей' : 'Vehicle collisions'
+                    }
+                    disabled={!leader}
+                    checked={snapshot.route?.carContacts ?? false}
+                    onChange={(e) => sdk.configure(snapshot.laps, undefined, e.target.checked)}
+                  />
+                  {language === 'ru' ? 'Столкновения автомобилей' : 'Vehicle collisions'}
                 </label>
               )}
+              <label className="lap-settings">
+                {t('laps')}
+                <select
+                  aria-label={t('laps')}
+                  disabled={!leader || snapshot.mode === 'sprint'}
+                  value={snapshot.laps}
+                  onChange={(e) => sdk.configure(Number(e.target.value))}
+                >
+                  {[1, 2, 3].map((n) => (
+                    <option key={n}>{n}</option>
+                  ))}
+                </select>
+              </label>
               <p className="lobby-control-note">
                 <GameControlsHint fallback={t('raceControls')} />
               </p>
@@ -710,6 +765,7 @@ export function OnlinePlayer({
               ))}
           </div>
           <RaceHUD
+            laps={snapshot?.laps}
             telemetry={telemetry}
             language={language}
             online

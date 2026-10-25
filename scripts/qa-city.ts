@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { installDriver } from '../tests/helpers/race-driver.ts';
 import { cityRoutes } from '../src/games/road-network.ts';
 import os from 'node:os';
+import { execFileSync } from 'node:child_process';
 const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3000';
 if (!['localhost', '127.0.0.1'].includes(new URL(origin).hostname))
   throw Error('Local isolated QA only');
@@ -64,7 +65,7 @@ async function context(quality: string, dpr: number, record?: string) {
       height: mode === 'performance' ? 1080 : 720,
     },
     deviceScaleFactor: dpr,
-    reducedMotion: ['video', 'performance', 'smoothness'].includes(mode)
+    reducedMotion: ['video', 'performance', 'smoothness', 'collision'].includes(mode)
       ? 'no-preference'
       : 'reduce',
     ...(record
@@ -91,6 +92,13 @@ async function openRace(page: Page, id: string) {
   page.on('console', (m) => {
     if (m.type() === 'error' && /THREE|WebGL|shader/i.test(m.text())) errors.push(m.text());
   });
+  if (['screens', 'video', 'collision'].includes(mode)) {
+    const r = await page.request.post(origin + '/api/racing-settings', {
+      headers: { Origin: origin },
+      data: { racingLine: 'full' },
+    });
+    if (!r.ok()) throw Error('Actual racing preference update failed');
+  }
   await page.goto(origin + '/play/midnight-outlaws');
   await page.getByRole('button', { name: 'На старт', exact: true }).waitFor();
   await page.locator(`[data-route-option="${id}"]`).click();
@@ -99,7 +107,7 @@ async function openRace(page: Page, id: string) {
   );
   await page.waitForFunction((id) => document.querySelector('canvas')?.dataset.route === id, id);
   await page.evaluate(() => document.fonts.ready);
-  if (mode === 'camera' || mode === 'smoothness')
+  if (['camera', 'smoothness', 'collision'].includes(mode))
     await page.evaluate(() => {
       (document.querySelector('.race-canvas') as HTMLElement).dataset.instrumentation = 'true';
     });
@@ -110,12 +118,17 @@ async function begin(page: Page) {
 }
 const report: Record<string, unknown> = {
   date: new Date().toISOString(),
+  sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  sourceUncommitted:
+    execFileSync('git', ['status', '--porcelain', '--', 'src', 'server', 'prisma'], {
+      encoding: 'utf8',
+    }).trim().length > 0,
   mode,
   origin,
   physicalController: 'NOT_TESTED',
   renderSource: 'Actual Next.js/Three.js GLB runtime; no generated images',
   errors,
-  motionPreference: ['video', 'performance', 'smoothness'].includes(mode)
+  motionPreference: ['video', 'performance', 'smoothness', 'collision'].includes(mode)
     ? 'no-preference'
     : 'reduce',
   machine: {
@@ -131,7 +144,49 @@ try {
     p = await setup.newPage();
   await prepare(p);
   await setup.close();
-  if (mode === 'smoothness') {
+  if (mode === 'collision') {
+    const c = await context('low', 0.5, 'collision'),
+      page = await c.newPage();
+    await page.addInitScript(() => {
+      const w = window as unknown as { contactProof: unknown[] };
+      w.contactProof = [];
+      window.addEventListener('nexus-simulation-tick', (e) => {
+        const s = (e as CustomEvent).detail;
+        if (s.collision && s.collisionImpulse > 0)
+          w.contactProof.push({
+            x: s.x,
+            z: s.z,
+            speed: s.speed,
+            impulse: s.collisionImpulse,
+            yaw: s.impactYaw,
+          });
+      });
+    });
+    await openRace(page, 'downtown-circuit');
+    await begin(page);
+    await page.keyboard.down('KeyW');
+    await page.waitForFunction(
+      () => Number(document.querySelector('[data-testid="speed"]')?.textContent) > 45,
+    );
+    await page.keyboard.down('KeyD');
+    await page.waitForFunction(
+      () => (window as unknown as { contactProof: unknown[] }).contactProof.length > 0,
+    );
+    await page.keyboard.up('KeyW');
+    await page.keyboard.up('KeyD');
+    await page.keyboard.down('KeyS');
+    await page.waitForFunction(
+      () => Number(document.querySelector('[data-testid="speed"]')?.textContent) < 8,
+    );
+    await page.keyboard.up('KeyS');
+    await page.screenshot({ path: out + '/physical-contact.png' });
+    report.contacts = await page.evaluate(
+      () => (window as unknown as { contactProof: unknown[] }).contactProof,
+    );
+    const video = page.video();
+    await c.close();
+    if (video) await rename(await video.path(), out + '/physical-contact.webm');
+  } else if (mode === 'smoothness') {
     const c = await context('low', 0.15),
       page = await c.newPage();
     await page.addInitScript(() => {
@@ -195,10 +250,15 @@ try {
           const a = (
             window as unknown as { cityStats: { frameTimesMs: number[]; paused: boolean }[] }
           ).cityStats.filter((x) => !x.paused);
-          return a.reduce((s, x) => s + x.frameTimesMs.length, 0) >= 24;
+          return (
+            a.reduce((s, x) => s + x.frameTimesMs.length, 0) >=
+            Number(
+              (window as unknown as { requiredFrameSamples?: number }).requiredFrameSamples ?? 100,
+            )
+          );
         },
         null,
-        { timeout: 180000 },
+        { timeout: 600000 },
       );
       const data = await page.evaluate(() => {
         const w = window as unknown as { cityStats: unknown[] };

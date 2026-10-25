@@ -176,7 +176,19 @@ async function snapshot(page: Page) {
     saves: console.saves.map(({ gameId, saveData }) => ({ gameId, saveData })),
     controllers,
     friends: social.friends.map((p) => p.id).sort(),
-    result,
+    result: result
+      ? {
+          match: { id: result.match.id, status: result.match.status },
+          result: result.result
+            ? {
+                serverVerified: result.result.serverVerified,
+                didFinish: result.result.didFinish,
+                timeSeconds: result.result.timeSeconds,
+                place: result.result.place,
+              }
+            : null,
+        }
+      : null,
   };
 }
 try {
@@ -293,6 +305,12 @@ try {
       page.on('websocket', (socket) => sockets[i].push(new URL(socket.url()).origin)),
     );
     await pages[0].goto(origin + '/online/midnight-outlaws');
+    if (process.env.NEXUS_PRODUCTION_ROUTE) {
+      const route = process.env.NEXUS_PRODUCTION_ROUTE;
+      if (!['downtown-circuit', 'midnight-sprint', 'industrial-run'].includes(route))
+        throw Error('Unknown verification route');
+      await pages[0].getByLabel('Трасса', { exact: true }).selectOption(route);
+    }
     await pages[0].locator('select[aria-label="участников"]').selectOption('2');
     await pages[0].locator('.room-setup > div .button').click();
     await pages[0].waitForFunction(

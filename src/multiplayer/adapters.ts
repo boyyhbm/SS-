@@ -1,4 +1,4 @@
-import { initialRace, stepRace } from '../games/racing-physics';
+import { initialNetworkRace, stepNetworkRace, simulateNetworkGroup } from '../games/network-racing';
 import type { MultiplayerAdapter } from './contracts';
 export const multiplayerAdapters: Record<string, MultiplayerAdapter> = {
   'midnight-outlaws': {
@@ -13,10 +13,8 @@ export const multiplayerAdapters: Record<string, MultiplayerAdapter> = {
       supportsMatchmaking: true,
       supportsReconnection: true,
     },
-    initialState(slot) {
-      // Ghost racing: cars do not collide. Stagger grid without changing checkpoint ordering.
-      return { ...initialRace(), x: 92 + (slot % 2) * 5, z: -Math.floor(slot / 2) * 5 };
-    },
-    simulate: stepRace,
+    initialState: initialNetworkRace,
+    simulate: stepNetworkRace,
+    simulateGroup: simulateNetworkGroup,
   },
 };

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { routeIdSchema, type RouteSelection } from '../games/route-registry';
 import type { RaceInput, RaceState } from '../games/racing-physics';
 export const SIMULATION_HZ = 30;
 export const SNAPSHOT_HZ = 15;
@@ -36,7 +37,8 @@ export interface RoomSnapshot<State = RaceState> {
   leaderId: string;
   phase: MatchPhase;
   region: 'europe';
-  mode: 'circuit';
+  mode: 'circuit' | 'sprint';
+  route?: RouteSelection;
   private: boolean;
   maxPlayers: number;
   laps: number;
@@ -45,6 +47,8 @@ export interface RoomSnapshot<State = RaceState> {
   startsAt: number | null;
   matchId: string | null;
   saved: boolean;
+  contactEvents?: number;
+  privateContactsAvailable?: boolean;
   players: NetworkPlayer<State>[];
 }
 export interface RoomSummary {
@@ -55,6 +59,7 @@ export interface RoomSummary {
   phase: MatchPhase;
   region: string;
   gameId: string;
+  route?: RouteSelection;
 }
 export interface MultiplayerCapabilities {
   singlePlayer: boolean;
@@ -69,8 +74,13 @@ export interface MultiplayerCapabilities {
 }
 export interface MultiplayerAdapter<State = RaceState> {
   capabilities: MultiplayerCapabilities;
-  initialState(slot: number): State;
-  simulate(state: State, input: RaceInput, dt: number): number | null;
+  simulateGroup?(
+    players: { state: State; input: RaceInput }[],
+    dt: number,
+    route?: RouteSelection,
+  ): number | void;
+  initialState(slot: number, route?: RouteSelection): State;
+  simulate(state: State, input: RaceInput, dt: number, route?: RouteSelection): number | null;
 }
 export type PresenceStatus = 'online' | 'inGame' | 'inLobby' | 'away' | 'offline';
 export interface Presence {
@@ -90,6 +100,8 @@ export const multiplayerActionSchema = z
       .optional(),
     private: z.boolean().optional(),
     maxPlayers: z.number().int().min(2).max(6).optional(),
+    routeId: routeIdSchema.optional(),
+    carContacts: z.boolean().optional(),
     activity: z.boolean().optional(),
     party: z.boolean().optional(),
   })

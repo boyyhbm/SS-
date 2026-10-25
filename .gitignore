@@ -22,3 +22,7 @@ storage/
 .railway/plan*.json
 docs/world-update/raw-video/
 docs/world-update/*.webm
+
+# Actual QA recordings are transcoded into the reviewable MP4 artifact.
+docs/gameplay-update/raw-video/
+docs/gameplay-update/*.webm

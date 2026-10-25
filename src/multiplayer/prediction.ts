@@ -1,10 +1,13 @@
-import { initialRace, stepRace, type RaceInput, type RaceState } from '../games/racing-physics';
+import { initialRace, type RaceInput, type RaceState } from '../games/racing-physics';
+import { stepNetworkRace } from '../games/network-racing';
+import { selectRoute, type RouteSelection } from '../games/route-registry';
 import { angleDelta } from '../games/presentation';
 import { FIXED_DT, type InputCommand, type NetworkPlayer, type RoomSnapshot } from './contracts';
 export interface RaceNetworkDriver {
   frame(input: RaceInput, dt: number): RaceState;
   remotePlayers(): NetworkPlayer[];
   car(): string;
+  route(): RouteSelection;
 }
 export class RacePrediction implements RaceNetworkDriver {
   state = initialRace();
@@ -27,7 +30,11 @@ export class RacePrediction implements RaceNetworkDriver {
     const player = snapshot.players.find((p) => p.id === this.userId);
     if (!player) return;
     const changed =
-      this.snapshot?.matchId !== snapshot.matchId || this.snapshot?.phase !== snapshot.phase;
+      this.snapshot?.matchId !== snapshot.matchId ||
+      this.snapshot?.phase !== snapshot.phase ||
+      this.snapshot?.route?.routeId !== snapshot.route?.routeId ||
+      this.snapshot?.route?.laps !== snapshot.route?.laps ||
+      this.snapshot?.route?.carContacts !== snapshot.route?.carContacts;
     if (!this.snapshot) this.offset = snapshot.serverTime - Date.now();
     if (changed) {
       this.pending = [];
@@ -39,7 +46,8 @@ export class RacePrediction implements RaceNetworkDriver {
     this.pending = this.pending.filter((command) => command.seq > player.ack);
     const corrected = { ...player.state };
     if (snapshot.phase === 'racing' && player.finish === null) {
-      for (const command of this.pending) stepRace(corrected, command, FIXED_DT);
+      for (const command of this.pending)
+        stepNetworkRace(corrected, command, FIXED_DT, snapshot.route);
     }
     this.lastError = Math.hypot(corrected.x - this.state.x, corrected.z - this.state.z);
     if (this.lastError > 0.1) this.corrections++;
@@ -65,7 +73,7 @@ export class RacePrediction implements RaceNetworkDriver {
           this.snapshot.startsAt !== null &&
           Date.now() + this.offset >= this.snapshot.startsAt);
       if (running && player?.finish === null) {
-        stepRace(this.state, command, FIXED_DT);
+        stepNetworkRace(this.state, command, FIXED_DT, this.snapshot.route);
         this.pending.push(command);
         if (this.pending.length > 90) this.pending.shift();
       }
@@ -119,6 +127,9 @@ export class RacePrediction implements RaceNetworkDriver {
   }
   resetPending() {
     this.pending = [];
+  }
+  route() {
+    return this.snapshot?.route ?? selectRoute();
   }
   car() {
     return this.snapshot?.players.find((p) => p.id === this.userId)?.car ?? 'silver';

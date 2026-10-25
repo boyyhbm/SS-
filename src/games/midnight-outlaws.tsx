@@ -2,6 +2,8 @@
 import { nexusInput } from '../input/manager';
 import { FixedStepClock } from './fixed-clock';
 import { RacePresentation } from './presentation';
+import { createRacingLine } from './visual/racing-line';
+import { useRacingPreferences } from './racing-preferences';
 import { useEffect, useRef, useState } from 'react';
 import type { RaceNetworkDriver } from '../multiplayer/prediction';
 import * as THREE from 'three';
@@ -11,7 +13,8 @@ import { createCar, type CarVisual } from './visual/car';
 import { ChaseCameraRig, projectedHeight } from './visual/camera';
 import { createCityWorld } from './visual/city-world';
 import { initialCityRace, stepCityRace, type CityRaceState } from './city-driving';
-import { getCityRoute, type CityRouteId } from './road-network';
+import { getCityRoute } from './road-network';
+import { isCityRoute, type RouteId } from './route-registry';
 import { qualityPresets, useRenderSettings, type RenderTier } from './visual/quality';
 import { createRenderPipeline } from './visual/pipeline';
 import { useUI } from '../lib/ui-store';
@@ -27,7 +30,7 @@ export interface RaceTelemetry {
   x: number;
   z: number;
   heading: number;
-  routeId?: CityRouteId;
+  routeId?: RouteId;
   finished?: boolean;
   checkpointCount?: number;
 }
@@ -44,7 +47,7 @@ export function MidnightOutlaws({
   restartKey,
   initialBestLap,
   networkRef,
-  routeId = 'downtown-circuit',
+  routeId = networkRef ? 'legacy-circuit' : 'downtown-circuit',
   freeDrive = false,
 }: {
   language: 'ru' | 'en';
@@ -59,16 +62,17 @@ export function MidnightOutlaws({
   restartKey: number;
   initialBestLap: number | null;
   networkRef?: React.RefObject<RaceNetworkDriver | null>;
-  routeId?: CityRouteId;
+  routeId?: RouteId;
   freeDrive?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null),
     state = useRef<RaceState | CityRaceState>({
-      ...(networkRef ? initialRace() : initialCityRace(routeId)),
+      ...(isCityRoute(routeId) ? initialCityRace(routeId) : initialRace()),
       bestLap: initialBestLap,
     }),
     pausedRef = useRef(paused);
   const quality = useRenderSettings((s) => s.quality);
+  const cityScene = isCityRoute(routeId);
   const bestRef = useRef(initialBestLap);
   useEffect(() => {
     bestRef.current = initialBestLap;
@@ -92,13 +96,14 @@ export function MidnightOutlaws({
   }, [paused]);
   useEffect(() => {
     state.current = {
-      ...(networkRef ? initialRace() : initialCityRace(routeId)),
+      ...(isCityRoute(routeId) ? initialCityRace(routeId) : initialRace()),
       bestLap: bestRef.current,
     };
   }, [restartKey, routeId, networkRef]);
   useEffect(() => {
     if (!host.current) return;
     const container = host.current;
+    void useRacingPreferences.getState().load();
     let cancelled = false,
       disposeScene = () => {};
     setLoading(0);
@@ -106,7 +111,7 @@ export function MidnightOutlaws({
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
-        antialias: true,
+        antialias: quality !== 'low' && quality !== 'auto',
         powerPreference: 'high-performance',
         preserveDrawingBuffer: false,
       });
@@ -158,7 +163,7 @@ export function MidnightOutlaws({
         0.15,
         preset.cityDistance,
       );
-      const cityWorld = networkRef ? undefined : createCityWorld(scene, assets, tier, renderer);
+      const cityWorld = cityScene ? createCityWorld(scene, assets, tier, renderer) : undefined;
       const world = cityWorld ?? createWorld(scene, assets, tier, renderer);
       const visual = createCar(assets.car.scene, tier === 'low'),
         car = visual.group;
@@ -172,6 +177,7 @@ export function MidnightOutlaws({
         quality,
         assets.loadedMs,
       );
+      const assist = createRacingLine(scene);
       const remoteCars = new Map<string, CarVisual>();
       let previousFrame = performance.now();
       let frame = 0,
@@ -325,7 +331,7 @@ export function MidnightOutlaws({
         previousFrame = now;
         const input = drivingInput;
         const network = networkRef?.current;
-        let sceneKey = `${presentation.current}:${pausedRef.current}:${cityOptions.current.routeId}`;
+        let sceneKey = `${presentation.current}:${pausedRef.current}:${cityOptions.current.routeId}:${useRacingPreferences.getState().mode}:${useRenderSettings.getState().dynamicFov}`;
         if (renderedRoute !== cityOptions.current.routeId) {
           cameraRig.reset();
           renderedRoute = cityOptions.current.routeId;
@@ -344,7 +350,20 @@ export function MidnightOutlaws({
             ghost.group.position.set(peer.state.x, 0.025, peer.state.z);
             ghost.group.rotation.y = peer.state.heading;
             ghost.group.visible = peer.connected || peer.finish !== null;
-            ghost.update(peer.state.speed, peer.state.steering, false, false, dt, peer.car);
+            const peerBrake =
+              'brakePressure' in peer.state && Number(peer.state.brakePressure) > 0.1;
+            const peerBoost =
+              typeof ghost.group.userData.nitro === 'number' &&
+              peer.state.nitro < ghost.group.userData.nitro;
+            ghost.group.userData.nitro = peer.state.nitro;
+            ghost.update(
+              peer.state.speed,
+              peer.state.steering,
+              peerBrake,
+              peerBoost,
+              pausedRef.current ? 0 : dt,
+              peer.car,
+            );
           }
           for (const [id, ghost] of remoteCars)
             if (!peers.some((p) => p.id === id)) {
@@ -367,15 +386,25 @@ export function MidnightOutlaws({
           network?.car(),
         );
         world.update(race, braking, dt, boost);
-        cityWorld?.setRoute(
+        const lineStats = assist.update(
           cityOptions.current.routeId,
-          race.nextCheckpoint,
-          cityOptions.current.freeDrive,
+          race,
+          cityOptions.current.freeDrive ? 'off' : useRacingPreferences.getState().mode,
         );
+        renderer.domElement.dataset.racingLineRed = String(lineStats.red);
+        renderer.domElement.dataset.racingLineYellow = String(lineStats.yellow);
+        renderer.domElement.dataset.racingLineGreen = String(lineStats.green);
+        renderer.domElement.dataset.racingLine = cityOptions.current.freeDrive
+          ? 'off'
+          : useRacingPreferences.getState().mode;
+        if (isCityRoute(cityOptions.current.routeId))
+          cityWorld?.setRoute(
+            cityOptions.current.routeId,
+            race.nextCheckpoint,
+            cityOptions.current.freeDrive,
+          );
         container.dataset.boosting = String(boost);
-        renderer.domElement.dataset.route = network
-          ? 'legacy-circuit'
-          : cityOptions.current.routeId;
+        renderer.domElement.dataset.route = cityOptions.current.routeId;
         container.dataset.braking = String(braking);
         const reduced = useUI.getState().reducedMotion || reducedQuery.matches;
         cameraRig.update(
@@ -460,6 +489,7 @@ export function MidnightOutlaws({
         inputEvents();
         window.removeEventListener('blur', blur);
         renderer.domElement.removeEventListener('webglcontextlost', contextLost);
+        assist.dispose();
         world.dispose();
         pipeline.dispose();
         scene.add(assets.car.scene, assets.district.scene, assets.districtLow.scene);
@@ -482,7 +512,7 @@ export function MidnightOutlaws({
       cancelled = true;
       disposeScene();
     };
-  }, [inputRef, networkRef, quality]);
+  }, [inputRef, networkRef, quality, cityScene]);
   return (
     <div className="race-canvas" ref={host} data-visual-version="city-streets-2">
       {loading < 100 && !failure && (

@@ -17,6 +17,7 @@ import {
 } from '../src/multiplayer/contracts';
 import { liveRooms, metrics, online } from './state';
 import { signConnectionToken, verifyConnectionToken, type ConnectionClaims } from './token';
+import { selectRoute, getRoute, routeIdSchema, type RouteId } from '../src/games/route-registry';
 const neutral = { throttle: 0, brake: 0, steer: 0, nitro: false };
 type Player = NetworkPlayer & {
   latest: InputCommand | null;
@@ -36,12 +37,14 @@ export class NexusRaceRoom extends Room {
   phase: MatchPhase = 'lobby';
   privateRoom = true;
   laps = 1;
+  route = selectRoute();
   tick = 0;
   startsAt: number | null = null;
   matchId: string | null = null;
   saved = false;
   elapsed = 0;
   saving = false;
+  contactEvents = 0;
   admitted = new Set<string>();
   pendingSeats = new Map<string, number>();
   heldIds() {
@@ -60,13 +63,23 @@ export class NexusRaceRoom extends Room {
     maxPlayers: number;
     admitted?: string[];
     creationToken: string;
+    routeId?: RouteId;
+    carContacts?: boolean;
   }) {
     const creator = verifyConnectionToken(options.creationToken, 'control');
     if (creator.sub !== options.ownerId) throw new Error('Unauthorized room creation');
     this.gameId = options.gameId;
     this.runtimeKey = options.runtimeKey;
     if (!multiplayerAdapters[this.runtimeKey]) throw new Error('Unregistered multiplayer adapter');
-    this.maxClients = options.maxPlayers;
+    this.route = selectRoute(
+      routeIdSchema.parse(options.routeId ?? 'legacy-circuit'),
+      1,
+      options.private &&
+        process.env.NEXUS_PRIVATE_CAR_CONTACTS === '1' &&
+        options.carContacts === true,
+    );
+    this.laps = this.route.laps;
+    this.maxClients = Math.min(options.maxPlayers, getRoute(this.route.routeId).maxPlayers);
     this.maxMessagesPerSecond = 80;
     this.privateRoom = options.private;
     this.leaderId = options.ownerId;
@@ -84,7 +97,17 @@ export class NexusRaceRoom extends Room {
       if (parsed.success && p && parsed.data.seq <= p.received) return;
       if (!parsed.success || !p || parsed.data.seq > p.received + 180) {
         metrics.rejectedMessages++;
-        if (p && ++p.strikes > 8) void client.leave(4003, 'Invalid input');
+        if (p && p.strikes === 0)
+          console.warn(
+            'NEXUS input validation',
+            JSON.stringify({
+              reason: parsed.success
+                ? 'sequence-gap'
+                : parsed.error.issues.map((i) => ({ path: i.path.join('.'), code: i.code })),
+              sequenceGap: parsed.success ? parsed.data.seq - p.received : null,
+            }),
+          );
+        if (p && ++p.strikes > 8) void client.leave(4403, 'Invalid input');
         return;
       }
       p.latest = parsed.data;
@@ -113,12 +136,26 @@ export class NexusRaceRoom extends Room {
     this.onMessage('settings', (client, raw: unknown) => {
       metrics.messages++;
       const settings = z
-        .object({ laps: z.number().int().min(1).max(3) })
+        .object({
+          laps: z.number().int().min(1).max(3),
+          routeId: routeIdSchema.optional(),
+          carContacts: z.boolean().optional(),
+        })
         .strict()
         .safeParse(raw);
       if (client.auth.sub === this.leaderId && this.phase === 'lobby' && settings.success) {
-        this.laps = settings.data.laps;
-        this.players.forEach((p) => (p.ready = false));
+        this.route = selectRoute(
+          settings.data.routeId ?? this.route.routeId,
+          settings.data.laps,
+          this.privateRoom &&
+            process.env.NEXUS_PRIVATE_CAR_CONTACTS === '1' &&
+            (settings.data.carContacts ?? this.route.carContacts ?? false),
+        );
+        this.laps = this.route.laps;
+        [...this.players.values()].forEach((p, i) => {
+          p.ready = false;
+          p.state = this.adapter.initialState(i, this.route);
+        });
         this.sendSnapshot();
       }
     });
@@ -139,7 +176,7 @@ export class NexusRaceRoom extends Room {
           p.ready = false;
           p.finish = null;
           p.place = null;
-          p.state = this.adapter.initialState(i);
+          p.state = this.adapter.initialState(i, this.route);
           p.latest = null;
         });
         void this.unlock();
@@ -215,7 +252,7 @@ export class NexusRaceRoom extends Room {
       car: 'silver',
       ready: false,
       connected: true,
-      state: this.adapter.initialState(this.players.size),
+      state: this.adapter.initialState(this.players.size, this.route),
       ack: -1,
       finish: null,
       place: null,
@@ -286,7 +323,8 @@ export class NexusRaceRoom extends Room {
       leaderId: this.leaderId,
       phase: this.phase,
       region: 'europe',
-      mode: 'circuit',
+      mode: getRoute(this.route.routeId).kind,
+      route: this.route,
       private: this.privateRoom,
       maxPlayers: this.maxClients,
       laps: this.laps,
@@ -295,6 +333,11 @@ export class NexusRaceRoom extends Room {
       startsAt: this.startsAt,
       matchId: this.matchId,
       saved: this.saved,
+      contactEvents: this.contactEvents,
+      privateContactsAvailable:
+        this.privateRoom &&
+        process.env.NEXUS_PRIVATE_CAR_CONTACTS === '1' &&
+        this.route.routeId !== 'legacy-circuit',
       players: [...this.players.values()].map(
         ({ id, username, avatar, car, ready, connected, state, ack, finish, place }) => ({
           id,
@@ -330,6 +373,11 @@ export class NexusRaceRoom extends Room {
           data: {
             gameId: this.gameId,
             roomId: this.roomId,
+            mode: getRoute(this.route.routeId).kind,
+            routeId: this.route.routeId,
+            routeVersion: this.route.routeVersion,
+            laps: this.laps,
+            carContacts: this.route.carContacts ?? false,
             participants: {
               create: [...this.players.values()].map((p) => ({ userId: p.id, car: p.car })),
             },
@@ -345,8 +393,9 @@ export class NexusRaceRoom extends Room {
       this.startsAt = Date.now() + 3000;
       this.tick = 0;
       this.elapsed = 0;
+      this.contactEvents = 0;
       [...this.players.values()].forEach((p, i) => {
-        p.state = this.adapter.initialState(i);
+        p.state = this.adapter.initialState(i, this.route);
         p.finish = null;
         p.place = null;
         p.latest = null;
@@ -376,19 +425,40 @@ export class NexusRaceRoom extends Room {
     const before = performance.now();
     this.tick++;
     this.elapsed += FIXED_DT;
+    const moving: {
+      p: Player;
+      state: Player['state'];
+      input: InputCommand | typeof neutral;
+      previous: { x: number; z: number };
+    }[] = [];
     for (const p of this.players.values()) {
       if (p.connected) p.connectedSeconds += FIXED_DT;
       if (p.finish !== null) continue;
       const input = p.connected && Date.now() - p.lastInputAt < 250 ? p.latest : null;
       if (input) p.ack = input.seq;
-      const previous = { x: p.state.x, z: p.state.z };
-      this.adapter.simulate(p.state, input ?? neutral, FIXED_DT);
+      moving.push({
+        p,
+        state: p.state,
+        input: input ?? neutral,
+        previous: { x: p.state.x, z: p.state.z },
+      });
+    }
+    if (this.adapter.simulateGroup) {
+      const contacts = this.adapter.simulateGroup(moving, FIXED_DT, this.route) ?? 0;
+      metrics.vehicleContacts += contacts;
+      this.contactEvents += contacts;
+    } else
+      for (const item of moving)
+        this.adapter.simulate(item.state, item.input, FIXED_DT, this.route);
+    for (const { p, previous } of moving) {
       // Defense in depth: simulation must never exceed its own speed / track invariants.
       if (
-        !Number.isFinite(p.state.x) ||
+        ![p.state.x, p.state.z, p.state.heading, p.state.vx, p.state.vz, p.state.speed].every(
+          Number.isFinite,
+        ) ||
         Math.hypot(p.state.x - previous.x, p.state.z - previous.z) > 5
       ) {
-        p.state = this.adapter.initialState(0);
+        p.state = this.adapter.initialState(0, this.route);
         metrics.rejectedMessages++;
       }
       if (p.state.lap > this.laps) {
@@ -402,7 +472,7 @@ export class NexusRaceRoom extends Room {
     metrics.tickMaxMs = Math.max(metrics.tickMaxMs, duration);
     if (
       [...this.players.values()].every((p) => p.finish !== null || p.departed) ||
-      this.elapsed >= 120 * this.laps
+      this.elapsed >= (this.route.routeId === 'legacy-circuit' ? 120 : 240) * this.laps
     ) {
       this.phase = 'results';
       this.sendSnapshot();
@@ -435,8 +505,20 @@ export class NexusRaceRoom extends Room {
             },
           });
           await tx.playerRating.upsert({
-            where: { userId_gameId_mode: { userId: p.id, gameId: this.gameId, mode: 'circuit' } },
-            create: { userId: p.id, gameId: this.gameId, races: 1, wins: p.place === 1 ? 1 : 0 },
+            where: {
+              userId_gameId_mode: {
+                userId: p.id,
+                gameId: this.gameId,
+                mode: getRoute(this.route.routeId).kind,
+              },
+            },
+            create: {
+              userId: p.id,
+              gameId: this.gameId,
+              mode: getRoute(this.route.routeId).kind,
+              races: 1,
+              wins: p.place === 1 ? 1 : 0,
+            },
             update: { races: { increment: 1 }, wins: { increment: p.place === 1 ? 1 : 0 } },
           });
           await tx.gameSession.create({

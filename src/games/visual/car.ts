@@ -44,11 +44,25 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       if (m instanceof THREE.MeshPhysicalMaterial) {
         m.clearcoat = 1;
         m.iridescence = 0;
-        m.clearcoatRoughness = 0.16;
+        m.clearcoatRoughness = 0.22;
       }
       m.normalScale.set(0.025, 0.025);
       m.envMapIntensity = 1.15;
       paint.push(m);
+    }
+    if (/Tire|Rubber/.test(m.name)) {
+      m.roughness = 0.91;
+      m.metalness = 0;
+      m.envMapIntensity = 0.25;
+    }
+    if (/Rim|Chrome/.test(m.name)) {
+      m.roughness = 0.3;
+      m.metalness = 0.85;
+    }
+    if (/Paint 2/.test(m.name)) {
+      m.roughness = 0.46;
+      m.metalness = 0.12;
+      m.normalScale.set(0.15, 0.15);
     }
     if (/Glass|Mirror/.test(m.name)) {
       if (/Glass/.test(m.name)) m.color.set('#637a86');

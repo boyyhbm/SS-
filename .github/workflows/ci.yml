@@ -13,6 +13,7 @@ jobs:
     env:
       NPM_CONFIG_CACHE: /home/runner/.npm
       E2E_SOFTWARE_DPR: '0.15'
+      NEXUS_PRIVATE_CAR_CONTACTS: '1' # Isolated CI only; production remains gated.
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:

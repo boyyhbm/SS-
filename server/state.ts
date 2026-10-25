@@ -1,3 +1,4 @@
+import type { RouteSelection } from '../src/games/route-registry';
 import type { Presence, RoomSummary, MatchPhase } from '../src/multiplayer/contracts';
 export interface PlatformRoom {
   roomId: string;
@@ -6,6 +7,7 @@ export interface PlatformRoom {
   leaderId: string;
   phase: MatchPhase;
   privateRoom: boolean;
+  route?: RouteSelection;
   maxClients: number;
   players: Map<string, { id: string; connected: boolean }>;
   admitted: Set<string>;
@@ -22,6 +24,7 @@ export const metrics = {
   tickTotalMs: 0,
   tickMaxMs: 0,
   messages: 0,
+  vehicleContacts: 0,
   rejectedMessages: 0,
   disconnects: 0,
   reconnects: 0,
@@ -55,5 +58,6 @@ export function publicRooms(gameId?: string): RoomSummary[] {
       phase: r.phase,
       region: 'europe',
       gameId: r.gameId,
+      route: r.route,
     }));
 }

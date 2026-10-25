@@ -1,3 +1,4 @@
+import { applyContactImpulse, sweepBody } from './contact-physics';
 import { type RaceState, type RaceInput } from './racing-physics';
 import {
   getCityRoute,
@@ -12,6 +13,8 @@ export interface CityRaceState extends RaceState {
   driveThrottle: number;
   brakePressure: number;
   reverseTimer: number;
+  impactYaw: number;
+  collisionImpulse: number;
 }
 export const drivingTuning = {
   wheelbase: 2.8,
@@ -45,6 +48,8 @@ export function initialCityRace(routeId: CityRouteId): CityRaceState {
     driveThrottle: 0,
     brakePressure: 0,
     reverseTimer: 0,
+    impactYaw: 0,
+    collisionImpulse: 0,
   };
 }
 const clamp = (n: number, a: number, b: number) =>
@@ -79,6 +84,7 @@ export function stepCityRace(
   input: RaceInput,
   dt: number,
   freeDrive = false,
+  laps = getCityRoute(s.routeId).laps,
 ): number | null {
   dt = clamp(dt, 0, 0.05);
   if (!dt) return null;
@@ -86,6 +92,8 @@ export function stepCityRace(
     previous = { x: s.x, z: s.z },
     previousHeading = s.heading;
   s.collision = false;
+  s.collisionImpulse = 0;
+  s.impactYaw *= Math.exp(-dt * 5);
   if (!s.finished) s.lapTime += dt;
   const throttle = s.finished && !freeDrive ? 0 : clamp(input.throttle, 0, 1),
     brake = s.finished && !freeDrive ? 1 : clamp(input.brake, 0, 1),
@@ -123,52 +131,46 @@ export function stepCityRace(
     -1.35,
     1.35,
   );
-  s.heading -= yaw * dt;
+  s.heading += (s.impactYaw - yaw) * dt;
   const grip = 1 - Math.exp(-dt * (handbrake ? 3.2 : Math.max(7, 14 - Math.abs(s.speed) * 0.1)));
   s.vx += (Math.sin(s.heading) * s.speed - s.vx) * grip;
   s.vz += (Math.cos(s.heading) * s.speed - s.vz) * grip;
-  const intended = { x: s.x + s.vx * dt, z: s.z + s.vz * dt };
-  if (carClearance(intended, s.heading) < 0 && carClearance(previous, previousHeading) >= 0) {
-    // Continuous swept motion to the curb: no radial snapping or repeated velocity
-    // multiplication. Remove only outward velocity so glancing impacts can slide.
-    let lo = 0,
-      hi = 1;
-    for (let i = 0; i < 9; i++) {
-      const t = (lo + hi) / 2;
-      if (
-        carClearance(
-          {
-            x: previous.x + (intended.x - previous.x) * t,
-            z: previous.z + (intended.z - previous.z) * t,
-          },
-          s.heading,
-        ) >= 0
-      )
-        lo = t;
-      else hi = t;
-    }
-    s.x = previous.x + (intended.x - previous.x) * lo;
-    s.z = previous.z + (intended.z - previous.z) * lo;
-    if (carClearance(s, s.heading) < 0) s.heading = previousHeading;
-    const dx =
-        carClearance({ x: s.x + 0.08, z: s.z }, s.heading) -
-        carClearance({ x: s.x - 0.08, z: s.z }, s.heading),
-      dz =
-        carClearance({ x: s.x, z: s.z + 0.08 }, s.heading) -
-        carClearance({ x: s.x, z: s.z - 0.08 }, s.heading),
+  const intendedX = s.x + s.vx * dt,
+    intendedZ = s.z + s.vz * dt;
+  const clearance = (x: number, z: number, heading: number) => carClearance({ x, z }, heading);
+  const fraction = sweepBody(
+    previous.x,
+    previous.z,
+    previousHeading,
+    intendedX,
+    intendedZ,
+    s.heading,
+    clearance,
+  );
+  const desiredHeading = s.heading;
+  s.x = previous.x + (intendedX - previous.x) * fraction;
+  s.z = previous.z + (intendedZ - previous.z) * fraction;
+  s.heading = previousHeading + (desiredHeading - previousHeading) * fraction;
+  if (fraction < 1) {
+    const dx = clearance(s.x + 0.04, s.z, s.heading) - clearance(s.x - 0.04, s.z, s.heading),
+      dz = clearance(s.x, s.z + 0.04, s.heading) - clearance(s.x, s.z - 0.04, s.heading),
       len = Math.hypot(dx, dz) || 1,
       nx = dx / len,
-      nz = dz / len,
-      dot = s.vx * nx + s.vz * nz;
-    if (dot < 0) {
-      s.vx -= nx * dot * 1.08;
-      s.vz -= nz * dot * 1.08;
-    }
-    s.speed = (s.vx * Math.sin(s.heading) + s.vz * Math.cos(s.heading)) * 0.85;
-    s.collision = true;
-  } else {
-    s.x = intended.x;
-    s.z = intended.z;
+      nz = dz / len;
+    const forwardX = Math.sin(s.heading),
+      forwardZ = Math.cos(s.heading),
+      end = forwardX * nx + forwardZ * nz < 0 ? 1.25 : -1.25;
+    const rx = forwardX * end - nx * drivingTuning.carRadius,
+      rz = forwardZ * end - nz * drivingTuning.carRadius;
+    s.collisionImpulse = applyContactImpulse(s, nx, nz, rx, rz);
+    s.collision = s.collisionImpulse > 25;
+    s.speed = clamp(s.vx * forwardX + s.vz * forwardZ, -9, 68);
+    // Use remaining time for a second, swept tangential slide. No coordinate snap.
+    const tx = s.x + s.vx * dt * (1 - fraction),
+      tz = s.z + s.vz * dt * (1 - fraction);
+    const slide = sweepBody(s.x, s.z, s.heading, tx, tz, s.heading, clearance);
+    s.x += (tx - s.x) * slide;
+    s.z += (tz - s.z) * slide;
   }
   if (freeDrive || s.finished) return null;
   const r = getCityRoute(s.routeId),
@@ -186,7 +188,7 @@ export function stepCityRace(
         s.lap++;
         s.nextCheckpoint = 1;
         s.lapTime = 0;
-        s.finished = r.kind === 'sprint' || s.lap > r.laps;
+        s.finished = r.kind === 'sprint' || s.lap > laps;
         return time;
       }
       s.nextCheckpoint++;
