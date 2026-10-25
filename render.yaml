@@ -1,0 +1,87 @@
+# Initial deploy is preparation-only. Keep NEXUS_LIVE absent until data import
+# and the two actual public origins are configured in nexus-production.
+envVarGroups:
+  - name: nexus-production
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXUS_DEPLOYMENT
+        value: render
+      - key: MULTIPLAYER_SECRET
+        generateValue: true
+
+databases:
+  - name: nexus-database
+    region: frankfurt
+    plan: basic-256mb
+    postgresMajorVersion: '16'
+    databaseName: nexus
+    user: nexus
+    diskSizeGB: 5
+    ipAllowList: []
+
+services:
+  - type: web
+    name: nexus-multiplayer
+    runtime: docker
+    repo: https://github.com/boyyhbm/SS-
+    branch: main
+    region: frankfurt
+    plan: starter
+    numInstances: 1
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./deploy/railway/Dockerfile.multiplayer
+    dockerContext: .
+    preDeployCommand: node scripts/release.mjs
+    healthCheckPath: /live
+    maxShutdownDelaySeconds: 10
+    envVars:
+      - fromGroup: nexus-production
+      - key: PORT
+        value: '10000'
+      - key: NEXUS_SERVICE
+        value: multiplayer
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nexus-database
+          property: connectionString
+
+  - type: web
+    name: nexus-web
+    runtime: docker
+    repo: https://github.com/boyyhbm/SS-
+    branch: main
+    region: frankfurt
+    plan: starter
+    numInstances: 1
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./deploy/railway/Dockerfile.web
+    dockerContext: .
+    preDeployCommand: node scripts/release.mjs
+    healthCheckPath: /api/health
+    maxShutdownDelaySeconds: 10
+    disk:
+      name: nexus-uploads
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - fromGroup: nexus-production
+      - key: PORT
+        value: '10000'
+      - key: NEXUS_SERVICE
+        value: web
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: TRUST_PROXY
+        value: 'false'
+      - key: NEXUS_UPLOAD_DIR
+        value: /var/data/uploads
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nexus-database
+          property: connectionString
+      - key: NEXUS_MULTIPLAYER_PRIVATE_HOSTPORT
+        fromService:
+          name: nexus-multiplayer
+          type: web
+          property: hostport

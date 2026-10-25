@@ -1,8 +1,14 @@
 import { Client } from 'pg';
 import { spawn } from 'node:child_process';
 import { validateProductionConfig } from './production-config.mjs';
+import { deploymentEnvironment, isPreparation } from './deployment-env.mjs';
 
-// Railway pre-deploy containers have private networking, but no application volume.
+Object.assign(process.env, deploymentEnvironment(process.env));
+if (isPreparation(process.env)) {
+  console.log('Preparation release: existing data untouched; migrations and seed not run.');
+  process.exit(0);
+}
+// Pre-deploy containers have private networking, but no application volume.
 validateProductionConfig(process.env, process.env.NEXUS_SERVICE ?? 'web', { volume: false });
 const connection = new Client({
   connectionString: process.env.DATABASE_URL,

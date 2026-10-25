@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-25T10:49:29.493Z",
+  "scope": "LOCAL validation of Render configuration; not deployed to Render",
+  "publicUrl": null,
+  "publicDeploymentVerified": false,
+  "unit": {
+    "passed": 75,
+    "files": 9
+  },
+  "typescript": "PASS",
+  "eslint": "PASS",
+  "docker": {
+    "liveWebBuild": "PASS",
+    "multiplayerBuild": "PASS",
+    "images": {
+      "web": "sha256:b0e810f0b3fd1b568d4a1aee03990f1256df82a32f4be3f1dd09b515149a9d53",
+      "multiplayer": "sha256:4278b2c8ef2bb339708bc1e7957234df49ee5a898e4c7eba84f8a0b47014cae0"
+    },
+    "publicEndpoint": "Test fixture only; not a production address",
+    "preparationHealth": "PASS",
+    "registrationDisabled": "PASS",
+    "gameReadinessDisabled": "PASS",
+    "noEnvironmentFileInImage": "PASS",
+    "compiledWssPolicy": "PASS",
+    "preparationBuildUsesGenerateOnly": "PASS",
+    "sigtermExitCode": 0
+  },
+  "dataRestoreAndOwnership": "deployment-local-tests.json",
+  "blueprintLiveValidation": "NOT_RUN_NO_RENDER_ACCESS",
+  "publicHttpsWssAcceptance": "NOT_RUN_NO_PUBLIC_DEPLOYMENT",
+  "historicalLocalTls": "railway-local-https-tests.json",
+  "physicalControllers": "UNVERIFIED"
+}

@@ -22,7 +22,8 @@ if (
   url.search ||
   url.hash ||
   (local && !rehearsal) ||
-  url.hostname.endsWith('.railway.internal')
+  url.hostname.endsWith('.internal') ||
+  (!local && !url.hostname.includes('.'))
 )
   throw Error('A public HTTPS origin is required');
 const origin = url.origin;

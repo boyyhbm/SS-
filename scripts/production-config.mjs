@@ -14,6 +14,8 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
     if (!env[name]) errors.push(`${name} is required`);
   if (env.NODE_ENV !== 'production') errors.push('NODE_ENV must be production');
   if (!['web', 'multiplayer'].includes(service)) errors.push('Unknown service');
+  if (env.NEXUS_DEPLOYMENT === 'render' && env.RENDER !== 'true')
+    errors.push('Render deployment requires the host-provided RENDER marker');
   if ((env.MULTIPLAYER_SECRET?.length ?? 0) < 64) errors.push('MULTIPLAYER_SECRET is too short');
   if (service === 'web' && (env.NEXTAUTH_SECRET?.length ?? 0) < 64)
     errors.push('NEXTAUTH_SECRET needs at least 64 characters');
@@ -52,6 +54,8 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
     if (!['postgres:', 'postgresql:'].includes(database.protocol)) throw Error();
     if (env.NEXUS_DEPLOYMENT === 'railway' && !database.hostname.endsWith('.railway.internal'))
       errors.push('Railway DATABASE_URL must use private networking');
+    if (env.NEXUS_DEPLOYMENT === 'render' && !/^dpg-[a-z0-9-]+$/.test(database.hostname))
+      errors.push('Render DATABASE_URL must use its private database hostname');
   } catch {
     errors.push('DATABASE_URL must be PostgreSQL');
   }
@@ -68,6 +72,11 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
         throw Error();
       if (env.NEXUS_DEPLOYMENT === 'railway' && !internal.hostname.endsWith('.railway.internal'))
         errors.push('MULTIPLAYER_INTERNAL_URL must use Railway private networking');
+      if (
+        env.NEXUS_DEPLOYMENT === 'render' &&
+        (!/^[a-z][a-z0-9-]+$/.test(internal.hostname) || loopback(internal.hostname))
+      )
+        errors.push('MULTIPLAYER_INTERNAL_URL must use Render private networking');
     } catch {
       errors.push('MULTIPLAYER_INTERNAL_URL is required');
     }
@@ -85,6 +94,15 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
       )
         errors.push('NEXUS_UPLOAD_DIR must be inside an attached Railway volume');
     }
+    if (
+      volume &&
+      env.NEXUS_DEPLOYMENT === 'render' &&
+      (!env.NEXUS_UPLOAD_DIR ||
+        !path.isAbsolute(env.NEXUS_UPLOAD_DIR) ||
+        !path.relative('/var/data', env.NEXUS_UPLOAD_DIR) ||
+        path.relative('/var/data', env.NEXUS_UPLOAD_DIR).startsWith('..'))
+    )
+      errors.push('NEXUS_UPLOAD_DIR must be inside the Render /var/data disk');
   }
   if (errors.length) throw new Error([...new Set(errors)].join('; '));
 }

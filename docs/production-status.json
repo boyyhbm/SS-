@@ -1,34 +1,37 @@
 {
-  "updatedAt": "2026-10-25",
-  "provider": "Railway",
+  "updatedAt": "2026-10-25T10:50:56.676Z",
+  "provider": "Render",
+  "providerSwitchApproved": true,
   "publicUrl": null,
   "deploymentCompleted": false,
   "services": {
     "web": "NOT_DEPLOYED",
     "multiplayer": "NOT_DEPLOYED",
-    "postgresql": "NOT_PROVISIONED_ON_RAILWAY"
+    "postgresql": "NOT_PROVISIONED_ON_RENDER"
   },
-  "railwayBackups": "NOT_CONFIGURED",
+  "hostBackups": "NOT_CONFIGURED",
   "publicAcceptanceTests": "NOT_RUN_NO_PUBLIC_DEPLOYMENT",
   "physicalControllers": "UNVERIFIED",
-  "agentAccessDraft": "SAVED_REQUIRES_OWNER_REVIEW_SECRET_ENTRY_AND_CONFIGURATION_PUBLICATION",
   "blockers": [
-    "Railway API requests blocked by environment network proxy: CONNECT 403",
-    "No Railway authorization configured in this environment",
-    "Owner has not approved billable Railway services and volumes"
+    "No Render authorization configured for the agent",
+    "Render API requests blocked by environment proxy: CONNECT 403",
+    "Render account connection and live Blueprint validation have not been performed"
   ],
   "prepared": [
-    "Current Railway IaC with three services, two persistent volumes, private PostgreSQL and GitHub CI gate",
-    "Production Dockerfiles, health endpoints, PORT support and guarded persistent uploads",
-    "Serialized deploy migrations and idempotent catalog seed",
-    "PostgreSQL singleton ownership for multiplayer rolling deployments",
-    "Private backup and verified local restore of all 23 tables",
-    "Public HTTPS/WSS two-browser and post-restart acceptance scripts",
-    "Custom domain and backup runbook"
+    "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
+    "Safe preparation mode: no registration, gameplay, migrations or seed before data import",
+    "Runtime origin normalization and actual persistent mount check",
+    "Serialized release migrations, idempotent seed and singleton multiplayer ownership",
+    "Existing private database/uploads backups and public HTTPS/WSS acceptance scripts"
   ],
-  "localRehearsalReport": "railway-local-tests.json",
-  "localHttpsReport": "railway-local-https-tests.json",
-  "localValidationReport": "railway-validation.json",
-  "localMainSmoke": "railway-main-smoke.json",
-  "runbook": "railway-production.md"
+  "previousProvider": {
+    "provider": "Railway",
+    "reason": "Owner screenshot reports new account registrations disabled; owner accepted switching to paid Render",
+    "runbook": "railway-production.md",
+    "status": "NOT_DEPLOYED"
+  },
+  "historicalLocalHttpsReport": "railway-local-https-tests.json",
+  "runbook": "render-production.md",
+  "localValidationReport": "render-local-tests.json",
+  "localRestoreReport": "deployment-local-tests.json"
 }

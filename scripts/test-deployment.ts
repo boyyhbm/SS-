@@ -70,16 +70,16 @@ async function waitReady(port: number) {
   throw Error('Rehearsal server did not become ready');
 }
 function start(port: number) {
-  const child = spawn(process.execPath, ['--import', 'tsx', 'server/index.ts'], {
+  const child = spawn(process.execPath, ['scripts/start-production.mjs', 'multiplayer'], {
     env: {
       ...process.env,
       DATABASE_URL: target.toString(),
       PORT: String(port),
       GAME_HOST: '0.0.0.0',
       NODE_ENV: 'production',
-      NEXUS_DEPLOYMENT: '',
-      NEXTAUTH_URL: 'http://localhost:3000',
-      NEXT_PUBLIC_MULTIPLAYER_URL: `ws://localhost:${port}`,
+      NEXUS_DEPLOYMENT: 'local-rehearsal',
+      NEXTAUTH_URL: 'https://console.example.test',
+      NEXT_PUBLIC_MULTIPLAYER_URL: 'wss://game.example.test',
     },
     stdio: 'ignore',
   });
@@ -160,7 +160,7 @@ try {
   database = new PrismaClient({ adapter: new PrismaPg({ connectionString: target.toString() }) });
   const first = start(28067);
   await waitReady(28067);
-  checks.push('Multiplayer binds Railway-style PORT and reports database-aware readiness');
+  checks.push('Production launcher binds host PORT and reports database-aware readiness');
   const game = await database.game.findFirstOrThrow({ where: { slug: 'midnight-outlaws' } });
   const user = await database.user.create({
     data: {
@@ -231,11 +231,11 @@ try {
     'Accounts, libraries, settings, controller profiles, saves, friends and existing results survive restarts unchanged',
   );
   await writeFile(
-    'docs/railway-local-tests.json',
+    'docs/deployment-local-tests.json',
     JSON.stringify(
       {
         date: new Date().toISOString(),
-        scope: 'LOCAL rehearsal, not public Railway deployment',
+        scope: 'LOCAL deployment rehearsal, not a public hosting verification',
         passed: true,
         checks,
         tableCount: Object.keys(restored).length,
@@ -247,11 +247,11 @@ try {
   console.log(JSON.stringify({ passed: true, scope: 'local-only', checks }));
 } catch {
   await writeFile(
-    'docs/railway-local-tests.json',
+    'docs/deployment-local-tests.json',
     JSON.stringify(
       {
         date: new Date().toISOString(),
-        scope: 'LOCAL rehearsal, not public Railway deployment',
+        scope: 'LOCAL deployment rehearsal, not a public hosting verification',
         passed: false,
         completedChecks: checks,
       },

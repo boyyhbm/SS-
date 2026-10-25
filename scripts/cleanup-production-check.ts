@@ -3,13 +3,13 @@ import { db } from '../src/lib/db';
 const prefix = process.argv[2];
 const ids = process.argv.slice(3);
 if (
-  process.env.NEXUS_DEPLOYMENT !== 'railway' ||
+  !['railway', 'render'].includes(process.env.NEXUS_DEPLOYMENT ?? '') ||
   !/^release_[a-f0-9]{8}$/.test(prefix ?? '') ||
   ids.length < 1 ||
   ids.length > 2 ||
   ids.some((id) => !/^[a-z0-9]{16,64}$/.test(id))
 )
-  throw Error('Only an explicitly named Railway production-check fixture can be removed');
+  throw Error('Only an explicitly named production-check fixture can be removed');
 try {
   const names = [prefix + '_a', prefix + '_b'];
   const users = await db.user.findMany({ where: { id: { in: ids }, username: { in: names } } });
