@@ -169,9 +169,10 @@ for (const { route, contacts } of cases)
         timeout: 120000,
       });
       if (contacts) {
-        await a.getByLabel('Столкновения автомобилей', { exact: true }).check();
+        await a.getByLabel('Столкновения автомобилей', { exact: true }).click();
         for (const p of pages)
           await expect(p.getByTestId('online-player')).toHaveAttribute('data-car-contacts', 'true');
+        await expect(a.getByLabel('Столкновения автомобилей', { exact: true })).toBeChecked();
       }
       for (const p of pages) {
         await expect(p.getByTestId('online-player')).toHaveAttribute('data-route', route.id);
