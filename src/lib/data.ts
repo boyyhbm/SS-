@@ -1,6 +1,7 @@
 import { db } from './db';
 import { currentUser } from './auth';
 import { gameArtwork } from './artwork';
+import { CITY_ROUTE_IDS } from '@/games/road-network';
 export async function consoleData() {
   const user = await currentUser();
   const [games, library, aggregate, recent, saves] = await Promise.all([
@@ -21,8 +22,12 @@ export async function consoleData() {
       : null,
     user
       ? db.gameSave.findMany({
-          where: { userId: user.id, saveKey: 'best-lap' },
-          select: { gameId: true, saveData: true },
+          where: {
+            userId: user.id,
+            saveKey: { in: ['best-lap', ...CITY_ROUTE_IDS.map((id) => `best-lap:${id}`)] },
+          },
+          select: { gameId: true, saveKey: true, saveData: true },
+          orderBy: { saveKey: 'asc' },
         })
       : [],
   ]);
@@ -94,5 +99,5 @@ export interface ConsoleData {
   games: GameDTO[];
   library: LibraryDTO[];
   user: UserDTO | null;
-  saves: { gameId: string; saveData: { seconds: number } }[];
+  saves: { gameId: string; saveKey: string; saveData: { seconds: number } }[];
 }

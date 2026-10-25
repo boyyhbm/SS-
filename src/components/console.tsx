@@ -1,5 +1,6 @@
 'use client';
 import { ConsoleStage } from './console-stage';
+import { cityRoutes } from '@/games/road-network';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
@@ -736,8 +737,11 @@ export function Console({
                   <div>
                     <dt>{t('bestLap')}</dt>
                     <dd>
-                      {data.saves.find((s) => s.gameId === game.id)?.saveData.seconds?.toFixed(2) ??
-                        '—'}{' '}
+                      {(
+                        data.saves.find(
+                          (s) => s.gameId === game.id && s.saveKey === 'best-lap:downtown-circuit',
+                        ) ?? data.saves.find((s) => s.gameId === game.id)
+                      )?.saveData.seconds?.toFixed(2) ?? '—'}{' '}
                       s
                     </dd>
                   </div>
@@ -1270,9 +1274,14 @@ function ProfilePanel({
           <h2>{t('bestLap')}</h2>
           {data.saves.length ? (
             data.saves.map((save) => (
-              <div className="best-lap-card" key={save.gameId}>
+              <div className="best-lap-card" key={save.gameId + save.saveKey}>
                 <Gamepad2 />
                 <h3>{data.games.find((g) => g.id === save.gameId)?.title ?? 'MIDNIGHT OUTLAWS'}</h3>
+                <small>
+                  {cityRoutes.find((r) => save.saveKey === `best-lap:${r.id}`)?.[
+                    ui.language === 'ru' ? 'nameRu' : 'name'
+                  ] ?? (ui.language === 'ru' ? 'Прежняя трасса' : 'Original circuit')}
+                </small>
                 <strong>
                   {save.saveData.seconds.toFixed(2)}
                   <small> s</small>
