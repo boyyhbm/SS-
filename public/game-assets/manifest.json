@@ -36,9 +36,9 @@
           "bytes": 3080
         },
         {
-          "path": "Materials/Fabric/Curtains.tres",
-          "sha256": "7bf1261c065eed3be0b265a20ab4968cbf5fa939afb9cbf20bba8c9369d84239",
-          "bytes": 545
+          "path": "Materials/Stone/Brick_Large_Beige.tres",
+          "sha256": "da4af695cd8aabe076400ba421cbeec667a852b8418e95d871c3a02e3110ad34",
+          "bytes": 509
         },
         {
           "path": "Materials/Wood/Wood_Painted_Green.tres",
@@ -46,13 +46,23 @@
           "bytes": 510
         },
         {
-          "path": "Materials/Stone/Brick_Large_Beige.tres",
-          "sha256": "da4af695cd8aabe076400ba421cbeec667a852b8418e95d871c3a02e3110ad34",
-          "bytes": 509
+          "path": "Materials/Metal/Bronze.tres",
+          "sha256": "6d23e2478697d122e900f07aa10cbda9cb8a87be966f0a54cfb3fd3a7efef9f9",
+          "bytes": 503
+        },
+        {
+          "path": "Materials/Stone/Concrete.tres",
+          "sha256": "d16fb30d13dc8172234189218212f15de6fe8167bbfd9e06af589ff0cdcac7bb",
+          "bytes": 468
         },
         {
           "path": "Materials/Stone/Concrete_Plaster.tres",
           "sha256": "8793fa9b00788c41953dd630f390aeb91777bda85441906f4796de868168ec9c",
+          "bytes": 484
+        },
+        {
+          "path": "Materials/Stone/Concrete_Grooved.tres",
+          "sha256": "b00ed382cf93d34070f16a03dcd68bcabc9bc8e4579fa19ea113bb96ff4ecf61",
           "bytes": 484
         },
         {
@@ -61,19 +71,9 @@
           "bytes": 495
         },
         {
-          "path": "Materials/Stone/Concrete.tres",
-          "sha256": "d16fb30d13dc8172234189218212f15de6fe8167bbfd9e06af589ff0cdcac7bb",
-          "bytes": 468
-        },
-        {
-          "path": "Materials/Metal/Bronze.tres",
-          "sha256": "6d23e2478697d122e900f07aa10cbda9cb8a87be966f0a54cfb3fd3a7efef9f9",
-          "bytes": 503
-        },
-        {
-          "path": "Materials/Stone/Concrete_Grooved.tres",
-          "sha256": "b00ed382cf93d34070f16a03dcd68bcabc9bc8e4579fa19ea113bb96ff4ecf61",
-          "bytes": 484
+          "path": "Materials/Fabric/Curtains.tres",
+          "sha256": "7bf1261c065eed3be0b265a20ab4968cbf5fa939afb9cbf20bba8c9369d84239",
+          "bytes": 545
         },
         {
           "path": "Materials/Metal/Black_Metal.tres",
@@ -91,14 +91,14 @@
           "bytes": 3018
         },
         {
-          "path": "Materials/Wood/Wood_Painted_White.tres",
-          "sha256": "869573a7e3d40e82f62612d1e9f55f0336b85a3e097761d170086c59429831d7",
-          "bytes": 486
-        },
-        {
           "path": "Materials/Roofing/Roofing_Shingle_Grey.tres",
           "sha256": "1881697a3ecea7cb68bd8c616b9502ac959f1a7f9282e3ec454071cd96e1ba6d",
           "bytes": 496
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_White.tres",
+          "sha256": "869573a7e3d40e82f62612d1e9f55f0336b85a3e097761d170086c59429831d7",
+          "bytes": 486
         },
         {
           "path": "Materials/Wood/Doors.tres",
@@ -121,9 +121,9 @@
           "bytes": 7505
         },
         {
-          "path": "Materials/Lights/Streetlight_Metal.tres",
-          "sha256": "5c1f27f8905f6880a8042b572e9f850bc2c58e0ee1a1c61e67b1850a909c969c",
-          "bytes": 489
+          "path": "Materials/Metal/Antenna_Metal.tres",
+          "sha256": "42dad7cb11c2bb3c44900423655b7ba284cb4443684ea6a28608b642925772e4",
+          "bytes": 479
         },
         {
           "path": "Materials/Wood/Wood_Brown.tres",
@@ -131,9 +131,9 @@
           "bytes": 470
         },
         {
-          "path": "Materials/Stone/Brick_Small_Red_Blend.tres",
-          "sha256": "ac071997a660e7562eb62d6d9308012260467c4fe0948ade2842bb8200910841",
-          "bytes": 505
+          "path": "Materials/Stone/Concrete2.tres",
+          "sha256": "10d679a67376d13e7878e0bc1e0351b7a494d86be1abdaa45fbc83216b6a18c8",
+          "bytes": 455
         },
         {
           "path": "Materials/Metal/Paris_TrafficSign_A.tres",
@@ -141,24 +141,19 @@
           "bytes": 723
         },
         {
-          "path": "Materials/Stone/Plaster.tres",
-          "sha256": "b763224661ca7aaf77dbb5b147cb5d2d3b098db4cfc640da6c628a5ee290f334",
-          "bytes": 452
-        },
-        {
-          "path": "Materials/Lights/StreetLight_Bulb.tres",
-          "sha256": "e45c770829534370899ebdf48f864bcfca903496e66c2af6a46829d0ca20a09d",
-          "bytes": 555
-        },
-        {
           "path": "Materials/Lights/Emissive_StreeLight.tres",
           "sha256": "eff2fba72679c64f2a5ac4fa2c276c1a5214c17c67c1ab3036a087318d5941f8",
           "bytes": 406
         },
         {
-          "path": "Materials/Stone/Concrete2.tres",
-          "sha256": "10d679a67376d13e7878e0bc1e0351b7a494d86be1abdaa45fbc83216b6a18c8",
-          "bytes": 455
+          "path": "Materials/Lights/Streetlight_Metal.tres",
+          "sha256": "5c1f27f8905f6880a8042b572e9f850bc2c58e0ee1a1c61e67b1850a909c969c",
+          "bytes": 489
+        },
+        {
+          "path": "Materials/Stone/Plaster.tres",
+          "sha256": "b763224661ca7aaf77dbb5b147cb5d2d3b098db4cfc640da6c628a5ee290f334",
+          "bytes": 452
         },
         {
           "path": "Materials/Metal/Paris_ElectricBox.tres",
@@ -166,9 +161,14 @@
           "bytes": 460
         },
         {
-          "path": "Materials/Metal/Antenna_Metal.tres",
-          "sha256": "42dad7cb11c2bb3c44900423655b7ba284cb4443684ea6a28608b642925772e4",
-          "bytes": 479
+          "path": "Materials/Stone/Brick_Small_Red_Blend.tres",
+          "sha256": "ac071997a660e7562eb62d6d9308012260467c4fe0948ade2842bb8200910841",
+          "bytes": 505
+        },
+        {
+          "path": "Materials/Lights/StreetLight_Bulb.tres",
+          "sha256": "e45c770829534370899ebdf48f864bcfca903496e66c2af6a46829d0ca20a09d",
+          "bytes": 555
         },
         {
           "path": "Meshes/Section02/BistroProps.glb",
@@ -181,9 +181,9 @@
           "bytes": 5054
         },
         {
-          "path": "Materials/Nature/Foliage_Hedges.tres",
-          "sha256": "7a1e6a5e0b781f3e50512332310273bcec89f9ae24c0e1b84448d4f19aa31915",
-          "bytes": 643
+          "path": "Materials/Stone/PlantPots.tres",
+          "sha256": "d357995907b447f56748744a1c252710283dfe0d1329b82dc1d6c5bc6f6cd43b",
+          "bytes": 456
         },
         {
           "path": "Materials/Nature/Foliage_Paris_Flowers.tres",
@@ -191,39 +191,134 @@
           "bytes": 496
         },
         {
+          "path": "Materials/Nature/Foliage_Hedges.tres",
+          "sha256": "7a1e6a5e0b781f3e50512332310273bcec89f9ae24c0e1b84448d4f19aa31915",
+          "bytes": 643
+        },
+        {
           "path": "Materials/Metal/SideWalkBarrier.tres",
           "sha256": "bf576c0c090eced4bba1bd25ef2e7f03e310ee8b2c9ef751be1abfe23bb250f3",
           "bytes": 468
         },
         {
-          "path": "Materials/Stone/PlantPots.tres",
-          "sha256": "d357995907b447f56748744a1c252710283dfe0d1329b82dc1d6c5bc6f6cd43b",
-          "bytes": 456
+          "path": "Meshes/Section05/S5B1.glb",
+          "sha256": "992a9449fc6bd3ebebaed1938f467e49c541a154c1737713d6d49d3183846dd4",
+          "bytes": 17262596
         },
         {
-          "path": "Textures/Lights/Spotlight_Glass_Emissive_Emissive.dds",
-          "sha256": "47a50d1d719011201cd95776c4db2583943bb10616b19b22235e52463f0df052",
-          "bytes": 2872
+          "path": "Scenes/Section05/S5B1.tscn",
+          "sha256": "2fc88e5ccf571c5872b0324742d067a7106ad8a3b69390751d3ffd60b7f4c3c3",
+          "bytes": 12836
         },
         {
-          "path": "Textures/Lights/Emissive_StreetLight_Emissive.dds",
-          "sha256": "bf89728e2c83ee6b7d296450fd6aa8e77fa9226dcab3eb3f350acba161a69681",
-          "bytes": 2872
+          "path": "Materials/Stone/Details_Dark.tres",
+          "sha256": "a0af711df6f5ab4d5484e160d1ebc4e45d816cb9062571e13399e7abaadd1a50",
+          "bytes": 476
         },
         {
-          "path": "Textures/Lights/Streetlight_Metal_BaseColor.dds",
-          "sha256": "352da936fc056cdad0229b62fe50f6e65e765c9436b04b27cc259afe8a68249d",
-          "bytes": 2796344
+          "path": "Materials/Metal/Forge_Metal.tres",
+          "sha256": "d54bcf6bed66261034e45b59e32c8e63b5877d3e840be9b51efdb81c545112ac",
+          "bytes": 564
         },
         {
-          "path": "Textures/Lights/Spotlight_Glass_Emissive_Normal.png",
-          "sha256": "bc2eebb9a0dbeebc6b589a6ea1cd1d7ae359e0ec58bb9b1203520eb94e41eedd",
-          "bytes": 3279876
+          "path": "Materials/Metal/Rollup_Door.tres",
+          "sha256": "89f80751d4c9618df6e15f7c6dfc1f57edc0e0581b997f8c4aa9b058e4f21886",
+          "bytes": 472
         },
         {
-          "path": "Textures/Metal/Antenna_Metal_BaseColor.dds",
-          "sha256": "9a4c4c5df383253cc0ca2df1a805d51ac224e69c620a2d045d9176ecfb7513fc",
-          "bytes": 2796344
+          "path": "Materials/Metal/Metal.tres",
+          "sha256": "d411ab09a4aa6256cfb7c80c53a292e34c53b9787cd2eacc5b863f1c43746d9c",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_Cyan.tres",
+          "sha256": "c2d110225490d021af78f11fc0e45a5e2364a21de2200577cd431f1f7e69848d",
+          "bytes": 482
+        },
+        {
+          "path": "Materials/Ground/Pavement_Curbstones.tres",
+          "sha256": "8dd371d0becc61c9ecf26eaa746bb5b99d4701a4c01d0f38229f41167fc90dac",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Roofing/Roofing_Metal_01.tres",
+          "sha256": "3d91a3a798187aabf7e37e6bc6b84af91a8c52ad3e7d2f8561cdc1a6eb5f27dd",
+          "bytes": 488
+        },
+        {
+          "path": "Materials/Miscellaneous/Building_Details.tres",
+          "sha256": "95673308615d5ed8f4c09bf88e7777a209fc02403454c0e74f62224e50d9f00c",
+          "bytes": 500
+        },
+        {
+          "path": "Materials/Nature/Foliage_Trunk.tres",
+          "sha256": "ed86c05768215090400baffc060011bd09222f112f8f6fee1bc9c335bb29dedc",
+          "bytes": 278
+        },
+        {
+          "path": "Materials/Glass/Glass_Exterior.tres",
+          "sha256": "02781cdd99e47b95e31fa910bc9572abb012d5713fc20cd7e7203186972b9dc8",
+          "bytes": 656
+        },
+        {
+          "path": "Materials/Nature/Foliage_Leaves.tres",
+          "sha256": "17982e5dcd99fd2a7cd833431f618d970951b6561c9aed22302e9a8d290ca7c1",
+          "bytes": 557
+        },
+        {
+          "path": "Materials/Nature/Pavement_Ground_Wet.tres",
+          "sha256": "2175d996bb42688d50c896dce6c3368c1f83d174c65ddf1e310c5cf7f6fa8096",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Fabric/Awning_Hotel_Fabric.tres",
+          "sha256": "b2c74c654373c04ea09476b397220469526befbc7dae17a578b4df69c483c8ee",
+          "bytes": 556
+        },
+        {
+          "path": "Materials/Miscellaneous/Room_Interior.tres",
+          "sha256": "eb04df8efa744d05229b5f5f279026ac55cc0f99b94dd95f9949a013ccc883ba",
+          "bytes": 293
+        },
+        {
+          "path": "Meshes/Section03/S3B1.glb",
+          "sha256": "ce7c8b37a15ba6972b49062bfa24bfe02c9f7408ef52c54d690f41f22133bfed",
+          "bytes": 3461164
+        },
+        {
+          "path": "Scenes/Section03/S3B1.tscn",
+          "sha256": "ef29ead9f22025dbc76330384d29c36f7c6e0fbbf472f70cc62ced1b331522d0",
+          "bytes": 5033
+        },
+        {
+          "path": "Meshes/Section01/S1Details.glb",
+          "sha256": "e6c5815de8c546b1ba9423f2b2befe9d906ac936d34150c76bf1fed1df58ccdf",
+          "bytes": 10375708
+        },
+        {
+          "path": "Scenes/Section01/S1Details.tscn",
+          "sha256": "323a2f5337ff87e1dc2c021adb887d57468fad1539f6a2f36d159d30f18c650e",
+          "bytes": 6937
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Tree_Trunk.tres",
+          "sha256": "5f85665ad3485cf7acff6c776cb624b956603b1436cb292c189d17eadc16ac10",
+          "bytes": 500
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Green_Leaves.tres",
+          "sha256": "669658264543696cac3f5cce3b8a3536213b16a0683b11502857383a3b17f787",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Orange_Leaves.tres",
+          "sha256": "75c53bacfb9c02fc5d4a75c9e06e3b1ab7b6676791a1532ff02b3226c552beb5",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Metal/Paris_StreetPivot.tres",
+          "sha256": "5770b2f778bebc76c3121dbfe315011e36545ad3a19332f4ad838d12be519275",
+          "bytes": 472
         },
         {
           "path": "Textures/Fabric/MASTER_Curtains_Normal.png",
@@ -231,8 +326,68 @@
           "bytes": 2630300
         },
         {
-          "path": "Textures/Metal/ElectricBox_BaseColor.dds",
-          "sha256": "34bc32682d4c43e16f590b75b904ce9ecfb2fb32049d22742e76ce421a216b76",
+          "path": "Textures/Fabric/MASTER_Curtains_BaseColor.dds",
+          "sha256": "3df6a4f1c9cf53ca5442829fbdeb2fc7c9e6e0651969e11533b5e088c9dbdee4",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_Normal.tga",
+          "sha256": "57169b17d864620b49a7eb7c5b0d9844a522e555ed11c91568439d46862b6a46",
+          "bytes": 131090
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_BaseColor.dds",
+          "sha256": "dfccede154fb2be457ac4b852e105a55627a2f86640d44c342fca2601b230050",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_Roughness.png",
+          "sha256": "c430692f78bb7f0f748fd687bd15df0597fb824ea19f1c73c3652f38bcdd7dfe",
+          "bytes": 1077352
+        },
+        {
+          "path": "Textures/Fabric/Awnings_Hotel_Fabric_Normal.png",
+          "sha256": "753002eea8f1c4f89e82d6a392bf04778abd05b2612b7024cbf3bda188776423",
+          "bytes": 4798187
+        },
+        {
+          "path": "Textures/Fabric/Awnings_Hotel_Fabric_BaseColor.dds",
+          "sha256": "53c338e10a0d42c5531da0f2e7aec11135b7f4828de0fb7bd21c9497684e007a",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Ground/Pavement_Curbstones_BaseColor.dds",
+          "sha256": "74d55e379548aefed2c47667642a144cae98ee661e21ca4da474a2b16eac4316",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Lights/Emissive_StreetLight_Emissive.dds",
+          "sha256": "bf89728e2c83ee6b7d296450fd6aa8e77fa9226dcab3eb3f350acba161a69681",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Emissive.dds",
+          "sha256": "47a50d1d719011201cd95776c4db2583943bb10616b19b22235e52463f0df052",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Normal.png",
+          "sha256": "bc2eebb9a0dbeebc6b589a6ea1cd1d7ae359e0ec58bb9b1203520eb94e41eedd",
+          "bytes": 3279876
+        },
+        {
+          "path": "Textures/Lights/Streetlight_Metal_BaseColor.dds",
+          "sha256": "352da936fc056cdad0229b62fe50f6e65e765c9436b04b27cc259afe8a68249d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Ground/Pavement_Curbstones_Normal.png",
+          "sha256": "5f79fcc71ceb380e617b5e973c45a00b911a53ea8283bf67b68564a70b42c844",
+          "bytes": 5891714
+        },
+        {
+          "path": "Textures/Metal/Antenna_Metal_BaseColor.dds",
+          "sha256": "9a4c4c5df383253cc0ca2df1a805d51ac224e69c620a2d045d9176ecfb7513fc",
           "bytes": 2796344
         },
         {
@@ -246,9 +401,9 @@
           "bytes": 1831105
         },
         {
-          "path": "Textures/Fabric/MASTER_Curtains_BaseColor.dds",
-          "sha256": "3df6a4f1c9cf53ca5442829fbdeb2fc7c9e6e0651969e11533b5e088c9dbdee4",
-          "bytes": 5592560
+          "path": "Textures/Metal/ElectricBox_BaseColor.dds",
+          "sha256": "34bc32682d4c43e16f590b75b904ce9ecfb2fb32049d22742e76ce421a216b76",
+          "bytes": 2796344
         },
         {
           "path": "Textures/Metal/ElectricBox_Normal.png",
@@ -261,19 +416,59 @@
           "bytes": 496
         },
         {
-          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_BaseColor.dds",
-          "sha256": "bd4613554721fbf1ab9f924956a4dde4b318d9d5496bde2ffc89aa1a2ee904ca",
-          "bytes": 496
-        },
-        {
           "path": "Textures/Metal/MASTER_Black_Metal_Normal.png",
           "sha256": "d98c526355bf535668d7e8d3a38bdf564a34ad9600875f0a87c171a0b5a572e4",
           "bytes": 7609135
         },
         {
+          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_BaseColor.dds",
+          "sha256": "bd4613554721fbf1ab9f924956a4dde4b318d9d5496bde2ffc89aa1a2ee904ca",
+          "bytes": 496
+        },
+        {
           "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_Normal.png",
           "sha256": "5a89332c9c06f8d072c8f885fdd85f9cd106e530008748a660c566ba6affe24b",
           "bytes": 1831105
+        },
+        {
+          "path": "Textures/Metal/MASTER_Metal_BaseColor.dds",
+          "sha256": "11b9e2c0c108ac2c33ab89092a474bb240c05aef557bb0ac6a50ffcf1a55d49a",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Forge_Metal_Normal.png",
+          "sha256": "6b9b046d2ed040fb458d6bc755a64b733f1c8d03161b16d4e31bb77499ba7661",
+          "bytes": 1738058
+        },
+        {
+          "path": "Textures/Metal/MASTER_Metal_Normal.png",
+          "sha256": "88556db3c01c66fc68c69e61af494d7af0280aead280eeddc368ec3e36bbfa28",
+          "bytes": 1457901
+        },
+        {
+          "path": "Textures/Metal/MASTER_Rollup_Door_BaseColor.dds",
+          "sha256": "f65a6313360305dfa01b01dba0f428bcb8ee3661e103b6b762fe4041711791ae",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Forge_Metal_BaseColor.dds",
+          "sha256": "21c5eaee1de278ce4e170aad152e33a1b94ef563b40dc2f9156a3525ff87dc4e",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Metal/MASTER_Rollup_Door_Normal.png",
+          "sha256": "e8f599dc5f4fac4458be6e8f4835c317aab736a086f609209484c5aa211e33fd",
+          "bytes": 3745890
+        },
+        {
+          "path": "Textures/Metal/Paris_StreetPivot_BaseColor.dds",
+          "sha256": "21eeda828f8b98292550947cd1c3aee0f6a16bc42c2960190f217473b7647954",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Paris_StreetPivot_Normal.png",
+          "sha256": "a1e45761fb23da6bb0078b1ce23175d7cbec9fc1b423dba0bd21ddfbaa5b5a3e",
+          "bytes": 1323825
         },
         {
           "path": "Textures/Metal/Paris_TrafficSign_A_BaseColor.dds",
@@ -301,14 +496,54 @@
           "bytes": 2825951
         },
         {
+          "path": "Textures/Miscellaneous/MASTER_Building_Details_BaseColor.dds",
+          "sha256": "d1c82e3a07d252975a92cdc2ae2bd869368f0b0e1c7ecb3cd297d2dd4d422fab",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Miscellaneous/MASTER_Building_Details_Normal.png",
+          "sha256": "c71fc3667638e064c0af819251f97518fa29b86687cccff9e077472ce409da49",
+          "bytes": 4480208
+        },
+        {
           "path": "Textures/Nature/Foliage_Bux_Hedges46_BaseColor.dds",
           "sha256": "c18fe165eb4b1b1afe07a7db0c7b6795907a3f2930e90b0b265f171050e0f4ca",
           "bytes": 5592560
         },
         {
+          "path": "Textures/Miscellaneous/MASTER_Room_Interior_BaseColor.dds",
+          "sha256": "160d56ce44e5f3ca169240f21a70460a13a61b801a9f5cb9a11345071d2a1f57",
+          "bytes": 2796344
+        },
+        {
           "path": "Textures/Nature/Foliage_Bux_Hedges46_Normal.png",
           "sha256": "aed4055de60f3caf0ee5edaf189b21fc64e457869cc77a52910503e7ccd8ff95",
           "bytes": 7554243
+        },
+        {
+          "path": "Textures/Nature/Foliage_Leaves_BaseColor.dds",
+          "sha256": "220e88463938a2f5e2d0c8ac0492410c56a43e627bb959e5cd76fe0eca018eac",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Leaves_Normal.png",
+          "sha256": "ebac8d478cd4d345bfc0dff9c82a2c85e6c5f0a636b4529e31bfab6fcd68320e",
+          "bytes": 790463
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Green_Leaves_BaseColor.dds",
+          "sha256": "b8c02d24abc1da1dd321458e5442e7ead1eb55f2a21a16ef41b57c94260f9405",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Orange_Leaves_BaseColor.dds",
+          "sha256": "391db874c954b7e5e3c97db138b1fa8bea7e37920155b4f88c711e66c6c098e6",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Trunk_BaseColor.dds",
+          "sha256": "d1cc632017fea4896bf1541cff534fa53d6a139bee36338a1b82fb91e6f6f5ad",
+          "bytes": 2796344
         },
         {
           "path": "Textures/Nature/Foliage_Paris_Flowers_BaseColor.dds",
@@ -321,19 +556,49 @@
           "bytes": 2805746
         },
         {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Trunk_Normal.png",
+          "sha256": "5ed72c8de555f0d6c177473be22e2ae4e2fdf22c4f13a5ecd39bfb12c0c204bf",
+          "bytes": 8854321
+        },
+        {
+          "path": "Textures/Nature/Foliage_Trunk_BaseColor.dds",
+          "sha256": "67352616aba249b730e70beda508b20f877c38cf19ab16ffd47082bed5a19300",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Pavement_Ground_Wet_BaseColor.dds",
+          "sha256": "b134c53cc5a9c4d3ddf3c37ff115ac6addd6fff42fa032ddb49c1fcd1807aeb7",
+          "bytes": 2796344
+        },
+        {
           "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_BaseColor.dds",
           "sha256": "18378c454d003de4e95b55526d28079ad6cb5537ae1fbf08a3de2e45b2c14bdc",
           "bytes": 2796344
         },
         {
-          "path": "Textures/Stone/Concrete2_BaseColor.dds",
-          "sha256": "6394eae366db6979de5c0190542d1b48d8aaf090ad3008164c3d599705c36a65",
+          "path": "Textures/Nature/Pavement_Ground_Wet_Normal.png",
+          "sha256": "460a5d3de8e639049a785782b53f934992ce80ae297cf255c001caa1ca324da5",
+          "bytes": 8479239
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Metal_01_Normal.png",
+          "sha256": "4253205d130be5cd83b3461f52d0448d9bc30c30949cadbf469981a14adb5597",
+          "bytes": 4281465
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Metal_01_BaseColor.dds",
+          "sha256": "f285c5265fac25463c23cd020468e35e444ae307f3220a6b028acfb3f6ccbc02",
           "bytes": 2796344
         },
         {
           "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_Normal.png",
           "sha256": "049007e6adaf498ba0dd1b391e958abdf99c49cbc24660597f6a36318b97d1d8",
           "bytes": 8345864
+        },
+        {
+          "path": "Textures/Stone/Concrete2_BaseColor.dds",
+          "sha256": "6394eae366db6979de5c0190542d1b48d8aaf090ad3008164c3d599705c36a65",
+          "bytes": 2796344
         },
         {
           "path": "Textures/Stone/Concrete2_Normal.png",
@@ -346,6 +611,11 @@
           "bytes": 2796344
         },
         {
+          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_Normal.png",
+          "sha256": "d7ab07cf3a03cae91e4ed6e043f1b3773ada056a6702610d0f628cc08bef5dd0",
+          "bytes": 8820912
+        },
+        {
           "path": "Textures/Stone/MASTER_Brick_Large_White_BaseColor.dds",
           "sha256": "2962e5cefc4622e1add61c1de440b131cf32908cb52ee0905a36969d35b85f2d",
           "bytes": 2796344
@@ -354,11 +624,6 @@
           "path": "Textures/Stone/MASTER_Brick_Large_White_Normal.png",
           "sha256": "4434f10a187c85947abda19b3cac7467a4e478df5c668fce621c99f797e12da9",
           "bytes": 2935734
-        },
-        {
-          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_Normal.png",
-          "sha256": "d7ab07cf3a03cae91e4ed6e043f1b3773ada056a6702610d0f628cc08bef5dd0",
-          "bytes": 8820912
         },
         {
           "path": "Textures/Stone/MASTER_Brick_Small_Red_BLENDSHADER_BaseColor.dds",
@@ -411,6 +676,16 @@
           "bytes": 2796344
         },
         {
+          "path": "Textures/Stone/MASTER_Details_Dark_BaseColor.dds",
+          "sha256": "d1c82e3a07d252975a92cdc2ae2bd869368f0b0e1c7ecb3cd297d2dd4d422fab",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Details_Dark_Normal.png",
+          "sha256": "c71fc3667638e064c0af819251f97518fa29b86687cccff9e077472ce409da49",
+          "bytes": 4480208
+        },
+        {
           "path": "Textures/Stone/Plantpots_Normal.png",
           "sha256": "00711670ac57a1329884cc21e63c00feb2cb9f9006c9be0a74d9a0f6b312cea9",
           "bytes": 5378101
@@ -431,9 +706,9 @@
           "bytes": 2796344
         },
         {
-          "path": "Textures/Wood/MASTER_Wood_Brown_Normal.png",
-          "sha256": "c5d4d88c628f081edbfb37d4f8502fbc3d3f0040ac560f998bfca282a8b701c1",
-          "bytes": 1013733
+          "path": "Textures/Wood/MASTER_Doors_Normal.png",
+          "sha256": "0c785ef9f53a7117bfc5983fbced4cc003eee330b8f87c0dbe28f34a29aeb4ce",
+          "bytes": 1783357
         },
         {
           "path": "Textures/Wood/MASTER_Wood_Brown_BaseColor.dds",
@@ -441,12 +716,17 @@
           "bytes": 2796344
         },
         {
-          "path": "Textures/Wood/MASTER_Doors_Normal.png",
-          "sha256": "0c785ef9f53a7117bfc5983fbced4cc003eee330b8f87c0dbe28f34a29aeb4ce",
-          "bytes": 1783357
+          "path": "Textures/Wood/MASTER_Wood_Brown_Normal.png",
+          "sha256": "c5d4d88c628f081edbfb37d4f8502fbc3d3f0040ac560f998bfca282a8b701c1",
+          "bytes": 1013733
         },
         {
-          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_Normal.png",
+          "path": "Textures/Wood/MASTER_Wood_Painted_Cyan_BaseColor.dds",
+          "sha256": "f87f6f4f7f9b585a540dadbc45bbed560d7c9299eefeed929eda0ff7de5af9c7",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Cyan_Normal.png",
           "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
           "bytes": 1945681
         },
@@ -456,7 +736,7 @@
           "bytes": 2796344
         },
         {
-          "path": "Textures/Wood/MASTER_Wood_Painted_White_Normal.png",
+          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_Normal.png",
           "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
           "bytes": 1945681
         },
@@ -464,6 +744,11 @@
           "path": "Textures/Wood/MASTER_Wood_Painted_White_BaseColor.dds",
           "sha256": "08243aeb8298fca283d14f85de122d2fc8d6b62597956144b951b690b93320a5",
           "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_White_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
         },
         {
           "path": "LICENSE-ASSETS",
@@ -522,121 +807,9 @@
       }
     },
     {
-      "filename": "district-high.glb",
-      "bytes": 8766968,
-      "sha256": "96240df6de9ccc427fa69997aea2268e12ba053a28409c256dcff2ebda5c64fd",
-      "triangles": 224459,
-      "templates": {
-        "S1B1": {
-          "min": [
-            -19.125953674316406,
-            -0.014409065246582031,
-            -85.65111541748047
-          ],
-          "max": [
-            7.691537857055664,
-            18.136390686035156,
-            -72.50029754638672
-          ]
-        },
-        "S1B2": {
-          "min": [
-            9.372016906738281,
-            -0.04043722152709961,
-            -85.4410171508789
-          ],
-          "max": [
-            30.350839614868164,
-            15.931421279907227,
-            -66.54759216308594
-          ]
-        },
-        "S2B1": {
-          "min": [
-            -19.94963026046753,
-            -0.04486346244812012,
-            -32.76698684692383
-          ],
-          "max": [
-            8.868235111236572,
-            25.724102020263672,
-            -16.771968841552734
-          ]
-        },
-        "BistroProps": {
-          "min": [
-            -7.071622848510742,
-            -0.009924381971359253,
-            -18.60642433166504
-          ],
-          "max": [
-            -0.2867865562438965,
-            1.4677380323410034,
-            -1.5692205429077148
-          ]
-        }
-      }
-    },
-    {
-      "filename": "district-low.glb",
-      "bytes": 2718472,
-      "sha256": "4560f0e117619b61b4f5aefcc4628f2638d5742b899bdc67a3840b6277e43aa8",
-      "triangles": 56574,
-      "templates": {
-        "S1B1": {
-          "min": [
-            -19.125953674316406,
-            -0.014409065246582031,
-            -85.65111541748047
-          ],
-          "max": [
-            7.691537857055664,
-            18.136390686035156,
-            -72.50029754638672
-          ]
-        },
-        "S1B2": {
-          "min": [
-            9.372016906738281,
-            -0.04043722152709961,
-            -85.4410171508789
-          ],
-          "max": [
-            30.350839614868164,
-            15.931421279907227,
-            -66.54759216308594
-          ]
-        },
-        "S2B1": {
-          "min": [
-            -19.94963026046753,
-            -0.04486346244812012,
-            -32.76698684692383
-          ],
-          "max": [
-            8.868235111236572,
-            25.724102020263672,
-            -16.771968841552734
-          ]
-        },
-        "BistroProps": {
-          "min": [
-            -7.071622848510742,
-            -0.009924381971359253,
-            -18.60642433166504
-          ],
-          "max": [
-            -0.2867865562438965,
-            1.4677380323410034,
-            -1.5692205429077148
-          ]
-        }
-      }
-    },
-    {
       "filename": "asphalt-color.webp",
-      "bytes": 82008,
-      "sha256": "4302827a87144687bbf254563903e04e91b202abddc3e46c41b3d7c0548b3dbd"
+      "bytes": 30912,
+      "sha256": "485935fee3412a25868c747bbc403b420ea7663b3217ea61eb7b9f2ff6c11190"
     },
     {
       "filename": "asphalt-normal.webp",
@@ -645,8 +818,240 @@
     },
     {
       "filename": "asphalt-roughness.webp",
-      "bytes": 34354,
-      "sha256": "90effc0440e28f3c6da3b849754573e82b73f62591d9a3d10a73beba8ca5f164"
+      "bytes": 240994,
+      "sha256": "771de12fb7b2fce42733fe8b9e132a69a29ad8e8e9c81ce9c208c7b4ed38a451"
+    },
+    {
+      "filename": "district-high.glb",
+      "bytes": 17113824,
+      "sha256": "b5ff0bbd6f28ca60907227600c927961f40021d96b5e16149f6ae47ff9a6adeb",
+      "triangles": 473155,
+      "templates": {
+        "S1B1": {
+          "min": [
+            -19.125953674316406,
+            -0.014409065246582031,
+            -85.65111541748047
+          ],
+          "max": [
+            7.691537857055664,
+            18.136390686035156,
+            -72.50029754638672
+          ]
+        },
+        "S1B2": {
+          "min": [
+            9.372016906738281,
+            -0.04043722152709961,
+            -85.4410171508789
+          ],
+          "max": [
+            30.350839614868164,
+            15.931421279907227,
+            -66.54759216308594
+          ]
+        },
+        "S2B1": {
+          "min": [
+            -19.94963026046753,
+            -0.04486346244812012,
+            -32.76698684692383
+          ],
+          "max": [
+            8.868235111236572,
+            25.724102020263672,
+            -16.771968841552734
+          ]
+        },
+        "BistroProps": {
+          "min": [
+            -7.071622848510742,
+            -0.009924381971359253,
+            -18.60642433166504
+          ],
+          "max": [
+            -0.2867865562438965,
+            1.4677380323410034,
+            -1.5692205429077148
+          ]
+        },
+        "S5B1": {
+          "min": [
+            -32.41913986206055,
+            -0.24224573373794556,
+            2.6139941215515137
+          ],
+          "max": [
+            -6.672364711761475,
+            24.616392135620117,
+            23.591233491897583
+          ]
+        },
+        "S3B1": {
+          "min": [
+            3.895514488220215,
+            -0.035825252532958984,
+            -5.663807511329651
+          ],
+          "max": [
+            25.075759887695312,
+            17.847135543823242,
+            10.841726660728455
+          ]
+        },
+        "Tree": {
+          "min": [
+            -11.19316291809082,
+            0.16283750534057617,
+            -67.85054016113281
+          ],
+          "max": [
+            3.7498438358306885,
+            14.717007637023926,
+            -52.57196044921875
+          ]
+        },
+        "Cypress": {
+          "min": [
+            5.347107410430908,
+            0.6430034637451172,
+            -53.11532211303711
+          ],
+          "max": [
+            7.095213413238525,
+            5.130486965179443,
+            -51.371551513671875
+          ]
+        },
+        "Hedge": {
+          "min": [
+            2.2258143424987793,
+            -0.10042554140090942,
+            -44.850215911865234
+          ],
+          "max": [
+            3.6821141242980957,
+            1.2055641412734985,
+            -40.47865676879883
+          ]
+        }
+      }
+    },
+    {
+      "filename": "district-low.glb",
+      "bytes": 5377892,
+      "sha256": "d83541d1273aabbed6bff01f05f36a6d36b40fb088575697e2aaa87a22a93c5f",
+      "triangles": 120699,
+      "templates": {
+        "S1B1": {
+          "min": [
+            -19.125953674316406,
+            -0.014409065246582031,
+            -85.65111541748047
+          ],
+          "max": [
+            7.691537857055664,
+            18.136390686035156,
+            -72.50029754638672
+          ]
+        },
+        "S1B2": {
+          "min": [
+            9.372016906738281,
+            -0.04043722152709961,
+            -85.4410171508789
+          ],
+          "max": [
+            30.350839614868164,
+            15.931421279907227,
+            -66.54759216308594
+          ]
+        },
+        "S2B1": {
+          "min": [
+            -19.94963026046753,
+            -0.04486346244812012,
+            -32.76698684692383
+          ],
+          "max": [
+            8.868235111236572,
+            25.724102020263672,
+            -16.771968841552734
+          ]
+        },
+        "BistroProps": {
+          "min": [
+            -7.071622848510742,
+            -0.009924381971359253,
+            -18.60642433166504
+          ],
+          "max": [
+            -0.2867865562438965,
+            1.4677380323410034,
+            -1.5692205429077148
+          ]
+        },
+        "S5B1": {
+          "min": [
+            -32.41913986206055,
+            -0.24224573373794556,
+            2.6139941215515137
+          ],
+          "max": [
+            -6.672364711761475,
+            24.616392135620117,
+            23.591233491897583
+          ]
+        },
+        "S3B1": {
+          "min": [
+            3.895514488220215,
+            -0.035825252532958984,
+            -5.663807511329651
+          ],
+          "max": [
+            25.075759887695312,
+            17.847135543823242,
+            10.841726660728455
+          ]
+        },
+        "Tree": {
+          "min": [
+            -11.19316291809082,
+            0.16283750534057617,
+            -67.85054016113281
+          ],
+          "max": [
+            3.7498438358306885,
+            14.717007637023926,
+            -52.57196044921875
+          ]
+        },
+        "Cypress": {
+          "min": [
+            5.347107410430908,
+            0.6430034637451172,
+            -53.11532211303711
+          ],
+          "max": [
+            7.095213413238525,
+            5.130486965179443,
+            -51.371551513671875
+          ]
+        },
+        "Hedge": {
+          "min": [
+            2.2258143424987793,
+            -0.10042554140090942,
+            -44.850215911865234
+          ],
+          "max": [
+            3.6821141242980957,
+            1.2055641412734985,
+            -40.47865676879883
+          ]
+        }
+      }
     }
   ]
 }

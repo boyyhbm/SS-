@@ -22,6 +22,8 @@ import { consoleReturn } from '@/input/focus';
 import { GameControlsHint } from './input-system';
 import { RaceHUD, GraphicsSettings } from './race-hud';
 import { InputNavigation } from './input-navigation';
+import { cityRoutes, type CityRouteId } from '@/games/road-network';
+import { GameRouteMap } from './game-route-map';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
 });
@@ -31,15 +33,22 @@ export function GamePlayer({
   language,
   initialBestLap,
   initialHistory,
+  initialRouteRecords = {},
 }: {
   gameId: string;
   title: string;
   language: 'ru' | 'en';
   initialBestLap: number | null;
   initialHistory: { seconds: number; recordedAt: string }[];
+  initialRouteRecords?: Partial<
+    Record<CityRouteId, { best: number | null; history: { seconds: number; recordedAt: string }[] }>
+  >;
 }) {
   const [mode, setMode] = useState<'practice' | 'timeTrial'>('timeTrial');
-  const [history, setHistory] = useState(initialHistory);
+  const [routeId, setRouteId] = useState<CityRouteId>('downtown-circuit');
+  const [routeRecords, setRouteRecords] = useState(initialRouteRecords);
+  const history = routeRecords[routeId]?.history ?? [];
+  const routeBest = routeRecords[routeId]?.best ?? null;
   const router = useRouter();
   const ui = useUI();
   const t = useCallback((key: TextKey) => dictionary[language][key], [language]);
@@ -56,7 +65,7 @@ export function GamePlayer({
     nitro: 100,
     lap: 1,
     lapTime: 0,
-    bestLap: initialBestLap,
+    bestLap: routeBest,
     nextCheckpoint: 1,
     collision: false,
     x: 95,
@@ -178,21 +187,28 @@ export function GamePlayer({
         const res = await fetch('/api/sessions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'lap', sessionId: session.current, seconds }),
+          body: JSON.stringify({ action: 'lap', sessionId: session.current, seconds, routeId }),
         });
         if (!res.ok) throw new Error();
         const result = await res.json();
-        setHistory((previous) =>
-          [...previous, { seconds, recordedAt: new Date().toISOString() }]
-            .sort((a, b) => a.seconds - b.seconds)
-            .slice(0, 10),
-        );
+        setRouteRecords((previous) => ({
+          ...previous,
+          [routeId]: {
+            best: Math.min(previous[routeId]?.best ?? Infinity, seconds),
+            history: [
+              ...(previous[routeId]?.history ?? []),
+              { seconds, recordedAt: new Date().toISOString() },
+            ]
+              .sort((a, b) => a.seconds - b.seconds)
+              .slice(0, 10),
+          },
+        }));
         setNotice(t(result.recordUpdated ? 'recordSaved' : 'lapCompleted'));
       } catch {
         setNotice(t('saveFailed'));
       }
     },
-    [t, mode],
+    [t, mode, routeId],
   );
   async function exit() {
     setPaused(true);
@@ -235,10 +251,11 @@ export function GamePlayer({
       data-z={telemetry.z}
       data-heading={telemetry.heading}
       data-lap={telemetry.lap}
+      data-route={routeId}
       className={`game-player ${telemetry.collision ? 'collision-flash' : ''}`}
       ref={root}
     >
-      <InputNavigation suspended={!paused} />
+      <InputNavigation suspended={!paused && !telemetry.finished} />
       <Race
         language={language}
         paused={paused || !started}
@@ -249,7 +266,9 @@ export function GamePlayer({
         inputRef={input}
         onPause={togglePause}
         restartKey={restartKey}
-        initialBestLap={initialBestLap}
+        initialBestLap={routeBest}
+        routeId={routeId}
+        freeDrive={mode === 'practice'}
       />
       <div className="player-topbar">
         <button className="player-brand" onClick={exit} aria-label={t('exitGame')}>
@@ -290,6 +309,25 @@ export function GamePlayer({
       {started && (
         <>
           <RaceHUD telemetry={telemetry} language={language} mode={mode} />
+          {telemetry.finished && mode !== 'practice' && !paused && (
+            <div className="pause-overlay route-finish-overlay">
+              <div className="route-finish-card">
+                <strong>{language === 'ru' ? 'Маршрут завершён' : 'Route completed'}</strong>
+                <button
+                  autoFocus
+                  data-game-back
+                  className="button primary"
+                  onClick={() => {
+                    setStarted(false);
+                    setPaused(true);
+                    setRestartKey((x) => x + 1);
+                  }}
+                >
+                  {language === 'ru' ? 'Выбрать маршрут' : 'Choose route'}
+                </button>
+              </div>
+            </div>
+          )}
           {!paused && (
             <div className="touch-controls">
               <div>
@@ -332,6 +370,39 @@ export function GamePlayer({
               {started ? <GameControlsHint fallback={t('controlsKeyboard')} /> : t('raceReadyBody')}
             </p>
             {!started && (
+              <div className="route-selection" aria-label={language === 'ru' ? 'Маршрут' : 'Route'}>
+                <GameRouteMap routeId={routeId} overview language={language} />
+                {cityRoutes.map((r) => (
+                  <button
+                    key={r.id}
+                    data-route-option={r.id}
+                    className={routeId === r.id ? 'selected' : ''}
+                    onClick={() => {
+                      setRouteId(r.id);
+                      setRestartKey((x) => x + 1);
+                    }}
+                  >
+                    <strong>{language === 'ru' ? r.nameRu : r.name}</strong>
+                    <span>
+                      {r.kind === 'sprint'
+                        ? language === 'ru'
+                          ? 'Спринт'
+                          : 'Sprint'
+                        : language === 'ru'
+                          ? '3 круга'
+                          : '3 laps'}{' '}
+                      · {(r.length / 1000).toFixed(1)} {language === 'ru' ? 'км' : 'km'}
+                    </span>
+                  </button>
+                ))}
+                <small>
+                  {language === 'ru'
+                    ? 'Новая сеть дорог: одиночная игра. Онлайн пока использует прежнюю трассу.'
+                    : 'New road network: single player. Online currently uses the original circuit.'}
+                </small>
+              </div>
+            )}
+            {!started && (
               <div className="solo-modes">
                 {(['practice', 'timeTrial'] as const).map((value) => (
                   <button
@@ -363,21 +434,40 @@ export function GamePlayer({
                 </ol>
               </details>
             )}
+            {initialHistory.length > 0 && (
+              <details className="personal-laps">
+                <summary>
+                  {language === 'ru' ? 'Архив прежней трассы' : 'Original circuit archive'}
+                  {initialBestLap ? ` · ${timeLabel(initialBestLap)}` : ''}
+                </summary>
+                <ol>
+                  {initialHistory.map((r, i) => (
+                    <li key={i}>
+                      <span>{i + 1}</span>
+                      <strong>{timeLabel(r.seconds)}</strong>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            )}
             {!started && (
-              <div className="start-controls">
-                <span>
-                  <Gamepad2 size={18} />
-                  <GameControlsHint fallback={t('controlsGamepad')} />
-                </span>
-                <span>
-                  <GameControlsHint fallback={t('controlsKeyboard')} />
-                </span>
-                <span>{t('controlsTouch')}</span>
-              </div>
+              <details className="start-controls-details">
+                <summary>{language === 'ru' ? 'Управление' : 'Controls'}</summary>
+                <div className="start-controls">
+                  <span>
+                    <Gamepad2 size={18} />
+                    <GameControlsHint fallback={t('controlsGamepad')} />
+                  </span>
+                  <span>
+                    <GameControlsHint fallback={t('controlsKeyboard')} />
+                  </span>
+                  <span>{t('controlsTouch')}</span>
+                </div>
+              </details>
             )}
             <GraphicsSettings language={language} />
             <button
-              autoFocus
+              autoFocus={started}
               data-game-back={started ? true : undefined}
               data-game-resume={started ? true : undefined}
               className="button primary"
@@ -391,6 +481,18 @@ export function GamePlayer({
               {t(started ? 'resume' : 'startRace')}
               {busy && <LoaderCircle className="spin" size={16} />}
             </button>
+            {started && (
+              <button
+                className="button secondary"
+                onClick={() => {
+                  setStarted(false);
+                  setPaused(true);
+                  setRestartKey((x) => x + 1);
+                }}
+              >
+                {language === 'ru' ? 'Другой маршрут' : 'Change route'}
+              </button>
+            )}
             {started && (
               <button
                 className="button secondary"

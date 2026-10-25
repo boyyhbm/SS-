@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-25T16:18:56.502Z",
+  "mode": "routes",
+  "origin": "http://localhost:3000",
+  "physicalController": "NOT_TESTED",
+  "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
+  "errors": [],
+  "routes": [
+    {
+      "route": "downtown-circuit",
+      "input": "virtual analog gamepad",
+      "lap": "2",
+      "checkpoint": "0 / 7",
+      "x": "-159.9924467045386",
+      "z": "-8.011976692372569"
+    },
+    {
+      "route": "midnight-sprint",
+      "input": "virtual analog gamepad",
+      "lap": "2",
+      "checkpoint": "0 / 9",
+      "x": "104.48112505416276",
+      "z": "19.99499863718404"
+    },
+    {
+      "route": "industrial-run",
+      "input": "keyboard",
+      "lap": "2",
+      "checkpoint": "0 / 9",
+      "x": "-10.754831439878567",
+      "z": "19.490635316050266"
+    }
+  ],
+  "passed": true
+}

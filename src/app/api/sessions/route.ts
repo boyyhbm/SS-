@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
 import { api, assertSameOrigin, ApiError, rateLimit } from '@/lib/security';
 import { isPlayable } from '@/games/registry';
+import { CITY_ROUTE_IDS } from '@/games/road-network';
 const schema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('start'), gameId: z.string().max(64) }),
   z.object({
@@ -14,6 +15,7 @@ const schema = z.discriminatedUnion('action', [
     action: z.literal('lap'),
     sessionId: z.string().max(64),
     seconds: z.number().finite().min(8).max(3600),
+    routeId: z.enum(CITY_ROUTE_IDS).optional(),
   }),
 ]);
 export async function POST(request: Request) {
@@ -55,13 +57,17 @@ export async function POST(request: Request) {
         const locked = await tx.gameSession.findUnique({ where: { id: session.id } });
         if (!locked || locked.endedAt) throw new ApiError(404, 'sessionUnavailable');
         const where = {
-          userId_gameId_saveKey: { userId: user.id, gameId: session.gameId, saveKey: 'best-lap' },
+          userId_gameId_saveKey: {
+            userId: user.id,
+            gameId: session.gameId,
+            saveKey: input.routeId ? `best-lap:${input.routeId}` : 'best-lap',
+          },
         };
         const historyWhere = {
           userId_gameId_saveKey: {
             userId: user.id,
             gameId: session.gameId,
-            saveKey: 'lap-history',
+            saveKey: input.routeId ? `lap-history:${input.routeId}` : 'lap-history',
           },
         };
         const previousHistory = await tx.gameSave.findUnique({ where: historyWhere });
@@ -85,7 +91,7 @@ export async function POST(request: Request) {
           create: {
             userId: user.id,
             gameId: session.gameId,
-            saveKey: 'lap-history',
+            saveKey: input.routeId ? `lap-history:${input.routeId}` : 'lap-history',
             saveData: bestLaps,
           },
           update: { saveData: bestLaps },
@@ -101,7 +107,7 @@ export async function POST(request: Request) {
             create: {
               userId: user.id,
               gameId: session.gameId,
-              saveKey: 'best-lap',
+              saveKey: input.routeId ? `best-lap:${input.routeId}` : 'best-lap',
               saveData: { seconds: input.seconds },
             },
             update: { saveData: { seconds: input.seconds } },

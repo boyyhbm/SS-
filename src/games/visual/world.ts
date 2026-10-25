@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Reflector } from 'three/addons/objects/Reflector.js';
+import { asphaltMaterial } from './city-world';
 import { TRACK_RADIUS as R, ROAD_HALF_WIDTH as HALF, type RaceState } from '../racing-physics';
 import { qualityPresets, type RenderTier } from './quality';
 import type { RaceAssets } from './assets';
@@ -120,19 +120,7 @@ export function createWorld(
   ground.position.y = -0.08;
   ground.receiveShadow = true;
   scene.add(ground);
-  const roadMaterial =
-    tier === 'low' ? new THREE.MeshStandardMaterial() : new THREE.MeshPhysicalMaterial();
-  roadMaterial.map = assets.color;
-  roadMaterial.normalMap = assets.normal;
-  roadMaterial.normalScale.set(0.3, 0.3);
-  roadMaterial.roughnessMap = assets.roughness;
-  roadMaterial.roughness = 0.8;
-  roadMaterial.metalness = 0;
-  roadMaterial.envMapIntensity = 1.1;
-  if (roadMaterial instanceof THREE.MeshPhysicalMaterial) {
-    roadMaterial.clearcoat = 0.25;
-    roadMaterial.clearcoatRoughness = 0.2;
-  }
+  const roadMaterial = asphaltMaterial(assets,tier);
   const road = new THREE.Mesh(strip(R - HALF, R + HALF, 0), roadMaterial);
   road.receiveShadow = true;
   scene.add(road);
@@ -174,7 +162,7 @@ export function createWorld(
   for (let i = 0; i < 110; i++) {
     const a = (i / 110) * Math.PI * 2;
     dummy.position.set(Math.cos(a) * R, 0.029, Math.sin(a) * R);
-    dummy.rotation.set(-Math.PI / 2, 0, a);
+    dummy.rotation.set(-Math.PI / 2, 0, Math.PI - a);
     dummy.updateMatrix();
     dashes.setMatrixAt(i, dummy.matrix);
   }
@@ -187,7 +175,7 @@ export function createWorld(
       const a = (cp * Math.PI) / 2 + 0.09,
         r = R - 10 + i * 1.5;
       dummy.position.set(Math.cos(a) * r, 0.032, Math.sin(a) * r);
-      dummy.rotation.set(-Math.PI / 2, 0, a);
+      dummy.rotation.set(-Math.PI / 2, 0, Math.PI - a);
       dummy.updateMatrix();
       crossing.setMatrixAt(index++, dummy.matrix);
     }
@@ -358,34 +346,6 @@ export function createWorld(
     studs.setMatrixAt(i, dummy.matrix);
   }
   scene.add(studs);
-  let reflection: Reflector | undefined;
-  if (preset.reflection) {
-    const shader = {
-      uniforms: {
-        color: { value: new THREE.Color() },
-        tDiffuse: { value: null },
-        textureMatrix: { value: new THREE.Matrix4() },
-        roughMap: { value: assets.roughness },
-      },
-      vertexShader:
-        'uniform mat4 textureMatrix; varying vec4 vUv; varying vec2 roadUv; void main(){roadUv=uv; vUv=textureMatrix*vec4(position,1.0); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
-      fragmentShader:
-        'uniform sampler2D tDiffuse; uniform sampler2D roughMap; varying vec4 vUv; varying vec2 roadUv; void main(){ vec3 reflection=texture2DProj(tDiffuse,vUv).rgb; float rough=texture2D(roughMap,roadUv*30.0).g; gl_FragColor=vec4(reflection,pow(1.0-rough,3.0)*0.12);\n#include <tonemapping_fragment>\n#include <colorspace_fragment>\n}',
-    };
-    reflection = new Reflector(new THREE.RingGeometry(R - HALF, R + HALF, 192), {
-      textureWidth: Math.min(1024, containerWidth(renderer)),
-      textureHeight: 512,
-      clipBias: 0.004,
-      multisample: 0,
-      shader,
-    });
-    reflection.rotation.x = -Math.PI / 2;
-    reflection.position.y = 0.035;
-    const mirrorMaterial = reflection.material as THREE.ShaderMaterial;
-    mirrorMaterial.transparent = true;
-    mirrorMaterial.depthWrite = false;
-    scene.add(reflection);
-  }
   const headlamps = [-0.65, 0.65].map((x) => {
     const l = new THREE.SpotLight('#cfe7ff', 220, 36, 0.36, 0.7, 2);
     scene.add(l, l.target);
@@ -427,14 +387,9 @@ export function createWorld(
     },
     dispose() {
       environment.dispose();
-      reflection?.getRenderTarget().dispose();
     },
   };
 }
-function containerWidth(renderer: THREE.WebGLRenderer) {
-  return renderer.domElement.width;
-}
-
 function createRoadEffects(scene: THREE.Scene, tier: RenderTier) {
   const vertices = new Float32Array(256 * 18),
     geometry = new THREE.BufferGeometry();

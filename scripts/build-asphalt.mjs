@@ -38,15 +38,12 @@ export async function buildAsphalt(products, output = 'public/game-assets') {
         grain = hash(x, y),
         aggregate = noise(x, y, 4);
       height[i] = grain * 0.33 + aggregate * 0.67;
-      wet[i] = Math.max(
-        0,
-        Math.min(1, (noise(x, y, 128) * 0.75 + noise(x, y, 256) * 0.25 - 0.44) * 6),
-      );
-      const v = 32 + grain * 8 + aggregate * 14 - wet[i] * 4;
+      wet[i] = noise(x, y, 128) * 0.6 + noise(x,y,256)*0.4;
+      const v = 39 + grain * 5 + aggregate * 8 - wet[i] * 1.5;
       color[i * 3] = v * 0.89;
       color[i * 3 + 1] = v * 0.96;
       color[i * 3 + 2] = v;
-      const r = 150 + (1 - wet[i]) * 40;
+      const r = 191 + aggregate * 12 + (1-wet[i])*9;
       rough.fill(Math.round(r), i * 3, i * 3 + 3);
     }
   for (let y = 0; y < size; y++)

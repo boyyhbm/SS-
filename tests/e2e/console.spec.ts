@@ -1,3 +1,4 @@
+import { installDriver } from '../helpers/race-driver';
 import { virtualPad, pressPad } from './pad-helpers';
 import sharp from 'sharp';
 import { unlink } from 'node:fs/promises';
@@ -205,6 +206,7 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
   await page.getByLabel('Статус', { exact: true }).selectOption('AVAILABLE');
   await page.getByLabel('Опубликовано', { exact: true }).check();
   await page.getByRole('button', { name: 'Сохранить игру', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Сохранить игру', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /NEXUS QA CIRCUIT/ })).toBeVisible();
   await page.goto('/discover');
   await expect(page.getByRole('heading', { name: 'NEXUS QA CIRCUIT' })).toBeVisible();
@@ -212,12 +214,14 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
   await page.getByRole('button', { name: /NEXUS QA CIRCUIT/ }).click();
   await page.getByLabel('Опубликовано', { exact: true }).uncheck();
   await page.getByRole('button', { name: 'Сохранить игру', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Сохранить игру', exact: true })).toHaveCount(0);
   await page.goto('/discover');
   await expect(page.getByRole('heading', { name: 'NEXUS QA CIRCUIT' })).toHaveCount(0);
   await page.goto('/admin');
   await page.getByRole('button', { name: /NEXUS QA CIRCUIT/ }).click();
   await page.getByLabel('Опубликовано', { exact: true }).check();
   await page.getByRole('button', { name: 'Сохранить игру', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Сохранить игру', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: /NEXUS QA CIRCUIT/ }).click();
   await page.getByRole('button', { name: 'Удалить карточку', exact: true }).click();
   await page
@@ -311,45 +315,7 @@ test('a complete lap through Gamepad API saves a real personal best', async ({ p
     timeout: 30000,
   });
   await page.getByRole('button', { name: 'На старт', exact: true }).click();
-  await page.evaluate(() => {
-    // Virtual standard gamepad drives via the public browser input API, not simulation internals.
-    let samples = 0;
-    Object.defineProperty(navigator, 'getGamepads', {
-      configurable: true,
-      value: () => {
-        const root = document.querySelector<HTMLElement>('[data-testid="race-player"]');
-        if (!root) return [];
-        const neutral = samples++ < 3; // Safe connection requires released controls first.
-        const x = Number(root.dataset.x),
-          z = Number(root.dataset.z),
-          heading = Number(root.dataset.heading);
-        const speed =
-          Number(document.querySelector('[data-testid="speed"]')?.textContent ?? 0) / 3.6;
-        const angle = Math.atan2(z, x),
-          desired = -angle;
-        const error = Math.atan2(Math.sin(desired - heading), Math.cos(desired - heading));
-        const steer = Math.max(
-          -1,
-          Math.min(1, -error * 2.8 + (Math.hypot(x, z) - 95) * 0.09 + speed / (95 * 1.12)),
-        );
-        return [
-          {
-            connected: true,
-            index: 0,
-            id: 'NEXUS QA standard gamepad',
-            mapping: 'standard',
-            timestamp: performance.now(),
-            axes: [neutral ? 0 : steer, 0, 0, 0],
-            buttons: Array.from({ length: 17 }, (_, i) => ({
-              pressed: !neutral && i === 7,
-              touched: !neutral && i === 7,
-              value: !neutral && i === 7 ? 1 : 0,
-            })),
-          },
-        ];
-      },
-    });
-  });
+  await installDriver(page, 'gamepad', 'single');
   await expect(page.getByTestId('race-player')).toHaveAttribute('data-lap', '2', {
     timeout: 100000,
   });
@@ -379,7 +345,7 @@ test('a complete lap through Gamepad API saves a real personal best', async ({ p
       userId_gameId_saveKey: {
         userId: saved.user.id,
         gameId: saved.library[0].gameId,
-        saveKey: 'lap-history',
+        saveKey: 'lap-history:downtown-circuit',
       },
     },
   });

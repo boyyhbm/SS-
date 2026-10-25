@@ -12,8 +12,18 @@ export const qualityPresets = {
 export const useRenderSettings = create<{
   quality: RenderQuality;
   setQuality: (q: RenderQuality) => void;
+  dynamicFov: boolean;
+  setDynamicFov: (value: boolean) => void;
 }>()(
-  persist((set) => ({ quality: 'auto', setQuality: (quality) => set({ quality }) }), {
-    name: 'nexus-render-quality',
-  }),
+  persist(
+    (set) => ({
+      quality: 'auto',
+      setQuality: (quality) => set({ quality }),
+      dynamicFov: false,
+      setDynamicFov: (dynamicFov) => set({ dynamicFov }),
+    }),
+    {
+      name: 'nexus-render-quality',
+    },
+  ),
 );

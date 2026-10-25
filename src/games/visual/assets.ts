@@ -39,8 +39,8 @@ export async function loadRaceAssets(
     map.repeat.set(2.5, 2.5);
     map.anisotropy = tier === 'low' ? 2 : 8;
   }
-  // Broad wet patches use a different scale from the fine mineral aggregate.
-  roughness.repeat.set(0.2, 0.2);
+  // Roughness and fine aggregate share a coherent physical scale. Broad dampness
+  // is a subtle world-space variation in the road shader, not a binary patch mask.
   environment.mapping = THREE.EquirectangularReflectionMapping;
   progress(100);
   return {

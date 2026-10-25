@@ -156,7 +156,7 @@ test('real accounts → friends → party → private invitation → synchronize
     await b.getByRole('button', { name: 'Я готов', exact: true }).click();
     await activatePad(a, '.lobby-actions button:last-child');
     await installDriver(a);
-    await installDriver(b, 'keyboard');
+    await installDriver(b, 'keyboard', 'online', 18);
     await expect(a.getByTestId('online-player')).toHaveAttribute('data-phase', 'racing');
     await expect(b.getByTestId('online-player')).toHaveAttribute('data-phase', 'racing');
     const match = await a.getByTestId('online-player').getAttribute('data-match');

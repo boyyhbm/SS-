@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-25T16:31:47.449Z",
+  "mode": "screens",
+  "origin": "http://localhost:3000",
+  "physicalController": "NOT_TESTED",
+  "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
+  "errors": [],
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "quota": "See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC"
+  },
+  "screenshots": [
+    "route-map",
+    "straight-markings",
+    "junction",
+    "curved-markings",
+    "car-close",
+    "industrial-environment"
+  ],
+  "passed": true
+}

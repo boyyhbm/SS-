@@ -3,7 +3,7 @@ import concurrent.futures, hashlib, io, json, pathlib, re, urllib.parse, urllib.
 from PIL import Image
 ROOT = pathlib.Path('.asset-cache/bistro')
 BASE = 'https://raw.githubusercontent.com/Jamsers/Bistro-Demo-Tweaked/main/'
-MODELS = {'S1B1': 'Section01', 'S1B2': 'Section01', 'S2B1': 'Section02', 'BistroProps': 'Section02'}
+MODELS = {'S1B1': 'Section01', 'S1B2': 'Section01', 'S2B1': 'Section02', 'BistroProps': 'Section02', 'S5B1': 'Section05', 'S3B1': 'Section03', 'S1Details': 'Section01'}
 ROOT.mkdir(parents=True, exist_ok=True)
 evidence = {}
 manifest_path = pathlib.Path('public/game-assets/manifest.json')

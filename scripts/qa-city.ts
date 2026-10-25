@@ -1,0 +1,367 @@
+// Actual browser captures only. Use an isolated local QA database, never production.
+import { chromium, type Page } from '@playwright/test';
+import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
+import { randomBytes } from 'node:crypto';
+import { installDriver } from '../tests/helpers/race-driver.ts';
+import { cityRoutes } from '../src/games/road-network.ts';
+import os from 'node:os';
+const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3000';
+if (!['localhost', '127.0.0.1'].includes(new URL(origin).hostname))
+  throw Error('Local isolated QA only');
+const mode = process.argv[2] ?? 'screens',
+  out = 'docs/world-update',
+  statePath = '/tmp/nexus-city-visual-state.json';
+await mkdir(out, { recursive: true });
+const browser = await chromium.launch({
+  executablePath: process.env.CHROMIUM_PATH ?? '/usr/bin/chromium',
+  args: [
+    '--no-sandbox',
+    '--enable-unsafe-swiftshader',
+    '--disable-background-timer-throttling',
+    '--disable-renderer-backgrounding',
+    '--disable-backgrounding-occluded-windows',
+    '--enable-precise-memory-info',
+  ],
+});
+const errors: string[] = [];
+let saved = await readFile(statePath, 'utf8')
+  .then(JSON.parse)
+  .catch(() => null);
+async function prepare(page: Page) {
+  page.setDefaultTimeout(180000);
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(origin);
+  const data = await (await page.request.get(origin + '/api/console')).json();
+  if (!data.user) {
+    const username = 'cityqa_' + randomBytes(5).toString('hex'),
+      password = randomBytes(20).toString('hex');
+    await page.goto(origin + '/register');
+    for (const [name, value] of Object.entries({
+      username,
+      email: username + '@example.test',
+      password,
+      confirmPassword: password,
+    }))
+      await page.locator(`[name="${name}"]`).fill(value);
+    await page.locator('.auth-submit').click();
+    await page.waitForURL(origin + '/');
+  }
+  const d = await (await page.request.get(origin + '/api/console')).json(),
+    game = d.games.find((g: { slug: string }) => g.slug === 'midnight-outlaws');
+  const added = await page.request.post(origin + '/api/library', {
+    headers: { Origin: origin },
+    data: { action: 'add', gameId: game.id },
+  });
+  if (!added.ok()) throw Error('Actual library add failed');
+  saved = { userId: d.user.id, storage: await page.context().storageState() };
+  await writeFile(statePath, JSON.stringify(saved), { mode: 0o600 });
+}
+async function context(quality: string, dpr: number, record?: string) {
+  const c = await browser.newContext({
+    storageState: saved?.storage,
+    viewport: {
+      width: mode === 'performance' ? 1920 : 1280,
+      height: mode === 'performance' ? 1080 : 720,
+    },
+    deviceScaleFactor: dpr,
+    reducedMotion: mode === 'video' || mode === 'performance' ? 'no-preference' : 'reduce',
+    ...(record
+      ? { recordVideo: { dir: out + '/raw-video', size: { width: 1280, height: 720 } } }
+      : {}),
+  });
+  await c.addInitScript((q) => {
+    localStorage.setItem(
+      'nexus-render-quality',
+      JSON.stringify({ state: { quality: q, dynamicFov: false }, version: 0 }),
+    );
+    const w = window as unknown as { cityStats: unknown[]; cityCamera: unknown[] };
+    w.cityStats = [];
+    w.cityCamera = [];
+    window.addEventListener('nexus-render-stats', (e) =>
+      w.cityStats.push((e as CustomEvent).detail),
+    );
+  }, quality);
+  c.setDefaultTimeout(180000);
+  return c;
+}
+async function openRace(page: Page, id: string) {
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => {
+    if (m.type() === 'error' && /THREE|WebGL|shader/i.test(m.text())) errors.push(m.text());
+  });
+  await page.goto(origin + '/play/midnight-outlaws');
+  await page.getByRole('button', { name: 'На старт', exact: true }).waitFor();
+  await page.locator(`[data-route-option="${id}"]`).click();
+  await page.waitForFunction(
+    () => document.querySelector('canvas')?.dataset.assets === 'glb-loaded',
+  );
+  await page.waitForFunction((id) => document.querySelector('canvas')?.dataset.route === id, id);
+  await page.evaluate(() => document.fonts.ready);
+}
+async function begin(page: Page) {
+  await page.getByRole('button', { name: 'На старт', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('.pause-overlay'));
+}
+const report: Record<string, unknown> = {
+  date: new Date().toISOString(),
+  mode,
+  origin,
+  physicalController: 'NOT_TESTED',
+  renderSource: 'Actual Next.js/Three.js GLB runtime; no generated images',
+  errors,
+  motionPreference: mode === 'video' || mode === 'performance' ? 'no-preference' : 'reduce',
+  machine: {
+    platform: os.platform(),
+    release: os.release(),
+    cpu: os.cpus()[0]?.model,
+    logicalCpus: os.cpus().length,
+    quota: 'See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC',
+  },
+};
+try {
+  const setup = await context('low', 0.15),
+    p = await setup.newPage();
+  await prepare(p);
+  await setup.close();
+  if (mode === 'performance') {
+    const results: Record<string, unknown>[] = [];
+    report.results = results;
+    for (const quality of ['low', 'medium', 'high', 'auto']) {
+      const c = await context(quality, 1),
+        page = await c.newPage();
+      await openRace(page, cityRoutes[0].id);
+      await begin(page);
+      await installDriver(page, 'gamepad', 'single', 18);
+      await page.waitForFunction(
+        () => (window as unknown as { cityStats: unknown[] }).cityStats.length >= 3,
+      );
+      await page.evaluate(() => {
+        (window as unknown as { cityStats: unknown[] }).cityStats = [];
+      });
+      const start = Date.now();
+      await page.waitForFunction(
+        () => {
+          const a = (
+            window as unknown as { cityStats: { frameTimesMs: number[]; paused: boolean }[] }
+          ).cityStats.filter((x) => !x.paused);
+          return a.reduce((s, x) => s + x.frameTimesMs.length, 0) >= 24;
+        },
+        null,
+        { timeout: 180000 },
+      );
+      const data = await page.evaluate(() => {
+        const w = window as unknown as { cityStats: unknown[] };
+        const canvas = document.querySelector('canvas')!,
+          gl = canvas.getContext('webgl2')!,
+          ext = gl.getExtension('WEBGL_debug_renderer_info');
+        return {
+          samples: w.cityStats,
+          gpu: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : 'unknown',
+          viewport: [innerWidth, innerHeight],
+          canvas: [canvas.width, canvas.height],
+          memory: (performance as unknown as { memory?: unknown }).memory
+            ? {
+                ...Object.fromEntries(
+                  ['usedJSHeapSize', 'totalJSHeapSize', 'jsHeapSizeLimit'].map((k) => [
+                    k,
+                    (performance as unknown as { memory: Record<string, number> }).memory[k],
+                  ]),
+                ),
+              }
+            : null,
+          userAgent: navigator.userAgent,
+          hardwareConcurrency: navigator.hardwareConcurrency,
+        };
+      });
+      results.push({
+        requestedQuality: quality,
+        elapsedWallMs: Date.now() - start,
+        deviceScaleFactor: 1,
+        ...data,
+      });
+      await c.close();
+    }
+    report.results = results;
+    report.target60FPS = 'Not verified on a physical gaming PC; software WebGL measurements only';
+  } else if (mode === 'screens') {
+    const c = await context('high', 1),
+      page = await c.newPage();
+    await openRace(page, 'downtown-circuit');
+    await page.screenshot({ path: out + '/route-map.png' });
+    await begin(page);
+    await page.screenshot({ path: out + '/straight-markings.png' });
+    await installDriver(page, 'gamepad', 'single', 22);
+    await page.waitForFunction(
+      () =>
+        Number(document.querySelector('[data-testid="checkpoint"]')?.textContent?.split('/')[0]) >=
+        3,
+    );
+    await page.screenshot({ path: out + '/junction.png' });
+    await page.evaluate(() => {
+      (window as unknown as { nexusDriverPaused: boolean }).nexusDriverPaused = true;
+    });
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Другой маршрут', exact: true }).click();
+    await page.locator('[data-route-option="midnight-sprint"]').click();
+    await page.getByRole('button', { name: 'На старт', exact: true }).click();
+    await page.waitForFunction(() =>
+      document.querySelector('.race-route')?.textContent?.includes('Полуночный спринт'),
+    );
+    await page.screenshot({ path: out + '/curved-markings.png' });
+    await page.keyboard.press('KeyC');
+    await page.waitForFunction(() => document.querySelector('canvas')?.dataset.cameraMode === '1');
+    await page.screenshot({ path: out + '/car-close.png' });
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Другой маршрут', exact: true }).click();
+    await page.locator('[data-route-option="industrial-run"]').click();
+    await page.getByRole('button', { name: 'На старт', exact: true }).click();
+    await page.waitForFunction(() =>
+      document.querySelector('.race-route')?.textContent?.includes('Промышленный заезд'),
+    );
+    await page.screenshot({ path: out + '/industrial-environment.png' });
+    report.screenshots = [
+      'route-map',
+      'straight-markings',
+      'junction',
+      'curved-markings',
+      'car-close',
+      'industrial-environment',
+    ];
+    await c.close();
+  } else if (mode === 'camera') {
+    const c = await context('medium', 0.5, 'camera'),
+      page = await c.newPage();
+    await openRace(page, 'midnight-sprint');
+    await begin(page);
+    const samples: Record<string, unknown>[] = [];
+    const capture = async (target: number) => {
+      await page.waitForFunction(
+        (k) =>
+          Math.abs(Number(document.querySelector('[data-testid="speed"]')?.textContent) - k) < 2,
+        target,
+        { timeout: 120000 },
+      );
+      const sample = await page.evaluate(() => {
+        const c = document.querySelector('canvas')!,
+          p = document.querySelector('[data-testid="race-player"]') as HTMLElement;
+        return {
+          kph: Number(document.querySelector('[data-testid="speed"]')?.textContent),
+          height: Number(c.dataset.projectedCarHeight),
+          distance: Number(c.dataset.cameraDistance),
+          fov: Number(c.dataset.cameraFov),
+          x: Number(p.dataset.x),
+          z: Number(p.dataset.z),
+          heading: Number(p.dataset.heading),
+        };
+      });
+      samples.push({ targetKph: target, ...sample });
+      await page.screenshot({ path: `${out}/camera-${target}.png` });
+    };
+    await capture(0);
+    await installDriver(page, 'gamepad', 'single', 18);
+    await page.waitForFunction(
+      () => {
+        const p = document.querySelector('[data-testid="race-player"]') as HTMLElement;
+        return (
+          Number(p.dataset.x) > -255 &&
+          Number(p.dataset.x) < -100 &&
+          Math.abs(Number(p.dataset.z) + 100) < 3
+        );
+      },
+      null,
+      { timeout: 180000 },
+    );
+    for (const speed of [50, 100, 150]) {
+      await page.evaluate((k) => {
+        const w = window as unknown as {
+          nexusDriverCruiseSpeed: number;
+          nexusDriverNitro: boolean;
+        };
+        w.nexusDriverCruiseSpeed = k / 3.6;
+        w.nexusDriverNitro = k >= 150;
+      }, speed);
+      await capture(speed);
+    }
+    const values = samples.map((s) => Number(s.height));
+    const deviation = (Math.max(...values) - Math.min(...values)) / values[0];
+    report.samples = samples;
+    report.measurement =
+      'Projected bounding height of the loaded GLB, accompanied by actual gameplay screenshots and video; not a segmented pixel-silhouette measurement';
+    report.relativeHeightDeviation = deviation;
+    report.passed = deviation <= 0.05;
+    if (deviation > 0.05) throw Error('Camera GLB projection exceeds 5 percent');
+    await page.keyboard.press('Escape');
+    const video = page.video();
+    await c.close();
+    if (video) await rename(await video.path(), out + '/camera-acceleration.webm');
+  } else if (mode === 'video' || mode === 'routes') {
+    const results: Record<string, unknown>[] = [];
+    report.routes = results;
+    for (const r of cityRoutes) {
+      const c = await context(
+          mode === 'video' ? 'medium' : 'low',
+          mode === 'video' ? 0.5 : 0.15,
+          mode === 'video' ? r.id : undefined,
+        ),
+        page = await c.newPage();
+      await openRace(page, r.id);
+      await begin(page);
+      await installDriver(
+        page,
+        r.id === 'industrial-run' ? 'keyboard' : 'gamepad',
+        'single',
+        mode === 'video' ? 24 : undefined,
+      );
+      if (mode === 'routes')
+        await page.waitForFunction(
+          () =>
+            document.querySelector('[data-testid="race-player"]')?.getAttribute('data-lap') === '2',
+          null,
+          { timeout: 180000 },
+        );
+      else
+        await page.waitForFunction(
+          () =>
+            Number(
+              document.querySelector('[data-testid="checkpoint"]')?.textContent?.split('/')[0],
+            ) >= 3,
+          null,
+          { timeout: 120000 },
+        );
+      const data = await page.evaluate(() => {
+        const r = document.querySelector('[data-testid="race-player"]') as HTMLElement;
+        return {
+          lap: r.dataset.lap,
+          checkpoint: document.querySelector('[data-testid="checkpoint"]')?.textContent,
+          x: r.dataset.x,
+          z: r.dataset.z,
+        };
+      });
+      await page.keyboard.press('Escape');
+      const video = page.video();
+      await c.close();
+      if (video) await rename(await video.path(), `${out}/${r.id}.webm`);
+      results.push({
+        route: r.id,
+        input: r.id === 'industrial-run' ? 'keyboard' : 'virtual analog gamepad',
+        ...data,
+      });
+    }
+    report.routes = results;
+  } else throw Error('Use screens, routes, video or performance');
+  report.passed = errors.length === 0;
+  if (errors.length) process.exitCode = 1;
+} catch (error) {
+  await writeFile(
+    '/tmp/nexus-city-qa-error-private.txt',
+    error instanceof Error ? (error.stack ?? error.message) : String(error),
+    { mode: 0o600 },
+  );
+  report.passed = false;
+  process.exitCode = 1;
+  console.error('City QA failed; private diagnostics saved without printing credentials');
+} finally {
+  await browser.close();
+  await writeFile(`${out}/${mode}-report.json`, JSON.stringify(report, null, 2) + '\n');
+  console.log(JSON.stringify({ mode, passed: report.passed, artifacts: out }));
+}

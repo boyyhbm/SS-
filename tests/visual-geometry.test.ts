@@ -60,10 +60,10 @@ it('neutralizes the source car display steering before applying game input', () 
   template.add(wheel);
   const car = createCar(template);
   car.update(0, 0, false, false, 0);
-  const neutral = new THREE.Box3().setFromObject(car.group).getSize(new THREE.Vector3());
+  const neutral = new THREE.Box3().setFromObject(car.group.getObjectByName('WheelRig_WheelFrontL')!).getSize(new THREE.Vector3());
   expect(neutral.x).toBeCloseTo(0.2, 4);
   car.update(0, 1, false, false, 0);
-  const steering = new THREE.Box3().setFromObject(car.group).getSize(new THREE.Vector3());
+  const steering = new THREE.Box3().setFromObject(car.group.getObjectByName('WheelRig_WheelFrontL')!).getSize(new THREE.Vector3());
   expect(steering.x).toBeGreaterThan(neutral.x + 0.1);
   car.dispose();
   geometry.dispose();
@@ -81,7 +81,7 @@ it('keeps base PBR paint and albedo in the lightweight material path', () => {
   const car = createCar(template, true);
   const paints: THREE.MeshStandardMaterial[] = [];
   car.group.traverse((object) => {
-    if (object instanceof THREE.Mesh) paints.push(object.material as THREE.MeshStandardMaterial);
+    if (object instanceof THREE.Mesh && object.material instanceof THREE.MeshStandardMaterial) paints.push(object.material);
   });
   expect(paints).toHaveLength(1);
   expect(paints[0]).toBeInstanceOf(THREE.MeshStandardMaterial);

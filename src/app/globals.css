@@ -6393,3 +6393,20 @@ html[data-input-method='gamepad'] .game-card:focus-within {
     transform: none !important;
   }
 }
+
+/* Route selection extends the existing race menu, not the console layout. */
+.route-selection{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;margin:14px 0;text-align:left}
+.route-selection>svg{grid-row:1/4;width:130px;align-self:center}
+.route-selection>button{display:flex;flex-direction:column;gap:3px;padding:9px 12px;border:1px solid #53616b55;background:#101b22;color:#e7ece6;border-radius:7px;text-align:left;cursor:pointer}
+.route-selection>button strong{font-size:13px}.route-selection>button span{font-size:10px;color:#a5b7bc}
+.route-selection>button.selected{border-color:#c4d897;background:#c4d89713}.route-selection>small{grid-column:1/-1;font-size:10px;color:#a2b0b8;line-height:1.4;margin-top:5px}
+.route-finish-card{position:absolute;top:20%;left:50%;transform:translateX(-50%);display:grid;gap:18px;padding:24px;background:#0c171de8;border:1px solid #a0bd7b55;border-radius:12px;text-align:center;z-index:5}
+.pause-overlay{overflow:auto}.pause-card{margin:auto}.graphics-settings label:has(input[type=checkbox]){font-size:11px;display:flex;align-items:center;gap:6px}.race-sector[hidden]{display:none}
+@media(max-width:600px){.route-selection{grid-template-columns:90px 1fr}.route-selection>svg{width:90px}.route-selection>button{padding:7px 9px}.route-selection>button strong{font-size:12px}.route-selection>small{font-size:9px}.pause-card{padding-top:20px;padding-bottom:20px}}
+/* Oversized race menus scroll inside the card so route selection never crops the heading. */
+.pause-overlay .pause-card{max-height:calc(100dvh - 48px);overflow-y:auto;flex-shrink:0;margin:auto;scrollbar-width:thin;scrollbar-color:#7e9475 #101b20}
+.pause-card:has(.route-selection){width:min(720px,calc(100vw - 40px));padding:26px 30px}
+.pause-card:has(.route-selection) h1{font-size:32px;line-height:1.1;margin:8px 0}
+.pause-card:has(.route-selection)>p{font-size:12px;line-height:1.4;margin:0 0 8px}
+.start-controls-details{font-size:12px;color:#afbec2;margin:10px 0}.start-controls-details summary{cursor:pointer}.start-controls-details .start-controls{margin:10px 0}
+@media(max-width:600px){.pause-card:has(.route-selection){padding:20px}.pause-card:has(.route-selection) h1{font-size:26px}}

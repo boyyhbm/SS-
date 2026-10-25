@@ -6,6 +6,8 @@ import { visualText } from '@/games/visual/i18n';
 import { useRenderSettings, type RenderQuality } from '@/games/visual/quality';
 import { Modal } from './modal';
 import { InputGlyph } from './input-system';
+import { GameRouteMap } from './game-route-map';
+import { getCityRoute } from '@/games/road-network';
 const route = Array.from({ length: 97 }, (_, i) => {
   const a = (i / 96) * Math.PI * 2;
   return `${i ? 'L' : 'M'} ${90 + Math.cos(a) * 62} ${65 + Math.sin(a) * 43}`;
@@ -26,15 +28,21 @@ export function RaceHUD({
   players?: number;
 }) {
   const t = (key: Parameters<typeof visualText>[1]) => visualText(language, key),
-    speed = Math.round(telemetry.speed * 3.6),
+    speed = Math.round(Math.abs(telemetry.speed) * 3.6),
     gear = Math.max(1, Math.min(6, Math.ceil(speed / 38))),
-    revs = speed ? Math.min(1, 0.25 + (speed - (gear - 1) * 38) / 45) : 0.17;
+    revs = speed ? Math.min(1, 0.25 + (speed - (gear - 1) * 38) / 45) : 0.17,
+    currentRoute = telemetry.routeId ? getCityRoute(telemetry.routeId) : null,
+    checkpointCount = telemetry.checkpointCount ?? 4;
   return (
     <div className="race-instruments">
       <div className="race-timing">
         <div>
           <span>
-            {t('lap')} <i>{String(telemetry.lap).padStart(2, '0')}</i>
+            {currentRoute?.kind === 'sprint' ? (language === 'ru' ? 'Спринт' : 'Sprint') : t('lap')}{' '}
+            <i>
+              {String(Math.min(telemetry.lap, currentRoute?.laps ?? 99)).padStart(2, '0')}
+              {currentRoute?.kind === 'circuit' ? ` / ${currentRoute.laps}` : ''}
+            </i>
           </span>
           <strong data-testid="lap-time">{timeLabel(telemetry.lapTime)}</strong>
         </div>
@@ -43,13 +51,15 @@ export function RaceHUD({
           <strong>{telemetry.bestLap ? timeLabel(telemetry.bestLap) : '—:—.——'}</strong>
         </div>
       </div>
-      <div className="race-sector">
+      <div className="race-sector" hidden={mode === 'practice' && !online}>
         <span>
           {t('checkpoint')}{' '}
-          <strong data-testid="checkpoint">{telemetry.nextCheckpoint - 1} / 4</strong>
+          <strong data-testid="checkpoint">
+            {telemetry.nextCheckpoint - 1} / {checkpointCount}
+          </strong>
         </span>
         <div>
-          {[1, 2, 3, 4].map((n) => (
+          {Array.from({ length: checkpointCount }, (_, i) => i + 1).map((n) => (
             <i
               key={n}
               className={
@@ -64,52 +74,80 @@ export function RaceHUD({
         </div>
       </div>
       <div className="race-route">
-        <svg
-          viewBox="0 0 180 135"
-          aria-label={language === 'ru' ? 'Схема реальной кольцевой трассы' : 'Actual circuit map'}
-        >
-          <path
-            d="M 5 35 L 172 35 M 26 10 L 26 125 M 7 98 L 173 98 M 154 6 L 154 128"
-            stroke="#819793"
-            strokeOpacity=".22"
-            fill="none"
+        {currentRoute ? (
+          <GameRouteMap
+            routeId={currentRoute.id}
+            x={telemetry.x}
+            z={telemetry.z}
+            heading={telemetry.heading}
+            checkpoint={telemetry.nextCheckpoint}
+            language={language}
           />
-          <path d={route} stroke="#0c151a" strokeWidth="10" fill="none" />
-          <path d={route} stroke="#d6dfda" strokeWidth="3.2" fill="none" />
-          {[0, 1, 2, 3].map((i) => {
-            const a = (i * Math.PI) / 2;
-            return (
-              <rect
-                key={i}
-                x={90 + Math.cos(a) * 62 - 3}
-                y={65 + Math.sin(a) * 43 - 3}
-                width="6"
-                height="6"
-                fill={i === telemetry.nextCheckpoint % 4 ? '#dbf879' : '#789394'}
+        ) : (
+          <>
+            <svg
+              viewBox="0 0 180 135"
+              aria-label={
+                language === 'ru' ? 'Схема реальной кольцевой трассы' : 'Actual circuit map'
+              }
+            >
+              <path
+                d="M 5 35 L 172 35 M 26 10 L 26 125 M 7 98 L 173 98 M 154 6 L 154 128"
+                stroke="#819793"
+                strokeOpacity=".22"
+                fill="none"
               />
-            );
-          })}
-          <g
-            transform={`translate(${90 + (telemetry.x / 95) * 62},${65 + (telemetry.z / 95) * 43}) rotate(${(-telemetry.heading * 180) / Math.PI})`}
-          >
-            <path
-              d="M 0 6 L -4 -4 L 0 -2 L 4 -4 Z"
-              fill="#dfff81"
-              stroke="#0b141a"
-              strokeWidth="1"
-            />
-          </g>
-        </svg>
+              <path d={route} stroke="#0c151a" strokeWidth="10" fill="none" />
+              <path d={route} stroke="#d6dfda" strokeWidth="3.2" fill="none" />
+              {[0, 1, 2, 3].map((i) => {
+                const a = (i * Math.PI) / 2;
+                return (
+                  <rect
+                    key={i}
+                    x={90 + Math.cos(a) * 62 - 3}
+                    y={65 + Math.sin(a) * 43 - 3}
+                    width="6"
+                    height="6"
+                    fill={i === telemetry.nextCheckpoint % 4 ? '#dbf879' : '#789394'}
+                  />
+                );
+              })}
+              <g
+                transform={`translate(${90 + (telemetry.x / 95) * 62},${65 + (telemetry.z / 95) * 43}) rotate(${(-telemetry.heading * 180) / Math.PI})`}
+              >
+                <path
+                  d="M 0 6 L -4 -4 L 0 -2 L 4 -4 Z"
+                  fill="#dfff81"
+                  stroke="#0b141a"
+                  strokeWidth="1"
+                />
+              </g>
+            </svg>
+          </>
+        )}
         <div>
-          <span>{t('district')}</span>
-          <small>01 / AFTER HOURS</small>
+          <span>
+            {currentRoute
+              ? language === 'ru'
+                ? currentRoute.nameRu
+                : currentRoute.name
+              : t('district')}
+          </span>
+          <small>
+            {currentRoute
+              ? language === 'ru'
+                ? 'ГОРОДСКАЯ СЕТЬ / 03'
+                : 'CITY NETWORK / 03'
+              : '01 / AFTER HOURS'}
+          </small>
         </div>
       </div>
       <div className="race-speedometer">
         <div className="race-transmission">
           <span>{online ? t('position') : t(mode)}</span>
           <strong>
-            {online ? `${position ?? '—'}/${players ?? '—'}` : 'AT'} <i>{gear}</i>
+            {online ? `${position ?? '—'}/${players ?? '—'}` : 'AT'}{' '}
+            <i>{telemetry.speed < -0.1 ? 'R' : gear}</i>
           </strong>
         </div>
         <div className="rpm-scale" aria-label="RPM">
@@ -142,6 +180,14 @@ export function GraphicsSettings({ language }: { language: 'ru' | 'en' }) {
   return (
     <>
       <div className="graphics-settings">
+        <label>
+          <input
+            type="checkbox"
+            checked={settings.dynamicFov ?? false}
+            onChange={(e) => settings.setDynamicFov(e.target.checked)}
+          />
+          {language === 'ru' ? 'Лёгкое изменение FOV' : 'Subtle dynamic FOV'}
+        </label>
         <label>
           {t('graphics')}
           <select

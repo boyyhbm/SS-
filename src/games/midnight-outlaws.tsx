@@ -7,6 +7,10 @@ import * as THREE from 'three';
 import { loadRaceAssets, disposeObjectResources } from './visual/assets';
 import { createWorld } from './visual/world';
 import { createCar, type CarVisual } from './visual/car';
+import { ChaseCameraRig, projectedHeight } from './visual/camera';
+import { createCityWorld } from './visual/city-world';
+import { initialCityRace, stepCityRace, type CityRaceState } from './city-driving';
+import { getCityRoute, type CityRouteId } from './road-network';
 import { qualityPresets, useRenderSettings, type RenderTier } from './visual/quality';
 import { createRenderPipeline } from './visual/pipeline';
 import { useUI } from '../lib/ui-store';
@@ -22,6 +26,9 @@ export interface RaceTelemetry {
   x: number;
   z: number;
   heading: number;
+  routeId?: CityRouteId;
+  finished?: boolean;
+  checkpointCount?: number;
 }
 export function MidnightOutlaws({
   language,
@@ -36,6 +43,8 @@ export function MidnightOutlaws({
   restartKey,
   initialBestLap,
   networkRef,
+  routeId = 'downtown-circuit',
+  freeDrive = false,
 }: {
   language: 'ru' | 'en';
   presentationKey?: string;
@@ -49,11 +58,24 @@ export function MidnightOutlaws({
   restartKey: number;
   initialBestLap: number | null;
   networkRef?: React.RefObject<RaceNetworkDriver | null>;
+  routeId?: CityRouteId;
+  freeDrive?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null),
-    state = useRef<RaceState>({ ...initialRace(), bestLap: initialBestLap }),
+    state = useRef<RaceState | CityRaceState>({
+      ...(networkRef ? initialRace() : initialCityRace(routeId)),
+      bestLap: initialBestLap,
+    }),
     pausedRef = useRef(paused);
   const quality = useRenderSettings((s) => s.quality);
+  const bestRef = useRef(initialBestLap);
+  useEffect(() => {
+    bestRef.current = initialBestLap;
+  }, [initialBestLap]);
+  const cityOptions = useRef({ routeId, freeDrive });
+  useEffect(() => {
+    cityOptions.current = { routeId, freeDrive };
+  }, [routeId, freeDrive]);
   const [loading, setLoading] = useState(0),
     [failure, setFailure] = useState(false);
   const callbacks = useRef({ onReady, onError, onLap, onTelemetry, onPause });
@@ -68,8 +90,11 @@ export function MidnightOutlaws({
     pausedRef.current = paused;
   }, [paused]);
   useEffect(() => {
-    state.current = { ...initialRace(), bestLap: state.current.bestLap ?? initialBestLap };
-  }, [restartKey, initialBestLap]);
+    state.current = {
+      ...(networkRef ? initialRace() : initialCityRace(routeId)),
+      bestLap: bestRef.current,
+    };
+  }, [restartKey, routeId, networkRef]);
   useEffect(() => {
     if (!host.current) return;
     const container = host.current;
@@ -132,10 +157,12 @@ export function MidnightOutlaws({
         0.15,
         preset.cityDistance,
       );
-      const world = createWorld(scene, assets, tier, renderer);
+      const cityWorld = networkRef ? undefined : createCityWorld(scene, assets, tier, renderer);
+      const world = cityWorld ?? createWorld(scene, assets, tier, renderer);
       const visual = createCar(assets.car.scene, tier === 'low'),
         car = visual.group;
       scene.add(car);
+      const carBounds = new THREE.Box3().setFromObject(car);
       const pipeline = createRenderPipeline(
         renderer,
         scene,
@@ -152,8 +179,11 @@ export function MidnightOutlaws({
         ready = false;
       let cameraMode = 0;
       let renderedPresentation = '';
+      let renderedRoute = '';
       let previousLap = state.current.lap;
-      const clock = new FixedStepClock();
+      // A slow presentation frame must not slow the single-player race clock.
+      // Catch-up still uses bounded 30 Hz steps and is cleared on pause/visibility loss.
+      const clock = new FixedStepClock(1 / 30, networkRef ? 0.25 : 1);
       let previousTick = performance.now(),
         simulationAt = previousTick;
       let previousPose = { ...state.current };
@@ -188,6 +218,20 @@ export function MidnightOutlaws({
           return;
         }
         clock.advance(elapsed, (dt) => {
+          // Opt-in, read-only diagnostics for capture/replay tooling. Observers
+          // receive a copy; all movement still goes through normalized input.
+          if (container.dataset.instrumentation === 'true')
+            window.dispatchEvent(
+              new CustomEvent('nexus-simulation-tick', { detail: { ...state.current } }),
+            );
+          const tickControls = nexusInput.readFresh();
+          drivingInput = {
+            throttle: Math.max(inputRef.current.throttle, tickControls.accelerate),
+            brake: Math.max(inputRef.current.brake, tickControls.brake),
+            steer: inputRef.current.steer || tickControls.steer,
+            nitro: inputRef.current.nitro || tickControls.boost > 0.5,
+            handbrake: !!inputRef.current.handbrake || tickControls.handbrake > 0.5,
+          };
           previousPose = { ...state.current };
           const race = state.current;
           if (network)
@@ -201,7 +245,10 @@ export function MidnightOutlaws({
               ),
             );
           else {
-            const lap = stepRace(race, drivingInput, dt);
+            const lap =
+              'routeId' in race
+                ? stepCityRace(race, drivingInput, dt, cityOptions.current.freeDrive)
+                : stepRace(race, drivingInput, dt);
             if (lap !== null) callbacks.current.onLap(lap);
           }
           if (race.lap > previousLap) void nexusInput.haptic('finish');
@@ -215,7 +262,12 @@ export function MidnightOutlaws({
         });
         simulationAt = now - clock.remainder * 1000;
         if ((!pausedRef.current || network) && now - lastHud > 80) {
-          callbacks.current.onTelemetry({ ...state.current });
+          callbacks.current.onTelemetry({
+            ...state.current,
+            ...('routeId' in state.current
+              ? { checkpointCount: getCityRoute(state.current.routeId).gates.length }
+              : {}),
+          });
           lastHud = now;
         }
       }
@@ -246,10 +298,7 @@ export function MidnightOutlaws({
       };
       const observer = new ResizeObserver(resize);
       observer.observe(container);
-      const targetPosition = new THREE.Vector3(),
-        targetLook = new THREE.Vector3();
-      camera.position.set(state.current.x + 1.1, 2.8, state.current.z - 7.6);
-      camera.lookAt(state.current.x, 1, state.current.z + 10);
+      const cameraRig = new ChaseCameraRig(camera);
       function animate() {
         if (cancelled) return;
         const now = performance.now();
@@ -273,7 +322,11 @@ export function MidnightOutlaws({
         previousFrame = now;
         const input = drivingInput;
         const network = networkRef?.current;
-        let sceneKey = `${presentation.current}:${pausedRef.current}`;
+        let sceneKey = `${presentation.current}:${pausedRef.current}:${cityOptions.current.routeId}`;
+        if (renderedRoute !== cityOptions.current.routeId) {
+          cameraRig.reset();
+          renderedRoute = cityOptions.current.routeId;
+        }
         if (network) {
           sceneKey += `:${network.car()}`;
           const peers = network.remotePlayers();
@@ -299,7 +352,7 @@ export function MidnightOutlaws({
         }
         car.position.set(race.x, 0.03, race.z);
         car.rotation.y = race.heading;
-        car.rotation.z = -race.steering * race.speed * 0.0016;
+        car.rotation.z = 0;
         const boost = !pausedRef.current && input.nitro && race.nitro > 0 && race.speed > 4;
         const braking = !pausedRef.current && (input.brake > 0.1 || !!input.handbrake);
         visual.update(
@@ -311,47 +364,35 @@ export function MidnightOutlaws({
           network?.car(),
         );
         world.update(race, braking, dt, boost);
-        container.dataset.boosting = String(boost);
-        container.dataset.braking = String(braking);
-        targetPosition.set(
-          race.x +
-            (cameraMode === 0 ? Math.cos(race.heading) * 1.5 : 0) -
-            Math.sin(race.heading) * (cameraMode === 0 ? 7.6 : cameraMode === 1 ? 13 : -0.6),
-          cameraMode === 0 ? 2.8 : cameraMode === 1 ? 5.6 : 1.12,
-          race.z -
-            (cameraMode === 0 ? Math.sin(race.heading) * 1.5 : 0) -
-            Math.cos(race.heading) * (cameraMode === 0 ? 7.6 : cameraMode === 1 ? 13 : -0.6),
+        cityWorld?.setRoute(
+          cityOptions.current.routeId,
+          race.nextCheckpoint,
+          cityOptions.current.freeDrive,
         );
-        if (cameraMode === 3)
-          targetPosition.set(
-            race.x + Math.sin(race.heading) * 5.8 - Math.cos(race.heading) * 5.1,
-            1.9,
-            race.z + Math.cos(race.heading) * 5.8 + Math.sin(race.heading) * 5.1,
-          );
+        container.dataset.boosting = String(boost);
+        renderer.domElement.dataset.route = network
+          ? 'legacy-circuit'
+          : cityOptions.current.routeId;
+        container.dataset.braking = String(braking);
         const reduced =
           useUI.getState().reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!ready || reduced) camera.position.copy(targetPosition);
-        else if (!pausedRef.current) camera.position.lerp(targetPosition, Math.min(1, dt * 5));
-        targetLook.set(
-          race.x + Math.sin(race.heading) * 9,
-          1.05,
-          race.z + Math.cos(race.heading) * 9,
+        cameraRig.update(
+          race,
+          pausedRef.current ? 0 : dt,
+          cameraMode,
+          useRenderSettings.getState().dynamicFov,
+          reduced,
+          cityWorld?.clipCamera,
         );
-        if (cameraMode === 3)
-          targetLook.set(
-            race.x - Math.cos(race.heading) * 2.6,
-            0.8,
-            race.z + Math.sin(race.heading) * 2.6,
-          );
-        camera.lookAt(targetLook);
-        if (!reduced && !pausedRef.current)
-          camera.position.y += Math.sin(now * 0.027) * race.speed * 0.0007 * (boost ? 1.8 : 1);
-        camera.fov +=
-          (58 + race.speed * 0.16 + (boost && !reduced ? 5 : 0) - camera.fov) * Math.min(1, dt * 4);
-        camera.updateProjectionMatrix();
         renderer.domElement.dataset.cameraMode = String(cameraMode);
-        renderer.domElement.dataset.cameraSettled = String(
-          camera.position.distanceTo(targetPosition) < 0.05,
+        renderer.domElement.dataset.cameraSettled = 'true';
+        renderer.domElement.dataset.cameraDistance = String(
+          Math.hypot(camera.position.x - race.x, camera.position.z - race.z),
+        );
+        renderer.domElement.dataset.cameraFov = String(camera.fov);
+        car.updateMatrixWorld(true);
+        renderer.domElement.dataset.projectedCarHeight = String(
+          projectedHeight(camera, carBounds, car.matrixWorld),
         );
         renderer.domElement.dataset.throttle = String(input.throttle);
         renderer.domElement.dataset.brake = String(input.brake);
@@ -371,7 +412,12 @@ export function MidnightOutlaws({
           setLoading(100);
           renderer.domElement.dataset.assets = 'glb-loaded';
           callbacks.current.onReady();
-          callbacks.current.onTelemetry({ ...state.current });
+          callbacks.current.onTelemetry({
+            ...state.current,
+            ...('routeId' in state.current
+              ? { checkpointCount: getCityRoute(state.current.routeId).gates.length }
+              : {}),
+          });
           lastHud = now;
         }
         frame = requestAnimationFrame(animate);
@@ -412,7 +458,7 @@ export function MidnightOutlaws({
     };
   }, [inputRef, networkRef, quality]);
   return (
-    <div className="race-canvas" ref={host} data-visual-version="after-hours-1">
+    <div className="race-canvas" ref={host} data-visual-version="city-streets-2">
       {loading < 100 && !failure && (
         <div className="race-asset-loading" role="status">
           <span>MIDNIGHT OUTLAWS</span>

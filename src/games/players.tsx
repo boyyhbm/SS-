@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { z } from 'zod';
 import type { ComponentType } from 'react';
 import type { Language } from '@/lib/i18n';
+import { CITY_ROUTE_IDS } from './road-network';
 export interface GameRuntimeContext {
   gameId: string;
   title: string;
@@ -29,6 +30,24 @@ function MidnightAdapter({ gameId, title, language, initialSaves }: GameRuntimeC
       language={language}
       initialBestLap={best}
       initialHistory={history.success ? history.data : []}
+      initialRouteRecords={Object.fromEntries(
+        CITY_ROUTE_IDS.map((id) => {
+          const record = z
+            .object({ seconds: z.number().finite() })
+            .safeParse(initialSaves[`best-lap:${id}`]);
+          const list = z
+            .array(z.object({ seconds: z.number().finite(), recordedAt: z.string() }))
+            .max(10)
+            .safeParse(initialSaves[`lap-history:${id}`]);
+          return [
+            id,
+            {
+              best: record.success ? record.data.seconds : null,
+              history: list.success ? list.data : [],
+            },
+          ];
+        }),
+      )}
     />
   );
 }
