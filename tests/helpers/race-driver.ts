@@ -48,6 +48,7 @@ export async function installDriver(
               : pad,
           ],
         });
+      let driving = false;
       let duty = 0;
       let accelerating = true;
       const held = new Set<string>();
@@ -81,6 +82,7 @@ export async function installDriver(
             : !document.querySelector('.pause-overlay')) &&
           !(window as unknown as { nexusDriverPaused?: boolean }).nexusDriverPaused
         ) {
+          driving = true;
           const x = sample?.x ?? Number(root.dataset.x),
             z = sample?.z ?? Number(root.dataset.z),
             heading = sample?.heading ?? Number(root.dataset.heading),
@@ -199,7 +201,10 @@ export async function installDriver(
             key('KeyD', turn && steer > 0);
             key('KeyA', turn && steer < 0);
           }
-        } else {
+        } else if (driving) {
+          // Release our driving input once on leaving the race/pause transition.
+          // Repeated neutral writes would erase real UI confirmation presses.
+          driving = false;
           pad.buttons[7] = button();
           pad.buttons[6] = button();
           if (route) pad.buttons[0] = button();

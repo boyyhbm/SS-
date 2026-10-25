@@ -1,3 +1,4 @@
+import { isolateRegistrationQuota } from '../helpers/registration-quota';
 import { test, expect } from '@playwright/test';
 import { randomBytes } from 'node:crypto';
 import { PrismaClient } from '@prisma/client';
@@ -6,6 +7,7 @@ const db = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 let userId = '';
+test.beforeAll(() => isolateRegistrationQuota(db));
 test.afterAll(async () => {
   if (userId)
     await db.user.deleteMany({ where: { id: userId, username: { startsWith: 'assistqa_' } } });
@@ -25,7 +27,13 @@ test('account-owned racing guide defaults to corners, toggles in UI and survives
     confirmPassword: password,
   }))
     await page.locator(`[name="${k}"]`).fill(v);
+  const registered = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === '/api/register' &&
+      response.request().method() === 'POST',
+  );
   await page.locator('.auth-submit').click();
+  expect((await registered).status()).toBe(201);
   await expect(page).toHaveURL('/');
   const origin = new URL(page.url()).origin;
   const d = await (await page.request.get('/api/console')).json();

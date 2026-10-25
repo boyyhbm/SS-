@@ -345,6 +345,7 @@ try {
     await openRace(page, 'midnight-sprint');
     await begin(page);
     const samples: Record<string, unknown>[] = [];
+    report.samples = samples;
     const capture = async (target: number) => {
       await page.waitForFunction(
         (k) =>
@@ -367,6 +368,10 @@ try {
       });
       samples.push({ targetKph: target, ...sample });
       await page.screenshot({ path: `${out}/camera-${target}.png` });
+      const afterScreenshotKph = Number(await page.getByTestId('speed').textContent());
+      Object.assign(samples.at(-1)!, { afterScreenshotKph });
+      // GPU readback is asynchronous: retain both live speeds instead of
+      // pretending the screenshot was taken at precisely the requested instant.
     };
     await capture(0);
     await installDriver(page, 'gamepad', 'single', 18);
@@ -382,7 +387,9 @@ try {
       null,
       { timeout: 180000 },
     );
-    for (const speed of [50, 100, 150]) {
+    // Capture the fastest run first, leaving straight road for GPU readback.
+    // Subsequent 100/50 km/h samples also verify braking with the same camera.
+    for (const speed of [150, 100, 50]) {
       await page.evaluate((k) => {
         const w = window as unknown as {
           nexusDriverCruiseSpeed: number;
@@ -395,7 +402,7 @@ try {
     }
     const values = samples.map((s) => Number(s.height));
     const deviation = (Math.max(...values) - Math.min(...values)) / values[0];
-    report.samples = samples;
+    report.samples = samples.sort((a, b) => Number(a.targetKph) - Number(b.targetKph));
     report.measurement =
       'Projected bounding height of the loaded GLB, accompanied by actual gameplay screenshots and video; not a segmented pixel-silhouette measurement';
     report.relativeHeightDeviation = deviation;
