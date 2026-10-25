@@ -87,5 +87,55 @@
     "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
     "Public GPU performance and capacity not benchmarked",
     "Active rooms are lost during a game server restart"
-  ]
+  ],
+  "latestCodeChecks": {
+    "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+    "build": "PASSED",
+    "typescript": "PASSED",
+    "eslint": "PASSED",
+    "unitTests": 75,
+    "browserTests": 16,
+    "conclusion": "SUCCESS",
+    "run": "https://github.com/boyyhbm/SS-/actions/runs/40197091776"
+  },
+  "subsequentAutomaticRollout": {
+    "verifiedAt": "2026-10-25T13:33:09.853Z",
+    "services": {
+      "web": {
+        "status": "LIVE",
+        "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+        "trigger": "new_commit",
+        "healthStatus": 200
+      },
+      "multiplayer": {
+        "status": "LIVE",
+        "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+        "trigger": "new_commit",
+        "healthStatus": 200
+      }
+    },
+    "applicationModulesChanged": false,
+    "note": "Only test tooling and documentation changed after the public acceptance run; hosted readiness checked again."
+  },
+  "managedBackup": {
+    "postgresPitr": "AVAILABLE",
+    "pitrStartsAt": "2026-10-25T11:17:05Z",
+    "managedRestoreDrill": "NOT_RUN",
+    "webDisk": {
+      "mount": "/var/data",
+      "sizeGB": 1,
+      "initialSnapshotCount": 0
+    },
+    "logicalExport": {
+      "createdAt": "2026-10-25T13:19:00Z",
+      "exportUrlIssued": true,
+      "downloadAndManagedRestoreTested": false
+    }
+  },
+  "additionalPublicBrowserQa": {
+    "screens": ["Guest home", "Discover", "Mobile registration 390x844"],
+    "deviceScaleFactor": 1,
+    "mobileHorizontalOverflow": false,
+    "fullRaceScreenshots": "Earlier local visual QA; not repeated on public host"
+  }
 }

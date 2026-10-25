@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T13:16:42.620Z",
+  "updatedAt": "2026-10-25T13:33:09.853Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -31,6 +31,11 @@
       "mount": "/var/data",
       "sizeGB": 1,
       "initialSnapshotCount": 0
+    },
+    "logicalExport": {
+      "createdAt": "2026-10-25T13:19:00Z",
+      "exportUrlIssued": true,
+      "downloadAndManagedRestoreTested": false
     }
   },
   "publicAcceptanceTests": {
@@ -77,12 +82,29 @@
     "branch": "main",
     "checksOnApplicationCommit": "SUCCESS",
     "autoDeployTrigger": "checksPass",
-    "observedAutomaticTrigger": "new_commit; initially blocked by short generated secrets, then same commit deployed via API"
+    "observedAutomaticTrigger": "new_commit after passing checks; both services reached LIVE and readiness 200",
+    "lastVerifiedCodeCommit": "623019a1b5ffea271a18b339add2bbe712773952",
+    "checksOnLastVerifiedCodeCommit": "SUCCESS",
+    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40197091776"
   },
   "knownLimitations": [
     "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
     "Public GPU performance and capacity not benchmarked",
     "Active rooms are lost during a game server restart",
     "Restart temporarily interrupts availability; observed multiplayer readiness recovery took about 3.5 minutes"
-  ]
+  ],
+  "latestVerifiedRollout": {
+    "web": {
+      "status": "LIVE",
+      "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    },
+    "multiplayer": {
+      "status": "LIVE",
+      "commit": "623019a1b5ffea271a18b339add2bbe712773952",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    }
+  }
 }
