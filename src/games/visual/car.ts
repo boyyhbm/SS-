@@ -128,6 +128,7 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
   contact.position.y = 0.001;
   contact.renderOrder = 1;
   group.add(contact);
+  let previousColor = '';
   return {
     group,
     dispose() {
@@ -137,10 +138,13 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       contactMaterial.dispose();
     },
     update(speed, steer, braking, boost, dt, color = 'silver') {
-      for (const p of paint)
-        p.color.set(
-          p.name.startsWith('Paint 2') ? '#17242b' : (carColors[color] ?? carColors.silver),
-        );
+      if (previousColor !== color) {
+        previousColor = color;
+        for (const p of paint)
+          p.color.set(
+            p.name.startsWith('Paint 2') ? '#17242b' : (carColors[color] ?? carColors.silver),
+          );
+      }
       for (const b of brakes) b.emissiveIntensity = braking ? 4 : 0.8;
       for (const w of wheels) {
         w.spin.rotation.x += (speed * dt) / w.radius;

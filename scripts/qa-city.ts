@@ -9,8 +9,8 @@ const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3000';
 if (!['localhost', '127.0.0.1'].includes(new URL(origin).hostname))
   throw Error('Local isolated QA only');
 const mode = process.argv[2] ?? 'screens',
-  out = 'docs/world-update',
-  statePath = '/tmp/nexus-city-visual-state.json';
+  out = process.env.NEXUS_QA_OUTPUT ?? 'docs/world-update',
+  statePath = process.env.NEXUS_QA_STATE ?? '/tmp/nexus-city-visual-state.json';
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH ?? '/usr/bin/chromium',
@@ -64,7 +64,9 @@ async function context(quality: string, dpr: number, record?: string) {
       height: mode === 'performance' ? 1080 : 720,
     },
     deviceScaleFactor: dpr,
-    reducedMotion: mode === 'video' || mode === 'performance' ? 'no-preference' : 'reduce',
+    reducedMotion: ['video', 'performance', 'smoothness'].includes(mode)
+      ? 'no-preference'
+      : 'reduce',
     ...(record
       ? { recordVideo: { dir: out + '/raw-video', size: { width: 1280, height: 720 } } }
       : {}),
@@ -97,6 +99,10 @@ async function openRace(page: Page, id: string) {
   );
   await page.waitForFunction((id) => document.querySelector('canvas')?.dataset.route === id, id);
   await page.evaluate(() => document.fonts.ready);
+  if (mode === 'camera' || mode === 'smoothness')
+    await page.evaluate(() => {
+      (document.querySelector('.race-canvas') as HTMLElement).dataset.instrumentation = 'true';
+    });
 }
 async function begin(page: Page) {
   await page.getByRole('button', { name: 'На старт', exact: true }).click();
@@ -109,7 +115,9 @@ const report: Record<string, unknown> = {
   physicalController: 'NOT_TESTED',
   renderSource: 'Actual Next.js/Three.js GLB runtime; no generated images',
   errors,
-  motionPreference: mode === 'video' || mode === 'performance' ? 'no-preference' : 'reduce',
+  motionPreference: ['video', 'performance', 'smoothness'].includes(mode)
+    ? 'no-preference'
+    : 'reduce',
   machine: {
     platform: os.platform(),
     release: os.release(),
@@ -123,7 +131,50 @@ try {
     p = await setup.newPage();
   await prepare(p);
   await setup.close();
-  if (mode === 'performance') {
+  if (mode === 'smoothness') {
+    const c = await context('low', 0.15),
+      page = await c.newPage();
+    await page.addInitScript(() => {
+      const w = window as unknown as { presentationTrace: Record<string, number>[] };
+      w.presentationTrace = [];
+      window.addEventListener('nexus-presentation-frame', (e) => {
+        if (w.presentationTrace.length < 10000) w.presentationTrace.push((e as CustomEvent).detail);
+      });
+    });
+    await openRace(page, 'downtown-circuit');
+    await begin(page);
+    await installDriver(page, 'gamepad', 'single', 27);
+    await page.waitForFunction(
+      () => document.querySelector('[data-testid="race-player"]')?.getAttribute('data-lap') === '2',
+      null,
+      { timeout: 180000 },
+    );
+    await page.keyboard.press('F3');
+    await page.screenshot({ path: out + '/developer-overlay.png' });
+    const trace = await page.evaluate(() => ({
+      frames: (window as unknown as { presentationTrace: unknown[] }).presentationTrace,
+      stats: (window as unknown as { cityStats: unknown[] }).cityStats,
+    }));
+    report.trace = trace;
+    const frames = trace.frames as {
+      now: number;
+      alpha: number;
+      x: number;
+      z: number;
+      heading: number;
+    }[];
+    report.presentation = {
+      frameCount: frames.length,
+      staleInterpolationFrames: frames.filter((f) => f.alpha < -1e-6 || f.alpha > 1.0001).length,
+      finiteTransforms: frames.every((f) => Object.values(f).every(Number.isFinite)),
+      physicalDisplaySmoothness: 'UNVERIFIED_SOFTWARE_GPU',
+    };
+    if (frames.length < 20 || frames.some((f) => f.alpha < -1e-6 || f.alpha > 1.0001))
+      throw Error('Presentation is running ahead of the fixed simulation');
+    report.scope =
+      'Actual full city lap with turns, analog input; software WebGL at DPR 0.15. Does not verify physical 60/120Hz output.';
+    await c.close();
+  } else if (mode === 'performance') {
     const results: Record<string, unknown>[] = [];
     report.results = results;
     for (const quality of ['low', 'medium', 'high', 'auto']) {

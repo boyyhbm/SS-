@@ -9,17 +9,20 @@ export const cameraProfiles = [
 ] as const;
 export const cameraTuning = { headingResponse: 7, baseFov: 58, maxDynamicFov: 0.8 };
 export type CameraPose = { x: number; z: number; heading: number; speed: number };
+const clipDirection = new THREE.Vector3(),
+  clipHit = new THREE.Vector3(),
+  clipRay = new THREE.Ray();
 export function avoidCameraObstacles(
   target: THREE.Vector3,
   desired: THREE.Vector3,
   boxes: readonly THREE.Box3[],
 ) {
-  const direction = new THREE.Vector3().subVectors(desired, target),
+  const direction = clipDirection.subVectors(desired, target),
     length = direction.length();
   if (length < 0.001) return;
   direction.normalize();
-  const ray = new THREE.Ray(target, direction),
-    hit = new THREE.Vector3();
+  const ray = clipRay.set(target, direction),
+    hit = clipHit;
   let allowed = length;
   for (const box of boxes)
     if (ray.intersectBox(box, hit)) {
@@ -65,7 +68,10 @@ export class ChaseCameraRig {
       profile.height,
       pose.z - cos * profile.distance,
     );
-    if (mode === 3) this.camera.position.add(new THREE.Vector3(-cos * 5.1, 0, sin * 5.1));
+    if (mode === 3) {
+      this.camera.position.x -= cos * 5.1;
+      this.camera.position.z += sin * 5.1;
+    }
     this.target.set(
       pose.x + sin * profile.lookAhead,
       profile.targetHeight,
@@ -73,12 +79,15 @@ export class ChaseCameraRig {
     );
     clip?.(this.target, this.camera.position);
     this.camera.lookAt(this.target);
-    this.camera.fov =
+    const fov =
       cameraTuning.baseFov +
       (dynamicFov && !reducedMotion
         ? Math.min(1, Math.max(0, pose.speed) / 50) * cameraTuning.maxDynamicFov
         : 0);
-    this.camera.updateProjectionMatrix();
+    if (this.camera.fov !== fov) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+    }
     this.camera.updateMatrixWorld();
   }
 }

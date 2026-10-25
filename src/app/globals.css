@@ -6410,3 +6410,21 @@ html[data-input-method='gamepad'] .game-card:focus-within {
 .pause-card:has(.route-selection)>p{font-size:12px;line-height:1.4;margin:0 0 8px}
 .start-controls-details{font-size:12px;color:#afbec2;margin:10px 0}.start-controls-details summary{cursor:pointer}.start-controls-details .start-controls{margin:10px 0}
 @media(max-width:600px){.pause-card:has(.route-selection){padding:20px}.pause-card:has(.route-selection) h1{font-size:26px}}
+
+.race-developer-overlay {
+  position: absolute;
+  top: 5rem;
+  left: 1rem;
+  z-index: 25;
+  padding: 0.75rem 1rem;
+  white-space: pre;
+  font:
+    12px/1.6 ui-monospace,
+    monospace;
+  color: #d7f5d3;
+  background: #090b12e8;
+  pointer-events: none;
+}
+.race-developer-overlay[hidden] {
+  display: none;
+}

@@ -1,6 +1,7 @@
 'use client';
 import { nexusInput } from '../input/manager';
 import { FixedStepClock } from './fixed-clock';
+import { RacePresentation } from './presentation';
 import { useEffect, useRef, useState } from 'react';
 import type { RaceNetworkDriver } from '../multiplayer/prediction';
 import * as THREE from 'three';
@@ -107,7 +108,7 @@ export function MidnightOutlaws({
       renderer = new THREE.WebGLRenderer({
         antialias: true,
         powerPreference: 'high-performance',
-        preserveDrawingBuffer: true,
+        preserveDrawingBuffer: false,
       });
     } catch {
       callbacks.current.onError();
@@ -184,13 +185,15 @@ export function MidnightOutlaws({
       // A slow presentation frame must not slow the single-player race clock.
       // Catch-up still uses bounded 30 Hz steps and is cleared on pause/visibility loss.
       const clock = new FixedStepClock(1 / 30, networkRef ? 0.25 : 1);
-      let previousTick = performance.now(),
-        simulationAt = previousTick;
-      let previousPose = { ...state.current };
+      let previousTick = performance.now();
+      const poses = new RacePresentation(state.current);
+      let stateIdentity = state.current;
+      let physicsMs = 0,
+        physicsSteps = 0;
+      const reducedQuery = matchMedia('(prefers-reduced-motion: reduce)');
       let drivingInput: RaceInput = { throttle: 0, brake: 0, steer: 0, nitro: false };
-      function simulate() {
-        const now = performance.now(),
-          elapsed = (now - previousTick) / 1000;
+      function simulate(now = performance.now()) {
+        const elapsed = (now - previousTick) / 1000;
         previousTick = now;
         if (cancelled || !ready) {
           clock.reset();
@@ -232,7 +235,11 @@ export function MidnightOutlaws({
             nitro: inputRef.current.nitro || tickControls.boost > 0.5,
             handbrake: !!inputRef.current.handbrake || tickControls.handbrake > 0.5,
           };
-          previousPose = { ...state.current };
+          if (stateIdentity !== state.current) {
+            poses.reset(state.current);
+            stateIdentity = state.current;
+          }
+          const stepStarted = performance.now();
           const race = state.current;
           if (network)
             Object.assign(
@@ -251,6 +258,9 @@ export function MidnightOutlaws({
                 : stepRace(race, drivingInput, dt);
             if (lap !== null) callbacks.current.onLap(lap);
           }
+          physicsMs += performance.now() - stepStarted;
+          physicsSteps++;
+          poses.push(race);
           if (race.lap > previousLap) void nexusInput.haptic('finish');
           previousLap = race.lap;
           if (!pausedRef.current) {
@@ -260,7 +270,6 @@ export function MidnightOutlaws({
             else if (drivingInput.throttle > 0.2) void nexusInput.haptic('accelerate');
           }
         });
-        simulationAt = now - clock.remainder * 1000;
         if ((!pausedRef.current || network) && now - lastHud > 80) {
           callbacks.current.onTelemetry({
             ...state.current,
@@ -301,24 +310,18 @@ export function MidnightOutlaws({
       const cameraRig = new ChaseCameraRig(camera);
       function animate() {
         if (cancelled) return;
+        // Drain elapsed physics before sampling presentation. The independent
+        // network/input timer uses the SAME clock and timestamp, so it cannot
+        // double-step. It keeps sending while a slow GPU delays visible frames.
         const now = performance.now();
-        const dt = Math.min((now - previousFrame) / 1000, 0.05);
-        const current = state.current;
-        const alpha =
-          pausedRef.current ||
-          Math.hypot(current.x - previousPose.x, current.z - previousPose.z) > 8
-            ? 1
-            : Math.min(1, Math.max(0, (now - simulationAt) / (clock.step * 1000)));
-        const angle = Math.atan2(
-          Math.sin(current.heading - previousPose.heading),
-          Math.cos(current.heading - previousPose.heading),
-        );
-        const race = {
-          ...current,
-          x: previousPose.x + (current.x - previousPose.x) * alpha,
-          z: previousPose.z + (current.z - previousPose.z) * alpha,
-          heading: previousPose.heading + angle * alpha,
-        };
+        simulate(now);
+        const dt = Math.min(Math.max(0, (now - previousFrame) / 1000), 0.25);
+        if (stateIdentity !== state.current) {
+          poses.reset(state.current);
+          stateIdentity = state.current;
+        }
+        const alpha = clock.remainder / clock.step;
+        const race = poses.sample(alpha, pausedRef.current);
         previousFrame = now;
         const input = drivingInput;
         const network = networkRef?.current;
@@ -374,8 +377,7 @@ export function MidnightOutlaws({
           ? 'legacy-circuit'
           : cityOptions.current.routeId;
         container.dataset.braking = String(braking);
-        const reduced =
-          useUI.getState().reducedMotion || matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduced = useUI.getState().reducedMotion || reducedQuery.matches;
         cameraRig.update(
           race,
           pausedRef.current ? 0 : dt,
@@ -390,10 +392,27 @@ export function MidnightOutlaws({
           Math.hypot(camera.position.x - race.x, camera.position.z - race.z),
         );
         renderer.domElement.dataset.cameraFov = String(camera.fov);
-        car.updateMatrixWorld(true);
-        renderer.domElement.dataset.projectedCarHeight = String(
-          projectedHeight(camera, carBounds, car.matrixWorld),
-        );
+        if (container.dataset.instrumentation === 'true') {
+          car.updateMatrixWorld(true);
+          renderer.domElement.dataset.projectedCarHeight = String(
+            projectedHeight(camera, carBounds, car.matrixWorld),
+          );
+          window.dispatchEvent(
+            new CustomEvent('nexus-presentation-frame', {
+              detail: {
+                now,
+                alpha,
+                x: race.x,
+                z: race.z,
+                heading: race.heading,
+                steering: race.steering,
+                cameraX: camera.position.x,
+                cameraZ: camera.position.z,
+                cameraHeading: camera.rotation.y,
+              },
+            }),
+          );
+        }
         renderer.domElement.dataset.throttle = String(input.throttle);
         renderer.domElement.dataset.brake = String(input.brake);
         renderer.domElement.dataset.steer = String(input.steer);
@@ -403,7 +422,14 @@ export function MidnightOutlaws({
         // Idle lobbies redraw when their presentation changes. Network simulation keeps ticking.
         if (sceneKey !== renderedPresentation) renderDirty = true;
         if (!ready || !pausedRef.current || renderDirty) {
-          pipeline.render(pausedRef.current);
+          pipeline.render(pausedRef.current, {
+            physicsMs,
+            physicsSteps,
+            alpha,
+            networkDelayMs: network ? 120 : 0,
+          });
+          physicsMs = 0;
+          physicsSteps = 0;
           renderedPresentation = sceneKey;
           renderDirty = false;
         }

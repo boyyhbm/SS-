@@ -24,11 +24,28 @@ export function createRenderPipeline(
     statsAt = performance.now(),
     dpr = renderer.getPixelRatio(),
     slow = 0;
-  let frames: number[] = [],
-    cpu: number[] = [];
+  const frames: number[] = [],
+    cpu: number[] = [],
+    physics: number[] = [];
+  let simulatedSteps = 0;
+  const overlay = document.createElement('output');
+  overlay.className = 'race-developer-overlay';
+  overlay.hidden = new URLSearchParams(location.search).get('developer') !== '1';
+  overlay.setAttribute('aria-label', 'Developer performance diagnostics');
+  renderer.domElement.parentElement?.appendChild(overlay);
+  const toggle = (event: KeyboardEvent) => {
+    if (event.code === 'F3') {
+      event.preventDefault();
+      overlay.hidden = !overlay.hidden;
+    }
+  };
+  window.addEventListener('keydown', toggle);
   const mean = (a: number[]) => a.reduce((s, n) => s + n, 0) / Math.max(1, a.length);
   return {
-    render(paused: boolean) {
+    render(
+      paused: boolean,
+      timing: { physicsMs: number; physicsSteps: number; alpha: number; networkDelayMs: number },
+    ) {
       const now = performance.now();
       if (last) frames.push(now - last);
       last = now;
@@ -37,6 +54,8 @@ export function createRenderPipeline(
       if (composer) composer.render();
       else renderer.render(scene, camera);
       cpu.push(performance.now() - start);
+      physics.push(timing.physicsMs);
+      simulatedSteps += timing.physicsSteps;
       if (now - statsAt > 1000) {
         const resources = performance
           .getEntriesByType('resource')
@@ -47,6 +66,15 @@ export function createRenderPipeline(
           requestedQuality: requested,
           fps: 1000 / Math.max(1, mean(frames)),
           frameMs: mean(frames),
+          fps1PercentLow:
+            1000 / Math.max(1, mean(sorted.slice(-Math.max(1, Math.ceil(sorted.length * 0.01))))),
+          frameMaxMs: sorted.at(-1) ?? 0,
+          frameSpikesOver50Ms: frames.filter((n) => n > 50).length,
+          physicsCpuMsPerStep: physics.reduce((s, n) => s + n, 0) / Math.max(1, simulatedSteps),
+          physicsSteps: simulatedSteps,
+          interpolationAlpha: timing.alpha,
+          networkInterpolationDelayMs: timing.networkDelayMs,
+          gpuMemory: 'UNAVAILABLE_WEBGL',
           frameP95Ms: sorted[Math.max(0, Math.ceil(sorted.length * 0.95) - 1)] ?? 0,
           frameTimesMs: [...frames],
           renderCpuMs: mean(cpu),
@@ -61,6 +89,11 @@ export function createRenderPipeline(
           paused,
         };
         window.dispatchEvent(new CustomEvent('nexus-render-stats', { detail }));
+        overlay.textContent = `FPS ${detail.fps.toFixed(1)} · 1% ${detail.fps1PercentLow.toFixed(1)}
+Frame ${detail.frameMs.toFixed(2)} ms · p95 ${detail.frameP95Ms.toFixed(2)} · max ${detail.frameMaxMs.toFixed(2)}
+Physics ${detail.physicsCpuMsPerStep.toFixed(3)} ms/step · 30 Hz
+Render CPU ${detail.renderCpuMs.toFixed(2)} ms · calls ${detail.drawCalls}
+Network buffer ${detail.networkInterpolationDelayMs} ms · DPR ${dpr.toFixed(2)}`;
         renderer.domElement.dataset.fps = detail.fps.toFixed(1);
         renderer.domElement.dataset.drawCalls = String(detail.drawCalls);
         if (requested === 'auto' && !paused && !document.hidden) {
@@ -72,8 +105,10 @@ export function createRenderPipeline(
             slow = 0;
           }
         }
-        frames = [];
-        cpu = [];
+        frames.length = 0;
+        cpu.length = 0;
+        physics.length = 0;
+        simulatedSteps = 0;
         statsAt = now;
       }
     },
@@ -81,6 +116,8 @@ export function createRenderPipeline(
       composer?.setSize(w, h);
     },
     dispose() {
+      window.removeEventListener('keydown', toggle);
+      overlay.remove();
       composer?.passes.forEach((p) => p.dispose());
       composer?.dispose();
     },

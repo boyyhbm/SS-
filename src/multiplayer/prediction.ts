@@ -1,4 +1,5 @@
 import { initialRace, stepRace, type RaceInput, type RaceState } from '../games/racing-physics';
+import { angleDelta } from '../games/presentation';
 import { FIXED_DT, type InputCommand, type NetworkPlayer, type RoomSnapshot } from './contracts';
 export interface RaceNetworkDriver {
   frame(input: RaceInput, dt: number): RaceState;
@@ -16,7 +17,7 @@ export class RacePrediction implements RaceNetworkDriver {
   snapshots: RoomSnapshot[] = [];
   corrections = 0;
   lastError = 0;
-  visualOffset = { x: 0, z: 0 };
+  visualOffset = { x: 0, z: 0, heading: 0 };
   constructor(
     public userId: string,
     public send: (input: InputCommand) => void,
@@ -45,7 +46,8 @@ export class RacePrediction implements RaceNetworkDriver {
     if (!changed && this.lastError < 8) {
       this.visualOffset.x += this.state.x - corrected.x;
       this.visualOffset.z += this.state.z - corrected.z;
-    } else this.visualOffset = { x: 0, z: 0 };
+      this.visualOffset.heading += angleDelta(corrected.heading, this.state.heading);
+    } else this.visualOffset = { x: 0, z: 0, heading: 0 };
     this.state = corrected;
     this.snapshots.push(snapshot);
     if (this.snapshots.length > 32) this.snapshots.shift();
@@ -72,10 +74,12 @@ export class RacePrediction implements RaceNetworkDriver {
     const decay = Math.exp(-dt * 14);
     this.visualOffset.x *= decay;
     this.visualOffset.z *= decay;
+    this.visualOffset.heading *= decay;
     return {
       ...this.state,
       x: this.state.x + this.visualOffset.x,
       z: this.state.z + this.visualOffset.z,
+      heading: this.state.heading + this.visualOffset.heading,
     };
   }
   remotePlayers(): NetworkPlayer[] {

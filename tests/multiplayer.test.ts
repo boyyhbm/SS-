@@ -171,3 +171,24 @@ describe('friend lobby discovery', () => {
     }
   });
 });
+
+it('reconciles local yaw over the short arc instead of snapping rotation at each snapshot', () => {
+  vi.spyOn(Date, 'now').mockReturnValue(1000);
+  const p = new RacePrediction('local', () => {});
+  const first = snapshot(1000);
+  first.players[0].state.heading = Math.PI - 0.05;
+  p.receive(first);
+  const next = snapshot(1034);
+  next.players[0].state.heading = -Math.PI + 0.15;
+  p.receive(next);
+  const visual = p.frame({ throttle: 0, brake: 0, steer: 0, nitro: false }, 1 / 120);
+  expect(
+    Math.abs(
+      Math.atan2(
+        Math.sin(visual.heading - (Math.PI - 0.05)),
+        Math.cos(visual.heading - (Math.PI - 0.05)),
+      ),
+    ),
+  ).toBeLessThan(0.04);
+  expect(p.state.heading).toBeCloseTo(-Math.PI + 0.15);
+});
