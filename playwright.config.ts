@@ -7,7 +7,7 @@ export default defineConfig({
   workers: 1,
   timeout: 60000,
   expect: { timeout: 15000 },
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [['list'], ['html', { open: 'never' }], ['json', {outputFile:'test-results/run-summary.json'}]],
   use: {
     baseURL: process.env.TEST_BASE_URL ?? 'http://localhost:3000',
     viewport: { width: 1440, height: 1000 },

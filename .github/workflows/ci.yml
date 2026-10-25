@@ -56,6 +56,9 @@ jobs:
         env:
           E2E_EXTERNAL_SERVER: '1'
         run: npm run test:e2e -- --trace=off
+      - name: Publish redacted browser failure summaries
+        if: failure()
+        run: node scripts/annotate-browser-failures.mjs
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: failure()
         with:
