@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-25T11:38:30.430Z",
+  "scope": "LOCAL fresh database validation; not a Render production test",
+  "passed": true,
+  "checks": [
+    "All four public catalog records exactly match the source including IDs, timestamps and JSON screenshots",
+    "Repeated seed preserves administrator edits",
+    "No user accounts created automatically",
+    "Original local catalog remains unchanged"
+  ],
+  "privateSourceTransfer": {
+    "personalRecords": 0,
+    "uploadFiles": 0,
+    "activeRateLimitRecords": 0
+  },
+  "publicDeploymentVerified": false
+}

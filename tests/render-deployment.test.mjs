@@ -124,7 +124,15 @@ describe('Render deployment', () => {
       );
     }
     expect(blueprint.services.find((s) => s.name === 'nexus-web').disk.mountPath).toBe('/var/data');
-    expect(JSON.stringify(blueprint)).not.toContain('NEXUS_LIVE');
+    const group = Object.fromEntries(
+      blueprint.envVarGroups[0].envVars
+        .filter((v) => v.value !== undefined)
+        .map((v) => [v.key, v.value]),
+    );
+    expect(group.NEXUS_LIVE).toBe('1');
+    expect(buildEnvironment(group).NEXT_PUBLIC_MULTIPLAYER_URL).toBe(
+      new URL(group.NEXUS_MULTIPLAYER_ORIGIN).origin.replace('https:', 'wss:'),
+    );
   });
   it('starts preparation without a database, rejects registration, and handles SIGTERM', async () => {
     const socket = createServer();

@@ -1,5 +1,6 @@
-# Initial deploy is preparation-only. Keep NEXUS_LIVE absent until data import
-# and the two actual public origins are configured in nexus-production.
+# Source preflight confirmed zero personal records and zero uploaded files.
+# The seed retains all four public catalog rows, including original IDs/dates.
+# These are the actual URLs supplied by the owner after Render provisioning.
 envVarGroups:
   - name: nexus-production
     envVars:
@@ -7,6 +8,12 @@ envVarGroups:
         value: production
       - key: NEXUS_DEPLOYMENT
         value: render
+      - key: NEXUS_WEB_ORIGIN
+        value: https://nexus-web-ylcv.onrender.com
+      - key: NEXUS_MULTIPLAYER_ORIGIN
+        value: https://nexus-multiplayer.onrender.com
+      - key: NEXUS_LIVE
+        value: '1'
       - key: MULTIPLAYER_SECRET
         generateValue: true
 

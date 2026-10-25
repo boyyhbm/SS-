@@ -1,21 +1,20 @@
 {
-  "updatedAt": "2026-10-25T11:12:31.388Z",
+  "updatedAt": "2026-10-25T11:42:19.433Z",
   "provider": "Render",
   "providerSwitchApproved": true,
-  "publicUrl": null,
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
   "deploymentCompleted": false,
   "services": {
-    "web": "NOT_DEPLOYED",
-    "multiplayer": "NOT_DEPLOYED",
-    "postgresql": "NOT_PROVISIONED_ON_RENDER"
+    "web": "OWNER_PROVIDED_URL_READINESS_UNVERIFIED",
+    "multiplayer": "OWNER_PROVIDED_URL_READINESS_UNVERIFIED",
+    "postgresql": "CREATION_REQUESTED_BY_OWNER_READINESS_UNVERIFIED"
   },
-  "hostBackups": "NOT_CONFIGURED",
-  "publicAcceptanceTests": "NOT_RUN_NO_PUBLIC_DEPLOYMENT",
+  "hostBackups": "UNVERIFIED",
+  "publicAcceptanceTests": "NOT_RUN_ENVIRONMENT_PROXY_CONNECT_403",
   "physicalControllers": "UNVERIFIED",
   "blockers": [
-    "No Render authorization configured for the agent",
-    "Render API requests blocked by environment proxy: CONNECT 403",
-    "Corrected Blueprint awaits retry in the owner dashboard; services are not yet deployed"
+    "Public URL/API access blocked for agent until saved network configuration is applied",
+    "Live deployment health and acceptance tests have not yet been observed"
   ],
   "prepared": [
     "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
@@ -35,9 +34,21 @@
   "localValidationReport": "render-local-tests.json",
   "localRestoreReport": "deployment-local-tests.json",
   "blueprintValidation": {
-    "lastHostResponse": "REJECTED",
-    "reason": "Render does not support maxShutdownDelaySeconds for services with a disk",
-    "fix": "Removed the unsupported field from disk-backed nexus-web; retained it for nexus-multiplayer",
-    "status": "AWAITING_DASHBOARD_RETRY"
+    "lastOwnerObservation": "ACCEPTED_SYNC_RUNNING",
+    "observedCommit": "8d44374091e253b609ee71a3dfb2a25f3a56d83d",
+    "nextDeployment": "Updated live configuration awaits sync and health verification"
+  },
+  "multiplayerUrl": "https://nexus-multiplayer.onrender.com",
+  "urlSource": "Owner-provided service addresses",
+  "launchConfiguration": "NEXUS_LIVE=1 and actual origins prepared for Blueprint synchronization",
+  "sourcePreflight": {
+    "personalRecords": 0,
+    "uploadFiles": 0,
+    "activeRateLimitRecords": 0,
+    "catalogRecords": 4,
+    "privateDataImportRequired": false,
+    "sourceDatabaseAndPrivateBackupPreserved": true,
+    "catalogSnapshot": "../prisma/catalog.snapshot.json",
+    "freshSeedVerification": "render-catalog-seed-tests.json"
   }
 }
