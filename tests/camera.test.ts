@@ -1,6 +1,25 @@
 import { expect, it } from 'vitest';
 import * as THREE from 'three';
-import { ChaseCameraRig, projectedHeight } from '../src/games/visual/camera';
+import { ChaseCameraRig, projectedHeight, avoidCameraObstacles } from '../src/games/visual/camera';
+it('avoids a parked car, facade or thin street pole and preserves clear-space distance', () => {
+  const target = new THREE.Vector3(0, 1, 0),
+    desired = new THREE.Vector3(0, 2, -8);
+  avoidCameraObstacles(target, desired, [
+    new THREE.Box3(new THREE.Vector3(-1, 0, -7), new THREE.Vector3(1, 4, -5)),
+  ]);
+  expect(desired.z).toBeGreaterThan(-5);
+  expect(desired.z).toBeLessThan(-4);
+  const clear = new THREE.Vector3(0, 2, -8);
+  avoidCameraObstacles(target, clear, [
+    new THREE.Box3(new THREE.Vector3(10, 0, -7), new THREE.Vector3(11, 4, -5)),
+  ]);
+  expect(clear.z).toBe(-8);
+  const pole = new THREE.Vector3(0, 2, -8);
+  avoidCameraObstacles(target, pole, [
+    new THREE.Box3(new THREE.Vector3(-0.1, 0, -4), new THREE.Vector3(0.1, 7, -3.8)),
+  ]);
+  expect(pole.z).toBeGreaterThan(-3.8);
+});
 
 it('keeps projected car height within 5% at 0/50/100/150 km/h, including acceleration and braking', () => {
   for (const dynamic of [false, true]) {

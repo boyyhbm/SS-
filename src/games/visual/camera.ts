@@ -9,6 +9,25 @@ export const cameraProfiles = [
 ] as const;
 export const cameraTuning = { headingResponse: 7, baseFov: 58, maxDynamicFov: 0.8 };
 export type CameraPose = { x: number; z: number; heading: number; speed: number };
+export function avoidCameraObstacles(
+  target: THREE.Vector3,
+  desired: THREE.Vector3,
+  boxes: readonly THREE.Box3[],
+) {
+  const direction = new THREE.Vector3().subVectors(desired, target),
+    length = direction.length();
+  if (length < 0.001) return;
+  direction.normalize();
+  const ray = new THREE.Ray(target, direction),
+    hit = new THREE.Vector3();
+  let allowed = length;
+  for (const box of boxes)
+    if (ray.intersectBox(box, hit)) {
+      const distance = hit.distanceTo(target) - 0.35;
+      if (distance >= 0) allowed = Math.min(allowed, distance);
+    }
+  if (allowed < length) desired.copy(target).addScaledVector(direction, Math.max(0.25, allowed));
+}
 export class ChaseCameraRig {
   private heading = 0;
   private initialized = false;

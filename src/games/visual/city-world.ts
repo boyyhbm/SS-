@@ -5,6 +5,7 @@ import { qualityPresets, type RenderTier } from './quality';
 import { batchStaticMeshes } from './geometry';
 import { createCar } from './car';
 import { addStreetFurniture } from './street-furniture';
+import { avoidCameraObstacles } from './camera';
 import {
   cityParkedCars,
   roadNodes,
@@ -131,7 +132,7 @@ export function createCityWorld(
   ground.position.set(0, -0.04, 40);
   ground.receiveShadow = true;
   scene.add(ground);
-  addStreetFurniture(scene);
+  const furnitureBoxes = addStreetFurniture(scene);
   const surfaces = roadSurfaces(),
     road = new THREE.Mesh(polygonSurface(surfaces.asphalt, 0.02), asphaltMaterial(assets, tier));
   road.receiveShadow = true;
@@ -174,7 +175,7 @@ export function createCityWorld(
     mesh.name = 'metric_' + name + '_markings';
     scene.add(mesh);
   }
-  const colliders: THREE.Box3[] = [],
+  const colliders: THREE.Box3[] = [...furnitureBoxes],
     cityMaterials = new Map<THREE.Material, THREE.Material>(),
     templates = new Map<string, THREE.Group>();
   function template(name: string, low: boolean) {
@@ -393,6 +394,13 @@ export function createCityWorld(
       poleTransforms.length,
     );
   poleTransforms.forEach((matrix, i) => {
+    const foot = new THREE.Vector3().setFromMatrixPosition(matrix);
+    colliders.push(
+      new THREE.Box3(
+        new THREE.Vector3(foot.x - 0.12, 0, foot.z - 0.12),
+        new THREE.Vector3(foot.x + 0.12, 6.9, foot.z + 0.12),
+      ),
+    );
     poles.setMatrixAt(i, matrix);
     dummy.position.copy(fixturePositions[i].point);
     dummy.rotation.set(0, 0, Math.PI / 2);
@@ -475,6 +483,7 @@ export function createCityWorld(
       group.add(mesh);
     });
     scene.add(group);
+    colliders.push(new THREE.Box3().setFromObject(group));
   }
   const river = new THREE.Mesh(
     new THREE.PlaneGeometry(60, 620),
@@ -501,9 +510,6 @@ export function createCityWorld(
     opacity: 0.6,
     depthWrite: false,
   });
-  const ray = new THREE.Ray(),
-    direction = new THREE.Vector3(),
-    hit = new THREE.Vector3();
   const headlights = [-0.64, 0.64].map((x) => {
     const light = new THREE.SpotLight('#e0e8ee', 140, 38, 0.34, 0.7, 2);
     scene.add(light, light.target);
@@ -511,16 +517,7 @@ export function createCityWorld(
   });
   return {
     clipCamera(target: THREE.Vector3, desired: THREE.Vector3) {
-      direction.subVectors(desired, target);
-      const length = direction.length();
-      ray.set(target, direction.normalize());
-      let allowed = length;
-      for (const box of colliders)
-        if (ray.intersectBox(box, hit)) {
-          const d = hit.distanceTo(target) - 0.35;
-          if (d > 0) allowed = Math.min(allowed, d);
-        }
-      if (allowed < length) desired.copy(target).addScaledVector(direction, Math.max(1.6, allowed));
+      avoidCameraObstacles(target, desired, colliders);
     },
     setRoute(id: CityRouteId, checkpoint: number, free: boolean) {
       if (id !== routeId) {

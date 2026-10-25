@@ -4,6 +4,7 @@ import { roadEdges, edgeLength, sampleRoad, cityParkedCars, type Point } from '.
 // Small original street assets. Major architecture, vehicles and foliage remain
 // reviewed glTF models; these meshes add functional street details at low draw cost.
 export function addStreetFurniture(scene: THREE.Scene) {
+  const cameraBoxes: THREE.Box3[] = [];
   const metal = new THREE.MeshStandardMaterial({
       color: '#4b5557',
       metalness: 0.62,
@@ -117,6 +118,7 @@ export function addStreetFurniture(scene: THREE.Scene) {
     copy.position.set(p.x, 0.17, p.z);
     copy.rotation.y = p.yaw;
     scene.add(copy);
+    cameraBoxes.push(new THREE.Box3().setFromObject(copy));
   }
   const bins = new THREE.Group(),
     profile = [
@@ -155,6 +157,7 @@ export function addStreetFurniture(scene: THREE.Scene) {
     const copy = bins.clone(true);
     copy.position.set(p.x, 0.17, p.z);
     scene.add(copy);
+    cameraBoxes.push(new THREE.Box3().setFromObject(copy));
   }
   const drainGeometry = rounded(0.42, 0.78, 0.014, 0.025),
     drains: THREE.Matrix4[] = [],
@@ -218,4 +221,5 @@ export function addStreetFurniture(scene: THREE.Scene) {
   }
   batchStaticMeshes(rails);
   scene.add(rails);
+  return cameraBoxes;
 }
