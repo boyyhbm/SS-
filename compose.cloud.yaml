@@ -1,0 +1,17 @@
+# Optional build-only trust configuration for this cloud's managed HTTPS proxy.
+# No credentials or certificates are copied into the resulting image.
+services:
+  game-server:
+    build:
+      network: host
+      extra_hosts:
+        - '${NEXUS_BUILD_PROXY_HOST:?}:${NEXUS_BUILD_PROXY_IP:?}'
+      args:
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-}
+      secrets:
+        - environment_proxy_ca
+secrets:
+  environment_proxy_ca:
+    file: ${NODE_EXTRA_CA_CERTS:?The cloud supplies its proxy CA path}

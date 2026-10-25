@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-25T00:44:50.668Z",
+  "checks": [
+    "Real separate Colyseus process killed during a two-account race",
+    "Restart marks unfinished durable match ABORTED",
+    "No fabricated winner or result row",
+    "Lost in-memory room cannot be joined after restart"
+  ],
+  "isolatedDatabase": true
+}

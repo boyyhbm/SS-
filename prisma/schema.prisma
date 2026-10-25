@@ -1,0 +1,350 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum GameStatus {
+  DRAFT
+  COMING_SOON
+  AVAILABLE
+}
+
+model User {
+  id                 String               @id @default(cuid())
+  username           String               @unique
+  email              String               @unique
+  emailVerified      DateTime?
+  name               String?
+  image              String?
+  avatar             String               @default("violet")
+  passwordHash       String
+  role               Role                 @default(USER)
+  tokenVersion       Int                  @default(0)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  accounts           Account[]
+  sessions           Session[]
+  library            UserLibrary[]
+  gameSessions       GameSession[]
+  saves              GameSave[]
+  settings           UserSettings?
+  controllerProfiles ControllerProfile[]
+  friendLinksA       Friendship[]         @relation("FriendA")
+  friendLinksB       Friendship[]         @relation("FriendB")
+  requestsSent       FriendRequest[]      @relation("RequestSender")
+  requestsReceived   FriendRequest[]      @relation("RequestRecipient")
+  blocksSent         UserBlock[]          @relation("Blocker")
+  blocksReceived     UserBlock[]          @relation("Blocked")
+  partiesLed         Party[]              @relation("PartyLeader")
+  partyMember        PartyMember?
+  invitesSent        GameInvite[]         @relation("InviteSender")
+  invitesReceived    GameInvite[]         @relation("InviteRecipient")
+  matchParticipants  MatchParticipant[]
+  ratings            PlayerRating[]
+  resetTokens        PasswordResetToken[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Game {
+  id                 String             @id @default(cuid())
+  slug               String             @unique
+  title              String
+  description        String
+  descriptionEn      String
+  genre              String
+  cover              String
+  banner             String
+  screenshots        Json
+  status             GameStatus         @default(DRAFT)
+  runtimeKey         String?
+  sortOrder          Int                @default(0)
+  published          Boolean            @default(false)
+  version            String             @default("1.0.0")
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  library            UserLibrary[]
+  sessions           GameSession[]
+  saves              GameSave[]
+  gameInvites        GameInvite[]
+  multiplayerMatches MultiplayerMatch[]
+  ratings            PlayerRating[]
+
+  @@index([published, sortOrder])
+}
+
+model UserLibrary {
+  id           String    @id @default(cuid())
+  userId       String
+  gameId       String
+  addedAt      DateTime  @default(now())
+  isFavorite   Boolean   @default(false)
+  lastPlayedAt DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game         Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@index([userId, lastPlayedAt])
+}
+
+model GameSession {
+  id              String    @id @default(cuid())
+  userId          String
+  gameId          String
+  startedAt       DateTime  @default(now())
+  endedAt         DateTime?
+  lastHeartbeatAt DateTime  @default(now())
+  durationSeconds Int       @default(0)
+  isPaused        Boolean   @default(false)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game            Game      @relation(fields: [gameId], references: [id], onDelete: Restrict)
+
+  @@index([userId, startedAt])
+}
+
+model GameSave {
+  id        String   @id @default(cuid())
+  userId    String
+  gameId    String
+  saveKey   String
+  saveData  Json
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, gameId, saveKey])
+}
+
+model UserSettings {
+  userId                   String             @id
+  language                 String             @default("ru")
+  uiSoundEnabled           Boolean            @default(false)
+  reducedMotion            Boolean            @default(false)
+  backgroundEffectsEnabled Boolean            @default(true)
+  hideActivity             Boolean            @default(false)
+  friendsOnlyInvites       Boolean            @default(true)
+  showGamePresence         Boolean            @default(true)
+  profilePrivate           Boolean            @default(true)
+  user                     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  controllerProfileId      String?
+  controllerProfile        ControllerProfile? @relation(fields: [controllerProfileId], references: [id], onDelete: SetNull)
+}
+
+model RateLimit {
+  key       String   @id
+  count     Int
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userBId   String
+  createdAt DateTime @default(now())
+  userA     User     @relation("FriendA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB     User     @relation("FriendB", fields: [userBId], references: [id], onDelete: Cascade)
+
+  @@unique([userAId, userBId])
+  @@index([userBId])
+}
+
+model FriendRequest {
+  id          String   @id @default(cuid())
+  senderId    String
+  recipientId String
+  createdAt   DateTime @default(now())
+  sender      User     @relation("RequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient   User     @relation("RequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, recipientId])
+  @@index([recipientId])
+}
+
+model UserBlock {
+  id        String   @id @default(cuid())
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
+}
+
+model Party {
+  id        String        @id @default(cuid())
+  leaderId  String
+  createdAt DateTime      @default(now())
+  leader    User          @relation("PartyLeader", fields: [leaderId], references: [id], onDelete: Cascade)
+  members   PartyMember[]
+  invites   GameInvite[]
+}
+
+model PartyMember {
+  id       String   @id @default(cuid())
+  partyId  String
+  userId   String   @unique
+  joinedAt DateTime @default(now())
+  party    Party    @relation(fields: [partyId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([partyId, userId])
+}
+
+enum InviteKind {
+  PARTY
+  GAME
+}
+
+model GameInvite {
+  id          String     @id @default(cuid())
+  senderId    String
+  recipientId String
+  kind        InviteKind
+  partyId     String?
+  roomId      String?
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime   @default(now())
+  sender      User       @relation("InviteSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient   User       @relation("InviteRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  party       Party?     @relation(fields: [partyId], references: [id], onDelete: Cascade)
+  gameId      String?
+  game        Game?      @relation(fields: [gameId], references: [id], onDelete: SetNull)
+
+  @@index([recipientId, expiresAt])
+  @@index([roomId, recipientId])
+}
+
+enum MatchStatus {
+  COUNTDOWN
+  RACING
+  FINISHED
+  ABORTED
+}
+
+model MultiplayerMatch {
+  id           String             @id @default(cuid())
+  gameId       String
+  roomId       String
+  mode         String             @default("circuit")
+  region       String             @default("europe")
+  status       MatchStatus        @default(COUNTDOWN)
+  startedAt    DateTime           @default(now())
+  endedAt      DateTime?
+  game         Game               @relation(fields: [gameId], references: [id], onDelete: Restrict)
+  participants MatchParticipant[]
+
+  @@index([gameId, startedAt])
+  @@index([status])
+}
+
+model MatchParticipant {
+  id           String           @id @default(cuid())
+  matchId      String
+  userId       String
+  car          String
+  disconnected Boolean          @default(false)
+  match        MultiplayerMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  result       MatchResult?
+
+  @@unique([matchId, userId])
+  @@index([userId])
+}
+
+model MatchResult {
+  id             String           @id @default(cuid())
+  participantId  String           @unique
+  place          Int?
+  timeSeconds    Float?
+  didFinish      Boolean          @default(false)
+  serverVerified Boolean          @default(true)
+  participant    MatchParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+}
+
+model PlayerRating {
+  id        String   @id @default(cuid())
+  userId    String
+  gameId    String
+  mode      String   @default("circuit")
+  rating    Int      @default(1000)
+  races     Int      @default(0)
+  wins      Int      @default(0)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, gameId, mode])
+}
+
+model ControllerProfile {
+  id        String         @id @default(cuid())
+  userId    String
+  name      String
+  deviceKey String?
+  config    Json
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeFor UserSettings[]
+
+  @@index([userId])
+}

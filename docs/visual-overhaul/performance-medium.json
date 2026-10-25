@@ -1,0 +1,382 @@
+{
+  "date": "2026-10-24T20:55:52.972Z",
+  "viewport": {
+    "width": 960,
+    "height": 640
+  },
+  "quality": "medium",
+  "input": "automated-standard-gamepad",
+  "reducedMotion": "reduce",
+  "sceneReadyMs": 14975,
+  "finalSpeedKmh": 173,
+  "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "browser": "154.0.8037.57",
+  "environment": "Chromium headless / software WebGL; no physical GPU performance claim",
+  "samples": [
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.7309407207077496,
+      "frameMs": 1368.0999999996275,
+      "frameP95Ms": 1368.0999999996275,
+      "frameTimesMs": [
+        1368.0999999996275
+      ],
+      "renderCpuMs": 7.5,
+      "drawCalls": 222,
+      "triangles": 859844,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.7227000072269028,
+      "frameMs": 1383.7000000001863,
+      "frameP95Ms": 1383.7000000001863,
+      "frameTimesMs": [
+        1383.7000000001863
+      ],
+      "renderCpuMs": 4.199999999254942,
+      "drawCalls": 226,
+      "triangles": 895200,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.7764577995183716,
+      "frameMs": 1287.9000000003725,
+      "frameP95Ms": 1287.9000000003725,
+      "frameTimesMs": [
+        1287.9000000003725
+      ],
+      "renderCpuMs": 4.5,
+      "drawCalls": 224,
+      "triangles": 973247,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.7617886798201098,
+      "frameMs": 1312.7000000001863,
+      "frameP95Ms": 1312.7000000001863,
+      "frameTimesMs": [
+        1312.7000000001863
+      ],
+      "renderCpuMs": 7.2999999998137355,
+      "drawCalls": 216,
+      "triangles": 833966,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8837044892190962,
+      "frameMs": 1131.5999999996275,
+      "frameP95Ms": 1131.5999999996275,
+      "frameTimesMs": [
+        1131.5999999996275
+      ],
+      "renderCpuMs": 7.599999999627471,
+      "drawCalls": 202,
+      "triangles": 706158,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8700191404208073,
+      "frameMs": 1149.4000000003725,
+      "frameP95Ms": 1149.4000000003725,
+      "frameTimesMs": [
+        1149.4000000003725
+      ],
+      "renderCpuMs": 5.8999999994412065,
+      "drawCalls": 202,
+      "triangles": 717963,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8502678343680952,
+      "frameMs": 1176.0999999996275,
+      "frameP95Ms": 1176.0999999996275,
+      "frameTimesMs": [
+        1176.0999999996275
+      ],
+      "renderCpuMs": 10.700000000186265,
+      "drawCalls": 202,
+      "triangles": 717963,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8423890152475055,
+      "frameMs": 1187.0999999996275,
+      "frameP95Ms": 1187.0999999996275,
+      "frameTimesMs": [
+        1187.0999999996275
+      ],
+      "renderCpuMs": 5,
+      "drawCalls": 198,
+      "triangles": 711684,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8600670852325104,
+      "frameMs": 1162.7000000001863,
+      "frameP95Ms": 1162.7000000001863,
+      "frameTimesMs": [
+        1162.7000000001863
+      ],
+      "renderCpuMs": 4.7999999998137355,
+      "drawCalls": 198,
+      "triangles": 711684,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8950948800571369,
+      "frameMs": 1117.2000000001863,
+      "frameP95Ms": 1117.2000000001863,
+      "frameTimesMs": [
+        1117.2000000001863
+      ],
+      "renderCpuMs": 4.7000000001862645,
+      "drawCalls": 184,
+      "triangles": 655318,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.8967001434718732,
+      "frameMs": 1115.2000000001863,
+      "frameP95Ms": 1115.2000000001863,
+      "frameTimesMs": [
+        1115.2000000001863
+      ],
+      "renderCpuMs": 4.5,
+      "drawCalls": 184,
+      "triangles": 655318,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 0.9283327144446966,
+      "frameMs": 1077.2000000001863,
+      "frameP95Ms": 1077.2000000001863,
+      "frameTimesMs": [
+        1077.2000000001863
+      ],
+      "renderCpuMs": 13.899999999441206,
+      "drawCalls": 181,
+      "triangles": 696565,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 1.0739984964025346,
+      "frameMs": 931.0999999996275,
+      "frameP95Ms": 935.8999999994412,
+      "frameTimesMs": [
+        926.2999999998137,
+        935.8999999994412
+      ],
+      "renderCpuMs": 5.9500000001862645,
+      "drawCalls": 165,
+      "triangles": 572557,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 1.140771161304921,
+      "frameMs": 876.6000000000931,
+      "frameP95Ms": 877.0999999996275,
+      "frameTimesMs": [
+        876.1000000005588,
+        877.0999999996275
+      ],
+      "renderCpuMs": 5.0499999998137355,
+      "drawCalls": 170,
+      "triangles": 588762,
+      "textures": 111,
+      "geometries": 141,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    },
+    {
+      "quality": "medium",
+      "requestedQuality": "medium",
+      "fps": 1.1077263915812794,
+      "frameMs": 902.75,
+      "frameP95Ms": 908.0999999996275,
+      "frameTimesMs": [
+        897.4000000003725,
+        908.0999999996275
+      ],
+      "renderCpuMs": 6.850000000093132,
+      "drawCalls": 161,
+      "triangles": 538560,
+      "textures": 112,
+      "geometries": 144,
+      "pixelRatio": 1,
+      "loadMs": 1354.199999999255,
+      "resourceTransferBytes": 15510797,
+      "resourceDecodedBytes": 17813319,
+      "paused": false
+    }
+  ],
+  "measurementWallMs": 20453.099999999627,
+  "processMemory": [
+    {
+      "type": "browser",
+      "rssKiB": 132400,
+      "peakRssKiB": 132400
+    },
+    {
+      "type": "renderer",
+      "rssKiB": 33916,
+      "peakRssKiB": 33916
+    },
+    {
+      "type": "renderer",
+      "rssKiB": 81100,
+      "peakRssKiB": 81148
+    },
+    {
+      "type": "renderer",
+      "rssKiB": 479236,
+      "peakRssKiB": 480564
+    },
+    {
+      "type": "GPU",
+      "rssKiB": 575532,
+      "peakRssKiB": 579016
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "rssKiB": 71904,
+      "peakRssKiB": 72772
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "rssKiB": 22908,
+      "peakRssKiB": 22908
+    }
+  ],
+  "cdpMetrics": [
+    {
+      "name": "Documents",
+      "value": 1
+    },
+    {
+      "name": "Nodes",
+      "value": 255
+    },
+    {
+      "name": "TaskDuration",
+      "value": 21.399955
+    },
+    {
+      "name": "JSHeapUsedSize",
+      "value": 17712272
+    },
+    {
+      "name": "JSHeapTotalSize",
+      "value": 19275776
+    }
+  ],
+  "errors": [],
+  "expectedResponses": []
+}

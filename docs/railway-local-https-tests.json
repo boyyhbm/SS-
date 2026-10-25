@@ -1,0 +1,28 @@
+{
+  "scope": "LOCAL pinned-TLS rehearsal; not a public Railway deployment",
+  "publicDeploymentVerified": false,
+  "before": {
+    "date": "2026-10-25T00:41:34.387Z",
+    "scope": "LOCAL TLS rehearsal",
+    "publicDeploymentVerified": false,
+    "passed": true,
+    "checks": [
+      "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+      "Logout/re-login retains library and favorite; account-owned controller profile saved",
+      "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+      "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+      "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+    ],
+    "controllerHardware": "Physical controllers not tested; virtual Gamepad API only"
+  },
+  "afterRestart": {
+    "date": "2026-10-25T00:48:51.963Z",
+    "scope": "LOCAL TLS rehearsal",
+    "publicDeploymentVerified": false,
+    "passed": true,
+    "checks": [
+      "Re-login after an externally triggered restart preserves accounts, library, favorites, controller profile, saves, friends and server-verified results"
+    ],
+    "controllerHardware": "Physical controllers not tested; virtual Gamepad API only"
+  }
+}

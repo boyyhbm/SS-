@@ -1,0 +1,153 @@
+Vitest
+
+> nexus-console@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /workspace/SS-
+
+
+ Test Files  4 passed (4)
+      Tests  34 passed (34)
+   Start at  10:17:53
+   Duration  2.99s (tests 49%, import 27%, transform 24%, worker 1%)
+
+
+
+TypeScript
+
+> nexus-console@1.0.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+
+ESLint
+
+> nexus-console@1.0.0 lint
+> eslint .
+
+
+
+Production build
+
+> nexus-console@1.0.0 build
+> prisma generate && next build --webpack
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+
+✔ Generated Prisma Client (v7.10.1) to ./node_modules/@prisma/client in 938ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+▲ Next.js 16.4.3 (webpack)
+- Environments: .env
+✓ Running next.config.ts took 128ms
+- Experiments (use with caution):
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 12.5s
+  Running TypeScript ...
+  Finished TypeScript in 11.2s ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/22) ...
+  Generating static pages using 4 workers (5/22) 
+  Generating static pages using 4 workers (10/22) 
+  Generating static pages using 4 workers (16/22) 
+✓ Generating static pages using 4 workers (22/22) in 859ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /api/admin/games
+├ ƒ /api/admin/images
+├ ƒ /api/admin/multiplayer
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/console
+├ ƒ /api/controllers
+├ ƒ /api/library
+├ ƒ /api/media/[file]
+├ ƒ /api/multiplayer
+├ ƒ /api/recovery
+├ ƒ /api/register
+├ ƒ /api/reset
+├ ƒ /api/sessions
+├ ƒ /api/settings
+├ ƒ /api/social
+├ ƒ /controllers
+├ ƒ /discover
+├ ƒ /friends
+├ ƒ /games/[slug]
+├ ƒ /library
+├ ƒ /login
+├ ƒ /online/[slug]
+├ ƒ /play/[slug]
+├ ƒ /profile
+├ ƒ /recovery
+├ ƒ /register
+└ ƒ /reset
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+
+
+
+Full production browser suite
+
+> nexus-console@1.0.0 test:e2e
+> playwright test
+
+
+Running 16 tests using 1 worker
+
+(node:406416) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/console.spec.ts:51:1 › A — real registration, empty library, discovery and add to Home (5.5s)
+  ✓   2 tests/e2e/console.spec.ts:65:1 › B — logout/login preserves library, favorite and settings (6.3s)
+  ✓   3 tests/e2e/console.spec.ts:89:1 › C — real WebGL, driving, pause and persistent launch history (16.8s)
+  ✓   4 tests/e2e/console.spec.ts:115:1 › D — separate accounts, forged identifiers and server authorization (7.4s)
+  ✓   5 tests/e2e/console.spec.ts:161:1 › E — ADMIN creates, publishes, edits and safely deletes a catalog game (7.4s)
+  ✓   6 tests/e2e/console.spec.ts:228:1 › F — mobile registration, catalog and personal library without overflow (4.4s)
+  ✓   7 tests/e2e/console.spec.ts:241:1 › removing membership preserves saves and best lap on re-add (3.2s)
+  ✓   8 tests/e2e/console.spec.ts:264:1 › locale persists in PostgreSQL and recovery has no fictitious link (4.3s)
+  ✓   9 tests/e2e/console.spec.ts:280:1 › database-backed login throttling and no unauthorized admin access (4.2s)
+  ✓  10 tests/e2e/console.spec.ts:297:1 › a complete lap through Gamepad API saves a real personal best (42.0s)
+  ✓  11 tests/e2e/console.spec.ts:388:1 › password reset tokens expire, are single-use and revoke existing sessions (4.4s)
+  ✓  12 tests/e2e/console.spec.ts:423:1 › keyboard focus and gamepad Library/Back work inside console dialogs (3.7s)
+  ✓  13 tests/e2e/controllers.spec.ts:27:1 › controller only: registration/OSK → catalog → library/context actions → race → restored focus (2.1m)
+  ✓  14 tests/e2e/controllers.spec.ts:156:1 › device discovery, input hints, saved remapping/profiles and ownership (14.1s)
+  ✓  15 tests/e2e/multiplayer.spec.ts:123:1 › real accounts → friends → party → private invitation → synchronized WebGL race → results → rematch (4.5m)
+  ✓  16 tests/e2e/multiplayer.spec.ts:343:1 › friend requests, removal, blocking, privacy and expired invitations enforce ownership (7.0s)
+
+  16 passed (8.8m)
+
+
+Final modal scope regression
+
+> nexus-console@1.0.0 test:e2e
+> playwright test tests/e2e/console.spec.ts --grep keyboard focus
+
+
+Running 1 test using 1 worker
+
+(node:414037) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/console.spec.ts:423:1 › keyboard focus and gamepad Library/Back work inside console dialogs (6.2s)
+
+  1 passed (9.6s)
+
+
+Final Docker WSS verification: passed.
+Source measurements: docs/multiplayer-test-results.json
+Date: 2026-10-24T10:36:05.535Z
+Server Node.js: 24.22.1; 30 Hz simulation / 15 Hz snapshots.

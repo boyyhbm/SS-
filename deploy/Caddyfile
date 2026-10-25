@@ -1,0 +1,6 @@
+{$NEXUS_DOMAIN} {
+  reverse_proxy web:3000
+}
+{$NEXUS_GAME_DOMAIN} {
+  reverse_proxy game-server:2567
+}

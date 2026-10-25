@@ -1,0 +1,66 @@
+name: NEXUS checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      NPM_CONFIG_CACHE: /home/runner/.npm
+      E2E_SOFTWARE_DPR: '0.15'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Prepare isolated CI database
+        run: |
+          node scripts/init-env.mjs
+          docker compose up -d --wait db
+          npm run db:generate
+          npm run db:migrate
+          npm run db:seed
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Validate backup restore and multiplayer ownership
+        run: |
+          node scripts/backup-local.mjs "$RUNNER_TEMP/nexus-backups"
+          NEXUS_BACKUP_DUMP=$(find "$RUNNER_TEMP/nexus-backups" -name database.dump -type f)
+          npm run test:deployment -- "$NEXUS_BACKUP_DUMP"
+      - name: Prepare browser
+        run: |
+          npx playwright install --with-deps chromium
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { appendFileSync } from 'node:fs';
+          appendFileSync(process.env.GITHUB_ENV, `CHROMIUM_PATH=${chromium.executablePath()}\n`);
+          JS
+      - name: Start production build for browser tests
+        run: |
+          npm start > "$RUNNER_TEMP/nexus-web.log" 2>&1 &
+          npm run game:start > "$RUNNER_TEMP/nexus-game.log" 2>&1 &
+          node scripts/wait-services.mjs
+      - name: Real browser scenarios
+        env:
+          E2E_EXTERNAL_SERVER: '1'
+        run: npm run test:e2e -- --trace=off
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        if: failure()
+        with:
+          name: nexus-check-failure
+          path: test-results/
+          retention-days: 3
+      - name: Stop only this CI database and services
+        if: always()
+        run: docker compose down

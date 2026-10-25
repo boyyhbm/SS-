@@ -1,0 +1,134 @@
+[
+  {
+    "requested": "low",
+    "actual": "low",
+    "samples": 14,
+    "meanWindowFps": 1.737144928431545,
+    "observedFps": 1.7034838993295967,
+    "meanFrameMs": 587.0322580645161,
+    "frameP95Ms": 977.4000000003725,
+    "meanWindowFrameMs": 599.9535714285669,
+    "worstWindowP95Ms": 1133,
+    "meanRenderCpuMs": 3.839285714385499,
+    "meanDrawCalls": 84.78571428571429,
+    "maxTriangles": 136162,
+    "textures": 39,
+    "geometries": 112,
+    "pixelRatioRange": [
+      0.85,
+      0.85
+    ],
+    "assetsDecodedMiB": 7.045802116394043,
+    "assetsLoadMs": 562.0999999996275,
+    "sceneReadyMs": 8373,
+    "jsHeapUsedMiB": 14.649219512939453,
+    "jsHeapTotalMiB": 16.3828125,
+    "gpuProcessRssMiB": 225.90625,
+    "finalSpeedKmh": 173,
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "browser": "154.0.8037.57",
+    "viewport": {
+      "width": 960,
+      "height": 640
+    }
+  },
+  {
+    "requested": "medium",
+    "actual": "medium",
+    "samples": 13,
+    "meanWindowFps": 0.9144090639299183,
+    "observedFps": 0.9335978527249388,
+    "meanFrameMs": 1071.125,
+    "frameP95Ms": 1312.7000000001863,
+    "meanWindowFrameMs": 1109.8115384615598,
+    "worstWindowP95Ms": 1312.7000000001863,
+    "meanRenderCpuMs": 6.673076922969463,
+    "meanDrawCalls": 191.30769230769232,
+    "maxTriangles": 973247,
+    "textures": 112,
+    "geometries": 144,
+    "pixelRatioRange": [
+      1,
+      1
+    ],
+    "assetsDecodedMiB": 16.988104820251465,
+    "assetsLoadMs": 1354.199999999255,
+    "sceneReadyMs": 14975,
+    "jsHeapUsedMiB": 16.891738891601562,
+    "jsHeapTotalMiB": 18.3828125,
+    "gpuProcessRssMiB": 562.04296875,
+    "finalSpeedKmh": 173,
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "browser": "154.0.8037.57",
+    "viewport": {
+      "width": 960,
+      "height": 640
+    }
+  },
+  {
+    "requested": "high",
+    "actual": "high",
+    "samples": 11,
+    "meanWindowFps": 0.5754302895861041,
+    "observedFps": 0.5569817664423602,
+    "meanFrameMs": 1795.3909090908921,
+    "frameP95Ms": 2262.7999999998137,
+    "meanWindowFrameMs": 1795.3909090908921,
+    "worstWindowP95Ms": 2262.7999999998137,
+    "meanRenderCpuMs": 13.281818181784315,
+    "meanDrawCalls": 315.72727272727275,
+    "maxTriangles": 1262941,
+    "textures": 113,
+    "geometries": 144,
+    "pixelRatioRange": [
+      1,
+      1
+    ],
+    "assetsDecodedMiB": 16.988104820251465,
+    "assetsLoadMs": 1131,
+    "sceneReadyMs": 15760,
+    "jsHeapUsedMiB": 17.164020538330078,
+    "jsHeapTotalMiB": 19.3828125,
+    "gpuProcessRssMiB": 608.90625,
+    "finalSpeedKmh": 173,
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "browser": "154.0.8037.57",
+    "viewport": {
+      "width": 960,
+      "height": 640
+    }
+  },
+  {
+    "requested": "auto",
+    "actual": "low",
+    "samples": 17,
+    "meanWindowFps": 3.1150135072070166,
+    "observedFps": 3.1069965349090407,
+    "meanFrameMs": 321.8542372881261,
+    "frameP95Ms": 507.5,
+    "meanWindowFrameMs": 332.4897058823365,
+    "worstWindowP95Ms": 534.0999999996275,
+    "meanRenderCpuMs": 2.5735294118697083,
+    "meanDrawCalls": 82.94117647058823,
+    "maxTriangles": 136162,
+    "textures": 40,
+    "geometries": 115,
+    "pixelRatioRange": [
+      0.6,
+      0.6
+    ],
+    "assetsDecodedMiB": 7.045802116394043,
+    "assetsLoadMs": 597,
+    "sceneReadyMs": 7763,
+    "jsHeapUsedMiB": 15.042556762695312,
+    "jsHeapTotalMiB": 16.3828125,
+    "gpuProcessRssMiB": 220.6953125,
+    "finalSpeedKmh": 173,
+    "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "browser": "154.0.8037.57",
+    "viewport": {
+      "width": 960,
+      "height": 640
+    }
+  }
+]

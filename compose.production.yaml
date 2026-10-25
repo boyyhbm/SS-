@@ -1,0 +1,47 @@
+# Use with: docker compose -f compose.yaml -f compose.production.yaml up -d --build
+# Set NEXTAUTH_URL=https://<NEXUS_DOMAIN> and NEXT_PUBLIC_MULTIPLAYER_URL=wss://<NEXUS_GAME_DOMAIN>.
+services:
+  game-server:
+    ports: !reset []
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        NEXT_PUBLIC_MULTIPLAYER_URL: ${NEXT_PUBLIC_MULTIPLAYER_URL:?Set the public WSS origin}
+    restart: unless-stopped
+    init: true
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://nexus:${DB_PASSWORD}@db:5432/nexus?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:?Set the HTTPS web origin}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?Generate a secret}
+      MULTIPLAYER_SECRET: ${MULTIPLAYER_SECRET:?Generate a secret}
+      MULTIPLAYER_INTERNAL_URL: http://game-server:2567
+      NEXT_PUBLIC_MULTIPLAYER_URL: ${NEXT_PUBLIC_MULTIPLAYER_URL}
+      TRUST_PROXY: 'true'
+    depends_on:
+      game-server:
+        condition: service_healthy
+    volumes:
+      - nexus_uploads:/app/storage/uploads
+  edge:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      NEXUS_DOMAIN: ${NEXUS_DOMAIN:?Set a web DNS hostname}
+      NEXUS_GAME_DOMAIN: ${NEXUS_GAME_DOMAIN:?Set a game DNS hostname}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - nexus_tls_data:/data
+      - nexus_tls_config:/config
+    depends_on:
+      - web
+      - game-server
+volumes:
+  nexus_uploads:
+  nexus_tls_data:
+  nexus_tls_config:

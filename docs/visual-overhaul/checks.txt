@@ -1,0 +1,234 @@
+Production build
+> nexus-console@1.0.0 build
+> prisma generate && next build --webpack
+
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma/schema.prisma.
+
+✔ Generated Prisma Client (v7.10.1) to ./node_modules/@prisma/client in 561ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+
+▲ Next.js 16.4.3 (webpack)
+- Environments: .env
+✓ Running next.config.ts took 91ms
+- Experiments (use with caution):
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 7.4s
+  Running TypeScript ...
+  Finished TypeScript in 3.9s ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/22) ...
+  Generating static pages using 4 workers (5/22) 
+  Generating static pages using 4 workers (10/22) 
+  Generating static pages using 4 workers (16/22) 
+✓ Generating static pages using 4 workers (22/22) in 500ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /admin
+├ ƒ /api/admin/games
+├ ƒ /api/admin/images
+├ ƒ /api/admin/multiplayer
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/console
+├ ƒ /api/controllers
+├ ƒ /api/library
+├ ƒ /api/media/[file]
+├ ƒ /api/multiplayer
+├ ƒ /api/recovery
+├ ƒ /api/register
+├ ƒ /api/reset
+├ ƒ /api/sessions
+├ ƒ /api/settings
+├ ƒ /api/social
+├ ƒ /controllers
+├ ƒ /discover
+├ ƒ /friends
+├ ƒ /games/[slug]
+├ ƒ /library
+├ ƒ /login
+├ ƒ /online/[slug]
+├ ƒ /play/[slug]
+├ ƒ /profile
+├ ƒ /recovery
+├ ƒ /register
+└ ƒ /reset
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+
+TypeScript
+> nexus-console@1.0.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+ESLint
+> nexus-console@1.0.0 lint
+> eslint .
+
+Vitest
+> nexus-console@1.0.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /workspace/SS-
+
+
+ Test Files  7 passed (7)
+      Tests  43 passed (43)
+   Start at  21:00:08
+   Duration  871ms (tests 56%, import 33%, transform 8%, worker 3%)
+
+Production Playwright: clean QA database, DPR .15, --trace=off
+> nexus-console@1.0.0 test:e2e
+> playwright test --trace=off
+
+
+Running 16 tests using 1 worker
+
+(node:58180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/console.spec.ts:52:1 › A — real registration, empty library, discovery and add to Home (4.2s)
+  ✓   2 tests/e2e/console.spec.ts:66:1 › B — logout/login preserves library, favorite and settings (4.1s)
+  ✓   3 tests/e2e/console.spec.ts:90:1 › C — real WebGL, driving, pause and persistent launch history (14.3s)
+  ✓   4 tests/e2e/console.spec.ts:116:1 › D — separate accounts, forged identifiers and server authorization (3.8s)
+  ✓   5 tests/e2e/console.spec.ts:162:1 › E — ADMIN creates, publishes, edits and safely deletes a catalog game (5.6s)
+  ✓   6 tests/e2e/console.spec.ts:229:1 › F — mobile registration, catalog and personal library without overflow (3.9s)
+  ✓   7 tests/e2e/console.spec.ts:242:1 › removing membership preserves saves and best lap on re-add (2.4s)
+  ✓   8 tests/e2e/console.spec.ts:265:1 › locale persists in PostgreSQL and recovery has no fictitious link (17.8s)
+  ✓   9 tests/e2e/console.spec.ts:287:1 › database-backed login throttling and no unauthorized admin access (3.7s)
+  ✓  10 tests/e2e/console.spec.ts:304:1 › a complete lap through Gamepad API saves a real personal best (50.6s)
+  ✓  11 tests/e2e/console.spec.ts:395:1 › password reset tokens expire, are single-use and revoke existing sessions (3.9s)
+  ✓  12 tests/e2e/console.spec.ts:430:1 › keyboard focus and gamepad Library/Back work inside console dialogs (4.4s)
+  ✓  13 tests/e2e/controllers.spec.ts:27:1 › controller only: registration/OSK → catalog → library/context actions → race → restored focus (1.6m)
+  ✓  14 tests/e2e/controllers.spec.ts:156:1 › device discovery, input hints, saved remapping/profiles and ownership (6.9s)
+  ✓  15 tests/e2e/multiplayer.spec.ts:124:1 › real accounts → friends → party → private invitation → synchronized WebGL race → results → rematch (3.0m)
+  ✓  16 tests/e2e/multiplayer.spec.ts:384:1 › friend requests, removal, blocking, privacy and expired invitations enforce ownership (5.1s)
+
+  16 passed (6.8m)
+
+Multiplayer with native 1280x900 UI capture
+> nexus-console@1.0.0 test:e2e
+> playwright test tests/e2e/multiplayer.spec.ts --grep real accounts --trace=off
+
+
+Running 1 test using 1 worker
+
+(node:62901) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/multiplayer.spec.ts:124:1 › real accounts → friends → party → private invitation → synchronized WebGL race → results → rematch (2.5m)
+
+  1 passed (2.6m)
+
+HUD CSS regression
+> nexus-console@1.0.0 test:e2e
+> playwright test tests/e2e/console.spec.ts --grep C — real WebGL --trace=off
+
+
+Running 1 test using 1 worker
+
+(node:67261) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/console.spec.ts:90:1 › C — real WebGL, driving, pause and persistent launch history (17.5s)
+
+  1 passed (19.2s)
+
+Final mobile CSS regression
+> nexus-console@1.0.0 test:e2e
+> playwright test tests/e2e/console.spec.ts --grep F — mobile --trace=off
+
+
+Running 1 test using 1 worker
+
+(node:74323) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/console.spec.ts:229:1 › F — mobile registration, catalog and personal library without overflow (3.6s)
+
+  1 passed (5.3s)
+
+Final desktop/mobile visual capture
+QA account and personal library ready.
+Console screens captured. {"errors":[]}
+Browser disconnected
+
+Native High gameplay and actual pause capture
+QA account and personal library ready.
+Scene rendered with GLB textures.
+Race started.
+Actual GLB scene captured. {"quality":"high","errors":[]}
+Browser disconnected
+
+Native DPR benchmark low
+QA account and personal library ready.
+Scene rendered with GLB textures.
+Race started.
+Actual GLB scene captured. {"quality":"low","errors":[]}
+Browser disconnected
+
+Native DPR benchmark medium
+QA account and personal library ready.
+Scene rendered with GLB textures.
+Race started.
+Actual GLB scene captured. {"quality":"medium","errors":[]}
+Browser disconnected
+
+Native DPR benchmark high
+QA account and personal library ready.
+Scene rendered with GLB textures.
+Race started.
+Actual GLB scene captured. {"quality":"high","errors":[]}
+Browser disconnected
+
+Native DPR benchmark auto
+QA account and personal library ready.
+Scene rendered with GLB textures.
+Race started.
+Actual GLB scene captured. {"quality":"auto","errors":[]}
+Browser disconnected
+
+Main database smoke
+{
+  "at": "2026-10-24T21:07:13.867Z",
+  "homeStatus": 200,
+  "apiStatus": 200,
+  "user": null,
+  "anonymousLibraryCount": 0,
+  "catalog": [
+    {
+      "slug": "midnight-outlaws",
+      "status": "AVAILABLE"
+    },
+    {
+      "slug": "orbital-silence",
+      "status": "COMING_SOON"
+    },
+    {
+      "slug": "evergreen",
+      "status": "COMING_SOON"
+    },
+    {
+      "slug": "echoes-of-light",
+      "status": "COMING_SOON"
+    }
+  ],
+  "gameHealth": {
+    "ok": true,
+    "region": "europe",
+    "protocol": 1
+  }
+}
+
+Main guest browser: passed; pageErrors: []; catalogCount: 4.
+Cloud environment draft: saved, requires publication in environment settings.

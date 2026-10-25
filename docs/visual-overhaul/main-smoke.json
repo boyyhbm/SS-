@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-24T21:07:13.867Z",
+  "homeStatus": 200,
+  "apiStatus": 200,
+  "user": null,
+  "anonymousLibraryCount": 0,
+  "catalog": [
+    {
+      "slug": "midnight-outlaws",
+      "status": "AVAILABLE"
+    },
+    {
+      "slug": "orbital-silence",
+      "status": "COMING_SOON"
+    },
+    {
+      "slug": "evergreen",
+      "status": "COMING_SOON"
+    },
+    {
+      "slug": "echoes-of-light",
+      "status": "COMING_SOON"
+    }
+  ],
+  "gameHealth": {
+    "ok": true,
+    "region": "europe",
+    "protocol": 1
+  }
+}

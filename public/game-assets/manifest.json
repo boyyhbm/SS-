@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "key": "car",
+      "url": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/glTF-Binary/CarConcept.glb",
+      "author": "Eric Chadwick / Darmstadt Graphics Group GmbH (2024); original concept by Unity Fan",
+      "license": "CC-BY-4.0",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept",
+      "sha256": "c272098089d78c5cd9fd9f24ff50ee8acf8d932c55f2d55fc10adb6c8998966b",
+      "sourceBytes": 11778688
+    },
+    {
+      "key": "environment",
+      "url": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/hdri/venice_sunset_1k.hdr",
+      "author": "HDRI Haven / Poly Haven contributors, mirrored by pmndrs",
+      "license": "CC0-1.0",
+      "page": "https://polyhaven.com/a/venice_sunset",
+      "sha256": "0e72ed46b5316cb5fb67fc81ff85b024a09146fd89ef3811a8d2299647ada118",
+      "sourceBytes": 1397783
+    },
+    {
+      "key": "district",
+      "url": "https://github.com/Jamsers/Bistro-Demo-Tweaked",
+      "author": "Amazon Lumberyard; Godot port Logan Preshaw; modifications John James Gutib (Jamsers). NEXUS reconstructs materials, normalizes building pivots, builds LOD and Meshopt/WebP exports.",
+      "license": "CC-BY-4.0",
+      "files": [
+        {
+          "path": "Meshes/Section01/S1B1.glb",
+          "sha256": "d4d1951cd486413a8bfe2829a681934d03cba1fe27816b722cbafcd20585e81a",
+          "bytes": 7185648
+        },
+        {
+          "path": "Scenes/Section01/S1B1.tscn",
+          "sha256": "acbdeef40429bd92e9a17a3ac6fcad99c2ac2660398533a1bce9eddd480e516b",
+          "bytes": 3080
+        },
+        {
+          "path": "Materials/Fabric/Curtains.tres",
+          "sha256": "7bf1261c065eed3be0b265a20ab4968cbf5fa939afb9cbf20bba8c9369d84239",
+          "bytes": 545
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_Green.tres",
+          "sha256": "600da5b20adf961cc3d3693a4f06e5434726e4e6d1a8a823b873308271bcfe96",
+          "bytes": 510
+        },
+        {
+          "path": "Materials/Stone/Brick_Large_Beige.tres",
+          "sha256": "da4af695cd8aabe076400ba421cbeec667a852b8418e95d871c3a02e3110ad34",
+          "bytes": 509
+        },
+        {
+          "path": "Materials/Stone/Concrete_Plaster.tres",
+          "sha256": "8793fa9b00788c41953dd630f390aeb91777bda85441906f4796de868168ec9c",
+          "bytes": 484
+        },
+        {
+          "path": "Materials/Stone/Concrete_Smooth.tres",
+          "sha256": "71d9d1c8e6a0903951363d4a0ca9f4e52d90e989dcc10eb831c41673cd3cfe45",
+          "bytes": 495
+        },
+        {
+          "path": "Materials/Stone/Concrete.tres",
+          "sha256": "d16fb30d13dc8172234189218212f15de6fe8167bbfd9e06af589ff0cdcac7bb",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Metal/Bronze.tres",
+          "sha256": "6d23e2478697d122e900f07aa10cbda9cb8a87be966f0a54cfb3fd3a7efef9f9",
+          "bytes": 503
+        },
+        {
+          "path": "Materials/Stone/Concrete_Grooved.tres",
+          "sha256": "b00ed382cf93d34070f16a03dcd68bcabc9bc8e4579fa19ea113bb96ff4ecf61",
+          "bytes": 484
+        },
+        {
+          "path": "Materials/Metal/Black_Metal.tres",
+          "sha256": "81d3ecf6dbbf6241ad0935a1ccd249219556ccbc97f350da367a9c6eae102c1c",
+          "bytes": 489
+        },
+        {
+          "path": "Meshes/Section01/S1B2.glb",
+          "sha256": "3cdb190d2f974c87d1c4c9ba91ac67089009eae81316862c2d74dea509337595",
+          "bytes": 1189864
+        },
+        {
+          "path": "Scenes/Section01/S1B2.tscn",
+          "sha256": "f86554a321dee2336e8293163eb67ebda45d0afa1e13cc950cd9cbce12cbbd46",
+          "bytes": 3018
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_White.tres",
+          "sha256": "869573a7e3d40e82f62612d1e9f55f0336b85a3e097761d170086c59429831d7",
+          "bytes": 486
+        },
+        {
+          "path": "Materials/Roofing/Roofing_Shingle_Grey.tres",
+          "sha256": "1881697a3ecea7cb68bd8c616b9502ac959f1a7f9282e3ec454071cd96e1ba6d",
+          "bytes": 496
+        },
+        {
+          "path": "Materials/Wood/Doors.tres",
+          "sha256": "f0ca9957a9be0207e205bb81b1ce8f1fbfc9eeb4229415a0f35abedf7e8858b3",
+          "bytes": 459
+        },
+        {
+          "path": "Materials/Stone/Brick_Large_White.tres",
+          "sha256": "d75bf500c195ab0f57bda6dac6c43f3a45b8e3ca7a7c52112404ee06f82596aa",
+          "bytes": 486
+        },
+        {
+          "path": "Meshes/Section02/S2B1.glb",
+          "sha256": "5297ce3fd246621a180114a22bbfe9336fcf712476dff6e5b6f157b501a2510d",
+          "bytes": 3121388
+        },
+        {
+          "path": "Scenes/Section02/S2B1.tscn",
+          "sha256": "b52cc6a57a6a4207021b3e2efda8f6a4829f4f2cf29fcb4163699a6c7e358f5a",
+          "bytes": 7505
+        },
+        {
+          "path": "Materials/Lights/Streetlight_Metal.tres",
+          "sha256": "5c1f27f8905f6880a8042b572e9f850bc2c58e0ee1a1c61e67b1850a909c969c",
+          "bytes": 489
+        },
+        {
+          "path": "Materials/Wood/Wood_Brown.tres",
+          "sha256": "2e66ab18b5b3fab51090e4b8e3d5cbe4b09e064213a1b83c63022409b8316a1c",
+          "bytes": 470
+        },
+        {
+          "path": "Materials/Stone/Brick_Small_Red_Blend.tres",
+          "sha256": "ac071997a660e7562eb62d6d9308012260467c4fe0948ade2842bb8200910841",
+          "bytes": 505
+        },
+        {
+          "path": "Materials/Metal/Paris_TrafficSign_A.tres",
+          "sha256": "063a24c91447c566844c06655420c7cbe8ba42ad65bf08e2f3e5ef2dc88c1b33",
+          "bytes": 723
+        },
+        {
+          "path": "Materials/Stone/Plaster.tres",
+          "sha256": "b763224661ca7aaf77dbb5b147cb5d2d3b098db4cfc640da6c628a5ee290f334",
+          "bytes": 452
+        },
+        {
+          "path": "Materials/Lights/StreetLight_Bulb.tres",
+          "sha256": "e45c770829534370899ebdf48f864bcfca903496e66c2af6a46829d0ca20a09d",
+          "bytes": 555
+        },
+        {
+          "path": "Materials/Lights/Emissive_StreeLight.tres",
+          "sha256": "eff2fba72679c64f2a5ac4fa2c276c1a5214c17c67c1ab3036a087318d5941f8",
+          "bytes": 406
+        },
+        {
+          "path": "Materials/Stone/Concrete2.tres",
+          "sha256": "10d679a67376d13e7878e0bc1e0351b7a494d86be1abdaa45fbc83216b6a18c8",
+          "bytes": 455
+        },
+        {
+          "path": "Materials/Metal/Paris_ElectricBox.tres",
+          "sha256": "7dc331e92b07f228a9241463cade6b77c059b77ff88613a0bf804a8c6d4b4abb",
+          "bytes": 460
+        },
+        {
+          "path": "Materials/Metal/Antenna_Metal.tres",
+          "sha256": "42dad7cb11c2bb3c44900423655b7ba284cb4443684ea6a28608b642925772e4",
+          "bytes": 479
+        },
+        {
+          "path": "Meshes/Section02/BistroProps.glb",
+          "sha256": "1c140fb202fdbd5e1326a42b8bdf1c5dfb7e88926d67a4bf2b849512d269c605",
+          "bytes": 3110308
+        },
+        {
+          "path": "Scenes/Section02/BistroProps.tscn",
+          "sha256": "19a0797d9556ce4d0dc2170ef642bf1d9aa91226aeda26251aeb66f56709899e",
+          "bytes": 5054
+        },
+        {
+          "path": "Materials/Nature/Foliage_Hedges.tres",
+          "sha256": "7a1e6a5e0b781f3e50512332310273bcec89f9ae24c0e1b84448d4f19aa31915",
+          "bytes": 643
+        },
+        {
+          "path": "Materials/Nature/Foliage_Paris_Flowers.tres",
+          "sha256": "76997a456d41d4fec92fb6e7372a9ff579521355c83ba4789d5771e7c3c81988",
+          "bytes": 496
+        },
+        {
+          "path": "Materials/Metal/SideWalkBarrier.tres",
+          "sha256": "bf576c0c090eced4bba1bd25ef2e7f03e310ee8b2c9ef751be1abfe23bb250f3",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Stone/PlantPots.tres",
+          "sha256": "d357995907b447f56748744a1c252710283dfe0d1329b82dc1d6c5bc6f6cd43b",
+          "bytes": 456
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Emissive.dds",
+          "sha256": "47a50d1d719011201cd95776c4db2583943bb10616b19b22235e52463f0df052",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Emissive_StreetLight_Emissive.dds",
+          "sha256": "bf89728e2c83ee6b7d296450fd6aa8e77fa9226dcab3eb3f350acba161a69681",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Streetlight_Metal_BaseColor.dds",
+          "sha256": "352da936fc056cdad0229b62fe50f6e65e765c9436b04b27cc259afe8a68249d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Normal.png",
+          "sha256": "bc2eebb9a0dbeebc6b589a6ea1cd1d7ae359e0ec58bb9b1203520eb94e41eedd",
+          "bytes": 3279876
+        },
+        {
+          "path": "Textures/Metal/Antenna_Metal_BaseColor.dds",
+          "sha256": "9a4c4c5df383253cc0ca2df1a805d51ac224e69c620a2d045d9176ecfb7513fc",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Fabric/MASTER_Curtains_Normal.png",
+          "sha256": "6181a5878109b2b4764aa80e8430f455701d77e3b85286871c388683f9aeb1ac",
+          "bytes": 2630300
+        },
+        {
+          "path": "Textures/Metal/ElectricBox_BaseColor.dds",
+          "sha256": "34bc32682d4c43e16f590b75b904ce9ecfb2fb32049d22742e76ce421a216b76",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Lights/Streetlight_Metal_Normal.png",
+          "sha256": "5976b5e40b3f217a9f8602abdae06e94cfc4ee8308831c365ef58b6eb4270a92",
+          "bytes": 5631546
+        },
+        {
+          "path": "Textures/Metal/Antenna_Metal_Normal.png",
+          "sha256": "5a89332c9c06f8d072c8f885fdd85f9cd106e530008748a660c566ba6affe24b",
+          "bytes": 1831105
+        },
+        {
+          "path": "Textures/Fabric/MASTER_Curtains_BaseColor.dds",
+          "sha256": "3df6a4f1c9cf53ca5442829fbdeb2fc7c9e6e0651969e11533b5e088c9dbdee4",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Metal/ElectricBox_Normal.png",
+          "sha256": "fe1d8c07b67c5615b0b4970847e14b49fb5476299e210b2f86c8c3cbfe88ca3e",
+          "bytes": 1561283
+        },
+        {
+          "path": "Textures/Metal/MASTER_Black_Metal_BaseColor.dds",
+          "sha256": "dabe1f4273034f4a6544f49a26e4d47cbf114f4759843580afabc20c61333088",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_BaseColor.dds",
+          "sha256": "bd4613554721fbf1ab9f924956a4dde4b318d9d5496bde2ffc89aa1a2ee904ca",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Black_Metal_Normal.png",
+          "sha256": "d98c526355bf535668d7e8d3a38bdf564a34ad9600875f0a87c171a0b5a572e4",
+          "bytes": 7609135
+        },
+        {
+          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_Normal.png",
+          "sha256": "5a89332c9c06f8d072c8f885fdd85f9cd106e530008748a660c566ba6affe24b",
+          "bytes": 1831105
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_BaseColor.dds",
+          "sha256": "035d0cba28f7e00705ba6d0dc87f9616ac58fa441f13a2ecc72b4e2ea27af73f",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_Normal.png",
+          "sha256": "10221159be78e5187a82c785f93992ebbce535977f4b355b64c6ac0ace0a0a4d",
+          "bytes": 1269826
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_Specular.dds",
+          "sha256": "3d5cea824f35e0f23c15c32542d3cbd64f3b844f3ee05980b9ebeda2f5fb7dfa",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Sidewalkbarrier_BaseColor.dds",
+          "sha256": "4b4a5c7e6019f12eb1209ff23585d2ab4d3338a1a90ee16e212412abcd46d581",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Sidewalkbarrier_Normal.png",
+          "sha256": "adc7485bdaf65896d1ba459e393f37923410c0ad3e13fb473f65029107e587d6",
+          "bytes": 2825951
+        },
+        {
+          "path": "Textures/Nature/Foliage_Bux_Hedges46_BaseColor.dds",
+          "sha256": "c18fe165eb4b1b1afe07a7db0c7b6795907a3f2930e90b0b265f171050e0f4ca",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Bux_Hedges46_Normal.png",
+          "sha256": "aed4055de60f3caf0ee5edaf189b21fc64e457869cc77a52910503e7ccd8ff95",
+          "bytes": 7554243
+        },
+        {
+          "path": "Textures/Nature/Foliage_Paris_Flowers_BaseColor.dds",
+          "sha256": "e188a6eeb73babfb40fee8e6c7bad77f6b724941a54a326ef13140fa81daa92c",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Foliage_Paris_Flowers_Normal.png",
+          "sha256": "2d00e670434359c0b8a34d935e10dee3cd8f238c4f469021a4a68d62b8bb4070",
+          "bytes": 2805746
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_BaseColor.dds",
+          "sha256": "18378c454d003de4e95b55526d28079ad6cb5537ae1fbf08a3de2e45b2c14bdc",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/Concrete2_BaseColor.dds",
+          "sha256": "6394eae366db6979de5c0190542d1b48d8aaf090ad3008164c3d599705c36a65",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_Normal.png",
+          "sha256": "049007e6adaf498ba0dd1b391e958abdf99c49cbc24660597f6a36318b97d1d8",
+          "bytes": 8345864
+        },
+        {
+          "path": "Textures/Stone/Concrete2_Normal.png",
+          "sha256": "348e92a4378f038099a181171a3c2e9c36ca3b0d7ce880c69f31d72c1611b8f7",
+          "bytes": 3233016
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_BaseColor.dds",
+          "sha256": "880efd79fdbe8c091f3aeb403da68f95a3dd165ab2c5caa10e59fb3ef2b20b82",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_White_BaseColor.dds",
+          "sha256": "2962e5cefc4622e1add61c1de440b131cf32908cb52ee0905a36969d35b85f2d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_White_Normal.png",
+          "sha256": "4434f10a187c85947abda19b3cac7467a4e478df5c668fce621c99f797e12da9",
+          "bytes": 2935734
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_Normal.png",
+          "sha256": "d7ab07cf3a03cae91e4ed6e043f1b3773ada056a6702610d0f628cc08bef5dd0",
+          "bytes": 8820912
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Small_Red_BLENDSHADER_BaseColor.dds",
+          "sha256": "6105c6511cb09f300b05b1e499095c85a65b95524060632524b0b99c89742738",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Small_Red_BLENDSHADER_Normal.png",
+          "sha256": "3eedefc075aa606551c87bcf374f49d1a6ac8eed3d9a2ce5ad8846c4aed219be",
+          "bytes": 7111799
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_BaseColor.dds",
+          "sha256": "e25548c6f1af25237cfecc14cb63b8ecd8887578b03efe0d8fb901f41bcec2d1",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Grooved_BaseColor.dds",
+          "sha256": "cb02b5a2ac35fa8456a47f5170ddb29eef06cbc944f2c27c9d7c8e4b30ff9eb1",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Grooved_Normal.png",
+          "sha256": "e587d6dfae525debcd33c1978994a702701bc2e63bcddeab72907991f10bd6c3",
+          "bytes": 7225134
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Normal.png",
+          "sha256": "7ac0d3702a4270e5ab28d27b7f666882287a665dc284e1d8df3dcab0c7d84b32",
+          "bytes": 6936118
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Plaster_BaseColor.dds",
+          "sha256": "86b9a40f862ae672bdd8749b567a2b54aa4a17a1a8789fb511c5e95e248efae4",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Plaster_Normal.png",
+          "sha256": "ede70a196f3d68e21844ab16040af9595422d274a4cf2303ba7c65a43e1009ca",
+          "bytes": 5266327
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Smooth_BLENDSHADER_Normal.png",
+          "sha256": "348e92a4378f038099a181171a3c2e9c36ca3b0d7ce880c69f31d72c1611b8f7",
+          "bytes": 3233016
+        },
+        {
+          "path": "Textures/Stone/Plantpots_BaseColor.dds",
+          "sha256": "18f289ca5e8e4dc111a6f5d8711f3cb891305cad556ce3d3a84945edd0d7560d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/Plantpots_Normal.png",
+          "sha256": "00711670ac57a1329884cc21e63c00feb2cb9f9006c9be0a74d9a0f6b312cea9",
+          "bytes": 5378101
+        },
+        {
+          "path": "Textures/Stone/Plaster_BaseColor.dds",
+          "sha256": "a2bd0599a1748f5caf623764fd26cc7afbdec57b0a619f739cd8c0bf8efb90a8",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/Plaster_Normal.png",
+          "sha256": "3f8a75d2fbab1226c96cca75b14f0aafc46e102e60233a68852115da6b4b8f6e",
+          "bytes": 9292325
+        },
+        {
+          "path": "Textures/Wood/MASTER_Doors_BaseColor.dds",
+          "sha256": "9c47e159df0af111e71dd248cc9d7d96d64f7bddc3b326d054d1ef7285e9b5b4",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Brown_Normal.png",
+          "sha256": "c5d4d88c628f081edbfb37d4f8502fbc3d3f0040ac560f998bfca282a8b701c1",
+          "bytes": 1013733
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Brown_BaseColor.dds",
+          "sha256": "b0ca7303b7e82911844ad65f140c7fa70640357ec13619220713745faec36776",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Doors_Normal.png",
+          "sha256": "0c785ef9f53a7117bfc5983fbced4cc003eee330b8f87c0dbe28f34a29aeb4ce",
+          "bytes": 1783357
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_BaseColor.dds",
+          "sha256": "e1c21f1075df65a6a295cb293881d1da3d4dad9cbc4f6bd23a17c6c39b38decd",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_White_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_White_BaseColor.dds",
+          "sha256": "08243aeb8298fca283d14f85de122d2fc8d6b62597956144b951b690b93320a5",
+          "bytes": 2796344
+        },
+        {
+          "path": "LICENSE-ASSETS",
+          "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+          "bytes": 18656
+        },
+        {
+          "path": "ATTRIBUTION",
+          "sha256": "9d69bb1066d3b7b7a081c586af3bf36e4674b2a8da275c4527a334ccdbce47c3",
+          "bytes": 6386
+        },
+        {
+          "path": "README.md",
+          "sha256": "39230f21d41f50879c015f35b5e91dddced1ec58d1253ae5f22a595fac226e31",
+          "bytes": 3998
+        }
+      ]
+    }
+  ],
+  "modifications": "Car: removed emblem/plate nodes, logo texture and variants, geometry/texture LOD and Meshopt compression. District: selected Amazon Lumberyard Bistro buildings and props from the CC BY Godot port. Reconstructed source materials from scene overrides, decoded DDS textures, normalized pivots, geometry and texture LOD. NEXUS authors the track, props, lighting and PBR asphalt. Licensed models are not claimed as NEXUS originals.",
+  "products": [
+    {
+      "filename": "car-high.glb",
+      "bytes": 2935028,
+      "sha256": "c431e99485d15204f3399d2a85d3c6ed6c476767cc111209f92a1272f45bdf07",
+      "triangles": 176584,
+      "bounds": {
+        "min": [
+          -1.2714082958559834,
+          -0.00024107342268636645,
+          -1.940231204032898
+        ],
+        "max": [
+          1.2709126970853442,
+          1.1486550569534302,
+          2.4171547889709473
+        ]
+      }
+    },
+    {
+      "filename": "car-low.glb",
+      "bytes": 1276736,
+      "sha256": "dc6d26b07e47e1c5c473de5e1e67dc99c25a309a697b03c3b557dbbe1ec6339e",
+      "triangles": 25663,
+      "bounds": {
+        "min": [
+          -1.2714082958559834,
+          -0.00024107342268636645,
+          -1.9379483461380005
+        ],
+        "max": [
+          1.2681731106833145,
+          1.1481895446777344,
+          2.4123408794403076
+        ]
+      }
+    },
+    {
+      "filename": "district-high.glb",
+      "bytes": 8766968,
+      "sha256": "96240df6de9ccc427fa69997aea2268e12ba053a28409c256dcff2ebda5c64fd",
+      "triangles": 224459,
+      "templates": {
+        "S1B1": {
+          "min": [
+            -19.125953674316406,
+            -0.014409065246582031,
+            -85.65111541748047
+          ],
+          "max": [
+            7.691537857055664,
+            18.136390686035156,
+            -72.50029754638672
+          ]
+        },
+        "S1B2": {
+          "min": [
+            9.372016906738281,
+            -0.04043722152709961,
+            -85.4410171508789
+          ],
+          "max": [
+            30.350839614868164,
+            15.931421279907227,
+            -66.54759216308594
+          ]
+        },
+        "S2B1": {
+          "min": [
+            -19.94963026046753,
+            -0.04486346244812012,
+            -32.76698684692383
+          ],
+          "max": [
+            8.868235111236572,
+            25.724102020263672,
+            -16.771968841552734
+          ]
+        },
+        "BistroProps": {
+          "min": [
+            -7.071622848510742,
+            -0.009924381971359253,
+            -18.60642433166504
+          ],
+          "max": [
+            -0.2867865562438965,
+            1.4677380323410034,
+            -1.5692205429077148
+          ]
+        }
+      }
+    },
+    {
+      "filename": "district-low.glb",
+      "bytes": 2718472,
+      "sha256": "4560f0e117619b61b4f5aefcc4628f2638d5742b899bdc67a3840b6277e43aa8",
+      "triangles": 56574,
+      "templates": {
+        "S1B1": {
+          "min": [
+            -19.125953674316406,
+            -0.014409065246582031,
+            -85.65111541748047
+          ],
+          "max": [
+            7.691537857055664,
+            18.136390686035156,
+            -72.50029754638672
+          ]
+        },
+        "S1B2": {
+          "min": [
+            9.372016906738281,
+            -0.04043722152709961,
+            -85.4410171508789
+          ],
+          "max": [
+            30.350839614868164,
+            15.931421279907227,
+            -66.54759216308594
+          ]
+        },
+        "S2B1": {
+          "min": [
+            -19.94963026046753,
+            -0.04486346244812012,
+            -32.76698684692383
+          ],
+          "max": [
+            8.868235111236572,
+            25.724102020263672,
+            -16.771968841552734
+          ]
+        },
+        "BistroProps": {
+          "min": [
+            -7.071622848510742,
+            -0.009924381971359253,
+            -18.60642433166504
+          ],
+          "max": [
+            -0.2867865562438965,
+            1.4677380323410034,
+            -1.5692205429077148
+          ]
+        }
+      }
+    },
+    {
+      "filename": "asphalt-color.webp",
+      "bytes": 82008,
+      "sha256": "4302827a87144687bbf254563903e04e91b202abddc3e46c41b3d7c0548b3dbd"
+    },
+    {
+      "filename": "asphalt-normal.webp",
+      "bytes": 1878706,
+      "sha256": "bb1de468d4585467fd1d4659d6af2a20f13ea4501ad8695946b718ac18675118"
+    },
+    {
+      "filename": "asphalt-roughness.webp",
+      "bytes": 34354,
+      "sha256": "90effc0440e28f3c6da3b849754573e82b73f62591d9a3d10a73beba8ca5f164"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-24T10:36:05.535Z",
+  "transport": "WSS on loopback through a real TLS reverse proxy; private test CA is explicitly trusted; certificate verification remains enabled. Delay/jitter/drop injected at application message boundaries, not WAN/TCP packet-loss measurements.",
+  "simulationHz": 30,
+  "snapshotHz": 15,
+  "checks": [
+    "Unauthenticated control and direct Colyseus create rejected",
+    "Private room access and unauthenticated seat reservation rejected",
+    "Capacity 2 enforced against a third invited account",
+    "Two independent accounts/SDK sessions: ready, shared start, movement, finish, DB settlement, duplicate Start; RTT 50ms",
+    "Real WebSocket disconnection and same-seat automatic reconnection",
+    "Two independent accounts/SDK sessions: ready, shared start, movement, finish, DB settlement, duplicate Start; RTT 100ms",
+    "Two independent accounts/SDK sessions: ready, shared start, movement, finish, DB settlement, duplicate Start; RTT 200ms",
+    "Six simultaneous Quick Match requests resolve to the same capacity-limited room",
+    "Six concurrent authoritative rooms with twelve genuine SDK connections"
+  ],
+  "observations": [
+    {
+      "kind": "race",
+      "configuredRttMs": 50,
+      "configuredOneWayJitterMs": 0,
+      "inputDropFraction": 0,
+      "elapsedWallMs": 11986,
+      "serverFinishSeconds": [
+        13.866666666666628,
+        13.899999999999961
+      ],
+      "actualRttMedianMs": 74,
+      "reconciliationErrorP95Meters": 1.5956961056048113,
+      "commandsSent": 1020,
+      "commandsDropped": 0
+    },
+    {
+      "kind": "race",
+      "configuredRttMs": 100,
+      "configuredOneWayJitterMs": 10,
+      "inputDropFraction": 0,
+      "elapsedWallMs": 12044,
+      "serverFinishSeconds": [
+        13.866666666666628,
+        13.899999999999961
+      ],
+      "actualRttMedianMs": 106,
+      "reconciliationErrorP95Meters": 1.5956627568447435,
+      "commandsSent": 2053,
+      "commandsDropped": 0
+    },
+    {
+      "kind": "race",
+      "configuredRttMs": 200,
+      "configuredOneWayJitterMs": 20,
+      "inputDropFraction": 0.03,
+      "elapsedWallMs": 11988,
+      "serverFinishSeconds": [
+        13.866666666666628,
+        13.899999999999961
+      ],
+      "actualRttMedianMs": 211,
+      "reconciliationErrorP95Meters": 1.5956615096750801,
+      "commandsSent": 3082,
+      "commandsDropped": 33
+    },
+    {
+      "kind": "load",
+      "rooms": 6,
+      "clients": 12,
+      "observationMs": 16044,
+      "messages": 5440,
+      "ticks": 2260,
+      "processLifetimeAverageSimulationTickMs": 0.014137737966387528,
+      "processLifetimeMaxSimulationTickMs": 1.094413999999233,
+      "disconnects": 1,
+      "reconnects": 1
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "updatedAt": "2026-10-25",
+  "provider": "Railway",
+  "publicUrl": null,
+  "deploymentCompleted": false,
+  "services": {
+    "web": "NOT_DEPLOYED",
+    "multiplayer": "NOT_DEPLOYED",
+    "postgresql": "NOT_PROVISIONED_ON_RAILWAY"
+  },
+  "railwayBackups": "NOT_CONFIGURED",
+  "publicAcceptanceTests": "NOT_RUN_NO_PUBLIC_DEPLOYMENT",
+  "physicalControllers": "UNVERIFIED",
+  "agentAccessDraft": "SAVED_REQUIRES_OWNER_REVIEW_SECRET_ENTRY_AND_CONFIGURATION_PUBLICATION",
+  "blockers": [
+    "Railway API requests blocked by environment network proxy: CONNECT 403",
+    "No Railway authorization configured in this environment",
+    "Owner has not approved billable Railway services and volumes"
+  ],
+  "prepared": [
+    "Current Railway IaC with three services, two persistent volumes, private PostgreSQL and GitHub CI gate",
+    "Production Dockerfiles, health endpoints, PORT support and guarded persistent uploads",
+    "Serialized deploy migrations and idempotent catalog seed",
+    "PostgreSQL singleton ownership for multiplayer rolling deployments",
+    "Private backup and verified local restore of all 23 tables",
+    "Public HTTPS/WSS two-browser and post-restart acceptance scripts",
+    "Custom domain and backup runbook"
+  ],
+  "localRehearsalReport": "railway-local-tests.json",
+  "localHttpsReport": "railway-local-https-tests.json",
+  "runbook": "railway-production.md"
+}

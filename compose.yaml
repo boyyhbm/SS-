@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Run node scripts/init-env.mjs first}
+    ports:
+      - '127.0.0.1:${DB_PORT:-5432}:5432'
+    volumes:
+      - nexus_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U nexus -d nexus']
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  game-server:
+    build:
+      context: .
+      target: base
+    restart: unless-stopped
+    init: true
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://nexus:${DB_PASSWORD}@db:5432/nexus?schema=public
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXT_PUBLIC_MULTIPLAYER_URL: ${NEXT_PUBLIC_MULTIPLAYER_URL:-ws://localhost:2567}
+      MULTIPLAYER_SECRET: ${MULTIPLAYER_SECRET:?Run node scripts/init-env.mjs first}
+    ports:
+      - '127.0.0.1:${GAME_PORT:-2567}:2567'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:2567/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+volumes:
+  nexus_postgres:
