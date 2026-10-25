@@ -3,9 +3,10 @@ export async function installDriver(
   page: Page,
   method: 'gamepad' | 'keyboard' = 'gamepad',
   kind: 'online' | 'single' = 'online',
+  cruiseSpeed?: number,
 ) {
   await page.evaluate(
-    ({ method, kind }) => {
+    ({ method, kind, cruiseSpeed }) => {
       const button = (value = 0) => ({ pressed: value > 0.2, touched: value > 0.2, value });
       const fixture = (
         window as unknown as {
@@ -43,6 +44,7 @@ export async function installDriver(
           ],
         });
       let duty = 0;
+      let accelerating = true;
       const held = new Set<string>();
       const key = (code: string, down: boolean) => {
         if (held.has(code) === down) return;
@@ -51,11 +53,18 @@ export async function installDriver(
         (document.querySelector('canvas') ?? document.body).dispatchEvent(
           new KeyboardEvent(down ? 'keydown' : 'keyup', {
             code,
-            key: code === 'KeyW' ? 'w' : code === 'KeyD' ? 'd' : 'a',
+            key: code.startsWith('Key') ? code.slice(3).toLowerCase() : code,
             bubbles: true,
           }),
         );
       };
+      const release = () => {
+        for (const code of [...held]) key(code, false);
+      };
+      // The real input manager neutralizes keys on blur. Reset the fixture too,
+      // so its next tick sends a new keydown rather than retaining a stale held bit.
+      window.addEventListener('blur', release);
+      document.addEventListener('visibilitychange', release);
       function update() {
         const root = document.querySelector(
           kind === 'online' ? '[data-testid="online-player"]' : '[data-testid="race-player"]',
@@ -81,26 +90,40 @@ export async function installDriver(
             Math.min(1, -error * 2.8 + (Math.hypot(x, z) - 95) * 0.09 + speed / (95 * 1.12)),
           );
           if (method === 'gamepad') {
-            pad.axes[0] = steer;
-            pad.buttons[7] = button(1);
+            // Public WAN checks can opt into a calmer pace for software rendering.
+            // The default retains the full-throttle local integration fixture.
+            pad.axes[0] =
+              cruiseSpeed === undefined
+                ? steer
+                : Math.abs(steer) < 0.001
+                  ? 0
+                  : Math.sign(steer) * (0.15 + Math.abs(steer) * 0.85);
+            pad.buttons[7] = button(
+              cruiseSpeed === undefined
+                ? 1
+                : Math.max(0, Math.min(1, 0.2 + (cruiseSpeed - speed) * 0.15)),
+            );
           } else {
             duty += Math.abs(steer);
             const turn = duty >= 1;
             if (turn) duty -= 1;
-            key('KeyW', true);
+            if (cruiseSpeed === undefined || speed < cruiseSpeed - 1) accelerating = true;
+            else if (speed > cruiseSpeed + 2) accelerating = false;
+            key('KeyW', accelerating);
+            key('KeyS', cruiseSpeed !== undefined && speed > cruiseSpeed + 7);
             key('KeyD', turn && steer > 0);
             key('KeyA', turn && steer < 0);
           }
         } else {
           pad.buttons[7] = button();
           pad.axes[0] = 0;
-          for (const code of ['KeyW', 'KeyA', 'KeyD']) key(code, false);
+          for (const code of ['KeyW', 'KeyA', 'KeyD', 'KeyS']) key(code, false);
         }
         pad.timestamp = performance.now();
       }
       update();
       setInterval(update, 1000 / 30);
     },
-    { method, kind },
+    { method, kind, cruiseSpeed },
   );
 }

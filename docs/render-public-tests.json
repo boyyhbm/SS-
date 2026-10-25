@@ -1,0 +1,91 @@
+{
+  "checkedAt": "2026-10-25T13:11:51.572Z",
+  "provider": "Render",
+  "applicationCommit": "2301b6d5c6e50bafd52eafb0f1319453016928f6",
+  "webOrigin": "https://nexus-web-ylcv.onrender.com",
+  "multiplayerOrigin": "https://nexus-multiplayer.onrender.com",
+  "scope": "Actual public HTTPS/WSS, normal certificate validation",
+  "publicDeploymentVerified": true,
+  "method": {
+    "clients": 2,
+    "separateChromiumProcesses": true,
+    "separateAccounts": true,
+    "host": "One cloud runner; not two physical computers",
+    "graphics": "Software WebGL; deviceScaleFactor 0.15",
+    "inputs": ["Virtual analog Gamepad API", "Keyboard events"],
+    "testDriverCruiseMetersPerSecond": 18,
+    "positionsOrResultsInjected": false,
+    "serverFinishChecksUnchanged": true,
+    "physicalControllers": "NOT_TESTED",
+    "publicPerformanceBenchmark": "NOT_RUN"
+  },
+  "before": {
+    "passed": true,
+    "checks": [
+      "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+      "Logout/re-login retains library and favorite; account-owned controller profile saved",
+      "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+      "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby"
+    ]
+  },
+  "raceResults": [
+    {
+      "client": "A",
+      "serverVerified": true,
+      "didFinish": true,
+      "timeSeconds": 48.93333333333312,
+      "place": 2
+    },
+    {
+      "client": "B",
+      "serverVerified": true,
+      "didFinish": true,
+      "timeSeconds": 39.133333333333674,
+      "place": 1
+    }
+  ],
+  "afterRestart": {
+    "passed": true,
+    "checks": [
+      "Re-login after an externally triggered restart preserves accounts, library, favorites, controller profile, saves, friends and server-verified results"
+    ],
+    "actualHostRestarts": true,
+    "bothInstanceIdsChanged": true,
+    "snapshotsEqual": true,
+    "gameRestartRequestedAt": "2026-10-25T13:05:18.160115Z",
+    "gameReadyAt": "2026-10-25T13:08:50.510724248Z",
+    "gameAutomaticRetries": 1,
+    "observation": "First process timed out awaiting singleton ownership; host automatically restarted it. Active rooms are not migrated."
+  },
+  "earlierAttempts": [
+    {
+      "passed": false,
+      "failedStep": "Synchronized WSS race, movement and server results",
+      "completedChecks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified"
+      ]
+    },
+    {
+      "passed": false,
+      "failedStep": "Synchronized WSS race, movement and server results",
+      "completedChecks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified"
+      ]
+    }
+  ],
+  "fixtureAdjustment": "Full-speed automatic driver hit barriers on software rendering/WAN. Public-only driver pace reduced; gameplay rules, physics and finish verification unchanged.",
+  "cleanup": {
+    "status": "PASSED",
+    "accountsRemoved": 6,
+    "scope": "Only exact verification ledger users and their exclusively owned matches; identity/role/email/time guards retained"
+  },
+  "limitations": [
+    "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
+    "Public GPU performance and capacity not benchmarked",
+    "Active rooms are lost during a game server restart"
+  ]
+}

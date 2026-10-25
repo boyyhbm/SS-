@@ -1,21 +1,44 @@
 {
-  "updatedAt": "2026-10-25T11:42:19.433Z",
+  "updatedAt": "2026-10-25T13:16:42.620Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
-  "deploymentCompleted": false,
+  "deploymentCompleted": true,
   "services": {
-    "web": "OWNER_PROVIDED_URL_READINESS_UNVERIFIED",
-    "multiplayer": "OWNER_PROVIDED_URL_READINESS_UNVERIFIED",
-    "postgresql": "CREATION_REQUESTED_BY_OWNER_READINESS_UNVERIFIED"
+    "web": {
+      "status": "LIVE",
+      "url": "https://nexus-web-ylcv.onrender.com",
+      "readinessPath": "/api/health"
+    },
+    "multiplayer": {
+      "status": "LIVE",
+      "url": "https://nexus-multiplayer.onrender.com",
+      "readinessPath": "/health",
+      "livenessPath": "/live"
+    },
+    "postgresql": {
+      "status": "AVAILABLE",
+      "version": "16",
+      "region": "Frankfurt",
+      "externalConnections": "DISABLED"
+    }
   },
-  "hostBackups": "UNVERIFIED",
-  "publicAcceptanceTests": "NOT_RUN_ENVIRONMENT_PROXY_CONNECT_403",
+  "hostBackups": {
+    "postgresPitr": "AVAILABLE",
+    "pitrStartsAt": "2026-10-25T11:17:05Z",
+    "managedRestoreDrill": "NOT_RUN",
+    "webDisk": {
+      "mount": "/var/data",
+      "sizeGB": 1,
+      "initialSnapshotCount": 0
+    }
+  },
+  "publicAcceptanceTests": {
+    "status": "PASSED_BEFORE_AND_AFTER_ACTUAL_HOST_RESTART",
+    "report": "render-public-tests.json"
+  },
   "physicalControllers": "UNVERIFIED",
-  "blockers": [
-    "Public URL/API access blocked for agent until saved network configuration is applied",
-    "Live deployment health and acceptance tests have not yet been observed"
-  ],
+  "blockers": [],
   "prepared": [
     "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
     "Safe preparation mode: no registration, gameplay, migrations or seed before data import",
@@ -34,13 +57,12 @@
   "localValidationReport": "render-local-tests.json",
   "localRestoreReport": "deployment-local-tests.json",
   "blueprintValidation": {
-    "lastOwnerObservation": "ACCEPTED_SYNC_RUNNING",
-    "observedCommit": "8d44374091e253b609ee71a3dfb2a25f3a56d83d",
-    "nextDeployment": "Updated live configuration awaits sync and health verification"
+    "status": "ACCEPTED_AND_DEPLOYED",
+    "applicationCommit": "2301b6d5c6e50bafd52eafb0f1319453016928f6"
   },
   "multiplayerUrl": "https://nexus-multiplayer.onrender.com",
   "urlSource": "Owner-provided service addresses",
-  "launchConfiguration": "NEXUS_LIVE=1 and actual origins prepared for Blueprint synchronization",
+  "launchConfiguration": "NEXUS_LIVE=1; actual HTTPS/WSS origins; long random secrets stored only in Render",
   "sourcePreflight": {
     "personalRecords": 0,
     "uploadFiles": 0,
@@ -50,5 +72,17 @@
     "sourceDatabaseAndPrivateBackupPreserved": true,
     "catalogSnapshot": "../prisma/catalog.snapshot.json",
     "freshSeedVerification": "render-catalog-seed-tests.json"
-  }
+  },
+  "github": {
+    "branch": "main",
+    "checksOnApplicationCommit": "SUCCESS",
+    "autoDeployTrigger": "checksPass",
+    "observedAutomaticTrigger": "new_commit; initially blocked by short generated secrets, then same commit deployed via API"
+  },
+  "knownLimitations": [
+    "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
+    "Public GPU performance and capacity not benchmarked",
+    "Active rooms are lost during a game server restart",
+    "Restart temporarily interrupts availability; observed multiplayer readiness recovery took about 3.5 minutes"
+  ]
 }

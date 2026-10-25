@@ -95,21 +95,45 @@ const report: {
   controllerHardware: 'Physical controllers not tested; virtual Gamepad API only',
 };
 let step = 'HTTPS health';
-const browser = await chromium.launch({
+// The cloud runner may require its managed HTTP proxy for Node-side API calls.
+// Keep this opt-in so loopback TLS rehearsals retain their direct connection.
+const proxy = (() => {
+  if (process.env.NEXUS_TEST_USE_PROXY !== '1') return undefined;
+  let configured;
+  try {
+    configured = new URL(process.env.HTTPS_PROXY ?? process.env.HTTP_PROXY ?? '');
+  } catch {
+    throw Error('Managed test proxy is not configured');
+  }
+  if (!['http:', 'https:'].includes(configured.protocol))
+    throw Error('Managed test proxy must use HTTP or HTTPS');
+  return {
+    server: configured.origin,
+    username: configured.username ? decodeURIComponent(configured.username) : undefined,
+    password: configured.password ? decodeURIComponent(configured.password) : undefined,
+  };
+})();
+const launchOptions = {
+  proxy,
   executablePath: process.env.CHROMIUM_PATH ?? '/usr/bin/chromium',
   args: [
     '--no-sandbox',
     '--enable-unsafe-swiftshader',
     '--disable-background-timer-throttling',
     '--disable-renderer-backgrounding',
+    '--disable-backgrounding-occluded-windows',
     ...(rehearsal && process.env.NEXUS_TEST_TLS_SPKI
       ? [`--ignore-certificate-errors-spki-list=${process.env.NEXUS_TEST_TLS_SPKI}`]
       : []),
   ],
-});
+};
+// Independent browser processes model two computers and avoid one window
+// taking keyboard focus from the other when a gamepad becomes active.
+const browsers = await Promise.all([0, 1].map(() => chromium.launch(launchOptions)));
 const contexts = await Promise.all(
-  [0, 1].map(() =>
+  browsers.map((browser) =>
     browser.newContext({
+      proxy,
       viewport: { width: 960, height: 650 },
       deviceScaleFactor: Number(process.env.NEXUS_PRODUCTION_TEST_DPR ?? 0.15),
       reducedMotion: 'reduce',
@@ -159,7 +183,7 @@ try {
   const response = await pages[0].goto(origin + '/api/health');
   assert.equal(response?.status(), 200);
   if (mode === 'after-restart') {
-    step = 'Persistence after owner-triggered server restart';
+    step = 'Persistence after host-triggered server restart';
     assert.ok(state.boot);
     const webBoot = await json<{ instanceId: string }>(pages[0], '/api/health');
     const gameResponse = await pages[0].request.get(state.boot.gameOrigin + '/health');
@@ -245,7 +269,7 @@ try {
       true,
     );
     await pages[0].getByRole('button', { name: 'На старт', exact: true }).click();
-    await installDriver(pages[0], 'gamepad', 'single');
+    await installDriver(pages[0], 'gamepad', 'single', 18);
     await pages[0].waitForFunction(
       () => document.querySelector('[data-testid="race-player"]')?.getAttribute('data-lap') === '2',
     );
@@ -295,8 +319,8 @@ try {
     await pages[0].getByRole('button', { name: 'Я готов', exact: true }).click();
     await pages[1].getByRole('button', { name: 'Я готов', exact: true }).click();
     await pages[0].getByRole('button', { name: 'Начать заезд', exact: true }).click();
-    await installDriver(pages[0]);
-    await installDriver(pages[1], 'keyboard');
+    await installDriver(pages[0], 'gamepad', 'online', 18);
+    await installDriver(pages[1], 'keyboard', 'online', 18);
     for (const page of pages)
       await page.waitForFunction(
         () =>
@@ -356,13 +380,19 @@ try {
   report.passed = true;
   report.publicDeploymentVerified =
     !rehearsal && mode === 'after-restart' && state.restartVerified === true;
-} catch {
+} catch (error) {
   report.failedStep = step;
+  // Private diagnostics live beside the private credential ledger, never in Git/logs.
+  await writeFile(
+    path.join(folder, `${mode}-failure-private.txt`),
+    error instanceof Error ? (error.stack ?? error.message) : String(error),
+    { mode: 0o600 },
+  );
   // Do not print Playwright errors: form call logs can contain generated passwords.
   console.error(`Production verification failed at: ${step}. Credentials were not logged.`);
   process.exitCode = 1;
 } finally {
-  await browser.close();
+  await Promise.all(browsers.map((browser) => browser.close()));
   await writeFile(
     path.join(folder, `${mode}-report.json`),
     JSON.stringify({ date: new Date().toISOString(), ...report }, null, 2),
