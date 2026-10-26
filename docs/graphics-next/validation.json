@@ -1,6 +1,6 @@
 {
   "date": "2026-10-26",
-  "phase": "local graphics/media checks passed; exact-release GitHub CI and production rollout pending",
+  "phase": "local graphics/media/security checks passed; CI registration fixture isolated, full CI rerun pending",
   "source": "f7f85b0",
   "typecheck": "passed, repeated after QA tooling changes",
   "lint": "passed, repeated after QA tooling changes",
@@ -67,5 +67,32 @@
     "keyboardPeakKmh": 125.63655,
     "virtualAnalogPeakKmh": 159.24792184558632,
     "quality": "Medium / DPR0.5 / software GPU"
+  },
+  "ciAttempts": [
+    {
+      "run": 40301565463,
+      "status": "failed",
+      "annotation": "Late online-routes registration redirect",
+      "diagnosis": "Shared local registration quota exhausted by accumulated fixture accounts",
+      "reproduction": "ci-registration-isolation.json",
+      "applicationProtectionChanged": false
+    }
+  ],
+  "renderLoadFixtures": {
+    "passed": true,
+    "scope": "Synthetic visual load; two actual draws per fixed scene, not gameplay FPS",
+    "cars": [
+      1,
+      2,
+      4,
+      6
+    ],
+    "drawCalls": [
+      476,
+      555,
+      713,
+      871
+    ],
+    "report": "render-load/report.json"
   }
 }

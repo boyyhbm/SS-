@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import type { PrismaClient } from '@prisma/client';
 
 // A complete browser suite creates >30 distinct accounts behind one local address.
-// Isolate its last registration scenario without weakening the application limit.
+// Isolate registration-heavy test groups without weakening the application limit.
 export async function isolateRegistrationQuota(db: PrismaClient) {
   if (process.env.NEXUS_E2E_DISPOSABLE_DB !== '1') return;
   const database = new URL(process.env.DATABASE_URL!),

@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-26T11:41:37.418Z",
+  "passed": true,
+  "scope": "Explicitly disposable local QA database only; production security unchanged",
+  "ciFailureRun": 40301565463,
+  "checks": {
+    "beforeIsolation": 429,
+    "afterIsolationInvalidPayload": 400,
+    "realUiRegistration": 201,
+    "realUiRedirect": "/",
+    "limitStillEnforced": 429
+  },
+  "fix": "Existing guarded registration-quota fixture now isolates the online-routes test group, which creates eight additional users behind one shared CI address"
+}

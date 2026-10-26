@@ -1,3 +1,4 @@
+import { isolateRegistrationQuota } from '../helpers/registration-quota';
 import { test, expect, type Page, chromium } from '@playwright/test';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -12,6 +13,7 @@ const db = new PrismaClient({
 });
 const post = (p: Page, url: string, data: unknown) =>
   p.request.post(origin + url, { headers: { Origin: origin }, data });
+test.beforeAll(() => isolateRegistrationQuota(db));
 test.afterAll(async () => {
   await db.multiplayerMatch.deleteMany({
     where: { participants: { some: { userId: { in: ids } }, every: { userId: { in: ids } } } },
@@ -141,7 +143,11 @@ for (const { route, contacts } of cases)
           confirmPassword: password,
         }))
           await p.locator(`[name="${k}"]`).fill(v);
+        const registered = p.waitForResponse(
+          (r) => new URL(r.url()).pathname === '/api/register' && r.request().method() === 'POST',
+        );
         await p.locator('.auth-submit').click();
+        expect((await registered).status()).toBe(201);
         await expect(p).toHaveURL(origin + '/');
         const data = await (await p.request.get(origin + '/api/console')).json();
         ids.push(data.user.id);

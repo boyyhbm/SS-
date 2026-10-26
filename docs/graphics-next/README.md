@@ -68,3 +68,11 @@ The route registry, three connected city routes plus original circuit, Free Driv
 No claim is made that every earlier directive has been accepted. Physical GPU frame pacing at 30/60/120 Hz, 200 km/h visuals, physical USB/Bluetooth pads, and stable public contact races are outstanding. The public competitive mode keeps inter-car contacts disabled. The city still has sparse areas, kit party walls and a simplified industrial district. The current licensed car is a detailed concept model with stylized proportions, not a newly commissioned production sports car. No cockpit camera is advertised. These limits remain visible in real captures.
 
 The public evidence export is generated with `node scripts/export-graphics-evidence.mjs`; it refuses incomplete captures. Reproduce screenshots/videos with `scripts/qa-city.ts` against an isolated local QA database. It refuses non-loopback targets. Public functional verification uses the separately guarded `scripts/verify-public-routes.ts` and an explicit private ledger containing only two owned fixture accounts; no credentials are published.
+
+## Additional release diagnostics
+
+[High render-load fixtures](render-load/report.json) use 1/2/4/6 visible model actors (476/555/713/871 draw calls) in the same fixed scene. Two actual draws yield one timing interval; this is not gameplay FPS and no synthetic actor is represented as a real network participant.
+
+The first exact-release CI attempt failed at a late registration redirect. [A disposable-database reproduction](ci-registration-isolation.json) confirmed HTTP 429 after the shared 30-request quota, HTTP 201 and a real successful redirect after guarded fixture isolation, and HTTP 429 again when the unchanged limit was reached. The existing local-only/disposable-only helper now isolates the online test group; production throttling has not been weakened. Full CI is rerun after this test-fixture correction.
+
+Very slow software GPU stalls can exceed the simulation's bounded catch-up interval. The real-time videos and speed readouts are evidence of actual execution and engine telemetry, not a comfortable-frame-rate or gaming-PC certification.

@@ -63,7 +63,7 @@ try {
     });
     await page.waitForFunction(
       (n) => window.graphicsLab.frames.length >= n,
-      Number(process.env.GRAPHICS_FRAME_SAMPLES ?? 2),
+      Number(process.env.GRAPHICS_FRAME_SAMPLES ?? 1),
     );
     const sample = await page.evaluate(() => {
       const g = document.querySelector('canvas').getContext('webgl2'),
