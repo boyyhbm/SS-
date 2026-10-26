@@ -343,6 +343,9 @@ export function createCityWorld(
   }
   for (const z of [-65, -25, 20, 65, 110])
     placements.Bistro_S3B1.push({ x: 304, z, yaw: -Math.PI / 2 });
+  // Two adjoining avenue frontages close the source kit's open party walls.
+  // Native scale and a 3.5m paved setback preserve doors, sidewalks and road clearance.
+  placements.Bistro_S1B1.push({ x: -82, z: 3, yaw: 0 }, { x: -118, z: 37, yaw: Math.PI });
   // Authored modules have different primary façade directions. Orient the
   // detailed frontage toward the actual nearest street, rather than presenting
   // the source kit's blank party wall to an avenue. Cardinal city blocks retain

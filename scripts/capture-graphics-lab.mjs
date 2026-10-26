@@ -34,6 +34,7 @@ const report = {
   viewport: [1280, 720],
   deviceScaleFactor: 1,
   tier,
+  renderMode: 'Fixed pose, two actual draws on demand; intervals are not gameplay FPS',
   sourceUncommitted:
     execFileSync('git', ['status', '--porcelain', '--', 'src'], { encoding: 'utf8' }).trim()
       .length > 0,
@@ -41,13 +42,14 @@ const report = {
   scenes: [],
 };
 try {
-  await page.goto('http://127.0.0.1:3102/?tier=' + tier, { waitUntil: 'commit' });
+  await page.goto('http://127.0.0.1:3102/?capture=1&tier=' + tier, { waitUntil: 'commit' });
   await page.waitForFunction(() => window.graphicsLab?.ready);
   for (const [name, count] of [
     ['showcase', 1],
     ['downtown', 1],
     ['speed', 1],
     ['corner', 1],
+    ['multiplayer', 1],
     ['multiplayer', 2],
     ['multiplayer', 4],
     ['multiplayer', 6],

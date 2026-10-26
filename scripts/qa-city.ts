@@ -88,6 +88,7 @@ async function context(quality: string, dpr: number, record?: string) {
   return c;
 }
 async function openRace(page: Page, id: string) {
+  console.log('Loading actual game runtime:', id);
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => {
     if (m.type() === 'error' && /THREE|WebGL|shader/i.test(m.text())) errors.push(m.text());
@@ -107,6 +108,7 @@ async function openRace(page: Page, id: string) {
   );
   await page.waitForFunction((id) => document.querySelector('canvas')?.dataset.route === id, id);
   await page.evaluate(() => document.fonts.ready);
+  console.log('Actual game runtime ready:', id);
   if (['camera', 'smoothness', 'collision'].includes(mode))
     await page.evaluate(() => {
       (document.querySelector('.race-canvas') as HTMLElement).dataset.instrumentation = 'true';
@@ -438,7 +440,12 @@ try {
   } else if (mode === 'video' || mode === 'routes') {
     const results: Record<string, unknown>[] = [];
     report.routes = results;
-    for (const r of cityRoutes) {
+    const videoRoutes = process.env.NEXUS_QA_VIDEO_ROUTE
+      ? cityRoutes.filter((r) => r.id === process.env.NEXUS_QA_VIDEO_ROUTE)
+      : cityRoutes;
+    if (!videoRoutes.length) throw Error('Unknown video route');
+    for (const r of videoRoutes) {
+      const recordingStarted = Date.now();
       const c = await context(
           mode === 'video' ? 'medium' : 'low',
           mode === 'video' ? 0.5 : 0.15,
@@ -447,11 +454,21 @@ try {
         page = await c.newPage();
       await openRace(page, r.id);
       await begin(page);
+      const drivingStarted = Date.now();
+      await page.evaluate((nitro) => {
+        Object.assign(window, { nexusDriverNitro: nitro, qaPeakSpeed: 0, qaPeakImpact: 0 });
+        window.addEventListener('nexus-simulation-tick', (event) => {
+          const state = (event as CustomEvent).detail,
+            w = window as unknown as { qaPeakSpeed: number; qaPeakImpact: number };
+          w.qaPeakSpeed = Math.max(w.qaPeakSpeed, state.speed * 3.6);
+          w.qaPeakImpact = Math.max(w.qaPeakImpact, state.collisionImpulse ?? 0);
+        });
+      }, process.env.NEXUS_QA_VIDEO_NITRO === '1');
       await installDriver(
         page,
         r.id === 'industrial-run' ? 'keyboard' : 'gamepad',
         'single',
-        mode === 'video' ? 24 : undefined,
+        mode === 'video' ? Number(process.env.NEXUS_QA_VIDEO_SPEED ?? 24) : undefined,
       );
       if (mode === 'routes')
         await page.waitForFunction(
@@ -472,6 +489,8 @@ try {
       const data = await page.evaluate(() => {
         const r = document.querySelector('[data-testid="race-player"]') as HTMLElement;
         return {
+          peakSpeedKmh: (window as unknown as { qaPeakSpeed?: number }).qaPeakSpeed,
+          peakImpact: (window as unknown as { qaPeakImpact?: number }).qaPeakImpact,
           lap: r.dataset.lap,
           checkpoint: document.querySelector('[data-testid="checkpoint"]')?.textContent,
           x: r.dataset.x,
@@ -484,6 +503,9 @@ try {
       if (video) await rename(await video.path(), `${out}/${r.id}.webm`);
       results.push({
         route: r.id,
+        videoStartSeconds: (drivingStarted - recordingStarted) / 1000,
+        renderQuality: mode === 'video' ? 'medium' : 'low',
+        renderDpr: mode === 'video' ? 0.5 : 0.15,
         input: r.id === 'industrial-run' ? 'keyboard' : 'virtual analog gamepad',
         ...data,
       });

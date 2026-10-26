@@ -9,6 +9,11 @@ import type { RenderTier } from '../src/games/visual/quality';
 import { createLocalReflections } from '../src/games/visual/reflections';
 import { initialCityRace } from '../src/games/city-driving';
 const query = new URLSearchParams(location.search);
+const captureMode = query.get('capture') === '1';
+let compiled = false,
+  scheduled = false,
+  drawsRemaining = 0,
+  previous = 0;
 const tier = (query.get('tier') ?? 'high') as RenderTier;
 const errors: string[] = [];
 const state = initialCityRace('downtown-circuit');
@@ -71,6 +76,13 @@ function select(name: keyof typeof fixed, count = 1) {
   roadBinding?.update(p.x, p.z, 10);
   lab.scene = name;
   lab.frames.length = 0;
+  previous = 0;
+  lab.ready = false;
+  drawsRemaining = 2;
+  if (compiled && !scheduled) {
+    scheduled = true;
+    requestAnimationFrame(frame);
+  }
 }
 const probes = await createLocalReflections(
   renderer,
@@ -89,7 +101,7 @@ select((query.get('scene') ?? 'showcase') as keyof typeof fixed, Number(query.ge
 // Compile the actual scene before recording frame intervals. No simulation state
 // or account is modified in this lab and no synthetic actors enter a game server.
 await renderer.compileAsync(scene, camera);
-let previous = 0;
+compiled = true;
 function frame(now: number) {
   if (previous && lab.frames.length < 10000) lab.frames.push(now - previous);
   previous = now;
@@ -103,6 +115,8 @@ function frame(now: number) {
   lab.calls = renderer.info.render.calls;
   lab.triangles = renderer.info.render.triangles;
   lab.ready = true;
-  requestAnimationFrame(frame);
+  if (!captureMode || --drawsRemaining > 0) requestAnimationFrame(frame);
+  else scheduled = false;
 }
+scheduled = true;
 requestAnimationFrame(frame);
