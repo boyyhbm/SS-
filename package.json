@@ -25,7 +25,9 @@
     "production:backup": "node scripts/backup-local.mjs",
     "test:deployment": "tsx scripts/test-deployment.ts",
     "test:production": "node --experimental-strip-types scripts/test-production.ts",
-    "test:city-multiplayer": "tsx scripts/test-city-multiplayer.ts"
+    "test:city-multiplayer": "tsx scripts/test-city-multiplayer.ts",
+    "assets:check": "node scripts/check-graphics-assets.mjs",
+    "assets:next": "python3 scripts/fetch-bistro-assets.py && node scripts/prepare-next-assets.mjs && node scripts/prepare-ultra-assets.mjs"
   },
   "engines": {
     "node": ">=24.0.0"

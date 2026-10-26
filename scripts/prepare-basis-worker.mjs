@@ -6,14 +6,17 @@ import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 const dir = 'public/game-assets/basis-r186',
   fn = KTX2Loader.BasisWorker.toString();
-const body = [
-  '/* Three.js r186 MIT / Basis Universal Apache-2.0; licenses in this directory. */',
-  ...['EngineFormat', 'EngineType', 'TranscoderFormat', 'BasisFormat'].map(
-    (name) => 'let _' + name + ' = ' + JSON.stringify(KTX2Loader[name]) + ';',
-  ),
-  await fs.readFile(dir + '/basis_transcoder.js', 'utf8'),
-  fn.substring(fn.indexOf('{') + 1, fn.lastIndexOf('}')),
-].join('\n').trimEnd()+'\n';
+const body =
+  [
+    '/* Three.js r186 MIT / Basis Universal Apache-2.0; licenses in this directory. */',
+    ...['EngineFormat', 'EngineType', 'TranscoderFormat', 'BasisFormat'].map(
+      (name) => 'let _' + name + ' = ' + JSON.stringify(KTX2Loader[name]) + ';',
+    ),
+    await fs.readFile(dir + '/basis_transcoder.js', 'utf8'),
+    fn.substring(fn.indexOf('{') + 1, fn.lastIndexOf('}')),
+  ]
+    .join('\n')
+    .trimEnd() + '\n';
 const file = 'ktx-worker-' + createHash('sha256').update(body).digest('hex').slice(0, 10) + '.js';
 await fs.writeFile(dir + '/' + file, body);
 await fs.copyFile('node_modules/three/LICENSE', dir + '/THREE-LICENSE');
