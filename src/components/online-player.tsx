@@ -40,6 +40,7 @@ import { consoleReturn } from '@/input/focus';
 import { GameControlsHint } from './input-system';
 import { nexusInput } from '@/input/manager';
 import { RaceHUD, GraphicsSettings } from './race-hud';
+import { GameAudioSettings } from './game-audio-settings';
 import { InputNavigation } from './input-navigation';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
@@ -825,6 +826,7 @@ export function OnlinePlayer({
             <h1>{t('pauseOnline')}</h1>
             <p>{t('pauseOnlineBody')}</p>
             <GraphicsSettings language={language} />
+            <GameAudioSettings language={language} />
             <button
               autoFocus
               data-game-back

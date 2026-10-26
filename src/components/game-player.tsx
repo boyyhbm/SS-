@@ -24,6 +24,7 @@ import { RaceHUD, GraphicsSettings } from './race-hud';
 import { InputNavigation } from './input-navigation';
 import { cityRoutes, type CityRouteId } from '@/games/road-network';
 import { GameRouteMap } from './game-route-map';
+import { GameAudioSettings } from './game-audio-settings';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
 });
@@ -466,6 +467,7 @@ export function GamePlayer({
               </details>
             )}
             <GraphicsSettings language={language} />
+            <GameAudioSettings language={language} />
             <button
               autoFocus={started}
               data-game-back={started ? true : undefined}

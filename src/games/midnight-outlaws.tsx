@@ -21,6 +21,9 @@ import { qualityPresets, useRenderSettings, type RenderTier } from './visual/qua
 import { createRenderPipeline } from './visual/pipeline';
 import { useUI } from '../lib/ui-store';
 import { initialRace, stepRace, type RaceInput, type RaceState } from './racing-physics';
+import { GameAudioEngine, type GameAudioStatus } from './audio/engine';
+import { audioText } from './audio/config';
+import { useGameAudioSettings } from './audio/settings';
 export interface RaceTelemetry {
   speed: number;
   nitro: number;
@@ -68,6 +71,7 @@ export function MidnightOutlaws({
   freeDrive?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null),
+    audio = useRef<GameAudioEngine | null>(null),
     state = useRef<RaceState | CityRaceState>({
       ...(isCityRoute(routeId) ? initialCityRace(routeId) : initialRace()),
       bestLap: initialBestLap,
@@ -76,6 +80,36 @@ export function MidnightOutlaws({
   const quality = useRenderSettings((s) => s.quality);
   const cityScene = isCityRoute(routeId);
   const bestRef = useRef(initialBestLap);
+  const [audioStatus, setAudioStatus] = useState<GameAudioStatus>('locked');
+  useEffect(() => {
+    const engine = new GameAudioEngine((status) => {
+      setAudioStatus(status);
+      window.dispatchEvent(new CustomEvent('nexus-game-audio-status', { detail: status }));
+    });
+    audio.current = engine;
+    engine.setSettings(useGameAudioSettings.getState().settings);
+    const unsubscribe = useGameAudioSettings.subscribe((s) => engine.setSettings(s.settings));
+    void useGameAudioSettings.getState().load();
+    const unlock = () => void engine.resume();
+    document.addEventListener('pointerdown', unlock, true);
+    document.addEventListener('keydown', unlock, true);
+    let confirmed = false;
+    const pad = nexusInput.on((event) => {
+      if (event.type !== 'frame') return;
+      const down = event.values.confirm > 0.5;
+      if (down && !confirmed && engine.status !== 'running') unlock();
+      confirmed = down;
+    });
+    return () => {
+      document.removeEventListener('pointerdown', unlock, true);
+      document.removeEventListener('keydown', unlock, true);
+      pad();
+      unsubscribe();
+      void useGameAudioSettings.getState().flush();
+      engine.dispose();
+      if (audio.current === engine) audio.current = null;
+    };
+  }, []);
   useEffect(() => {
     bestRef.current = initialBestLap;
   }, [initialBestLap]);
@@ -292,6 +326,10 @@ export function MidnightOutlaws({
         renderer.domElement.dataset.steer = String(drivingInput.steer);
         renderer.domElement.dataset.handbrake = String(!!drivingInput.handbrake);
         const network = networkRef?.current;
+        audio.current?.setPaused(pausedRef.current || document.hidden);
+        audio.current?.setEnvironment(
+          cityOptions.current.routeId === 'industrial-run' ? 'industrial' : 'city',
+        );
         if (pausedRef.current && !network) {
           clock.reset();
           return;
@@ -337,6 +375,7 @@ export function MidnightOutlaws({
           physicsMs += performance.now() - stepStarted;
           physicsSteps++;
           poses.push(race);
+          audio.current?.update(race, drivingInput, dt);
           if (race.lap > previousLap) void nexusInput.haptic('finish');
           previousLap = race.lap;
           if (!pausedRef.current) {
@@ -409,6 +448,7 @@ export function MidnightOutlaws({
         if (network) {
           sceneKey += `:${network.car()}`;
           const peers = network.remotePlayers();
+          audio.current?.updateOpponents(peers, dt);
           for (const peer of peers) {
             sceneKey += `:${peer.id}:${peer.car}:${peer.connected}:${peer.finish}`;
             let ghost = remoteCars.get(peer.id);
@@ -488,6 +528,13 @@ export function MidnightOutlaws({
           reduced,
           cityWorld?.clipCamera,
         );
+        audio.current?.setListener(
+          camera.position.x,
+          camera.position.y,
+          camera.position.z,
+          race.heading,
+          cameraMode,
+        );
         renderer.domElement.dataset.cameraMode = String(cameraMode);
         renderer.domElement.dataset.cameraSettled = 'true';
         renderer.domElement.dataset.cameraDistance = String(
@@ -495,6 +542,9 @@ export function MidnightOutlaws({
         );
         renderer.domElement.dataset.cameraFov = String(camera.fov);
         if (container.dataset.instrumentation === 'true') {
+          window.dispatchEvent(
+            new CustomEvent('nexus-game-audio-telemetry', { detail: audio.current?.inspect() }),
+          );
           car.updateMatrixWorld(true);
           renderer.domElement.dataset.projectedCarHeight = String(
             projectedHeight(camera, carBounds, car.matrixWorld),
@@ -618,6 +668,24 @@ export function MidnightOutlaws({
         </div>
       )}
       <div className="race-lens" aria-hidden="true" />
+      {!paused && loading === 100 && audioStatus !== 'running' && (
+        <div className="game-audio-unlock" role="status">
+          <span>
+            {audioStatus === 'unavailable'
+              ? audioText[language].unavailable
+              : audioText[language].locked}
+          </span>
+          {audioStatus !== 'unavailable' && (
+            <button
+              type="button"
+              className="text-button"
+              onClick={() => void audio.current?.resume()}
+            >
+              {audioText[language].enable}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

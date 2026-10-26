@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-26",
+  "source": "94206cb",
+  "existing": {
+    "gameAudio": "absent; only optional console UI tones",
+    "vehicleModels": 1,
+    "onlineVehicleChoice": "three paint colors of the same model",
+    "vehicleSpecificPhysics": false,
+    "routes": ["downtown-circuit", "midnight-sprint", "industrial-run", "legacy-circuit"],
+    "freeDrive": true,
+    "dynamicRacingLine": true,
+    "worldContacts": true,
+    "publicVehicleContacts": false,
+    "independentInputAndPhysicsTimer": true,
+    "gamepad": "implemented and virtual-controller tested; physical devices unverified",
+    "multiplayer": "public WSS routes functionally verified; inter-car contacts disabled",
+    "graphics": "Auto/Low/Medium/High/Ultra/Cinematic, WebGL2, PBR, HDR, local probes",
+    "performance": "software renderer has serious stalls; physical GPU 1080p/60 FPS not certified"
+  },
+  "preservation": "Existing authentication, library, social data, saved records, road graph and runtime remain the integration baseline."
+}

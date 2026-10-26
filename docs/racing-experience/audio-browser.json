@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-26T18:24:27.233Z",
+  "passed": true,
+  "scope": "Actual authenticated game runtime, pointer start and keyboard throttle; Web Audio analyser output; software graphics at declared functional DPR",
+  "checks": [
+    "Engine audible after real start interaction",
+    "RPM rises on throttle",
+    "Gear shift occurs during acceleration",
+    "Measured output remains below clipping",
+    "Mute silences output",
+    "Volume settings survive reload",
+    "Second account retains separate defaults",
+    "Anonymous settings access rejected",
+    "Foreign origin and userId injection rejected"
+  ],
+  "idleRPM": 850,
+  "maximumRPM": 6256.020223967473,
+  "maximumPeak": 0.08360107988119125,
+  "shifts": 1,
+  "physicalSpeakersOrHeadphonesTested": false,
+  "sourceRecordings": false
+}
