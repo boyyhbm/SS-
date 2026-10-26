@@ -1,6 +1,6 @@
 # Complete Racing Experience — implementation and evidence
 
-The preserved baseline is [baseline.json](baseline.json), source `94206cb`. Audio-only `a86cf3a` was deployed first. The integrated content source is `4c5c547`; production acceptance is recorded separately after deployment.
+The preserved baseline is [baseline.json](baseline.json), source `94206cb`. Audio-only `a86cf3a` was deployed first. The integrated content was implemented in `72f9b66`, `4c5c547` and `b423f2c`; capture reports retain their actual source revisions. Production acceptance is recorded separately after deployment.
 
 ## Audio
 
@@ -51,11 +51,12 @@ The track browser uses actual in-game captures, calculated length/radius and the
 
 ## Verification and limits
 
-- 142 unit tests passed after integrating the driving/contact/route changes. They include all six vehicles completing every city and new spline route through normalized controls, fixed-step equivalence, 3D line clearance/elevation, mass-dependent momentum and cached-road query equivalence.
+- Unit coverage includes all six vehicles completing every city and new spline route through normalized controls, fixed-step equivalence, 3D line clearance/elevation, mass-dependent momentum and cached-road query equivalence. Two additional SDK tests verify that queued obsolete snapshots are coalesced before prediction/UI work, and pending snapshots cannot repopulate a room after leaving. Test totals and final CI results are recorded with the release evidence.
 - [Six real SDK clients on all six non-legacy routes](multiplayer-six-cars.json): different models, shared starts, ordered server gates/finish, agreeing results, PostgreSQL persistence and rematch. Six rooms ran concurrently (36 genuine clients); this is a functional check, not a capacity certification. One reported client reconnected during the run. [Initial two-client track check](multiplayer-tracks.json) is also retained.
 - [Browser route evidence](tracks-browser.json) is explicit about the scope and revision tested. More recent local/browser/public acceptance is recorded separately; a passing build alone is never treated as gameplay acceptance.
 - GPU performance must be read from the actual capture reports. The available GPU is software SwiftShader; no modern gaming PC, physical controller or 1080p/60 FPS hardware certification is available. Synthetic Gamepad API tests do not certify a named USB/Bluetooth controller.
 - Public competitive car-to-car contacts remain disabled. The private contact solver is gated and currently supports the city routes only. World contacts work on the new tracks. New-track inter-car contact synchronization is not claimed.
+- A private mixed-car city browser run initially failed after repeated reconnects (one client exhausted its reconnection window). After snapshot coalescing, the repeated two-browser run completed with identical authoritative results. This single successful retry does not establish production contact stability.
 - The five additional cars and nature/racing props need higher-detail licensed replacements to meet the user's visual target. Professional recorded engine layers also remain missing. Do not describe the current content as AAA parity or finished photoreal graphics.
 
 ## Extending content

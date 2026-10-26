@@ -17,7 +17,13 @@ import {
 } from '../src/multiplayer/contracts';
 import { liveRooms, metrics, online } from './state';
 import { signConnectionToken, verifyConnectionToken, type ConnectionClaims } from './token';
-import { selectRoute, getRoute, routeIdSchema, type RouteId } from '../src/games/route-registry';
+import {
+  selectRoute,
+  getRoute,
+  routeIdSchema,
+  isCityRoute,
+  type RouteId,
+} from '../src/games/route-registry';
 import { VEHICLE_VERSION, vehicleIdSchema, DEFAULT_VEHICLE } from '../src/games/vehicles/config';
 import { isTrackId, getTrack } from '../src/games/tracks/registry';
 import { configureVehicle } from '../src/games/vehicles/state';
@@ -359,7 +365,7 @@ export class NexusRaceRoom extends Room {
       privateContactsAvailable:
         this.privateRoom &&
         process.env.NEXUS_PRIVATE_CAR_CONTACTS === '1' &&
-        this.route.routeId !== 'legacy-circuit',
+        isCityRoute(this.route.routeId),
       players: [...this.players.values()].map(
         ({
           id,
@@ -514,7 +520,13 @@ export class NexusRaceRoom extends Room {
     metrics.tickMaxMs = Math.max(metrics.tickMaxMs, duration);
     if (
       [...this.players.values()].every((p) => p.finish !== null || p.departed) ||
-      this.elapsed >= (isTrackId(this.route.routeId) ? getTrack(this.route.routeId).durationLimitSeconds : this.route.routeId === 'legacy-circuit' ? 120 : 240) * this.laps
+      this.elapsed >=
+        (isTrackId(this.route.routeId)
+          ? getTrack(this.route.routeId).durationLimitSeconds
+          : this.route.routeId === 'legacy-circuit'
+            ? 120
+            : 240) *
+          this.laps
     ) {
       this.phase = 'results';
       this.sendSnapshot();

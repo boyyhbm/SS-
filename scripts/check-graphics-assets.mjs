@@ -8,7 +8,8 @@ const root = path.resolve('public/game-assets'),
 const hash = (b) => createHash('sha256').update(b).digest('hex');
 assert.equal(REVISION, '186', 'Regenerate and version the decoder when upgrading Three');
 const known = new Map(manifest.products.map((p) => [p.filename, p]));
-let total = 0;
+let total = 0,
+  extraResources = 0;
 for (const p of manifest.products) {
   const file = path.resolve(root, p.filename);
   assert(file.startsWith(root + path.sep));
@@ -68,6 +69,8 @@ for (const filename of ['vehicle-manifest.json', 'track-manifest.json']) {
     assert(file.startsWith(root + path.sep));
     const bytes = await fs.readFile(file);
     assert.equal(bytes.length, model.bytes);
+    extraResources++;
+    total += bytes.length;
     assert.equal(hash(bytes), model.sha256);
     if (model.pack === 'nature') {
       const gltf = JSON.parse(bytes.subarray(20, 20 + bytes.readUInt32LE(12)).toString());
@@ -92,7 +95,8 @@ for (const filename of ['vehicle-manifest.json', 'track-manifest.json']) {
 console.log(
   JSON.stringify({
     passed: true,
-    resources: manifest.products.length,
+    resources: manifest.products.length + extraResources,
+    vehicleAndTrackResources: extraResources,
     totalBytes: total,
     decoderRevision: REVISION,
   }),

@@ -7,13 +7,14 @@ const root = 'public/reports/racing-experience',
   read = async (name) => JSON.parse(await fs.readFile(root + '/' + name, 'utf8'));
 const low = await read('capture-low-video.json'),
   high = await read('capture-high-stills.json'),
-  ultra = await read('capture-ultra-stills.json');
-assert(low.passed && high.passed && ultra.passed);
+  ultra = await read('capture-ultra-stills.json'),
+  garage = await read('capture-high-garage.json');
+assert(low.passed && high.passed && ultra.passed && garage.passed);
 assert.equal(low.scenes.length, 4);
 assert.equal(high.scenes.length, 4);
 assert(ultra.scenes.length >= 1);
 const resources = [];
-for (const report of [low, high, ultra])
+for (const report of [low, high, ultra, garage])
   for (const scene of report.scenes) {
     for (const filename of [scene.screenshot, scene.clip].filter(Boolean)) {
       assert(!filename.includes('..'));

@@ -30,7 +30,7 @@ const requested = process.env.NEXUS_TEST_ROUTES?.split(',');
 const testRoutes = requested
   ? requested.map((id) => {
       const r = routeRegistry.find((r) => r.routeId === id);
-      assert(r && r.routeId !== 'legacy-circuit', 'Unknown requested route');
+      assert(r, 'Unknown requested route');
       return { id: r.routeId, kind: r.kind, path: r.geometry };
     })
   : cityRoutes;

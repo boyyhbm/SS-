@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-26T22:55:13.454Z",
+  "date": "2026-10-26T23:42:19.596Z",
   "passed": true,
   "scope": "Actual browser runtime screenshots and live game-audio recordings. Shared 5-vCPU SwiftShader runner, capture overhead and concurrent functional QA; not a standalone gaming-PC benchmark. High/Ultra are severely GPU limited here. 1080p/60 FPS on physical hardware is unverified.",
   "host": {
@@ -13,15 +13,15 @@
       "route": "downtown-circuit",
       "quality": "low",
       "captureMode": "video",
-      "samples": 47,
-      "averageFps": 1.3999136223509614,
-      "onePercentLowFps": 0.5425347222257311,
-      "frameMeanMs": 714.3297872340426,
-      "frameP95Ms": 1399.199999988079,
-      "frameMaxMs": 1843.199999988079,
-      "physicsMsPerStep": 0.09416222884205552,
-      "renderSubmissionMs": 22.902272725647148,
-      "drawCalls": 135,
+      "samples": 22,
+      "averageFps": 0.6646806813582437,
+      "onePercentLowFps": 0.24379540689559692,
+      "frameMeanMs": 1504.4818181815472,
+      "frameP95Ms": 3022.800000011921,
+      "frameMaxMs": 4101.799999982119,
+      "physicsMsPerStep": 0.2282058343555863,
+      "renderSubmissionMs": 59.02272727543657,
+      "drawCalls": 104,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
       "backingPixelRatio": 0.85
@@ -30,14 +30,14 @@
       "route": "velocity-circuit",
       "quality": "low",
       "captureMode": "video",
-      "samples": 57,
-      "averageFps": 2.0448944009369407,
-      "onePercentLowFps": 1.1299435028248588,
-      "frameMeanMs": 489.02280701723015,
-      "frameP95Ms": 676.8000000119209,
-      "frameMaxMs": 885,
-      "physicsMsPerStep": 0.10687428612873599,
-      "renderSubmissionMs": 15.938333333283662,
+      "samples": 36,
+      "averageFps": 1.0949471231791053,
+      "onePercentLowFps": 0.5815305885008928,
+      "frameMeanMs": 913.2861111106145,
+      "frameP95Ms": 1242.199999988079,
+      "frameMaxMs": 1719.6000000238419,
+      "physicsMsPerStep": 0.18915235788567353,
+      "renderSubmissionMs": 13.380555556052261,
       "drawCalls": 63,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
@@ -47,15 +47,15 @@
       "route": "eagle-ridge",
       "quality": "low",
       "captureMode": "video",
-      "samples": 62,
-      "averageFps": 1.9642942005797837,
-      "onePercentLowFps": 0.78125,
-      "frameMeanMs": 509.08870967741933,
-      "frameP95Ms": 887.5,
-      "frameMaxMs": 1280,
-      "physicsMsPerStep": 0.07397399909538378,
-      "renderSubmissionMs": 16.389855070174605,
-      "drawCalls": 464,
+      "samples": 42,
+      "averageFps": 1.4756673002672922,
+      "onePercentLowFps": 0.6037553583353233,
+      "frameMeanMs": 677.65952380924,
+      "frameP95Ms": 1127.0999999940395,
+      "frameMaxMs": 1656.2999999821186,
+      "physicsMsPerStep": 0.1112707247639592,
+      "renderSubmissionMs": 18.654761909019378,
+      "drawCalls": 460,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
       "backingPixelRatio": 0.85
@@ -64,15 +64,15 @@
       "route": "coastline-run",
       "quality": "low",
       "captureMode": "video",
-      "samples": 53,
-      "averageFps": 1.816816868289118,
-      "onePercentLowFps": 0.909835319812049,
-      "frameMeanMs": 550.41320754672,
-      "frameP95Ms": 743.5999999940395,
-      "frameMaxMs": 1099.0999999940395,
-      "physicsMsPerStep": 0.18443332992604897,
-      "renderSubmissionMs": 19.831944445562034,
-      "drawCalls": 438,
+      "samples": 30,
+      "averageFps": 0.9990143058840671,
+      "onePercentLowFps": 0.49473111363681904,
+      "frameMeanMs": 1000.9866666674613,
+      "frameP95Ms": 1792.4000000059605,
+      "frameMaxMs": 2021.300000011921,
+      "physicsMsPerStep": 0.20987991575740358,
+      "renderSubmissionMs": 23.14333333273729,
+      "drawCalls": 436,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
       "backingPixelRatio": 0.85
@@ -115,14 +115,14 @@
       "route": "eagle-ridge",
       "quality": "high",
       "captureMode": "stills",
-      "samples": 14,
-      "averageFps": 0.2046984134411362,
-      "onePercentLowFps": 0.11780921974937215,
-      "frameMeanMs": 4885.235714284437,
-      "frameP95Ms": 8488.300000011921,
-      "frameMaxMs": 8488.300000011921,
-      "physicsMsPerStep": 0.2777460219997568,
-      "renderSubmissionMs": 70.84523809452851,
+      "samples": 12,
+      "averageFps": 0.2337176690557806,
+      "onePercentLowFps": 0.1963710627599618,
+      "frameMeanMs": 4278.666666666667,
+      "frameP95Ms": 5092.4000000059605,
+      "frameMaxMs": 5092.4000000059605,
+      "physicsMsPerStep": 0.24746673702491498,
+      "renderSubmissionMs": 47.59722222056653,
       "drawCalls": 1313,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
@@ -132,14 +132,14 @@
       "route": "coastline-run",
       "quality": "high",
       "captureMode": "stills",
-      "samples": 12,
-      "averageFps": 0.3567860710718486,
-      "onePercentLowFps": 0.2530620508152415,
-      "frameMeanMs": 2802.799999999503,
-      "frameP95Ms": 3951.5999999940395,
-      "frameMaxMs": 3951.5999999940395,
-      "physicsMsPerStep": 0.850065506063587,
-      "renderSubmissionMs": 42.19999999966886,
+      "samples": 8,
+      "averageFps": 0.23254935133257254,
+      "onePercentLowFps": 0.16027952749534047,
+      "frameMeanMs": 4300.16250000149,
+      "frameP95Ms": 6239.100000023842,
+      "frameMaxMs": 6239.100000023842,
+      "physicsMsPerStep": 0.21320084473046658,
+      "renderSubmissionMs": 41.004166666418314,
       "drawCalls": 1220,
       "gpuFrameMs": null,
       "gpuMemory": "UNAVAILABLE_WEBGL",
@@ -166,43 +166,43 @@
   "resources": [
     {
       "filename": "images/downtown-circuit-low.png",
-      "bytes": 663852,
-      "sha256": "b633f481808c817ae5fbaeefe58a7497b204c1e5d38124c8a72f4c937871f8e9"
+      "bytes": 760173,
+      "sha256": "189bfa9a06fd5b3fbcb78e4cd56b2dfdc2208220ff2b146a537e1cc9a2879ebb"
     },
     {
       "filename": "clips/downtown-circuit-low.mp4",
-      "bytes": 1975379,
-      "sha256": "ad41dea4a20b10d7bff65c96410c4e07ab1577372e6722441d0a1a8f646c19eb"
+      "bytes": 1482066,
+      "sha256": "84bac851d94d1e615d38b23d999908d687a56dc72618f2cbd40bab041118c40c"
     },
     {
       "filename": "images/velocity-circuit-low.png",
-      "bytes": 602256,
-      "sha256": "0390a17db7c21690856b4d0cbf65be351583482fae68074649c39dbe6be4518c"
+      "bytes": 571050,
+      "sha256": "65dd3e9de1c0503fcb7e983ee4c7f4d3d8d110d918d088269cb2dd8e683ce12e"
     },
     {
       "filename": "clips/velocity-circuit-low.mp4",
-      "bytes": 1562087,
-      "sha256": "c81624b7721bbeb4fe34f8064261d44ccd5f69545deea9a38ccdc244dfc6804d"
+      "bytes": 1263742,
+      "sha256": "3f48837938ba98c61bea908cb1baaf05c36968d9a7671190f2dc47523fff3b2e"
     },
     {
       "filename": "images/eagle-ridge-low.png",
-      "bytes": 588317,
-      "sha256": "3086b019e6825f8d09b496c4941a9799838b0f1f257cb1642131a4db47d66bdf"
+      "bytes": 588536,
+      "sha256": "43e3124159250b4d2ab785cf323b0fbaffa88109044a0f22c009e1c2ebb6f04c"
     },
     {
       "filename": "clips/eagle-ridge-low.mp4",
-      "bytes": 1861010,
-      "sha256": "247bcf115f62b112b88d1c52134f75ffcb8e596f6b2426037045c48993c91b17"
+      "bytes": 1404890,
+      "sha256": "b5ad9ddb8585b4ce3e0715ccfbc07a6276ea80c1e0e66b47bd1fe4328e8cc5b4"
     },
     {
       "filename": "images/coastline-run-low.png",
-      "bytes": 634559,
-      "sha256": "8e84a91cce12fd2bb0841d775e367afda85a2992a06c4cb8287b00a36413313b"
+      "bytes": 582896,
+      "sha256": "297bfd835acd2191b6783b5925a95adc5292a9bc495ebeea877bf099e4e44d48"
     },
     {
       "filename": "clips/coastline-run-low.mp4",
-      "bytes": 1571062,
-      "sha256": "2df056895cf7287d7f45664ee0a5e02f9b413462137146bf392f24777a05f1b9"
+      "bytes": 1117514,
+      "sha256": "e8d13cfc54e9f5f4f2ed8f8b5c5f17dfbb8245114ac8f636132058664a5a1548"
     },
     {
       "filename": "images/downtown-circuit-high.png",
@@ -216,18 +216,23 @@
     },
     {
       "filename": "images/eagle-ridge-high.png",
-      "bytes": 829236,
-      "sha256": "ed940208e01e4f45682ca0cc143e5bd1882a6dd06a9b6179971a2492bdc04d15"
+      "bytes": 836951,
+      "sha256": "415fa51d4a838416896b0bb96d3a7f7777d045e71ade33e98f0d86335ddd7198"
     },
     {
       "filename": "images/coastline-run-high.png",
-      "bytes": 840865,
-      "sha256": "9ab3342ed30bf64ca16227a2fbb9106b6642be61ac2b6ecde41d39eb25452f13"
+      "bytes": 849065,
+      "sha256": "943c7967c78c5fd4aad49fdd9fb62d318d7985c7965eca9ea40aa91392666cd1"
     },
     {
       "filename": "images/velocity-circuit-ultra.png",
       "bytes": 833522,
       "sha256": "64717764d9e732fc000a6df3f654d0daffc036fc25bf9f75778ac7876d511977"
+    },
+    {
+      "filename": "images/garage-high.png",
+      "bytes": 219092,
+      "sha256": "a97b05223da81705d8bfa9065646ecce4ab6bd8d86f587e8ce2f250a6b055263"
     }
   ]
 }

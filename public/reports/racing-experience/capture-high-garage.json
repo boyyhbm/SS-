@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-26T23:23:41.275Z",
+  "quality": "high",
+  "mode": "garage",
+  "viewport": [
+    1280,
+    720
+  ],
+  "devicePixelRatio": 1,
+  "sourceCommit": "b423f2c42910329e76f64a949c74c78f241b50ed",
+  "sourceUncommitted": false,
+  "scope": "Actual NEXUS game runtime. Normal keyboard/Gamepad API fixture controls only. Canvas capture includes live game audio, not a prerecorded engine track. No pose injection or generated images.",
+  "host": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "platform": "linux",
+    "gpu": ""
+  },
+  "errors": [],
+  "scenes": [
+    {
+      "route": "velocity-circuit",
+      "screenshot": "images/garage-high.png",
+      "scope": "Actual full-detail garage viewer; no gameplay performance claim"
+    }
+  ],
+  "passed": true
+}

@@ -34,6 +34,8 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
     return result;
   }
   private connectionEpoch = 0;
+  private snapshotTimer: ReturnType<typeof setTimeout> | null = null;
+  private pendingSnapshot: RoomSnapshot<State> | null = null;
   async connect(action: MultiplayerAction) {
     await this.leaveRoom();
     const epoch = ++this.connectionEpoch;
@@ -76,9 +78,21 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
         return;
       }
       if (this.latestSnapshot && snapshot.serverTime < this.latestSnapshot.serverTime) return;
-      this.latestSnapshot = snapshot;
-      this.prediction?.receive(snapshot);
-      this.snapshotListeners.forEach((listener) => listener(snapshot));
+      if (this.pendingSnapshot && snapshot.serverTime < this.pendingSnapshot.serverTime) return;
+      this.pendingSnapshot = snapshot;
+      // A stalled renderer can deliver many queued socket messages together.
+      // Replaying prediction for every obsolete snapshot compounds that stall.
+      // Deliver the newest one on the next task; ordinary updates add only one task.
+      if (this.snapshotTimer === null)
+        this.snapshotTimer = setTimeout(() => {
+          this.snapshotTimer = null;
+          const latest = this.pendingSnapshot;
+          this.pendingSnapshot = null;
+          if (!latest || this.room !== room || epoch !== this.connectionEpoch) return;
+          this.latestSnapshot = latest;
+          this.prediction?.receive(latest);
+          this.snapshotListeners.forEach((listener) => listener(latest));
+        }, 0);
     });
     room.onMessage('pong', (data: { echo: number; serverTime: number }) => {
       const measured = Date.now() - data.echo;
@@ -147,6 +161,9 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
   }
   async leaveRoom() {
     this.connectionEpoch++;
+    if (this.snapshotTimer !== null) clearTimeout(this.snapshotTimer);
+    this.snapshotTimer = null;
+    this.pendingSnapshot = null;
     this.latestSnapshot = null;
     if (this.prediction) this.prediction.connected = false;
     if (this.pingTimer) clearInterval(this.pingTimer);
