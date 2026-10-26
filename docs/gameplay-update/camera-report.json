@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-25T22:26:03.364Z",
+  "sourceCommit": "d28276fbcb7d44bf6165f3c6ed0ba5bb07956910",
+  "sourceUncommitted": false,
+  "mode": "camera",
+  "origin": "http://localhost:3001",
+  "physicalController": "NOT_TESTED",
+  "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
+  "errors": [],
+  "motionPreference": "reduce",
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "quota": "See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC"
+  },
+  "samples": [
+    {
+      "targetKph": 0,
+      "kph": 0,
+      "height": 0.2920407414228436,
+      "distance": 7.800000000000012,
+      "fov": 58,
+      "x": -290.1362060394862,
+      "z": 125.14098156496028,
+      "heading": -2.611979785774493,
+      "afterScreenshotKph": 0,
+      "screenshotHudKphVisualReview": 0
+    },
+    {
+      "targetKph": 50,
+      "kph": 50,
+      "height": 0.2920407414228455,
+      "distance": 7.799999999999995,
+      "fov": 58,
+      "x": 240.05774094439883,
+      "z": -66.11712569846799,
+      "heading": -6.347561170486822,
+      "afterScreenshotKph": 50,
+      "screenshotHudKphVisualReview": 50
+    },
+    {
+      "targetKph": 100,
+      "kph": 100,
+      "height": 0.29204074142284564,
+      "distance": 7.799999999999997,
+      "fov": 58,
+      "x": 167.27617929030086,
+      "z": -99.99770409982251,
+      "heading": -4.712357506550861,
+      "afterScreenshotKph": 60,
+      "screenshotHudKphVisualReview": 100
+    },
+    {
+      "targetKph": 150,
+      "kph": 151,
+      "height": 0.2920407414228436,
+      "distance": 7.800000000000001,
+      "fov": 58,
+      "x": -144.75713829937524,
+      "z": -99.99093757200934,
+      "heading": -4.712573806766708,
+      "afterScreenshotKph": 148,
+      "screenshotHudKphVisualReview": 148
+    }
+  ],
+  "measurement": "Projected bounding height of the loaded GLB, accompanied by actual gameplay screenshots and video; not a segmented pixel-silhouette measurement",
+  "relativeHeightDeviation": 7.032965967521275e-15,
+  "passed": true,
+  "screenshotTiming": "Browser screenshot readback is asynchronous; projection samples and post-screenshot live HUD can be different instants. Visible screenshot HUD was manually reviewed: 0, 50, 100, 148 km/h."
+}

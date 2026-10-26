@@ -1,0 +1,96 @@
+{
+  "source": "Actual Playwright browser recordings, normal elapsed time; no generated gameplay images or interpolated frames",
+  "containerFPS": 25,
+  "containerFpsIsNotGameFps": true,
+  "videoNotes": "Single-player Medium DPR .5 except collision Low DPR .5; online functional proof DPR .15, both 960x650 viewports. High screenshots are separate. Higher-DPR contact attempt failed and is reported separately.",
+  "clips": {
+    "gameplay": {
+      "chapters": [
+        {
+          "source": "camera-acceleration.webm",
+          "startSeconds": 0,
+          "durationSeconds": 69.16
+        },
+        {
+          "source": "downtown-circuit.webm",
+          "startSeconds": 69.16,
+          "durationSeconds": 47.04
+        },
+        {
+          "source": "midnight-sprint.webm",
+          "startSeconds": 116.2,
+          "durationSeconds": 40.12
+        },
+        {
+          "source": "industrial-run.webm",
+          "startSeconds": 156.32,
+          "durationSeconds": 46.32
+        },
+        {
+          "source": "physical-contact.webm",
+          "startSeconds": 202.64,
+          "durationSeconds": 20.44
+        }
+      ],
+      "durationSeconds": 223.08
+    },
+    "multiplayer": {
+      "chapters": [
+        {
+          "source": "online-player-1.webm",
+          "startSeconds": 0,
+          "durationSeconds": 81.92
+        },
+        {
+          "source": "online-player-2.webm",
+          "startSeconds": 81.92,
+          "durationSeconds": 81.92
+        }
+      ],
+      "durationSeconds": 163.84
+    }
+  },
+  "encodedFiles": {
+    "gameplay": {
+      "sha256": "379a4754f72a5138b0c453e6c2045c471127624da55c50576fae55b793615989",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 720,
+            "avg_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "223.080000",
+          "size": "9696004"
+        }
+      },
+      "fullDecodeValidation": "PASSED"
+    },
+    "multiplayer": {
+      "sha256": "650ac08401b350cd476aca57372b93cc158aeb98aa0613a36bde2309301848fb",
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 960,
+            "height": 650,
+            "avg_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "163.840000",
+          "size": "9131994"
+        }
+      },
+      "fullDecodeValidation": "PASSED",
+      "edit": "Crop recording padding to the actual 960x650 browser viewport; unchanged time and gameplay frames"
+    }
+  }
+}

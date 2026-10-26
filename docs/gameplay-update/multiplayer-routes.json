@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-25T21:07:53.622Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.5991820780232248,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 2,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvobkb500002bgmjg2esh4s2",
+          "finish": 32.466666666667386,
+          "place": 1
+        },
+        {
+          "id": "cmvobkb4o0000bgmj3oidmudv",
+          "finish": 32.466666666667386,
+          "place": 2
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "midnight-sprint",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.7064209906817227,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 2,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvobkb520003bgmjodi12a3f",
+          "finish": 41.6000000000002,
+          "place": 1
+        },
+        {
+          "id": "cmvobkb690008bgmjizdke3fm",
+          "finish": 41.6000000000002,
+          "place": 2
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "industrial-run",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.8964563379234187,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 2,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvobkb5z0006bgmj90c7yfa4",
+          "finish": 46.66666666666658,
+          "place": 2
+        },
+        {
+          "id": "cmvobkb89000cbgmjzv4c1co3",
+          "finish": 46.599999999999916,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ]
+}

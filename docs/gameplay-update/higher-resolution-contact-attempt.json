@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-25T22:41:58.284Z",
+  "scope": "Additional private-contact video attempt on two independent Chromium/SwiftShader processes; not production",
+  "deviceScaleFactor": 0.5,
+  "viewport": [960, 650],
+  "passed": false,
+  "failures": [
+    {
+      "title": "two real browser clients finish downtown-circuit with vehicle contacts with identical authoritative results",
+      "status": "failed",
+      "errorFirstLine": "Error: expect(locator).toHaveAttribute(expected) failed"
+    }
+  ],
+  "lastProbe": {
+    "date": "2026-10-25T22:40:49.542Z",
+    "events": [
+      {
+        "client": 1,
+        "type": "socket-closed",
+        "at": 1792967856461
+      },
+      {
+        "client": 1,
+        "type": "reconnect-attempt",
+        "at": 1792967856464
+      },
+      {
+        "client": 1,
+        "type": "reconnect-attempt",
+        "at": 1792967856670
+      },
+      {
+        "client": 1,
+        "type": "socket-closed",
+        "at": 1792967856819
+      }
+    ],
+    "clients": [
+      {
+        "phase": "results",
+        "speed": "17.42948497115664",
+        "input": {
+          "gas": "0",
+          "steer": "0"
+        },
+        "stats": {
+          "quality": "low",
+          "requestedQuality": "auto",
+          "fps": 2.681444404690771,
+          "frameMs": 372.933333337307,
+          "fps1PercentLow": 2.1523891519172538,
+          "frameMaxMs": 464.6000000089407,
+          "frameSpikesOver50Ms": 3,
+          "physicsCpuMsPerStep": 0.009523809665725344,
+          "physicsSteps": 21,
+          "interpolationAlpha": 0.9680000002682221,
+          "networkInterpolationDelayMs": 120,
+          "networkSnapshotAgeMs": 189.85546875,
+          "gpuMemory": "UNAVAILABLE_WEBGL",
+          "frameP95Ms": 464.6000000089407,
+          "frameTimesMs": [464.6000000089407, 330, 324.20000000298023],
+          "renderCpuMs": 4.466666663686435,
+          "drawCalls": 109,
+          "triangles": 197533,
+          "textures": 55,
+          "geometries": 235,
+          "pixelRatio": 0.5,
+          "loadMs": 1157.7000000029802,
+          "resourceTransferBytes": 8753127,
+          "resourceDecodedBytes": 10203023,
+          "paused": false
+        }
+      },
+      {
+        "phase": "browse",
+        "closeCode": "4003",
+        "speed": "0.1445602610748684",
+        "input": null,
+        "stats": {
+          "quality": "low",
+          "requestedQuality": "auto",
+          "fps": 2.5180459962942683,
+          "frameMs": 397.1333333353202,
+          "fps1PercentLow": 2.205071664829107,
+          "frameMaxMs": 453.5,
+          "frameSpikesOver50Ms": 3,
+          "physicsCpuMsPerStep": 2.4476190471933004,
+          "physicsSteps": 21,
+          "interpolationAlpha": 0.5000000000000011,
+          "networkInterpolationDelayMs": 120,
+          "networkSnapshotAgeMs": 65777.16552734375,
+          "gpuMemory": "UNAVAILABLE_WEBGL",
+          "frameP95Ms": 453.5,
+          "frameTimesMs": [389.70000000298023, 348.20000000298023, 453.5],
+          "renderCpuMs": 2.5666666626930237,
+          "drawCalls": 141,
+          "triangles": 247391,
+          "textures": 53,
+          "geometries": 222,
+          "pixelRatio": 0.5,
+          "loadMs": 1349,
+          "resourceTransferBytes": 8753127,
+          "resourceDecodedBytes": 10203023,
+          "paused": false
+        }
+      }
+    ]
+  },
+  "establishedRootCause": "UNRESOLVED; connection loss observed in this software-rendered run. Earlier successful lower-DPR/SDK checks do not certify higher-resolution or physical GPU behavior.",
+  "productionContactsEnabled": false
+}

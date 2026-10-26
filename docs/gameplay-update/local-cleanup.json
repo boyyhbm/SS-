@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-25T22:43:13.897Z",
+  "isolatedQaDatabaseDropped": true,
+  "exactNameGuard": true,
+  "mainDatabasePreserved": true,
+  "privateQaCookieAndEnvironmentFilesRemoved": true,
+  "originalEnvironmentFilePreserved": true,
+  "restoredServices": {
+    "web": {
+      "http": 200,
+      "ready": true
+    },
+    "multiplayer": {
+      "http": 200,
+      "ready": true
+    }
+  },
+  "mainDatabaseMigration": "Three additive migrations successfully applied after private backup",
+  "updatedGameServerContainer": true,
+  "productionNextBuild": "PASSED_WITH_ORIGINAL_ENVIRONMENT"
+}

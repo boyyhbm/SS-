@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-25T23:09:00.657Z",
+  "passed": true,
+  "jobsCompleted": 5,
+  "verificationAccountsRemoved": 10,
+  "identityGuards": [
+    "Exact ledger IDs and release prefix",
+    "USER role and example.test email",
+    "Created within the previous 24 hours",
+    "Matches removed only when every participant belongs to this exact pair"
+  ],
+  "otherAccountsUntouched": true,
+  "privateVerificationLedgersRemoved": true,
+  "privateVerificationLedgersRemovedAt": "2026-10-26T02:21:39.260Z"
+}

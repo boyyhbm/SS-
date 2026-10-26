@@ -1,0 +1,99 @@
+{
+  "updatedAt": "2026-10-26T02:20:27.493Z",
+  "completedAt": "2026-10-25T23:05:49.680Z",
+  "provider": "Render",
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
+  "multiplayerUrl": "https://nexus-multiplayer.onrender.com",
+  "sourceCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+  "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40240880798",
+  "passed": true,
+  "services": {
+    "web": {
+      "status": "live",
+      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    },
+    "multiplayer": {
+      "status": "live",
+      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    }
+  },
+  "actualHostedRestartVerified": true,
+  "bothNewProcessIdsConfirmed": true,
+  "persistenceBaselineCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+  "checks": [
+    {
+      "scenario": "after-restart",
+      "routeId": null,
+      "passed": true,
+      "scope": "PUBLIC HTTPS/WSS",
+      "checks": [
+        "Re-login after an externally triggered restart preserves accounts, library, favorites, controller profile, saves, friends and server-verified results"
+      ]
+    },
+    {
+      "scenario": "downtown-circuit",
+      "routeId": "downtown-circuit",
+      "passed": true,
+      "scope": "PUBLIC HTTPS/WSS",
+      "checks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+        "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+        "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+      ]
+    },
+    {
+      "scenario": "midnight-sprint",
+      "routeId": "midnight-sprint",
+      "passed": true,
+      "scope": "PUBLIC HTTPS/WSS",
+      "checks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+        "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+        "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+      ]
+    },
+    {
+      "scenario": "industrial-run",
+      "routeId": "industrial-run",
+      "passed": true,
+      "scope": "PUBLIC HTTPS/WSS",
+      "checks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+        "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+        "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+      ]
+    },
+    {
+      "scenario": "legacy-circuit",
+      "routeId": "legacy-circuit",
+      "passed": true,
+      "scope": "PUBLIC HTTPS/WSS",
+      "checks": [
+        "Two real independent registrations, empty initial libraries, secure HTTP-only cookies, Discover add and favorite",
+        "Logout/re-login retains library and favorite; account-owned controller profile saved",
+        "Real GLB runtime, virtual analog input, completed lap and durable save; physical controller unverified",
+        "Two independent WSS clients, friend invitation, private room, ready/countdown, shared match, remote movement, both server-verified finishes, saved history and rematch lobby",
+        "Persistence snapshot stored privately; actual host restart still needs after-restart verification"
+      ]
+    }
+  ],
+  "persistedRouteRecords": "public-route-records.json",
+  "twoIndependentChromiumProcesses": true,
+  "deviceScaleFactor": 0.15,
+  "physicalControllersTested": false,
+  "geographicallySeparateComputersTested": false,
+  "publicVehicleContactsEnabled": false,
+  "initialReadinessAttempt": "rollout-readiness-first-attempt.json",
+  "cleanup": "production-cleanup.json",
+  "privateLedgersPublished": false
+}

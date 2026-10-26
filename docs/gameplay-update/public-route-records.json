@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-25T23:06:14.539Z",
+  "sourceCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+  "scope": "Authenticated public HTTPS API reads after two-browser WSS races; same accounts, actual persisted server results",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 1,
+      "laps": 1,
+      "carContacts": false,
+      "independentAccounts": 2,
+      "sameMatchId": true,
+      "persistedServerVerifiedResults": [
+        {
+          "place": 1,
+          "timeSeconds": 43.766666666666744
+        },
+        {
+          "place": 2,
+          "timeSeconds": 46.16666666666661
+        }
+      ]
+    },
+    {
+      "routeId": "midnight-sprint",
+      "routeVersion": 1,
+      "laps": 1,
+      "carContacts": false,
+      "independentAccounts": 2,
+      "sameMatchId": true,
+      "persistedServerVerifiedResults": [
+        {
+          "place": 1,
+          "timeSeconds": 58.26666666666592
+        },
+        {
+          "place": 2,
+          "timeSeconds": 58.46666666666591
+        }
+      ]
+    },
+    {
+      "routeId": "industrial-run",
+      "routeVersion": 1,
+      "laps": 1,
+      "carContacts": false,
+      "independentAccounts": 2,
+      "sameMatchId": true,
+      "persistedServerVerifiedResults": [
+        {
+          "place": 1,
+          "timeSeconds": 63.233333333332304
+        },
+        {
+          "place": 2,
+          "timeSeconds": 64.0666666666656
+        }
+      ]
+    },
+    {
+      "routeId": "legacy-circuit",
+      "routeVersion": 1,
+      "laps": 1,
+      "carContacts": false,
+      "independentAccounts": 2,
+      "sameMatchId": true,
+      "persistedServerVerifiedResults": [
+        {
+          "place": 2,
+          "timeSeconds": 34.33333333333395
+        },
+        {
+          "place": 1,
+          "timeSeconds": 32.36666666666739
+        }
+      ]
+    }
+  ]
+}

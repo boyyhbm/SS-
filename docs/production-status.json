@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-25T17:24:52.313093+00:00",
+  "updatedAt": "2026-10-26T02:20:27.497Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -33,15 +33,15 @@
       "initialSnapshotCount": 0
     },
     "logicalExport": {
-      "createdAt": "2026-10-25T13:19:00Z",
+      "createdAt": "2026-10-25T21:19:00Z",
       "exportUrlIssued": true,
       "downloadAndManagedRestoreTested": false
     }
   },
   "publicAcceptanceTests": {
-    "status": "PASSED_NEW_CODE_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
-    "report": "world-update/public-tests.json",
-    "historicalReport": "render-public-tests.json"
+    "status": "PASSED_ALL_FOUR_ROUTES_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
+    "report": "gameplay-update/public-tests.json",
+    "historicalReport": "world-update/public-tests.json"
   },
   "physicalControllers": "UNVERIFIED",
   "blockers": [],
@@ -84,27 +84,28 @@
     "checksOnApplicationCommit": "SUCCESS",
     "autoDeployTrigger": "checksPass",
     "observedAutomaticTrigger": "new_commit after passing checks; both services reached LIVE and readiness 200",
-    "lastVerifiedCodeCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+    "lastVerifiedCodeCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
     "checksOnLastVerifiedCodeCommit": "SUCCESS",
-    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40214485818"
+    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40240880798"
   },
   "knownLimitations": [
-    "Physical controllers, Safari/Firefox and two geographically separate computers not tested",
-    "Active rooms are lost during a game server restart",
-    "Restart temporarily interrupts availability; observed multiplayer readiness recovery took about 3.5 minutes",
-    "Physical gaming GPU performance and production capacity unverified; measured software High/1080p is about 0.31 FPS",
-    "New city routes single-player only; existing online circuit preserved"
+    "Physical controllers, Safari/Firefox and geographically separate computers not tested",
+    "Active rooms are lost during a multiplayer process restart; completed results and accounts remain durable",
+    "Rollout readiness is not instantaneous; an initial probe received a non-success response, then stable new-instance readiness and persistence passed",
+    "Physical gaming GPU/60 FPS unverified; measured software High/1080p average is 0.327 FPS",
+    "Private vehicle contacts remain disabled for visitors; higher-DPR software-browser contact attempt lost a connection; cause unresolved",
+    "City facade resolution, sparse blocks and dynamic traffic remain prototype limitations"
   ],
   "latestVerifiedRollout": {
     "web": {
-      "status": "LIVE",
-      "commit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+      "status": "live",
+      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
       "trigger": "new_commit",
       "healthStatus": 200
     },
     "multiplayer": {
-      "status": "LIVE",
-      "commit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+      "status": "live",
+      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
       "trigger": "new_commit",
       "healthStatus": 200
     }
@@ -117,6 +118,24 @@
     "graphicsPerformance": "world-update/performance.md",
     "high1080p60FpsOnGamingPc": "UNVERIFIED",
     "gameplayVideo": "world-update/gameplay.mp4",
-    "screenshots": "world-update/gallery.md"
+    "screenshots": "world-update/gallery.md",
+    "asOfCommit": "2cde7873baf943b5d06ea5d4ba1a098bc839181e",
+    "historical": true,
+    "supersededBy": "gameplay-update/validation.json"
+  },
+  "gameplayUpdate": {
+    "report": "gameplay-update/validation.json",
+    "sourceCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+    "registeredRoutes": 4,
+    "allFourRoutesPublicWss": "PASSED_TWO_INDEPENDENT_BROWSERS",
+    "serverVerifiedPersistedRouteResults": "gameplay-update/public-route-records.json",
+    "actualHostedRestartPersistence": "PASSED",
+    "publicVehicleContactsEnabled": false,
+    "graphicsPerformance": "gameplay-update/performance.md",
+    "high1080p60FpsOnGamingPc": "UNVERIFIED",
+    "gameplayVideo": "gameplay-update/gameplay.mp4",
+    "multiplayerVideo": "gameplay-update/multiplayer.mp4",
+    "screenshots": "gameplay-update/gallery.md",
+    "fullVisualAndHardwareAcceptanceComplete": false
   }
 }

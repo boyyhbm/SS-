@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-25T21:58:09.862Z",
+  "sourceCommit": "7fc2f10ce5a42b3f51db077d59e2e01b5901b1e4",
+  "sourceUncommitted": false,
+  "mode": "video",
+  "origin": "http://localhost:3001",
+  "physicalController": "NOT_TESTED",
+  "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
+  "errors": [],
+  "motionPreference": "no-preference",
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "quota": "See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC"
+  },
+  "routes": [
+    {
+      "route": "downtown-circuit",
+      "input": "virtual analog gamepad",
+      "lap": "1",
+      "checkpoint": "3 / 7",
+      "x": "-39.97430195443666",
+      "z": "-7.24540572543118"
+    },
+    {
+      "route": "midnight-sprint",
+      "input": "virtual analog gamepad",
+      "lap": "1",
+      "checkpoint": "3 / 9",
+      "x": "-160.56821351165348",
+      "z": "-99.99542334787954"
+    },
+    {
+      "route": "industrial-run",
+      "input": "keyboard",
+      "lap": "1",
+      "checkpoint": "3 / 9",
+      "x": "199.63833136040606",
+      "z": "-99.5443005978992"
+    }
+  ],
+  "passed": true
+}

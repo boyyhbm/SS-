@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-25T22:40:01.653Z",
+  "scope": "Isolated localhost QA database; empty invalid registrations create no accounts",
+  "passed": true,
+  "first30Statuses": [
+    400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400,
+    400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400
+  ],
+  "request31Status": 429,
+  "applicationLimitUnchanged": true,
+  "onlyExactTemporaryQuotaRestored": true
+}

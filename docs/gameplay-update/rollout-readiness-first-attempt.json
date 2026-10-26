@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-25T22:52:32.692Z",
+  "scope": "PUBLIC HTTPS/WSS",
+  "publicDeploymentVerified": false,
+  "passed": false,
+  "checks": [],
+  "controllerHardware": "Physical controllers not tested; virtual Gamepad API only",
+  "failedStep": "Persistence after host-triggered server restart",
+  "observation": "Initial rollout check stopped at multiplayer readiness HTTP response before authentication or persistence comparison. Retrying only after stable new-instance readiness."
+}

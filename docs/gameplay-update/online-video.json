@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-25T21:54:46.533Z",
+  "source": "Actual two independent Chromium processes, registered accounts, real Colyseus room and server contacts",
+  "quality": "Low",
+  "viewport": [960, 650],
+  "deviceScaleFactor": 0.15,
+  "privateQaOnly": true,
+  "clients": ["online-player-1.webm", "online-player-2.webm"]
+}

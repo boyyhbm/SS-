@@ -1,0 +1,138 @@
+{
+  "updatedAt": "2026-10-26T02:20:27.495Z",
+  "sourceCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+  "productSourceTree": "eb94017930772fb4e1a2f535504b39d7ee0df288",
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
+  "fullAcceptanceComplete": false,
+  "verification": {
+    "productionBuild": "PASSED",
+    "typeScript": "PASSED",
+    "eslint": "PASSED",
+    "unit": {
+      "tests": 117,
+      "files": 18,
+      "status": "PASSED"
+    },
+    "browserRegression": {
+      "tests": 24,
+      "files": 6,
+      "status": "PASSED",
+      "softwareDpr": 0.15,
+      "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40240880798"
+    },
+    "backupRestoreAndOwnershipCI": "PASSED",
+    "productionDependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "localFinalTypeScriptAndEslintAfterLegacyTestToolUpdate": "PASSED",
+    "publicVerificationTool": "Legacy whitelist expanded to match tested registered routes; same assertions executed in the public legacy variant"
+  },
+  "smoothness": {
+    "diagnostic": {
+      "frameCount": 485,
+      "staleInterpolationFrames": 0,
+      "finiteTransforms": true,
+      "physicalDisplaySmoothness": "UNVERIFIED_SOFTWARE_GPU"
+    },
+    "deterministicRenderingCadencesHz": [30, 60, 120],
+    "fixedStepAndAngleWrapTests": "PASSED",
+    "physicalDisplayAt30_60_120Hz": "NOT_TESTED"
+  },
+  "camera": {
+    "distanceMeters": 7.8,
+    "fovDegrees": 58,
+    "projectionRelativeHeightDeviation": 7.032965967521275e-15,
+    "measuredSpeedsKph": [0, 50, 100, 151],
+    "visibleScreenshotSpeedsKph": [0, 50, 100, 148],
+    "projectionIsNotPixelSilhouette": true
+  },
+  "multiplayer": {
+    "routeIds": ["downtown-circuit", "midnight-sprint", "industrial-run", "legacy-circuit"],
+    "citySdkRoutes": "PASSED",
+    "cityBrowserRoutes": "PASSED_AT_SOFTWARE_DPR_0.15",
+    "singleCommonRegistry": true,
+    "serverAuthoritativeResults": true,
+    "publicTests": "PASSED_ALL_FOUR_ROUTES_TWO_INDEPENDENT_BROWSERS_WSS",
+    "persistedRouteRecords": "PASSED_FOR_BOTH_ACCOUNTS_ON_EACH_ROUTE"
+  },
+  "racingLine": {
+    "modes": ["off", "corners", "full"],
+    "default": "corners",
+    "accountPersistenceAndIsolation": "PASSED",
+    "geometryAndBrakingProfileTests": "PASSED"
+  },
+  "contacts": {
+    "environment": "Impulse/friction/inertia solver with swept capsule against road boundaries and explicit parked-car colliders; arbitrary visual GLB meshes are not runtime collision meshes",
+    "privateVehicleContactsSdk": "PASSED_3_ROUTES",
+    "measuredMedianRttMs": [51, 100, 202],
+    "privateVehicleContactsBrowser": "PASSED_AT_DPR_0.15",
+    "additionalDpr0_5BrowserAttempt": "FAILED_CONNECTION_LOSS_4003",
+    "failedAttemptReport": "higher-resolution-contact-attempt.json",
+    "publicVehicleContactsEnabled": false
+  },
+  "graphics": {
+    "existingLicensedGlbPreserved": true,
+    "paintClearcoatTyresAndRimsRetuned": true,
+    "stableStreetLightSlotIdentity": true,
+    "shadowTexelSnappingAndLodHysteresis": true,
+    "roadWearDecals": true,
+    "lowCostLowPreset": true,
+    "motionBlurAndTaa": false,
+    "facadeTextureResolutionIncreased": false,
+    "realHighScreenshots": {
+      "viewport": [1280, 720],
+      "deviceScaleFactor": 1,
+      "gallery": "gallery.md"
+    }
+  },
+  "performance": {
+    "status": "MEASURED_ON_SOFTWARE_GPU_ONLY",
+    "samplesPerPreset": 100,
+    "presets": ["low", "medium", "high", "auto"],
+    "high1080p60FpsOnGamingPc": "NOT_VERIFIED",
+    "report": "performance.md"
+  },
+  "media": {
+    "gameplay": "gameplay.mp4",
+    "multiplayerFunctionalProof": "multiplayer.mp4",
+    "chaptersAndFullDecodeValidation": "video-chapters.json",
+    "generatedGameplayImages": false,
+    "physicalControllers": "NOT_TESTED"
+  },
+  "knownLimitations": [
+    "Physical GPU frame pacing/60 FPS, real USB/Bluetooth controllers, Safari/Firefox and geographic WAN are unverified",
+    "Software-rendered high-resolution private contact run lost one connection; root cause unresolved; contacts remain disabled for visitors",
+    "City remains a compact prototype with blank facades/open blocks; no higher-resolution facade textures, pedestrians or dynamic city traffic added",
+    "Contacts approximate road boundaries and explicit parked cars; no arbitrary dynamic scene-mesh collision import",
+    "Active rooms cannot survive a multiplayer process restart; completed results and accounts remain durable",
+    "100 frame intervals per quality preset are a short software benchmark, not a physical gaming-PC certification"
+  ],
+  "releasePublicChecksPending": false,
+  "publicProduction": {
+    "report": "public-tests.json",
+    "services": {
+      "web": {
+        "status": "live",
+        "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+        "trigger": "new_commit",
+        "healthStatus": 200
+      },
+      "multiplayer": {
+        "status": "live",
+        "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+        "trigger": "new_commit",
+        "healthStatus": 200
+      }
+    },
+    "actualRolloutPersistence": "PASSED",
+    "sourceCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+    "cleanup": "PASSED_TEN_OWN_VERIFICATION_ACCOUNTS_REMOVED"
+  },
+  "privateDataCleanup": "All credential ledgers removed after guarded cleanup; native database/backups retained",
+  "captureProductCodeMatchesReleasedSource": true
+}

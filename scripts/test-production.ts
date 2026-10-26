@@ -307,7 +307,9 @@ try {
     await pages[0].goto(origin + '/online/midnight-outlaws');
     if (process.env.NEXUS_PRODUCTION_ROUTE) {
       const route = process.env.NEXUS_PRODUCTION_ROUTE;
-      if (!['downtown-circuit', 'midnight-sprint', 'industrial-run'].includes(route))
+      if (
+        !['legacy-circuit', 'downtown-circuit', 'midnight-sprint', 'industrial-run'].includes(route)
+      )
         throw Error('Unknown verification route');
       await pages[0].getByLabel('Трасса', { exact: true }).selectOption(route);
     }
