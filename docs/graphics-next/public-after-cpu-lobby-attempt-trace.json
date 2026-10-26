@@ -1,0 +1,485 @@
+{
+  "samples": [
+    {
+      "at": 1793020366583,
+      "clients": [
+        {
+          "stats": null
+        },
+        {
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020376588,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "95",
+          "z": "0",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020386591,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020396590,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "95",
+          "z": "0",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020406590,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "95",
+          "z": "0",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020416591,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020426591,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020436591,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020446592,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020456593,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020466593,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020476596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020486596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020496596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020506596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020516596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020526596,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020536598,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020546597,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020556597,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020566597,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020576599,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020586598,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020597213,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020609056,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793020421903
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020421903
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020422102
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793020422737
+    }
+  ]
+}

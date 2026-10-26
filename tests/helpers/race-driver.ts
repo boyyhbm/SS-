@@ -63,6 +63,9 @@ export async function installDriver(
       let driving = false;
       let duty = 0;
       let accelerating = true;
+      let stuckSince = 0,
+        reverseUntil = 0,
+        gentleUntil = 0;
       const held = new Set<string>();
       const key = (code: string, down: boolean) => {
         if (held.has(code) === down) return;
@@ -170,11 +173,25 @@ export async function installDriver(
               Math.abs(err) > 0.55 ? 10 : Math.abs(err) > 0.22 ? 17 : override,
             );
           }
+          const now = performance.now();
+          if (route && now > gentleUntil && Math.abs(speed) < 0.8 && (targetSpeed ?? 0) > 0) {
+            if (!stuckSince) stuckSince = now;
+            if (now - stuckSince > 2000) {
+              reverseUntil = now + 2400;
+              gentleUntil = reverseUntil + 3000;
+              stuckSince = 0;
+              const w = window as unknown as { nexusDriverRecoveries?: number };
+              w.nexusDriverRecoveries = (w.nexusDriverRecoveries ?? 0) + 1;
+            }
+          } else stuckSince = 0;
+          const reversing = now < reverseUntil;
+          if (reversing) steer = -steer;
+          else if (now < gentleUntil) targetSpeed = Math.min(targetSpeed ?? 10, 10);
           if (method === 'gamepad') {
             const boosting =
               !!route &&
               (window as unknown as { nexusDriverNitro?: boolean }).nexusDriverNitro === true;
-            if (route) pad.buttons[0] = button(boosting ? 1 : 0);
+            if (route) pad.buttons[0] = button(boosting && !reversing ? 1 : 0);
             // Public WAN checks can opt into a calmer pace for software rendering.
             // The default retains the full-throttle local integration fixture.
             pad.axes[0] =
@@ -184,7 +201,7 @@ export async function installDriver(
                   ? 0
                   : Math.sign(steer) * (0.15 + Math.abs(steer) * 0.85);
             pad.buttons[7] = button(
-              targetSpeed === 0
+              reversing || targetSpeed === 0
                 ? 0
                 : targetSpeed === undefined
                   ? 1
@@ -200,13 +217,15 @@ export async function installDriver(
                     ),
             );
             pad.buttons[6] = button(
-              targetSpeed === 0
-                ? speed > 0.05
-                  ? 1
-                  : 0
-                : route && targetSpeed !== undefined && speed > targetSpeed + 2
-                  ? Math.min(1, (speed - targetSpeed) * 0.12)
-                  : 0,
+              reversing
+                ? 1
+                : targetSpeed === 0
+                  ? speed > 0.05
+                    ? 1
+                    : 0
+                  : route && targetSpeed !== undefined && speed > targetSpeed + 2
+                    ? Math.min(1, (speed - targetSpeed) * 0.12)
+                    : 0,
             );
           } else {
             duty += Math.abs(steer);
@@ -214,8 +233,11 @@ export async function installDriver(
             if (turn) duty -= 1;
             if (targetSpeed === undefined || speed < targetSpeed - 1) accelerating = true;
             else if (speed > targetSpeed + 2) accelerating = false;
-            key('KeyW', accelerating);
-            key('KeyS', targetSpeed !== undefined && speed > targetSpeed + (route ? 2 : 7));
+            key('KeyW', !reversing && accelerating);
+            key(
+              'KeyS',
+              reversing || (targetSpeed !== undefined && speed > targetSpeed + (route ? 2 : 7)),
+            );
             key('KeyD', turn && steer > 0);
             key('KeyA', turn && steer < 0);
           }

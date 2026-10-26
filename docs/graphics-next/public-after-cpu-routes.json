@@ -1,0 +1,340 @@
+{
+  "date": "2026-10-26T13:19:19.809Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR 0.15, input driver cruise 18 m/s; functional verification; NOT a GPU or physical controller certification",
+  "passed": false,
+  "routes": [],
+  "stage": "downtown-circuit: results",
+  "events": [
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793020799343
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793020799344
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793020799535
+    },
+    {
+      "client": 0,
+      "type": "reconnected",
+      "at": 1793020800141
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793020946934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020946934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020947274
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793020947866
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021012160
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021012161
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021012491
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021013100
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021015871
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021015871
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021016229
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021016792
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021018434
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021018434
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021018981
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021019685
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021022270
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021022272
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021023664
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021024305
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021026369
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021026371
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021026799
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021027380
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021028883
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021028883
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021030005
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021030645
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021032724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021032726
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021033088
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021033701
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021036469
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021042708
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021046219
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021046906
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021048724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021048724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021049103
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021049734
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021051234
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021051236
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021051679
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021052320
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021056934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021056937
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021057637
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021058245
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021063824
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021063825
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021064540
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021065155
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021068838
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021068838
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021073241
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021077145
+    },
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793021107831
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793021107831
+    }
+  ],
+  "errorType": "AssertionError",
+  "diagnostics": [
+    {
+      "phase": "results",
+      "x": "-159.646567997651",
+      "z": "1.6129108514768278",
+      "speed": "16.396879432124273",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    },
+    {
+      "phase": "results",
+      "x": "-23.86324180422158",
+      "z": "-94.09470095746259",
+      "speed": "0",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    }
+  ]
+}

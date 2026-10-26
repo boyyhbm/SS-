@@ -143,6 +143,9 @@ const probe = setInterval(async () => {
                 speed: r?.dataset.speed,
                 checkpoint: document.querySelector('[data-testid=checkpoint]')?.textContent,
                 disconnect: r?.dataset.disconnectCode,
+                driverRecoveries:
+                  (window as unknown as { nexusDriverRecoveries?: number }).nexusDriverRecoveries ??
+                  0,
                 stats: stats
                   ? {
                       fps: stats.fps,
@@ -210,7 +213,20 @@ try {
     for (const p of pages) {
       assert.equal(await p.getByTestId('online-player').getAttribute('data-room'), roomId);
       assert.equal(await p.getByTestId('online-player').getAttribute('data-route'), routeId);
-      await p.getByRole('button', { name: 'Я готов', exact: true }).click();
+      // A transport drop between pointer input and server receipt may discard the
+      // first request. Confirm the server-backed label before moving to Start.
+      for (let attempt = 0; attempt < 3; attempt++) {
+        if (await p.getByRole('button', { name: 'Пока не готов', exact: true }).isVisible()) break;
+        await p.getByRole('button', { name: 'Я готов', exact: true }).click();
+        try {
+          await p
+            .getByRole('button', { name: 'Пока не готов', exact: true })
+            .waitFor({ timeout: 10000 });
+          break;
+        } catch (error) {
+          if (attempt === 2) throw error;
+        }
+      }
     }
     await checkpoint(routeId + ': ready');
     await a.waitForFunction(() => document.querySelectorAll('.lobby-person.is-ready').length === 2);

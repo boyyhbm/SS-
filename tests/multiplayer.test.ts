@@ -5,7 +5,7 @@ import {
   type NetworkPlayer,
   type RoomSnapshot,
 } from '../src/multiplayer/contracts';
-import { RacePrediction } from '../src/multiplayer/prediction';
+import { RacePrediction, MAX_PREDICTION_COMMANDS } from '../src/multiplayer/prediction';
 import { initialRace } from '../src/games/racing-physics';
 const player = (id: string, x = 95): NetworkPlayer => ({
   id,
@@ -70,6 +70,25 @@ describe('multiplayer trust boundary', () => {
   });
 });
 describe('prediction and interpolation', () => {
+  it('bounds speculative work under missing acknowledgements without dropping network commands', () => {
+    const sent: { seq: number }[] = [];
+    const prediction = new RacePrediction('local', (input) => sent.push(input));
+    prediction.receive(snapshot(1000));
+    for (let i = 0; i < 90; i++)
+      prediction.frame({ throttle: 1, brake: 0, steer: 0, nitro: false }, 1 / 30);
+    expect(sent).toHaveLength(90);
+    expect(sent.map((c) => c.seq)).toEqual(Array.from({ length: 90 }, (_, i) => i));
+    expect(prediction.pending.length).toBeLessThanOrEqual(MAX_PREDICTION_COMMANDS);
+    expect(prediction.pending.at(-1)?.seq).toBe(89);
+    const authority = snapshot(4000);
+    authority.players[0].ack = 89;
+    authority.players[0].state.x = 82;
+    prediction.receive(authority);
+    expect(prediction.pending).toHaveLength(0);
+    expect(prediction.state.x).toBe(82);
+    expect(Number.isFinite(prediction.state.speed)).toBe(true);
+  });
+
   it('responds locally before a server reply and reconciles unacknowledged commands', () => {
     vi.spyOn(Date, 'now').mockReturnValue(1000);
     const commands: unknown[] = [];

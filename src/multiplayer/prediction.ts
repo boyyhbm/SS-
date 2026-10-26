@@ -10,6 +10,10 @@ export interface RaceNetworkDriver {
   route(): RouteSelection;
   snapshotAgeMs?(): number;
 }
+// Bound speculative rollback work to 600 ms. Ordinary 50–200 ms links retain
+// their complete input history; a stalled client must not replay seconds of
+// expensive contacts on every queued snapshot and starve its WebSocket callbacks.
+export const MAX_PREDICTION_COMMANDS = Math.ceil(0.6 / FIXED_DT);
 export class RacePrediction implements RaceNetworkDriver {
   state = initialRace();
   snapshot: RoomSnapshot | null = null;
@@ -44,7 +48,9 @@ export class RacePrediction implements RaceNetworkDriver {
     }
     this.snapshot = snapshot;
     this.sequence = Math.max(this.sequence, player.ack + 1);
-    this.pending = this.pending.filter((command) => command.seq > player.ack);
+    this.pending = this.pending
+      .filter((command) => command.seq > player.ack)
+      .slice(-MAX_PREDICTION_COMMANDS);
     const corrected = { ...player.state };
     if (snapshot.phase === 'racing' && player.finish === null) {
       for (const command of this.pending)
@@ -76,7 +82,7 @@ export class RacePrediction implements RaceNetworkDriver {
       if (running && player?.finish === null) {
         stepNetworkRace(this.state, command, FIXED_DT, this.snapshot.route);
         this.pending.push(command);
-        if (this.pending.length > 90) this.pending.shift();
+        if (this.pending.length > MAX_PREDICTION_COMMANDS) this.pending.shift();
       }
       this.send(command);
     }

@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-26T13:12:36.507Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR 0.15, input driver cruise 18 m/s; functional verification; NOT a GPU or physical controller certification",
+  "passed": false,
+  "routes": [],
+  "stage": "downtown-circuit: ready",
+  "events": [
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793020421903
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020421903
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020422102
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793020422737
+    }
+  ],
+  "errorType": "TimeoutError",
+  "diagnostics": [
+    {
+      "phase": "lobby",
+      "x": "-157.9",
+      "z": "4",
+      "speed": "0",
+      "renderReady": "true",
+      "players": 2,
+      "readyPlayers": 1,
+      "startDisabled": true
+    },
+    {
+      "phase": "lobby",
+      "x": "-162.1",
+      "z": "4",
+      "speed": "0",
+      "renderReady": "true",
+      "players": 2,
+      "readyPlayers": 1,
+      "startDisabled": false
+    }
+  ]
+}

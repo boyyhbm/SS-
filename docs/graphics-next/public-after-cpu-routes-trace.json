@@ -1,0 +1,1085 @@
+{
+  "samples": [
+    {
+      "at": 1793020769868,
+      "clients": [
+        {
+          "phase": "browse",
+          "x": "95",
+          "z": "0",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020789117,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020809033,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "95",
+          "z": "0",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020819035,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-157.9",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-162.1",
+          "z": "4",
+          "speed": "0",
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793020829036,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-160.28788223808309",
+          "z": "-27.672702901368723",
+          "speed": "18.01510956441336",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 3.9051059259527947,
+            "frameMaxMs": 321.90000000596046,
+            "renderCpuMs": 10.725000008940697,
+            "networkSnapshotAgeMs": 185
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-163.66563839349146",
+          "z": "-32.84691509086249",
+          "speed": "16.576804623900042",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 2.2204129968272035,
+            "frameMaxMs": 537.6999999880791,
+            "renderCpuMs": 13.200000007947287,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020839036,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-95.94237184594522",
+          "z": "-98.47920039142268",
+          "speed": "17.929034855214223",
+          "checkpoint": "1 / 7",
+          "stats": {
+            "fps": 2.003606491669081,
+            "frameMaxMs": 793.8000000119209,
+            "renderCpuMs": 16.033333321412403,
+            "networkSnapshotAgeMs": 37
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-111.81373573782565",
+          "z": "-98.23786315951212",
+          "speed": "16.736429169446698",
+          "checkpoint": "1 / 7",
+          "stats": {
+            "fps": 3.267706886708175,
+            "frameMaxMs": 366,
+            "renderCpuMs": 14.024999998509884,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020849037,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-40.558470109306356",
+          "z": "14.194655277673764",
+          "speed": "17.667510872803575",
+          "checkpoint": "3 / 7",
+          "stats": {
+            "fps": 2.6619343389529724,
+            "frameMaxMs": 563,
+            "renderCpuMs": 22.333333333333332,
+            "networkSnapshotAgeMs": 579.945068359375
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.886327674573273",
+          "z": "-94.11131357738786",
+          "speed": "0.09845355741033443",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.5806451612903225,
+            "frameMaxMs": 429.7000000178814,
+            "renderCpuMs": 12.566666662693024,
+            "networkSnapshotAgeMs": 292.04833984375
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020859040,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-52.43651294401945",
+          "z": "147.7512743150038",
+          "speed": "7.581162630779336",
+          "checkpoint": "4 / 7",
+          "stats": {
+            "fps": 1.845018450184502,
+            "frameMaxMs": 679.9000000059605,
+            "renderCpuMs": 35.300000001986824,
+            "networkSnapshotAgeMs": 1034.578369140625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884743156467284",
+          "z": "-94.11006189577114",
+          "speed": "0.1021964227412099",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.6648630650376843,
+            "frameMaxMs": 674.7999999821186,
+            "renderCpuMs": 14.349999994039536,
+            "networkSnapshotAgeMs": 587.393798828125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020869043,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-162.8924795230998",
+          "z": "118.14592607816995",
+          "speed": "16.057142326830423",
+          "checkpoint": "5 / 7",
+          "stats": {
+            "fps": 2.2646636974613097,
+            "frameMaxMs": 518.7999999821186,
+            "renderCpuMs": 17.80000000198682,
+            "networkSnapshotAgeMs": 829.91650390625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884743156467284",
+          "z": "-94.11006189577114",
+          "speed": "0.1060423426886295",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.756846167938526,
+            "frameMaxMs": 435.30000001192093,
+            "renderCpuMs": 5.799999992052714,
+            "networkSnapshotAgeMs": 215.005126953125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020879043,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.64656799765106",
+          "z": "1.6129108514736887",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 1.2637432073850199,
+            "frameMaxMs": 1026.2999999821186,
+            "renderCpuMs": 89.7999999821186,
+            "networkSnapshotAgeMs": 1536.5791015625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884743156467284",
+          "z": "-94.11006189577114",
+          "speed": "0.09769239887837507",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.7307026652761532,
+            "frameMaxMs": 1069.9000000059605,
+            "renderCpuMs": 7.500000009934108,
+            "networkSnapshotAgeMs": 892.026123046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020889044,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 3.798309752181787,
+            "frameMaxMs": 280,
+            "renderCpuMs": 8.62499999254942,
+            "networkSnapshotAgeMs": 207.444580078125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884110589777634",
+          "z": "-94.10939122498122",
+          "speed": "0.10659860650337033",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.991026919242273,
+            "frameMaxMs": 374.09999999403954,
+            "renderCpuMs": 8.06666667262713,
+            "networkSnapshotAgeMs": 157.026123046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020899052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 3.684937816674344,
+            "frameMaxMs": 286,
+            "renderCpuMs": 10.049999989569187,
+            "networkSnapshotAgeMs": 203.334716796875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884110589777634",
+          "z": "-94.10939122498122",
+          "speed": "0.10648241599263289",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 3.4390852032654164,
+            "frameMaxMs": 348.69999998807907,
+            "renderCpuMs": 8.825000002980232,
+            "networkSnapshotAgeMs": 146.176513671875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020909052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 1.5994881637799634,
+            "frameMaxMs": 720.8000000119209,
+            "renderCpuMs": 39.25000001490116,
+            "networkSnapshotAgeMs": 1192.909423828125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.884110589777634",
+          "z": "-94.10939122498122",
+          "speed": "0.10669143887087745",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.76164890335506,
+            "frameMaxMs": 572.9000000059605,
+            "renderCpuMs": 11.149999991059303,
+            "networkSnapshotAgeMs": 987.32861328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020919052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 0.7417022065640645,
+            "frameMaxMs": 1577.300000011921,
+            "renderCpuMs": 13.299999997019768,
+            "networkSnapshotAgeMs": 1649.909423828125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.88290329047285",
+          "z": "-94.10831586709016",
+          "speed": "0.08747906375821266",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.1188185276198956,
+            "frameMaxMs": 1078.9000000059605,
+            "renderCpuMs": 9.349999994039536,
+            "networkSnapshotAgeMs": 518.32861328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020929052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 2.9535553422822223,
+            "frameMaxMs": 473.40000000596046,
+            "renderCpuMs": 12.350000008940697,
+            "networkSnapshotAgeMs": 316.798095703125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.878864371282862",
+          "z": "-94.10523352871834",
+          "speed": "0.11397654355304546",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.3490721165249404,
+            "frameMaxMs": 487.2999999821186,
+            "renderCpuMs": 9.933333337306976,
+            "networkSnapshotAgeMs": 16641.32861328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020949052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 4.691751900212002,
+            "frameMaxMs": 277.69999998807907,
+            "renderCpuMs": 5.820000004768372,
+            "networkSnapshotAgeMs": 129.992919921875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.87416784346394",
+          "z": "-94.10214473611155",
+          "speed": "0.10752751340467578",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.2016732716479583,
+            "frameMaxMs": 499.40000000596046,
+            "renderCpuMs": 7.800000001986821,
+            "networkSnapshotAgeMs": 16868.32861328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020959052,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 3.3211557621888113,
+            "frameMaxMs": 315.90000000596046,
+            "renderCpuMs": 11.450000002980232,
+            "networkSnapshotAgeMs": 196.988525390625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.874133017654565",
+          "z": "-94.10211039342705",
+          "speed": "0.114264234113445",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 3.4791684786794708,
+            "frameMaxMs": 306,
+            "renderCpuMs": 12.62500000745058,
+            "networkSnapshotAgeMs": 150.779296875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020969056,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 0.7733353955646195,
+            "frameMaxMs": 1490.199999988079,
+            "renderCpuMs": 141.34999999403954,
+            "networkSnapshotAgeMs": 1061.988525390625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.873403969498288",
+          "z": "-94.10167829159533",
+          "speed": "0.11426014830337694",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.0062893081761006,
+            "frameMaxMs": 1534.800000011921,
+            "renderCpuMs": 21.349999994039536,
+            "networkSnapshotAgeMs": 1362.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020979165,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 2.829921705515393,
+            "frameMaxMs": 461.5,
+            "renderCpuMs": 28.53333334128062,
+            "networkSnapshotAgeMs": 365.51513671875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.869771217580826",
+          "z": "-94.09924846254192",
+          "speed": "0.11790315950307806",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 0.2513352183474709,
+            "frameMaxMs": 7402,
+            "renderCpuMs": 39.6499999910593,
+            "networkSnapshotAgeMs": 7313.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793020989167,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 0.20877916383944883,
+            "frameMaxMs": 7400.700000017881,
+            "renderCpuMs": 11.549999997019768,
+            "networkSnapshotAgeMs": 9463.51513671875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.867620257550968",
+          "z": "-94.0981359287265",
+          "speed": "0.12374501080157305",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.6739203214177536,
+            "frameMaxMs": 772.7999999821186,
+            "renderCpuMs": 12.75,
+            "networkSnapshotAgeMs": 17383.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021009167,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 1.9282684149301195,
+            "frameMaxMs": 624.5999999940395,
+            "renderCpuMs": 4.850000008940697,
+            "networkSnapshotAgeMs": 300.70458984375
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.86339317425935",
+          "z": "-94.09490002964046",
+          "speed": "0.12823401946054966",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.499583402728965,
+            "frameMaxMs": 429.59999999403954,
+            "renderCpuMs": 10.699999988079071,
+            "networkSnapshotAgeMs": 20379.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021019168,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 2.33608472197339,
+            "frameMaxMs": 543.0999999940395,
+            "renderCpuMs": 13.799999992052713,
+            "networkSnapshotAgeMs": 432.62158203125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.86269158125276",
+          "z": "-94.09455306344698",
+          "speed": "0.11580947749622547",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.8968713789274494,
+            "frameMaxMs": 389.90000000596046,
+            "renderCpuMs": 12.200000010430813,
+            "networkSnapshotAgeMs": 739.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021029169,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 3.938868756967,
+            "frameMaxMs": 372.90000000596046,
+            "renderCpuMs": 8.520000004768372,
+            "networkSnapshotAgeMs": 171.62158203125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.86269161116798",
+          "z": "-94.09455306148783",
+          "speed": "0.12687870631248796",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 3.3838084764572955,
+            "frameMaxMs": 325.09999999403954,
+            "renderCpuMs": 18.220000010728835,
+            "networkSnapshotAgeMs": 909.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021042710,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 2.5,
+            "frameMaxMs": 534.8000000119209,
+            "renderCpuMs": 15.33333334326744,
+            "networkSnapshotAgeMs": 724.62158203125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.8628323764692",
+          "z": "-94.09459093926061",
+          "speed": "0.12693065080336552",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.6737967914438503,
+            "frameMaxMs": 457.80000001192093,
+            "renderCpuMs": 9.725000001490116,
+            "networkSnapshotAgeMs": 346.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021052710,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 4.961548002928019,
+            "frameMaxMs": 322.30000001192093,
+            "renderCpuMs": 8.450000002980232,
+            "networkSnapshotAgeMs": 125.703369140625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.86317443589676",
+          "z": "-94.09460042780914",
+          "speed": "0.12488944588815687",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 1.9548431238507007,
+            "frameMaxMs": 575.0999999940395,
+            "renderCpuMs": 38.46666665871938,
+            "networkSnapshotAgeMs": 766.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021063239,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "checkpoint": "0 / 7",
+          "stats": {
+            "fps": 1.4884274763844187,
+            "frameMaxMs": 869.6999999880791,
+            "renderCpuMs": 26.600000008940697,
+            "networkSnapshotAgeMs": 754.703369140625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.86283245972758",
+          "z": "-94.09459093380725",
+          "speed": "0.12342442509996579",
+          "checkpoint": "2 / 7",
+          "stats": {
+            "fps": 2.2706630336263007,
+            "frameMaxMs": 615.9000000059605,
+            "renderCpuMs": 9.849999994039536,
+            "networkSnapshotAgeMs": 629.66357421875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793021073248,
+      "clients": [
+        {
+          "phase": "results",
+          "x": "-159.646567997651",
+          "z": "1.6129108514768278",
+          "speed": "16.396879432124273",
+          "stats": {
+            "fps": 1.7222078705164863,
+            "frameMaxMs": 677.1999999880791,
+            "renderCpuMs": 13.150000005960464,
+            "networkSnapshotAgeMs": 332.703369140625
+          }
+        },
+        {
+          "phase": "results",
+          "x": "-23.86324180422158",
+          "z": "-94.09470095746259",
+          "speed": "0",
+          "stats": {
+            "fps": 2.2706630336263007,
+            "frameMaxMs": 615.9000000059605,
+            "renderCpuMs": 9.849999994039536,
+            "networkSnapshotAgeMs": 629.66357421875
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793020799343
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793020799344
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793020799535
+    },
+    {
+      "client": 0,
+      "type": "reconnected",
+      "at": 1793020800141
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793020946934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020946934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793020947274
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793020947866
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021012160
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021012161
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021012491
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021013100
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021015871
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021015871
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021016229
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021016792
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021018434
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021018434
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021018981
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021019685
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021022270
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021022272
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021023664
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021024305
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021026369
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021026371
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021026799
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021027380
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021028883
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021028883
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021030005
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021030645
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021032724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021032726
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021033088
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021033701
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021036469
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021042708
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021046219
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021046906
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021048724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021048724
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021049103
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021049734
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021051234
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021051236
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021051679
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021052320
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021056934
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021056937
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021057637
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021058245
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021063824
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021063825
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021064540
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021065155
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793021068838
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021068838
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793021073241
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793021077145
+    }
+  ]
+}

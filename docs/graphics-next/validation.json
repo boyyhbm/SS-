@@ -1,11 +1,11 @@
 {
   "date": "2026-10-26",
-  "phase": "graphics published at ac20982; exact-equivalent collision query optimization awaiting CI/public retest",
+  "phase": "bounded client prediction and input-only test recovery awaiting exact CI and public retest",
   "source": "f7f85b0",
   "typecheck": "passed, repeated after QA tooling changes",
   "lint": "passed, repeated after QA tooling changes",
   "productionBuild": "passed after pause settings fix (isolated QA origins)",
-  "unitTests": 127,
+  "unitTests": 128,
   "localBrowserScenarios": 26,
   "browserNote": "26 passed before the final material/frontage-only tuning; exact final source will also run in GitHub CI",
   "assets": {
@@ -103,5 +103,13 @@
     "gameplayRulesChanged": false,
     "publicRetest": "pending"
   },
-  "publicContinuousAttempt": "failed: second browser disconnected on Sprint; diagnostics preserved"
+  "publicContinuousAttempt": "failed: second browser disconnected on Sprint; diagnostics preserved",
+  "predictionReplay": {
+    "windowMs": 600,
+    "maximumCommands": 18,
+    "networkCommandsDropped": false,
+    "serverAuthorityChanged": false,
+    "regressionTest": "90 ordered outgoing commands, bounded replay, authoritative ACK restore passed"
+  },
+  "publicLatestAttempt": "lobby request lost during a brief reconnect; test now confirms Ready acknowledgement; race attempt stalled after automatic keyboard driver contact"
 }
