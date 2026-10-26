@@ -9,6 +9,7 @@ import manifest from '../../../public/game-assets/graphics-manifest.json';
 import { vehicles, type VehicleId } from '../vehicles/config';
 import trackManifest from '../../../public/game-assets/track-manifest.json';
 import { getTrack, type TrackId } from '../tracks/registry';
+import { batchStaticMeshes } from './geometry';
 // The fixed static worker has its own restricted policy. The application
 // document keeps its existing no-eval policy and never executes user code.
 class StaticKTX2Loader extends KTX2Loader {
@@ -143,6 +144,9 @@ export async function loadRaceAssets(
       ]);
     const extraVehicles = await vehicleModels;
     const trackProps = Object.fromEntries(await propModels);
+    // Merge rigid prop panels by material once before their first GPU upload.
+    // Each spatial cluster then instances a complete object, not every tiny panel.
+    for (const gltf of Object.values(trackProps)) batchStaticMeshes(gltf.scene);
     for (const gltf of [
       car,
       carLow,

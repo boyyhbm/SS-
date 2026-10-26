@@ -114,10 +114,17 @@ export function OnlinePlayer({
   const me = snapshot?.players.find((p) => p.id === userId);
   useEffect(() => {
     if (!snapshot) initialVehicleRoom.current = '';
-    if (snapshot?.phase === 'lobby' && me && garage.loaded && initialVehicleRoom.current !== snapshot.roomId) {
-      initialVehicleRoom.current = snapshot.roomId; sdk.chooseVehicle(garage.value.vehicleId);
+    if (
+      snapshot?.phase === 'lobby' &&
+      me &&
+      garage.loaded &&
+      initialVehicleRoom.current !== snapshot.roomId
+    ) {
+      initialVehicleRoom.current = snapshot.roomId;
+      sdk.chooseVehicle(garage.value.vehicleId);
+      sdk.chooseCar(garage.value.paint);
     }
-  }, [snapshot, me, garage.loaded, garage.value.vehicleId, sdk]);
+  }, [snapshot, me, garage.loaded, garage.value.vehicleId, garage.value.paint, sdk]);
   const leader = snapshot?.leaderId === userId;
   const playing = snapshot?.phase === 'racing' || snapshot?.phase === 'countdown';
   const canStart =
@@ -624,7 +631,13 @@ export function OnlinePlayer({
             <aside className="lobby-customize">
               <span className="eyebrow">NEXUS GARAGE / 01</span>
               <h2>{t('car')}</h2>
-              <VehicleSelect language={language} onSelect={(id) => sdk.chooseVehicle(id)} />
+              <VehicleSelect
+                language={language}
+                onSelect={(id) => {
+                  sdk.chooseVehicle(id);
+                  sdk.chooseCar(useGaragePreference.getState().value.paint);
+                }}
+              />
               <div className="car-swatches">
                 {cars.map((car) => (
                   <button

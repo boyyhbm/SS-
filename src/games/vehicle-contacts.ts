@@ -1,12 +1,15 @@
 import type { CityRaceState } from './city-driving';
 import { carClearance } from './city-driving';
 import { contactTuning } from './contact-physics';
+import { vehicleDimensions } from './vehicles/config';
 // Closest points of two finite capsule spines (Ericson segment/segment method).
 function closest(a: CityRaceState, b: CityRaceState) {
-  const ax = Math.sin(a.heading) * 2.5,
-    az = Math.cos(a.heading) * 2.5,
-    bx = Math.sin(b.heading) * 2.5,
-    bz = Math.cos(b.heading) * 2.5,
+  const ad = vehicleDimensions(a.vehicleId),
+    bd = vehicleDimensions(b.vehicleId);
+  const ax = Math.sin(a.heading) * ad.halfSpine * 2,
+    az = Math.cos(a.heading) * ad.halfSpine * 2,
+    bx = Math.sin(b.heading) * bd.halfSpine * 2,
+    bz = Math.cos(b.heading) * bd.halfSpine * 2,
     ox = a.x - ax / 2 - b.x + bx / 2,
     oz = a.z - az / 2 - b.z + bz / 2,
     aa = ax * ax + az * az,
@@ -40,33 +43,44 @@ export function resolveVehicleContacts(states: CityRaceState[]) {
     for (let k = i + 1; k < states.length; k++) {
       const a = states[i],
         b = states[k];
-      if (a.finished || b.finished || Math.hypot(a.x - b.x, a.z - b.z) > 5.2) continue;
+      const ad = vehicleDimensions(a.vehicleId),
+        bd = vehicleDimensions(b.vehicleId);
+      if (
+        a.finished ||
+        b.finished ||
+        Math.hypot(a.x - b.x, a.z - b.z) > ad.radius + bd.radius + ad.halfSpine + bd.halfSpine
+      )
+        continue;
+      const ma = a.mass ?? tune.mass,
+        mb = b.mass ?? tune.mass,
+        ia = a.yawInertia ?? tune.yawInertia,
+        ib = b.yawInertia ?? tune.yawInertia;
       const p = closest(a, b),
         dx = p.ax - p.bx,
         dz = p.az - p.bz,
         d = Math.hypot(dx, dz),
-        penetration = 2.1 - d;
+        penetration = ad.radius + bd.radius - d;
       if (penetration <= 0) continue;
       const fallback = Math.hypot(a.x - b.x, a.z - b.z),
         nx = d > 1e-6 ? dx / d : fallback > 1e-6 ? (a.x - b.x) / fallback : Math.cos(a.heading),
         nz = d > 1e-6 ? dz / d : fallback > 1e-6 ? (a.z - b.z) / fallback : -Math.sin(a.heading);
-      const arx = p.ax - a.x - nx * 1.05,
-        arz = p.az - a.z - nz * 1.05,
-        brx = p.bx - b.x + nx * 1.05,
-        brz = p.bz - b.z + nz * 1.05;
+      const arx = p.ax - a.x - nx * ad.radius,
+        arz = p.az - a.z - nz * ad.radius,
+        brx = p.bx - b.x + nx * bd.radius,
+        brz = p.bz - b.z + nz * bd.radius;
       const la = arz * nx - arx * nz,
         lb = brz * nx - brx * nz;
       const vn =
         (a.vx + a.impactYaw * arz - b.vx - b.impactYaw * brz) * nx +
         (a.vz - a.impactYaw * arx - b.vz + b.impactYaw * brx) * nz;
       if (vn < -0.02) {
-        const impulse = (-1.08 * vn) / (2 / tune.mass + (la * la + lb * lb) / tune.yawInertia);
-        a.vx += (nx * impulse) / tune.mass;
-        a.vz += (nz * impulse) / tune.mass;
-        b.vx -= (nx * impulse) / tune.mass;
-        b.vz -= (nz * impulse) / tune.mass;
-        a.impactYaw += (la * impulse) / tune.yawInertia;
-        b.impactYaw -= (lb * impulse) / tune.yawInertia;
+        const impulse = (-1.08 * vn) / (1 / ma + 1 / mb + (la * la) / ia + (lb * lb) / ib);
+        a.vx += (nx * impulse) / ma;
+        a.vz += (nz * impulse) / ma;
+        b.vx -= (nx * impulse) / mb;
+        b.vz -= (nz * impulse) / mb;
+        a.impactYaw += (la * impulse) / ia;
+        b.impactYaw -= (lb * impulse) / ib;
         const tx = -nz,
           tz = nx,
           lta = arz * tx - arx * tz,
@@ -76,17 +90,14 @@ export function resolveVehicleContacts(states: CityRaceState[]) {
             (a.vz - a.impactYaw * arx - b.vz + b.impactYaw * brx) * tz,
           friction = Math.max(
             -0.18 * impulse,
-            Math.min(
-              0.18 * impulse,
-              -vt / (2 / tune.mass + (lta * lta + ltb * ltb) / tune.yawInertia),
-            ),
+            Math.min(0.18 * impulse, -vt / (1 / ma + 1 / mb + (lta * lta) / ia + (ltb * ltb) / ib)),
           );
-        a.vx += (tx * friction) / tune.mass;
-        a.vz += (tz * friction) / tune.mass;
-        b.vx -= (tx * friction) / tune.mass;
-        b.vz -= (tz * friction) / tune.mass;
-        a.impactYaw += (lta * friction) / tune.yawInertia;
-        b.impactYaw -= (ltb * friction) / tune.yawInertia;
+        a.vx += (tx * friction) / ma;
+        a.vz += (tz * friction) / ma;
+        b.vx -= (tx * friction) / mb;
+        b.vz -= (tz * friction) / mb;
+        a.impactYaw += (lta * friction) / ia;
+        b.impactYaw -= (ltb * friction) / ib;
         for (const s of [a, b]) {
           s.impactYaw = Math.max(-1.1, Math.min(1.1, s.impactYaw));
           s.speed = s.vx * Math.sin(s.heading) + s.vz * Math.cos(s.heading);
@@ -104,7 +115,7 @@ export function resolveVehicleContacts(states: CityRaceState[]) {
         const amount = Math.max(0, Math.min(correction, 0.36 - (correctionUsed.get(s) ?? 0)));
         const x = s.x + nx * amount * sign,
           z = s.z + nz * amount * sign;
-        if (carClearance({ x, z }, s.heading) >= 0) {
+        if (carClearance({ x, z }, s.heading, s.vehicleId) >= 0) {
           s.x = x;
           s.z = z;
           correctionUsed.set(s, (correctionUsed.get(s) ?? 0) + amount);

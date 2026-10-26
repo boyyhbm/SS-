@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
 import { initialCityRace } from '../src/games/city-driving';
 import { resolveVehicleContacts } from '../src/games/vehicle-contacts';
+import { configureVehicle } from '../src/games/vehicles/state';
 it('applies equal opposite authoritative impulses without duplicate bounce or energy gain', () => {
   const a = initialCityRace('downtown-circuit'),
     b = initialCityRace('downtown-circuit');
@@ -34,6 +35,19 @@ it('leaves separate cars unchanged and excludes finished cars', () => {
   b.z = a.z;
   b.finished = true;
   expect(resolveVehicleContacts([a, b])).toBe(0);
+});
+it('uses authoritative vehicle masses for equal opposite momentum transfer', () => {
+  const a = configureVehicle(initialCityRace('downtown-circuit'), 'pocket-gt'),
+    b = configureVehicle(initialCityRace('downtown-circuit'), 'iron-v8');
+  Object.assign(a, { x: -160, z: -52, heading: 0, vx: 0, vz: 12, speed: 12 });
+  Object.assign(b, { x: -160, z: -48, heading: 0, vx: 0, vz: 0, speed: 0 });
+  const momentum = a.mass! * a.vz + b.mass! * b.vz,
+    energy = a.mass! * a.vz * a.vz + b.mass! * b.vz * b.vz;
+  expect(resolveVehicleContacts([a, b])).toBe(1);
+  expect(a.mass! * a.vz + b.mass! * b.vz).toBeCloseTo(momentum, 6);
+  expect(a.mass! * a.vz * a.vz + b.mass! * b.vz * b.vz).toBeLessThan(energy);
+  expect(a.vz).toBeLessThan(12);
+  expect(b.vz).toBeGreaterThan(0);
 });
 it('bounds pile-up stabilization and never swaps fast head-on cars between 30Hz ticks', async () => {
   const { simulateNetworkGroup } = await import('../src/games/network-racing');

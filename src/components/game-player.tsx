@@ -30,6 +30,9 @@ import { useGaragePreference } from '@/games/vehicles/preferences';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
 });
+const TrackBrowser = dynamic(() => import('./race-track-browser').then((m) => m.RaceTrackBrowser), {
+  ssr: false,
+});
 const selectableRoutes = routeRegistry
   .filter((r) => r.routeId !== 'legacy-circuit')
   .map((r) => ({ ...r, id: r.routeId }));
@@ -57,6 +60,7 @@ export function GamePlayer({
   }, []);
   const [routeId, setRouteId] = useState<RouteId>('downtown-circuit');
   const [selectedLaps, setSelectedLaps] = useState(3);
+  const [trackBrowser, setTrackBrowser] = useState(false);
   const [routeRecords, setRouteRecords] = useState(initialRouteRecords);
   const history = routeRecords[routeId]?.history ?? [];
   const routeBest = routeRecords[routeId]?.best ?? null;
@@ -380,6 +384,21 @@ export function GamePlayer({
           <p>{t('launchDescription')}</p>
         </div>
       )}
+      {trackBrowser && (
+        <TrackBrowser
+          language={language}
+          current={routeId}
+          laps={selectedLaps}
+          records={routeRecords}
+          onClose={() => setTrackBrowser(false)}
+          onSelect={(id, count) => {
+            setRouteId(id);
+            setSelectedLaps(count);
+            setRestartKey((x) => x + 1);
+            setTrackBrowser(false);
+          }}
+        />
+      )}
       {ready && paused && !error && (
         <div className="pause-overlay">
           <div className="pause-card">
@@ -392,6 +411,9 @@ export function GamePlayer({
             </p>
             {!started && (
               <div className="route-selection" aria-label={language === 'ru' ? 'Маршрут' : 'Route'}>
+                <button className="button secondary" onClick={() => setTrackBrowser(true)}>
+                  {language === 'ru' ? 'Обзор трасс' : 'Browse tracks'}
+                </button>
                 <GameRouteMap routeId={routeId} overview language={language} />
                 {selectableRoutes.map((r) => (
                   <button

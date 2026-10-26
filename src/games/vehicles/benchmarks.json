@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-26T18:37:09.334Z",
+  "date": "2026-10-26T22:07:08.105Z",
   "scope": "Deterministic flat dry physics benchmark at 120 Hz, no nitro, no walls; measured model behavior, not real-car claims or render performance",
   "vehicleVersion": 1,
   "results": [
@@ -10,7 +10,7 @@
       "maximumSpeedKmh": 243.86798424528686,
       "braking100Meters": 25.226083761625816,
       "braking100Seconds": 1.60833333333333,
-      "steeringHeadingChangeRad": 0.11168342039023024,
+      "steeringHeadingChangeRad": 0.11118530437786515,
       "tireGrip": 1.06
     },
     {
@@ -20,7 +20,7 @@
       "maximumSpeedKmh": 229.4502476391295,
       "braking100Meters": 24.42066964680362,
       "braking100Seconds": 1.5416666666666636,
-      "steeringHeadingChangeRad": 0.15457502030337242,
+      "steeringHeadingChangeRad": 0.15571671269006743,
       "tireGrip": 1.02
     },
     {
@@ -30,7 +30,7 @@
       "maximumSpeedKmh": 262.7009405629606,
       "braking100Meters": 31.2420162847279,
       "braking100Seconds": 2.0249999999999955,
-      "steeringHeadingChangeRad": 0.0872022785151098,
+      "steeringHeadingChangeRad": 0.08685016598601121,
       "tireGrip": 0.94
     },
     {
@@ -40,7 +40,7 @@
       "maximumSpeedKmh": 272.98300060730435,
       "braking100Meters": 24.062609214859386,
       "braking100Seconds": 1.5333333333333303,
-      "steeringHeadingChangeRad": 0.11561026709102605,
+      "steeringHeadingChangeRad": 0.1151038521614784,
       "tireGrip": 1.16
     },
     {
@@ -50,7 +50,7 @@
       "maximumSpeedKmh": 294.8981338755978,
       "braking100Meters": 19.1713513549531,
       "braking100Seconds": 1.1999999999999982,
-      "steeringHeadingChangeRad": 0.13293435611560725,
+      "steeringHeadingChangeRad": 0.13232969103449163,
       "tireGrip": 1.28
     },
     {
@@ -60,7 +60,7 @@
       "maximumSpeedKmh": 360.45011229070855,
       "braking100Meters": 23.768757146870858,
       "braking100Seconds": 1.5083333333333304,
-      "steeringHeadingChangeRad": 0.10099234025064074,
+      "steeringHeadingChangeRad": 0.10057304580789439,
       "tireGrip": 1.12
     }
   ]

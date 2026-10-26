@@ -1,22 +1,37 @@
 {
-  "date": "2026-10-26T19:07:14.967Z",
+  "date": "2026-10-26T22:07:47.694Z",
   "passed": true,
   "scope": "Actual single-player WebGL models and keyboard movement; account-persisted selection; no pose injection",
   "models": [
     {
       "vehicleId": "meridian-r6",
       "triangles": 25663,
-      "distance": 62.66501323582312
+      "distance": 72.61209949904688
     },
     {
       "vehicleId": "pocket-gt",
       "triangles": 2088,
-      "distance": 27.843747474361955
+      "distance": 86.80189702432729
     },
     {
       "vehicleId": "iron-v8",
       "triangles": 2032,
-      "distance": 31.6612646958138
+      "distance": 15.640085548742382
+    },
+    {
+      "vehicleId": "vector-rs",
+      "triangles": 2088,
+      "distance": 15.738030593560584
+    },
+    {
+      "vehicleId": "apex-r",
+      "triangles": 1952,
+      "distance": 22.642878442400676
+    },
+    {
+      "vehicleId": "nova-x",
+      "triangles": 2068,
+      "distance": 54.71644187583049
     }
   ]
 }
