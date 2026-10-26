@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-26",
+  "phase": "local graphics/media checks passed; exact-release GitHub CI and production rollout pending",
+  "source": "f7f85b0",
+  "typecheck": "passed, repeated after QA tooling changes",
+  "lint": "passed, repeated after QA tooling changes",
+  "productionBuild": "passed after pause settings fix (isolated QA origins)",
+  "unitTests": 126,
+  "localBrowserScenarios": 26,
+  "browserNote": "26 passed before the final material/frontage-only tuning; exact final source will also run in GitHub CI",
+  "assets": {
+    "passed": true,
+    "resources": 91,
+    "totalBytes": 300474620,
+    "decoderRevision": "186"
+  },
+  "realSdkClients": {
+    "fourPlayersPerRoom": "passed on 3 city routes",
+    "sixPlayersPerRoom": "passed on 3 city routes"
+  },
+  "physicalGpu": "unavailable",
+  "physicalControllers": "not tested",
+  "production": "pending",
+  "softwareGpu": "ANGLE Vulkan SwiftShader (Subzero), Chromium 154; not a hardware 60 FPS benchmark",
+  "retainedFeatures": [
+    "Existing road graph and routes",
+    "Free Drive",
+    "Shared fixed-step movement and collision rules",
+    "Dynamic racing line",
+    "Keyboard and normalized analog gamepad input",
+    "Server-authoritative checkpoints and results",
+    "NEXUS auth/library/social/settings/saves"
+  ],
+  "unverifiedOrUnimplemented": [
+    "Physical gaming GPU High/1080p/60 FPS and 30/60/120 Hz pacing",
+    "Physical USB/Bluetooth controllers",
+    "Public stable inter-car contacts",
+    "Full renderer WebGPU compatibility/performance",
+    "SSR/TAA/ray tracing",
+    "Full cockpit/baked GI",
+    "200 km/h visual quality"
+  ],
+  "renderingSource": "6250431dd480887c1956afee387c80769edb5cb5",
+  "nativePhotos": {
+    "high": "passed, native 1280x720/DPR1",
+    "ultra": "passed, native 1280x720/DPR1",
+    "poseInjection": false
+  },
+  "softwareBenchmarks": {
+    "presets": 6,
+    "passed": true,
+    "reliableOnePercentLow": false,
+    "autoSelected": "low",
+    "autoDprRange": [
+      0.5525,
+      0.85
+    ],
+    "physical60FpsCertified": false
+  },
+  "pauseSettingsLayout": {
+    "desktop1280": "passed",
+    "mobile390": "passed"
+  },
+  "realVideo": {
+    "timeScale": 1,
+    "frameInterpolation": false,
+    "keyboardPeakKmh": 125.63655,
+    "virtualAnalogPeakKmh": 159.24792184558632,
+    "quality": "Medium / DPR0.5 / software GPU"
+  }
+}

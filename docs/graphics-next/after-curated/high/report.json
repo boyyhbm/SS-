@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-26T07:36:53.267Z",
+  "sourceCommit": "6250431dd480887c1956afee387c80769edb5cb5",
+  "kind": "Actual Three.js graphics fixtures, synthetic visual car poses; NOT gameplay or multiplayer proof",
+  "viewport": [
+    1280,
+    720
+  ],
+  "deviceScaleFactor": 1,
+  "tier": "high",
+  "renderMode": "Fixed pose, two actual draws on demand; intervals are not gameplay FPS",
+  "sourceUncommitted": false,
+  "errors": [],
+  "scenes": [
+    {
+      "name": "downtown",
+      "cars": 1,
+      "file": "downtown-1.png",
+      "frameIntervalsMs": [
+        13299.5
+      ],
+      "drawCalls": 837,
+      "triangles": 3705304,
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    }
+  ],
+  "passed": true
+}

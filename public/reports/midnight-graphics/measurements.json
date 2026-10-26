@@ -1,0 +1,221 @@
+{
+  "date": "2026-10-26T09:08:08.664Z",
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "cpuQuota": "400000 100000",
+    "memoryLimitBytes": "34359738368",
+    "nodeVersion": "v24.19.0",
+    "browserVersion": "154.0.8037.57",
+    "physicalGamingGpu": false
+  },
+  "scope": "Actual game, software Vulkan/SwiftShader; no physical GPU or target 60 FPS certification. Short rows do not establish a reliable 1% low.",
+  "rows": [
+    {
+      "requested": "low",
+      "selected": "low",
+      "frameSamples": 72,
+      "fps": 0.774915970049647,
+      "frameMs": 1290.4624999997516,
+      "p95Ms": 1720.800000011921,
+      "maxMs": 2283.0999999940395,
+      "frameSpikesOver50Ms": 72,
+      "frameSpikesOver33Ms": 72,
+      "mainThreadFrameMs": 14.156944444196093,
+      "physicsSteps": 2156,
+      "assetLoadMs": 1357.199999988079,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 160.83333333333334,
+      "renderMainThreadMs": 8.554166665921608,
+      "physicsMsPerStep": 0.24419798641619572,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        0.85,
+        0.85
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1632,
+        918
+      ]
+    },
+    {
+      "requested": "medium",
+      "selected": "medium",
+      "frameSamples": 16,
+      "fps": 0.16307710183452537,
+      "frameMs": 6132.0687499996275,
+      "p95Ms": 11987.90000000596,
+      "maxMs": 11987.90000000596,
+      "frameSpikesOver50Ms": 16,
+      "frameSpikesOver33Ms": 16,
+      "mainThreadFrameMs": 135.4187500011176,
+      "physicsSteps": 484,
+      "assetLoadMs": 4052.800000011921,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 558,
+      "renderMainThreadMs": 128.13749999925494,
+      "physicsMsPerStep": 0.3449106518097423,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        1,
+        1
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "requested": "high",
+      "selected": "high",
+      "frameSamples": 8,
+      "fps": 0.06985850160498816,
+      "frameMs": 14314.650000002235,
+      "p95Ms": 22931,
+      "maxMs": 22931,
+      "frameSpikesOver50Ms": 8,
+      "frameSpikesOver33Ms": 8,
+      "mainThreadFrameMs": 394.36250000074506,
+      "physicsSteps": 247,
+      "assetLoadMs": 10140.5,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 443.25,
+      "renderMainThreadMs": 391.57499999552965,
+      "physicsMsPerStep": 0.5748184522168907,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        1,
+        1
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "requested": "ultra",
+      "selected": "ultra",
+      "frameSamples": 8,
+      "fps": 0.047729763624308474,
+      "frameMs": 20951.28750000149,
+      "p95Ms": 25934.80000001192,
+      "maxMs": 25934.80000001192,
+      "frameSpikesOver50Ms": 8,
+      "frameSpikesOver33Ms": 8,
+      "mainThreadFrameMs": 314.5374999977648,
+      "physicsSteps": 245,
+      "assetLoadMs": 16642,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 1117.25,
+      "renderMainThreadMs": 308.5874999985099,
+      "physicsMsPerStep": 0.33855213315574006,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        1,
+        1
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "requested": "cinematic",
+      "selected": "cinematic",
+      "frameSamples": 6,
+      "fps": 0.048643692250814254,
+      "frameMs": 20557.650000000995,
+      "p95Ms": 32163.59999999404,
+      "maxMs": 32163.59999999404,
+      "frameSpikesOver50Ms": 6,
+      "frameSpikesOver33Ms": 6,
+      "mainThreadFrameMs": 624.6500000059605,
+      "physicsSteps": 187,
+      "assetLoadMs": 16101.5,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 936,
+      "renderMainThreadMs": 619.3666666646799,
+      "physicsMsPerStep": 0.9580076043306796,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        1,
+        1
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1920,
+        1080
+      ]
+    },
+    {
+      "requested": "auto",
+      "selected": "low",
+      "frameSamples": 87,
+      "fps": 0.9658060261856826,
+      "frameMs": 1035.4045977010123,
+      "p95Ms": 2013.800000011921,
+      "maxMs": 7886.800000011921,
+      "frameSpikesOver50Ms": 87,
+      "frameSpikesOver33Ms": 87,
+      "mainThreadFrameMs": 15.655426359107327,
+      "physicsSteps": 2134,
+      "assetLoadMs": 2252.7999999821186,
+      "onePercentLow": null,
+      "insufficientForOnePercentLow": true,
+      "drawCalls": 162.04651162790697,
+      "renderMainThreadMs": 8.187984496701596,
+      "physicsMsPerStep": 0.33195353856522275,
+      "gpuFrameMs": null,
+      "gpuMemory": "UNAVAILABLE_WEBGL",
+      "dprRange": [
+        0.5525,
+        0.85
+      ],
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "canvas": [
+        1060,
+        596
+      ]
+    }
+  ]
+}

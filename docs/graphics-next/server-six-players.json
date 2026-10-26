@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-26T06:25:00.715Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 1,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9030241871398186,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 6,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovgsou000q5pmjjtyur9j5",
+          "finish": 32.56666666666738,
+          "place": 1
+        },
+        {
+          "id": "cmvovgs0600025pmja9iobtnn",
+          "finish": 32.56666666666738,
+          "place": 2
+        },
+        {
+          "id": "cmvovgrxk00005pmjgxnq9ttu",
+          "finish": 32.83333333333403,
+          "place": 3
+        },
+        {
+          "id": "cmvovgsoi000m5pmjl4btxz3g",
+          "finish": 32.83333333333403,
+          "place": 4
+        },
+        {
+          "id": "cmvovgsot000o5pmjmti487xs",
+          "finish": 32.96666666666736,
+          "place": 5
+        },
+        {
+          "id": "cmvovgs5g00045pmjd0rm2mkx",
+          "finish": 32.96666666666736,
+          "place": 6
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "midnight-sprint",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 1,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9030274142755559,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 6,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovgsot000p5pmjsrmxz6cf",
+          "finish": 41.43333333333354,
+          "place": 1
+        },
+        {
+          "id": "cmvovgs8100065pmj0qmx1b1q",
+          "finish": 41.500000000000206,
+          "place": 2
+        },
+        {
+          "id": "cmvovgsj7000e5pmj6q9feryq",
+          "finish": 41.63333333333353,
+          "place": 3
+        },
+        {
+          "id": "cmvovgsd9000a5pmjbtqo4app",
+          "finish": 41.66666666666686,
+          "place": 4
+        },
+        {
+          "id": "cmvovgsc900085pmjvt4lnq5l",
+          "finish": 41.86666666666685,
+          "place": 5
+        },
+        {
+          "id": "cmvovgseo000c5pmj4mxd4vzy",
+          "finish": 41.86666666666685,
+          "place": 6
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "industrial-run",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 1,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.90302167717387,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 6,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovgsk5000g5pmjb9ic1sgq",
+          "finish": 46.73333333333324,
+          "place": 1
+        },
+        {
+          "id": "cmvovgsll000i5pmjvi5nh8u1",
+          "finish": 46.76666666666657,
+          "place": 2
+        },
+        {
+          "id": "cmvovgsn6000k5pmjv9wqoxbs",
+          "finish": 46.799999999999905,
+          "place": 3
+        },
+        {
+          "id": "cmvovgta5001b5pmj51in1kj4",
+          "finish": 46.799999999999905,
+          "place": 4
+        },
+        {
+          "id": "cmvovgsrm000z5pmjbbet4l0y",
+          "finish": 47.09999999999989,
+          "place": 6
+        },
+        {
+          "id": "cmvovgssk00155pmjxkccrd36",
+          "finish": 47.066666666666556,
+          "place": 5
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 6
+}

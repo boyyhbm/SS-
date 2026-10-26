@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-26T07:28:22.286Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR .15 functional verification; NOT a GPU or physical controller certification",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "matchId": "cmvoxr2hh00100fn3fomdbfe6",
+      "records": [
+        {
+          "place": 2,
+          "seconds": 43.96666666666673,
+          "serverVerified": true
+        },
+        {
+          "place": 1,
+          "seconds": 43.533333333333424,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ]
+    }
+  ],
+  "stage": "complete"
+}

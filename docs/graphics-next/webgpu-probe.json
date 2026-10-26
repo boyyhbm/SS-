@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-26T05:12:58.130Z",
+  "physicalGpuAvailable": false,
+  "scope": "Separate renderer compatibility probe, not gameplay or a GPU performance certification",
+  "attempts": [
+    {
+      "experimentalSoftwareFlags": false,
+      "ready": true,
+      "available": false,
+      "actualBackend": "webgl2-fallback",
+      "productionCompatible": false,
+      "notes": [
+        "PBR car subset excludes the legacy GLSL contact decal; full city compatibility is tested separately."
+      ],
+      "frames": [
+        197.70000000298023,
+        7826.199999988079,
+        1007.3000000119209,
+        945.5,
+        843.3999999910593,
+        856.0999999940395,
+        948.5999999940395,
+        842.8000000119209,
+        912,
+        886.6999999880791,
+        766.6000000089407,
+        747.7000000029802
+      ],
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "messages": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "No available adapters.",
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible.",
+        "THREE.Renderer: \"renderAsync()\" has been deprecated. Use \"render()\" and \"await renderer.init();\" when creating the renderer.",
+        "THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend.",
+        "[.WebGL-0x210c001b5a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "[.WebGL-0x210c001b5a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+      ],
+      "fullSceneRenderReturned": true,
+      "compatibilityFailure": [
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible."
+      ],
+      "messageCounts": {
+        "Failed to load resource: the server responded with a status of 404 (Not Found)": 1,
+        "No available adapters.": 1,
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible.": 3,
+        "THREE.Renderer: \"renderAsync()\" has been deprecated. Use \"render()\" and \"await renderer.init();\" when creating the renderer.": 1,
+        "THREE.WebGPURenderer: WebGPU is not available, running under WebGL2 backend.": 1,
+        "[.WebGL-0x210c001b5a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels": 3,
+        "[.WebGL-0x210c001b5a00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)": 1
+      }
+    },
+    {
+      "experimentalSoftwareFlags": true,
+      "ready": true,
+      "available": true,
+      "actualBackend": "webgpu",
+      "productionCompatible": false,
+      "notes": [
+        "PBR car subset excludes the legacy GLSL contact decal; full city compatibility is tested separately."
+      ],
+      "frames": [
+        30.599999994039536,
+        12,
+        11.200000002980232,
+        17.799999997019768,
+        19.5,
+        14.5,
+        17.80000001192093,
+        13.899999991059303,
+        16.5,
+        16.900000005960464,
+        16.5,
+        18.400000005960464
+      ],
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+      "secureContext": true,
+      "messages": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Instance dropped in popErrorScope",
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible.",
+        "THREE.Renderer: \"renderAsync()\" has been deprecated. Use \"render()\" and \"await renderer.init();\" when creating the renderer."
+      ],
+      "fullSceneRenderReturned": true,
+      "compatibilityFailure": [
+        "Instance dropped in popErrorScope",
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible."
+      ],
+      "messageCounts": {
+        "Failed to load resource: the server responded with a status of 404 (Not Found)": 1,
+        "Instance dropped in popErrorScope": 220,
+        "THREE.NodeBuilder: Material \"ShaderMaterial\" is not compatible.": 3,
+        "THREE.Renderer: \"renderAsync()\" has been deprecated. Use \"render()\" and \"await renderer.init();\" when creating the renderer.": 1
+      }
+    }
+  ],
+  "decision": "Retain WebGL2 production fallback: full legacy GLSL/PMREM graph must pass compatibility and physical GPU benchmarks before a backend migration."
+}

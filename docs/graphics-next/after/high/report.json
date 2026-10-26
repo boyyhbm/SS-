@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-26T07:07:25.610Z",
+  "sourceCommit": "ca7797819e084aaf903b8461c2fd992bcbf1e861",
+  "kind": "Actual Three.js graphics fixtures, synthetic visual car poses; NOT gameplay or multiplayer proof",
+  "viewport": [
+    1280,
+    720
+  ],
+  "deviceScaleFactor": 1,
+  "tier": "high",
+  "sourceUncommitted": false,
+  "errors": [],
+  "scenes": [
+    {
+      "name": "showcase",
+      "cars": 1,
+      "file": "showcase-1.png",
+      "frameIntervalsMs": [
+        10949.600000000006,
+        15516,
+        11399.5
+      ],
+      "drawCalls": 708,
+      "triangles": 2914636,
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    },
+    {
+      "name": "downtown",
+      "cars": 1,
+      "file": "downtown-1.png",
+      "frameIntervalsMs": [
+        11199.50000000003,
+        13316.099999999977,
+        11749.5
+      ],
+      "drawCalls": 837,
+      "triangles": 3157100,
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    },
+    {
+      "name": "speed",
+      "cars": 1,
+      "file": "speed-1.png",
+      "frameIntervalsMs": [
+        10549.599999999977,
+        8149.700000000012,
+        7333.099999999977
+      ],
+      "drawCalls": 507,
+      "triangles": 1993445,
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    },
+    {
+      "name": "corner",
+      "cars": 1,
+      "file": "corner-1.png",
+      "frameIntervalsMs": [
+        7333,
+        9749.699999999953,
+        8516.300000000047
+      ],
+      "drawCalls": 330,
+      "triangles": 1881183,
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+    }
+  ],
+  "passed": true
+}

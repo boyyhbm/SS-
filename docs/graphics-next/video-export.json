@@ -1,0 +1,12 @@
+{
+  "source": "video-pad/industrial-run.webm",
+  "sourceReport": "video-pad/video-report.json",
+  "trimStartSeconds": 59.599,
+  "durationSeconds": 24,
+  "timeScale": 1,
+  "frameInterpolation": false,
+  "encoding": "H264/yuv420p; source timestamps preserved; fixed recording frame rate is not game FPS",
+  "sourceRenderQuality": "Medium",
+  "sourceDpr": 0.5,
+  "physicalGpu": false
+}

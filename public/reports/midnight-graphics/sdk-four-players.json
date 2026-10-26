@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-26T06:33:15.748Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.903028104845634,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 4,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovre1s000cpbmjaru6itrn",
+          "finish": 32.700000000000706,
+          "place": 2
+        },
+        {
+          "id": "cmvovre1r000bpbmjq9vyt1mj",
+          "finish": 32.56666666666738,
+          "place": 1
+        },
+        {
+          "id": "cmvovrdqb0000pbmj3tw8fh9k",
+          "finish": 32.8000000000007,
+          "place": 3
+        },
+        {
+          "id": "cmvovre1u000dpbmj3ksgxhuf",
+          "finish": 32.83333333333403,
+          "place": 4
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "midnight-sprint",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.903155701015751,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 4,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovre1r000apbmjhkx02ay6",
+          "finish": 42.33333333333349,
+          "place": 4
+        },
+        {
+          "id": "cmvovrdv30002pbmjhg12ohbv",
+          "finish": 42.1333333333335,
+          "place": 3
+        },
+        {
+          "id": "cmvovrdvz0004pbmjxwi1qenq",
+          "finish": 41.86666666666685,
+          "place": 1
+        },
+        {
+          "id": "cmvovre3x000ipbmj06nlz06l",
+          "finish": 41.86666666666685,
+          "place": 2
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "industrial-run",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9033438556844401,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 4,
+      "serverFinishSeconds": [
+        {
+          "id": "cmvovrdzv0006pbmjxr9pagp9",
+          "finish": 46.93333333333323,
+          "place": 2
+        },
+        {
+          "id": "cmvovre110008pbmjtbdlh8s3",
+          "finish": 46.8999999999999,
+          "place": 1
+        },
+        {
+          "id": "cmvovre4b000jpbmj460b1pis",
+          "finish": 47.033333333333225,
+          "place": 3
+        },
+        {
+          "id": "cmvovre62000qpbmj2jjx3zhf",
+          "finish": 47.033333333333225,
+          "place": 4
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 4
+}

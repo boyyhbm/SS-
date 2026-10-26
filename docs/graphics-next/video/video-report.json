@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-26T07:53:25.345Z",
+  "sourceCommit": "6250431dd480887c1956afee387c80769edb5cb5",
+  "sourceUncommitted": false,
+  "mode": "video",
+  "origin": "http://localhost:3001",
+  "physicalController": "NOT_TESTED",
+  "renderSource": "Actual Next.js/Three.js GLB runtime; no generated images",
+  "errors": [],
+  "motionPreference": "no-preference",
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "quota": "See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC"
+  },
+  "routes": [
+    {
+      "route": "industrial-run",
+      "videoStartSeconds": 65.481,
+      "renderQuality": "medium",
+      "renderDpr": 0.5,
+      "input": "keyboard",
+      "peakSpeedKmh": 125.6365519437078,
+      "peakImpact": 0,
+      "lap": "1",
+      "checkpoint": "3 / 9",
+      "x": "240.05163224805108",
+      "z": "-62.40600204422021"
+    }
+  ],
+  "passed": true
+}
