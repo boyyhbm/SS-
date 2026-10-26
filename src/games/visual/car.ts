@@ -48,7 +48,7 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       if (m instanceof THREE.MeshPhysicalMaterial) {
         m.clearcoat = 1;
         m.iridescence = 0;
-        m.clearcoatRoughness = 0.22;
+        m.clearcoatRoughness = 0.12;
       }
       m.normalScale.set(0.025, 0.025);
       m.envMapIntensity = 1.15;
@@ -60,7 +60,7 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       m.envMapIntensity = 0.25;
     }
     if (/Rim|Chrome/.test(m.name)) {
-      m.roughness = 0.3;
+      m.roughness = 0.22;
       m.metalness = 0.85;
     }
     if (/Paint 2/.test(m.name)) {

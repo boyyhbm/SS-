@@ -59,7 +59,10 @@ try {
       name,
       count,
     });
-    await page.waitForFunction(() => window.graphicsLab.frames.length >= 2);
+    await page.waitForFunction(
+      (n) => window.graphicsLab.frames.length >= n,
+      Number(process.env.GRAPHICS_FRAME_SAMPLES ?? 2),
+    );
     const sample = await page.evaluate(() => {
       const g = document.querySelector('canvas').getContext('webgl2'),
         e = g.getExtension('WEBGL_debug_renderer_info');

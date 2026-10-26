@@ -320,11 +320,11 @@ export function createCityWorld(
           });
         }
       for (const side of [-1, 1]) {
-        const name = industrial ? 'Bistro_S3B1' : 'Bistro_S1B2';
+        const name = industrial ? 'Bistro_S3B1' : side < 0 ? 'Bistro_S1B1' : 'Bistro_S2B1';
         placements[name].push({
           x,
           z: z + side * 37,
-          yaw: (side < 0 ? Math.PI : 0) + (name === 'Bistro_S1B2' ? -Math.PI / 2 : 0),
+          yaw: side < 0 ? Math.PI : 0,
           scale: industrial ? 1.05 : 1,
           height: 1,
         });
