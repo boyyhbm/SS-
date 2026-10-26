@@ -998,17 +998,24 @@
   border-top: 1px solid #b9d2bc25;
   margin: 20px 0;
   padding-top: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
 }
 .graphics-settings label {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(95px, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
+  text-align: left;
   gap: 13px;
   font-size: 10px;
   color: #b9cbbb;
+}
+.graphics-settings select,
+.graphics-settings input[type='range'] {
+  min-width: 0;
+  width: 100%;
 }
 .graphics-settings select {
   background: #1d2b2f;
@@ -1583,6 +1590,11 @@ body:has(.online-playing) .controller-hints {
 }
 .graphics-settings {
   width: 100%;
+}
+.graphics-settings > .text-button {
+  max-width: none;
+  justify-self: start;
+  text-align: left;
 }
 .art-orbital-silence .game-cover > img,
 .art-evergreen .game-cover > img,

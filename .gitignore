@@ -26,3 +26,7 @@ docs/world-update/*.webm
 # Actual QA recordings are transcoded into the reviewable MP4 artifact.
 docs/gameplay-update/raw-video/
 docs/gameplay-update/*.webm
+
+# Raw, real-time QA recordings stay local; reviewable MP4s are exported separately.
+docs/graphics-next/**/raw-video/
+docs/graphics-next/**/*.webm

@@ -93,7 +93,7 @@ async function openRace(page: Page, id: string) {
   page.on('console', (m) => {
     if (m.type() === 'error' && /THREE|WebGL|shader/i.test(m.text())) errors.push(m.text());
   });
-  if (['screens', 'video', 'collision'].includes(mode)) {
+  if (['screens', 'video', 'collision', 'still'].includes(mode)) {
     const r = await page.request.post(origin + '/api/racing-settings', {
       headers: { Origin: origin },
       data: { racingLine: 'full' },
@@ -138,7 +138,13 @@ const report: Record<string, unknown> = {
     release: os.release(),
     cpu: os.cpus()[0]?.model,
     logicalCpus: os.cpus().length,
-    quota: 'See /sys/fs/cgroup/cpu.max on the cloud runner; this is not a physical gaming PC',
+    cpuQuota: (await readFile('/sys/fs/cgroup/cpu.max', 'utf8').catch(() => 'unavailable')).trim(),
+    memoryLimitBytes: (
+      await readFile('/sys/fs/cgroup/memory.max', 'utf8').catch(() => 'unavailable')
+    ).trim(),
+    nodeVersion: process.version,
+    browserVersion: browser.version(),
+    physicalGamingGpu: false,
   },
 };
 try {
@@ -240,13 +246,14 @@ try {
     if (qualities.some((q) => !['auto', 'low', 'medium', 'high', 'ultra', 'cinematic'].includes(q)))
       throw Error('Unknown quality');
     for (const quality of qualities) {
+      console.log('Measuring actual preset:', quality);
       const c = await context(quality, 1),
         page = await c.newPage();
       await openRace(page, cityRoutes[0].id);
       await begin(page);
       await installDriver(page, 'gamepad', 'single', 18);
       await page.waitForFunction(
-        () => (window as unknown as { cityStats: unknown[] }).cityStats.length >= 3,
+        () => (window as unknown as { cityStats: unknown[] }).cityStats.length >= 1,
       );
       await page.evaluate(() => {
         (window as unknown as { cityStats: unknown[] }).cityStats = [];
@@ -316,9 +323,183 @@ try {
         ...data,
       });
       await c.close();
+      console.log('Preset measurement completed:', quality);
+      await writeFile(out + '/performance-progress.json', JSON.stringify(report, null, 2) + '\n');
     }
     report.results = results;
     report.target60FPS = 'Not verified on a physical gaming PC; software WebGL measurements only';
+  } else if (mode === 'still') {
+    const quality = process.env.NEXUS_QA_QUALITY ?? 'high',
+      c = await context(
+        process.env.NEXUS_QA_STILL_TOUR === '1' ? 'low' : quality,
+        process.env.NEXUS_QA_STILL_TOUR === '1' ? 0.15 : 1,
+      ),
+      page = await c.newPage();
+    const nativeShot = async (name: string) => {
+      const cdp = await c.newCDPSession(page);
+      const shot = await cdp.send('Page.captureScreenshot', {
+        format: 'png',
+        fromSurface: true,
+        captureBeyondViewport: false,
+        clip: { x: 0, y: 0, width: 1280, height: 720, scale: 1 },
+      });
+      const png = Buffer.from(shot.data, 'base64');
+      if (png.readUInt32BE(16) !== 1280 || png.readUInt32BE(20) !== 720)
+        throw Error('Native screenshot resolution mismatch');
+      await writeFile(out + '/' + name, png);
+      await cdp.detach();
+    };
+    await openRace(page, 'downtown-circuit');
+    if (process.env.NEXUS_QA_STILL_TOUR === '1')
+      await page.getByRole('button', { name: 'Свободная тренировка', exact: true }).click();
+    await begin(page);
+    if (process.env.NEXUS_QA_STILL_TOUR === '1') {
+      await installDriver(page, 'gamepad', 'single', 18, [
+        { x: -160, z: 20 },
+        { x: -160, z: -100 },
+        { x: -40, z: -100 },
+        { x: -40, z: 20 },
+        { x: -160, z: 20 },
+      ]);
+      await page.waitForFunction(
+        () => {
+          const r = document.querySelector<HTMLElement>('[data-testid="race-player"]');
+          return (
+            !!r &&
+            Math.abs(Number(r.dataset.z) - 20) < 5 &&
+            Number(r.dataset.x) < -75 &&
+            Number(r.dataset.x) > -100
+          );
+        },
+        null,
+        { polling: 100, timeout: 240000 },
+      );
+      console.log('Photo viewpoint reached with normalized input');
+      await page.evaluate(() => Object.assign(window, { nexusDriverCruiseSpeed: 0 }));
+      await page.waitForFunction(
+        () => Number(document.querySelector('[data-testid="speed"]')?.textContent) < 2,
+        null,
+        { polling: 100 },
+      );
+      await page.evaluate(() => Object.assign(window, { nexusDriverPaused: true }));
+      // Drive using genuine normalized input at a low navigation cost on the software GPU.
+      // Reload the actual renderer through the real pause UI at native capture resolution.
+      await page.getByRole('button', { name: 'Пауза', exact: true }).click({ force: true });
+      await page.locator('[data-game-resume]').waitFor();
+      console.log('Parked; loading native-resolution photo quality');
+      const cdp = await c.newCDPSession(page);
+      await cdp.send('Emulation.setDeviceMetricsOverride', {
+        width: 1280,
+        height: 720,
+        deviceScaleFactor: 1,
+        mobile: false,
+      });
+      await page.getByLabel('Графика', { exact: true }).selectOption(quality);
+      await page.waitForFunction(
+        (q) => {
+          const canvas = document.querySelector('canvas');
+          return (
+            canvas?.dataset.quality === q &&
+            canvas.dataset.assets === 'glb-loaded' &&
+            canvas.width === 1280 &&
+            canvas.height === 720
+          );
+        },
+        quality,
+        { polling: 500 },
+      );
+      await page.locator('[data-game-resume]').click({ force: true });
+      await page.waitForFunction(() => !document.querySelector('.pause-overlay'));
+      report.navigation = {
+        quality: 'low',
+        deviceScaleFactor: 0.15,
+        input: 'normalized virtual gamepad',
+        poseInjection: false,
+      };
+      report.capture = {
+        quality,
+        width: 1280,
+        height: 720,
+        deviceScaleFactor: 1,
+        actualPausedUiQualityChange: true,
+      };
+    } else {
+      await page.keyboard.down('KeyW');
+      await page.waitForFunction(
+        () => Number(document.querySelector('[data-testid="speed"]')?.textContent) > 20,
+        null,
+        { polling: 100 },
+      );
+      await page.keyboard.up('KeyW');
+    }
+    console.log('Capturing actual native-resolution gameplay');
+    await nativeShot('gameplay.png');
+    await page.keyboard.down('KeyC');
+    await page.waitForFunction(
+      () => document.querySelector('canvas')?.dataset.cameraMode === '1',
+      null,
+      { polling: 500, timeout: 120000 },
+    );
+    await page.keyboard.up('KeyC');
+    await nativeShot('car-close.png');
+    report.pose = await page
+      .getByTestId('race-player')
+      .evaluate((r) => ({ x: r.dataset.x, z: r.dataset.z, heading: r.dataset.heading }));
+    await page.getByRole('button', { name: 'Пауза', exact: true }).click({ force: true });
+    await page.locator('[data-game-resume]').waitFor();
+    await nativeShot('pause.png');
+    report.quality = quality;
+    report.deviceScaleFactor = 1;
+    report.scope =
+      process.env.NEXUS_QA_STILL_TOUR === '1'
+        ? 'Actual Free Drive with normalized virtual gamepad inputs on connected streets; no pose injection or performance certification'
+        : 'Actual game runtime with normal keyboard input; not a performance benchmark';
+    await c.close();
+  } else if (mode === 'settings') {
+    const c = await context('low', 0.15),
+      page = await c.newPage();
+    await openRace(page, 'downtown-circuit');
+    await begin(page);
+    await page.getByRole('button', { name: 'Пауза', exact: true }).click({ force: true });
+    await page.locator('[data-game-resume]').waitFor();
+    const layouts = [];
+    for (const viewport of [
+      { width: 1280, height: 720 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(viewport);
+      const geometry = await page.locator('.graphics-settings').evaluate((root) => {
+        const card = root.closest('.pause-card')!;
+        const box = card.getBoundingClientRect();
+        const controls = [...root.querySelectorAll('select,input,button')].map((node) => {
+          const r = node.getBoundingClientRect();
+          return { left: r.left, right: r.right, width: r.width };
+        });
+        return {
+          card: {
+            left: box.left,
+            right: box.right,
+            scrollWidth: card.scrollWidth,
+            clientWidth: card.clientWidth,
+          },
+          controls,
+          viewport: innerWidth,
+        };
+      });
+      if (
+        geometry.card.scrollWidth > geometry.card.clientWidth + 1 ||
+        geometry.controls.some(
+          (r) => r.left < geometry.card.left || r.right > geometry.card.right || r.width < 1,
+        )
+      )
+        throw Error('Graphics settings overflow the pause card');
+      await page.screenshot({ path: out + `/pause-${viewport.width}.png`, scale: 'css' });
+      layouts.push({ viewport, geometry });
+    }
+    report.layouts = layouts;
+    report.scope =
+      'Actual pause controls on desktop/mobile, Low/DPR0.15 scene; UI screenshots at CSS resolution, not High graphics evidence';
+    await c.close();
   } else if (mode === 'screens') {
     const c = await context(process.env.NEXUS_QA_QUALITY ?? 'high', 1),
       page = await c.newPage();
@@ -466,7 +647,11 @@ try {
       }, process.env.NEXUS_QA_VIDEO_NITRO === '1');
       await installDriver(
         page,
-        r.id === 'industrial-run' ? 'keyboard' : 'gamepad',
+        process.env.NEXUS_QA_VIDEO_INPUT === 'gamepad'
+          ? 'gamepad'
+          : r.id === 'industrial-run'
+            ? 'keyboard'
+            : 'gamepad',
         'single',
         mode === 'video' ? Number(process.env.NEXUS_QA_VIDEO_SPEED ?? 24) : undefined,
       );
@@ -476,6 +661,10 @@ try {
             document.querySelector('[data-testid="race-player"]')?.getAttribute('data-lap') === '2',
           null,
           { timeout: 180000 },
+        );
+      else if (process.env.NEXUS_QA_VIDEO_SECONDS)
+        await page.waitForTimeout(
+          Math.min(60, Math.max(5, Number(process.env.NEXUS_QA_VIDEO_SECONDS))) * 1000,
         );
       else
         await page.waitForFunction(
@@ -506,7 +695,12 @@ try {
         videoStartSeconds: (drivingStarted - recordingStarted) / 1000,
         renderQuality: mode === 'video' ? 'medium' : 'low',
         renderDpr: mode === 'video' ? 0.5 : 0.15,
-        input: r.id === 'industrial-run' ? 'keyboard' : 'virtual analog gamepad',
+        input:
+          process.env.NEXUS_QA_VIDEO_INPUT === 'gamepad'
+            ? 'virtual analog gamepad'
+            : r.id === 'industrial-run'
+              ? 'keyboard'
+              : 'virtual analog gamepad',
         ...data,
       });
     }

@@ -1,15 +1,27 @@
 import type { Page } from '@playwright/test';
-import { cityRoutes } from '../../src/games/road-network.ts';
+import { cityRoutes, type Point } from '../../src/games/road-network.ts';
 export async function installDriver(
   page: Page,
   method: 'gamepad' | 'keyboard' = 'gamepad',
   kind: 'online' | 'single' = 'online',
   cruiseSpeed?: number,
+  drivingPath?: Point[],
 ) {
   const routeId = await page
     .getByTestId(kind === 'single' ? 'race-player' : 'online-player')
     .getAttribute('data-route');
-  const route = cityRoutes.find((r) => r.id === routeId);
+  const densePath = drivingPath?.flatMap((a, i) => {
+    const b = drivingPath[i + 1];
+    if (!b) return [a];
+    const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 0.8));
+    return Array.from({ length: steps }, (_, n) => ({
+      x: a.x + ((b.x - a.x) * n) / steps,
+      z: a.z + ((b.z - a.z) * n) / steps,
+    }));
+  });
+  const route = drivingPath
+    ? { path: densePath!, kind: 'circuit' as const }
+    : cityRoutes.find((r) => r.id === routeId);
   await page.evaluate(
     ({ method, kind, cruiseSpeed, route }) => {
       const button = (value = 0) => ({ pressed: value > 0.2, touched: value > 0.2, value });
@@ -172,23 +184,29 @@ export async function installDriver(
                   ? 0
                   : Math.sign(steer) * (0.15 + Math.abs(steer) * 0.85);
             pad.buttons[7] = button(
-              targetSpeed === undefined
-                ? 1
-                : Math.max(
-                    0,
-                    Math.min(
-                      1,
-                      (route
-                        ? (0.8 + 0.0055 * targetSpeed * targetSpeed) / (boosting ? 17 : 10)
-                        : 0.2) +
-                        (targetSpeed - speed) * (route ? 0.22 : 0.15),
+              targetSpeed === 0
+                ? 0
+                : targetSpeed === undefined
+                  ? 1
+                  : Math.max(
+                      0,
+                      Math.min(
+                        1,
+                        (route
+                          ? (0.8 + 0.0055 * targetSpeed * targetSpeed) / (boosting ? 17 : 10)
+                          : 0.2) +
+                          (targetSpeed - speed) * (route ? 0.22 : 0.15),
+                      ),
                     ),
-                  ),
             );
             pad.buttons[6] = button(
-              route && targetSpeed !== undefined && speed > targetSpeed + 2
-                ? Math.min(1, (speed - targetSpeed) * 0.12)
-                : 0,
+              targetSpeed === 0
+                ? speed > 0.05
+                  ? 1
+                  : 0
+                : route && targetSpeed !== undefined && speed > targetSpeed + 2
+                  ? Math.min(1, (speed - targetSpeed) * 0.12)
+                  : 0,
             );
           } else {
             duty += Math.abs(steer);
