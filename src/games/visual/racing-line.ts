@@ -16,6 +16,7 @@ export function createRacingLine(scene: THREE.Scene) {
   const mesh = new THREE.Mesh(geometry, material);
   mesh.renderOrder = 2;
   mesh.name = 'Dynamic_racing_line';
+  mesh.layers.set(2);
   scene.add(mesh);
   let id: RouteId | undefined,
     data: ReturnType<typeof buildRacingLine>,

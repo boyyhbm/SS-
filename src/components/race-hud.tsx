@@ -223,12 +223,33 @@ export function GraphicsSettings({ language }: { language: 'ru' | 'en' }) {
             value={settings.quality}
             onChange={(e) => settings.setQuality(e.target.value as RenderQuality)}
           >
-            {(['auto', 'low', 'medium', 'high'] as const).map((q) => (
+            {(['auto', 'low', 'medium', 'high', 'ultra', 'cinematic'] as const).map((q) => (
               <option value={q} key={q}>
                 {t(q)}
               </option>
             ))}
           </select>
+        </label>
+        <label>
+          {t('postIntensity')}
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            aria-label={t('postIntensity')}
+            value={settings.postIntensity ?? 0.7}
+            onChange={(e) => settings.setPostIntensity(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={settings.quality === 'auto' || (settings.dynamicResolution ?? false)}
+            disabled={settings.quality === 'auto'}
+            onChange={(e) => settings.setDynamicResolution(e.target.checked)}
+          />
+          {t('dynamicResolution')}
         </label>
         <button className="text-button" onClick={() => setCredits(true)}>
           {t('credits')}

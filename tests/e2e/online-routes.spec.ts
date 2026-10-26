@@ -58,6 +58,17 @@ for (const { route, contacts } of cases)
         }),
       ),
     );
+    if (process.env.E2E_SOFTWARE_DPR)
+      await Promise.all(
+        contexts.map((c) =>
+          c.addInitScript(() =>
+            localStorage.setItem(
+              'nexus-render-quality',
+              JSON.stringify({ state: { quality: 'low' }, version: 0 }),
+            ),
+          ),
+        ),
+      );
     const pages = await Promise.all(contexts.map((c) => c.newPage()));
     const events: { client: number; type: string; at: number }[] = [];
     for (const [client, p] of pages.entries()) {

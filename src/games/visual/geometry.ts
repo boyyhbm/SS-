@@ -11,7 +11,10 @@ export function batchStaticMeshes(root: THREE.Object3D) {
   root.traverse((object) => {
     if (!(object instanceof THREE.Mesh) || Array.isArray(object.material)) return;
     const geometry = object.geometry.clone();
-    for (const key of ['position', 'normal', 'tangent']) {
+    // Normalize accessor storage, not its values. Quantized UVs and float UVs
+    // may describe the same material but previously forced separate draw calls.
+    for (const key of Object.keys(geometry.attributes)) {
+      if (key === 'skinIndex') continue;
       const attribute = geometry.getAttribute(key);
       if (!attribute) continue;
       const values = new Float32Array(attribute.count * attribute.itemSize);
@@ -19,6 +22,15 @@ export function batchStaticMeshes(root: THREE.Object3D) {
         for (let component = 0; component < attribute.itemSize; component++)
           values[i * attribute.itemSize + component] = attribute.getComponent(i, component);
       geometry.setAttribute(key, new THREE.BufferAttribute(values, attribute.itemSize));
+    }
+    if (!(object.material instanceof THREE.ShaderMaterial)) {
+      const channels = new Set<number>();
+      for (const value of Object.values(object.material))
+        if (value instanceof THREE.Texture && value.mapping === THREE.UVMapping)
+          channels.add(value.channel);
+      for (const key of Object.keys(geometry.attributes))
+        if (/^uv[123]?$/.test(key) && !channels.has(key === 'uv' ? 0 : Number(key.slice(2))))
+          geometry.deleteAttribute(key);
     }
     geometry.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, object.matrixWorld));
     const key =

@@ -84,7 +84,7 @@ async function context(quality: string, dpr: number, record?: string) {
       w.cityStats.push((e as CustomEvent).detail),
     );
   }, quality);
-  c.setDefaultTimeout(180000);
+  c.setDefaultTimeout(Number(process.env.NEXUS_QA_TIMEOUT_MS ?? 180000));
   return c;
 }
 async function openRace(page: Page, id: string) {
@@ -232,7 +232,12 @@ try {
   } else if (mode === 'performance') {
     const results: Record<string, unknown>[] = [];
     report.results = results;
-    for (const quality of ['low', 'medium', 'high', 'auto']) {
+    const qualities = (
+      process.env.NEXUS_QA_QUALITIES ?? 'low,medium,high,ultra,cinematic,auto'
+    ).split(',');
+    if (qualities.some((q) => !['auto', 'low', 'medium', 'high', 'ultra', 'cinematic'].includes(q)))
+      throw Error('Unknown quality');
+    for (const quality of qualities) {
       const c = await context(quality, 1),
         page = await c.newPage();
       await openRace(page, cityRoutes[0].id);
@@ -245,16 +250,32 @@ try {
         (window as unknown as { cityStats: unknown[] }).cityStats = [];
       });
       const start = Date.now();
+      await page.evaluate(
+        ({ samples, maxWall }) => {
+          Object.assign(window, {
+            requiredFrameSamples: samples,
+            benchmarkEndsAt: performance.now() + maxWall,
+          });
+        },
+        {
+          samples: Number(process.env.NEXUS_QA_FRAME_SAMPLES ?? 100),
+          maxWall: Number(process.env.NEXUS_QA_BENCHMARK_MS ?? 600000),
+        },
+      );
       await page.waitForFunction(
         () => {
           const a = (
             window as unknown as { cityStats: { frameTimesMs: number[]; paused: boolean }[] }
           ).cityStats.filter((x) => !x.paused);
           return (
+            (a.length >= 2 &&
+              performance.now() >
+                Number((window as unknown as { benchmarkEndsAt: number }).benchmarkEndsAt)) ||
             a.reduce((s, x) => s + x.frameTimesMs.length, 0) >=
-            Number(
-              (window as unknown as { requiredFrameSamples?: number }).requiredFrameSamples ?? 100,
-            )
+              Number(
+                (window as unknown as { requiredFrameSamples?: number }).requiredFrameSamples ??
+                  100,
+              )
           );
         },
         null,
@@ -288,6 +309,8 @@ try {
         requestedQuality: quality,
         elapsedWallMs: Date.now() - start,
         deviceScaleFactor: 1,
+        requiredSamples: Number(process.env.NEXUS_QA_FRAME_SAMPLES ?? 100),
+        wallBudgetMs: Number(process.env.NEXUS_QA_BENCHMARK_MS ?? 600000),
         ...data,
       });
       await c.close();
@@ -295,7 +318,7 @@ try {
     report.results = results;
     report.target60FPS = 'Not verified on a physical gaming PC; software WebGL measurements only';
   } else if (mode === 'screens') {
-    const c = await context('high', 1),
+    const c = await context(process.env.NEXUS_QA_QUALITY ?? 'high', 1),
       page = await c.newPage();
     await openRace(page, 'downtown-circuit');
     await page.screenshot({ path: out + '/route-map.png' });

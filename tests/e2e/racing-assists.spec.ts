@@ -1,5 +1,5 @@
 import { isolateRegistrationQuota } from '../helpers/registration-quota';
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { randomBytes } from 'node:crypto';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';

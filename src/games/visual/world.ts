@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { asphaltMaterial } from './city-world';
+import { createShadowLighting } from './lighting';
 import { TRACK_RADIUS as R, ROAD_HALF_WIDTH as HALF, type RaceState } from '../racing-physics';
 import { qualityPresets, type RenderTier } from './quality';
 import type { RaceAssets } from './assets';
@@ -91,27 +92,19 @@ export function createWorld(
     }),
   );
   scene.add(sky);
-  const key = new THREE.DirectionalLight('#bad2eb', 1.15);
-  key.position.set(-35, 55, 20);
-  key.castShadow = preset.shadows;
-  key.shadow.mapSize.set(tier === 'high' ? 2048 : 1024, tier === 'high' ? 2048 : 1024);
-  key.shadow.bias = -0.0006;
-  key.shadow.normalBias = 0.04;
-  Object.assign(key.shadow.camera, {
-    left: -24,
-    right: 24,
-    top: 24,
-    bottom: -24,
-    near: 1,
-    far: 130,
-  });
-  scene.add(key, key.target);
+  const lighting = createShadowLighting(
+    scene,
+    tier,
+    '#bad2eb',
+    1.15,
+    new THREE.Vector3(-35, 55, 20),
+  );
   const pmrem = new THREE.PMREMGenerator(renderer);
   const environment = pmrem.fromEquirectangular(assets.environment);
   pmrem.dispose();
   scene.environment = environment.texture;
   scene.environmentIntensity = 0.4;
-  scene.environmentRotation.y = 0.7;
+  scene.environmentRotation.y = 0;
   const ground = new THREE.Mesh(
     new THREE.CircleGeometry(650, 96),
     new THREE.MeshStandardMaterial({ color: '#111b22', roughness: 0.94 }),
@@ -120,7 +113,7 @@ export function createWorld(
   ground.position.y = -0.08;
   ground.receiveShadow = true;
   scene.add(ground);
-  const roadMaterial = asphaltMaterial(assets,tier);
+  const roadMaterial = asphaltMaterial(assets, tier);
   const road = new THREE.Mesh(strip(R - HALF, R + HALF, 0), roadMaterial);
   road.receiveShadow = true;
   scene.add(road);
@@ -358,9 +351,7 @@ export function createWorld(
   return {
     update(race: RaceState, braking: boolean, dt: number, boost: boolean) {
       effects.update(race, braking, dt, boost);
-      key.position.set(race.x - 30, 55, race.z + 20);
-      key.target.position.set(race.x, 0, race.z);
-      key.target.updateMatrixWorld();
+      lighting.update(race.x, race.z);
       const ordered = lampPositions
         .map((p, i) => ({ p, i, d: p.distanceToSquared(cameraTarget.set(race.x, 0, race.z)) }))
         .sort((a, b) => a.d - b.d);
@@ -407,7 +398,7 @@ function createRoadEffects(scene: THREE.Scene, tier: RenderTier) {
   );
   marks.frustumCulled = false;
   scene.add(marks);
-  const count = tier === 'low' ? 100 : 300,
+  const count = Math.round(300 * qualityPresets[tier].particles),
     data = new Float32Array(count * 3);
   for (let i = 0; i < data.length; i++) data[i] = (Math.random() - 0.5) * 35;
   const rainGeometry = new THREE.BufferGeometry();

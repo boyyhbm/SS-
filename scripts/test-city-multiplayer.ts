@@ -2,6 +2,7 @@
 import 'dotenv/config';
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
+import path from 'node:path';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { Client, type Room, type SeatReservation } from '@colyseus/sdk';
 import { db } from '../src/lib/db';
@@ -19,6 +20,8 @@ if (
   !['localhost', '127.0.0.1'].includes(new URL(internal).hostname)
 )
   throw Error('Isolated local city QA only');
+const playerCount = Number(process.env.NEXUS_TEST_PLAYERS ?? 2);
+assert(Number.isInteger(playerCount) && playerCount >= 2 && playerCount <= 6);
 const contactMode = process.env.NEXUS_TEST_CONTACTS === '1';
 const faultMode = process.env.NEXUS_TEST_NETWORK === '1';
 const delayed = new Set<ReturnType<typeof setTimeout>>();
@@ -78,7 +81,7 @@ try {
         delayed.add(t);
       };
       const users = await Promise.all(
-        [0, 1].map(async () => {
+        Array.from({ length: playerCount }, (_, i) => i).map(async () => {
           const name = 'citynet_' + randomBytes(7).toString('hex');
           const user = await db.user.create({
             data: {
@@ -93,8 +96,10 @@ try {
           return user;
         }),
       );
-      const aId = users.map((u) => u.id).sort();
-      await db.friendship.create({ data: { userAId: aId[0], userBId: aId[1] } });
+      for (const user of users.slice(1)) {
+        const pair = [users[0].id, user.id].sort();
+        await db.friendship.create({ data: { userAId: pair[0], userBId: pair[1] } });
+      }
       type Peer = {
         room: Room;
         snapshot: RoomSnapshot | null;
@@ -113,7 +118,7 @@ try {
                 gameId: game.id,
                 routeId: route.id,
                 private: true,
-                maxPlayers: 2,
+                maxPlayers: playerCount,
                 carContacts: contactMode,
               },
         );
@@ -168,40 +173,54 @@ try {
         await wait(() => !!peer.snapshot, 'initial snapshot');
         return peer;
       }
-      const a = await connect(0);
-      await db.gameInvite.create({
-        data: {
-          senderId: users[0].id,
-          recipientId: users[1].id,
-          gameId: game.id,
-          roomId: a.room.roomId,
-          kind: 'GAME',
-          expiresAt: new Date(Date.now() + 60000),
-        },
-      });
-      const b = await connect(1, a.room.roomId);
+      const peers: Peer[] = [await connect(0)];
+      const a = peers[0];
+      for (let i = 1; i < playerCount; i++) {
+        await db.gameInvite.create({
+          data: {
+            senderId: users[0].id,
+            recipientId: users[i].id,
+            gameId: game.id,
+            roomId: a.room.roomId,
+            kind: 'GAME',
+            expiresAt: new Date(Date.now() + 60000),
+          },
+        });
+        peers.push(await connect(i, a.room.roomId));
+      }
+      const b = peers[1];
       await wait(
-        () => a.snapshot?.players.length === 2 && b.snapshot?.players.length === 2,
-        'two clients',
+        () => peers.every((p) => p.snapshot?.players.length === playerCount),
+        'all genuine SDK clients',
       );
-      assert.notDeepEqual(a.snapshot!.players[0].state, a.snapshot!.players[1].state);
+      assert.equal(
+        new Set(a.snapshot!.players.map((p) => p.state.x + ',' + p.state.z)).size,
+        playerCount,
+      );
       a.room.send('settings', { routeId: route.id, laps: 1, carContacts: contactMode });
       await wait(
         () => a.snapshot?.laps === 1 && b.snapshot?.route?.routeId === route.id,
         'route config',
       );
-      for (const p of [a, b]) p.room.send('ready', true);
+      for (const p of peers) p.room.send('ready', true);
       await wait(() => a.snapshot!.players.every((p) => p.ready), 'ready');
       a.room.send('start');
       a.room.send('start');
-      const raceTimers = [a, b].map((p) =>
+      const raceTimers = peers.map((p) =>
         setInterval(() => {
           if (p.room.connection.isOpen)
             p.prediction.frame(routeDriver(route, p.prediction.state), 1 / 30);
         }, 1000 / 30),
       );
       timers.push(...raceTimers);
-      await wait(() => a.snapshot?.phase === 'racing' && b.snapshot?.phase === 'racing', 'start');
+      await wait(() => peers.every((p) => p.snapshot?.phase === 'racing'), 'start');
+      assert(
+        peers.every(
+          (p) =>
+            p.snapshot?.startsAt === a.snapshot?.startsAt &&
+            p.snapshot?.matchId === a.snapshot?.matchId,
+        ),
+      );
       assert.equal(a.snapshot!.startsAt, b.snapshot!.startsAt);
       assert.equal(a.snapshot!.matchId, b.snapshot!.matchId);
       if (faultMode && route.id === 'industrial-run') {
@@ -209,16 +228,17 @@ try {
         b.room.connection.close(4010, 'Temporary QA disconnect');
         await wait(() => b.reconnects > 0, 'reconnection', 15000);
       }
-      await wait(() => a.snapshot?.saved === true && b.snapshot?.saved === true, 'results');
+      await wait(() => peers.every((p) => p.snapshot?.saved === true), 'results');
       raceTimers.forEach(clearInterval);
       assert.ok(a.snapshot!.players.every((p) => p.finish !== null));
       const results = (p: Peer) =>
         p.snapshot!.players.map((x) => ({ id: x.id, finish: x.finish, place: x.place }));
-      assert.deepEqual(results(a), results(b));
+      for (const peer of peers) assert.deepEqual(results(a), results(peer));
       const match = await db.multiplayerMatch.findUniqueOrThrow({
         where: { id: a.snapshot!.matchId! },
         include: { participants: { include: { result: true } } },
       });
+      assert.equal(match.participants.length, playerCount);
       assert.equal(match.routeId, route.id);
       assert.equal(match.routeVersion, a.snapshot!.route!.routeVersion);
       assert.equal(match.laps, 1);
@@ -229,33 +249,33 @@ try {
       assert.ok(match.participants.every((p) => p.result?.serverVerified && p.result.didFinish));
       const verifiedResults = results(a);
       a.room.send('rematch');
-      await wait(() => a.snapshot?.phase === 'lobby' && b.snapshot?.phase === 'lobby', 'rematch');
+      await wait(() => peers.every((p) => p.snapshot?.phase === 'lobby'), 'rematch');
       report.routes.push({
         routeId: route.id,
         routeVersion: match.routeVersion,
         carContacts: contactMode,
         networkSimulation: profile,
         measuredRttMedianMs:
-          [...a.rtts, ...b.rtts].sort((a, b) => a - b)[
-            Math.floor((a.rtts.length + b.rtts.length) / 2)
+          peers.flatMap((p) => p.rtts).sort((a, b) => a - b)[
+            Math.floor(peers.reduce((n, p) => n + p.rtts.length, 0) / 2)
           ] ?? null,
         simulationScope:
           'Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark',
         reconnects: b.reconnects,
         reconciliationErrorP95Meters:
-          [...a.errors, ...b.errors].sort((a, b) => a - b)[
-            Math.max(0, Math.ceil((a.errors.length + b.errors.length) * 0.95) - 1)
+          peers.flatMap((p) => p.errors).sort((a, b) => a - b)[
+            Math.max(0, Math.ceil(peers.reduce((n, p) => n + p.errors.length, 0) * 0.95) - 1)
           ] ?? null,
         contactEvents: verifiedContactEvents,
         mode: route.kind,
-        players: 2,
+        players: playerCount,
         serverFinishSeconds: verifiedResults,
         startsAtAgreed: true,
         resultsAgreed: true,
         savedToPostgres: true,
         rematch: true,
       });
-      for (const p of [a, b]) {
+      for (const p of peers) {
         p.room.reconnection.enabled = false;
         await p.room.leave(true);
       }
@@ -280,10 +300,22 @@ try {
   });
   await db.user.deleteMany({ where: { id: { in: ids }, username: { startsWith: 'citynet_' } } });
   await db.$disconnect();
-  await mkdir('docs/gameplay-update', { recursive: true });
+  const output =
+    process.env.NEXUS_TEST_CITY_OUTPUT ??
+    'docs/gameplay-update/' + (contactMode ? 'private-contacts.json' : 'multiplayer-routes.json');
+  await mkdir(path.dirname(output), { recursive: true });
   await writeFile(
-    'docs/gameplay-update/' + (contactMode ? 'private-contacts.json' : 'multiplayer-routes.json'),
-    JSON.stringify(report, null, 2) + '\n',
+    output,
+    JSON.stringify(
+      {
+        ...report,
+        scope:
+          'Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim',
+        playerCount,
+      },
+      null,
+      2,
+    ) + '\n',
   );
   console.log(
     JSON.stringify({

@@ -50,7 +50,7 @@ paths = sorted(set(value for m in materials.values() for key,value in m.items() 
 def convert(path):
     raw = download(path)
     image = Image.open(io.BytesIO(raw)).convert('RGBA')
-    image.thumbnail((1024,1024),Image.Resampling.LANCZOS)
+    image.thumbnail((2048,2048),Image.Resampling.LANCZOS)
     filename = hashlib.sha256(path.encode()).hexdigest()[:16] + '.webp'
     target = ROOT / 'converted' / filename
     target.parent.mkdir(exist_ok=True)

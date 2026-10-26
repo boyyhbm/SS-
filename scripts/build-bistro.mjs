@@ -15,7 +15,7 @@ import { readFile, writeFile, copyFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer';
 import sharp from 'sharp';
-export async function buildBistro(products) {
+export async function assembleBistro() {
   const descriptor = JSON.parse(await readFile('.asset-cache/bistro/descriptor.json', 'utf8'));
   const io = new NodeIO()
     .registerExtensions(ALL_EXTENSIONS)
@@ -30,7 +30,8 @@ export async function buildBistro(products) {
       if (!mesh) continue;
       // Godot sanitizes glTF node names: '.001' becomes '_001'. Reconstruct
       // those assignments as well, otherwise leaves and façade panels stay white.
-      const path = entry.materials[node.getName()] ?? entry.materials[node.getName().replaceAll('.','_')];
+      const path =
+        entry.materials[node.getName()] ?? entry.materials[node.getName().replaceAll('.', '_')];
       if (!path) continue;
       const spec = descriptor.materials[path];
       const mat = doc
@@ -57,7 +58,11 @@ export async function buildBistro(products) {
           .setBaseColorFactor([0.5, 0.62, 0.66, 0.9])
           .setRoughnessFactor(0.2)
           .setMetallicFactor(0.55);
-      if(/Leaves|Leaf|Cypress|Hedge|Foliage|Ivy/i.test(spec.name)&&!/Trunk|Bark/i.test(spec.name))mat.setAlphaMode('MASK').setAlphaCutoff(.45).setDoubleSided(true).setRoughnessFactor(.9);
+      if (
+        /Leaves|Leaf|Cypress|Hedge|Foliage|Ivy/i.test(spec.name) &&
+        !/Trunk|Bark/i.test(spec.name)
+      )
+        mat.setAlphaMode('MASK').setAlphaCutoff(0.45).setDoubleSided(true).setRoughnessFactor(0.9);
       if (spec.scale) {
         const ext = doc.createExtension(KHRTextureTransform);
         for (const info of [
@@ -70,21 +75,46 @@ export async function buildBistro(products) {
       }
       for (const p of mesh.listPrimitives()) p.setMaterial(mat);
     }
-    if(name==='S1Details'){
-      const selected=[
-        ['Tree',/Linde_Tree_Large_linde_tree_large_4051$/],
-        ['Cypress',/Italian_Cypress5_3931$/],
-        ['Hedge',/bux_hedge_box_long_low_3963$/],
+    if (name === 'S1Details') {
+      const selected = [
+        ['Tree', /Linde_Tree_Large_linde_tree_large_4051$/],
+        ['Cypress', /Italian_Cypress5_3931$/],
+        ['Hedge', /bux_hedge_box_long_low_3963$/],
       ];
-      const originalScene=doc.getRoot().listScenes()[0],roots=[];
-      for(const[label,pattern]of selected){const original=doc.getRoot().listNodes().find(n=>pattern.test(n.getName()));if(!original)throw Error('Reviewed foliage missing '+label);const matrix=original.getWorldMatrix();original.getParentNode()?.removeChild(original);original.setMatrix(matrix);const root=doc.createNode(`Bistro_${label}`);root.addChild(original);originalScene.addChild(root);const box=getBounds(root);root.setTranslation([-(box.min[0]+box.max[0])/2,-box.min[1],-(box.min[2]+box.max[2])/2]);roots.push(root);cache.set(label,box);}
-      for(const child of [...originalScene.listChildren()])if(!roots.includes(child))originalScene.removeChild(child);
-      const mapped=mergeDocuments(combined,doc);for(const root of roots)scene.addChild(mapped.get(root));
+      const originalScene = doc.getRoot().listScenes()[0],
+        roots = [];
+      for (const [label, pattern] of selected) {
+        const original = doc
+          .getRoot()
+          .listNodes()
+          .find((n) => pattern.test(n.getName()));
+        if (!original) throw Error('Reviewed foliage missing ' + label);
+        const matrix = original.getWorldMatrix();
+        original.getParentNode()?.removeChild(original);
+        original.setMatrix(matrix);
+        const root = doc.createNode(`Bistro_${label}`);
+        root.addChild(original);
+        originalScene.addChild(root);
+        const box = getBounds(root);
+        root.setTranslation([
+          -(box.min[0] + box.max[0]) / 2,
+          -box.min[1],
+          -(box.min[2] + box.max[2]) / 2,
+        ]);
+        roots.push(root);
+        cache.set(label, box);
+      }
+      for (const child of [...originalScene.listChildren()])
+        if (!roots.includes(child)) originalScene.removeChild(child);
+      const mapped = mergeDocuments(combined, doc);
+      for (const root of roots) scene.addChild(mapped.get(root));
       continue;
     }
     // This building also contains four full cypress trees in the source export.
     // Reuse the separate reviewed foliage template instead of duplicating them in every façade.
-    if(name==='S5B1')for(const n of doc.getRoot().listNodes())if(/Italian_Cypress/.test(n.getName())&&n.getMesh())n.dispose();
+    if (name === 'S5B1')
+      for (const n of doc.getRoot().listNodes())
+        if (/Italian_Cypress/.test(n.getName()) && n.getMesh()) n.dispose();
     const box = getBounds(doc.getRoot().listScenes()[0]),
       root = doc.createNode(`Bistro_${name}`),
       originalScene = doc.getRoot().listScenes()[0];
@@ -103,6 +133,13 @@ export async function buildBistro(products) {
   for (const s of combined.getRoot().listScenes()) if (s !== scene) s.dispose();
   combined.getRoot().setDefaultScene(scene);
   await combined.transform(prune(), dedup(), weld());
+  return { combined, scene, cache, descriptor };
+}
+export async function buildBistro(products) {
+  const { combined, scene, cache, descriptor } = await assembleBistro();
+  const io = new NodeIO()
+    .registerExtensions(ALL_EXTENSIONS)
+    .registerDependencies({ 'meshopt.encoder': MeshoptEncoder });
   for (const level of ['high', 'low']) {
     const doc = new Document();
     const mapping = mergeDocuments(doc, combined);

@@ -8,6 +8,9 @@ export const carColors: Record<string, string> = {
 export interface CarVisual {
   group: THREE.Group;
   dispose: () => void;
+  materials: THREE.Material[];
+  distance?: (meters: number) => void;
+  prewarm?: (enabled: boolean) => void;
   update: (
     speed: number,
     steer: number,
@@ -27,8 +30,9 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
   const unique = new Map<THREE.Material, THREE.Material>();
   model.traverse((o) => {
     if (!(o instanceof THREE.Mesh)) return;
+    o.layers.set(1);
     o.castShadow = true;
-    o.receiveShadow = false;
+    o.receiveShadow = true;
     const original = o.material as THREE.MeshStandardMaterial;
     let m = unique.get(original) as THREE.MeshStandardMaterial | undefined;
     if (!m) {
@@ -68,7 +72,11 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       if (/Glass/.test(m.name)) m.color.set('#637a86');
       if (m instanceof THREE.MeshPhysicalMaterial) m.transmission = 0;
       m.transparent = true;
-      m.opacity = 0.86;
+      m.opacity = /Mirror/.test(m.name) ? 1 : 0.68;
+      m.transparent = !/Mirror/.test(m.name);
+      m.depthWrite = !m.transparent;
+      m.side = THREE.FrontSide;
+      o.castShadow = false;
       m.roughness = 0.13;
       m.metalness = 0.06;
       m.envMapIntensity = 1.25;
@@ -121,7 +129,11 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
   const { group: body, geometries: ownedGeometry } = batchStaticMeshes(model);
   ownedGeometry.push(...wheelGeometry);
   group.traverse((o) => {
-    if (o instanceof THREE.Mesh) o.castShadow = true;
+    if (o instanceof THREE.Mesh) {
+      o.layers.set(1);
+      o.castShadow = !/Glass|Mirror/.test((o.material as THREE.Material).name);
+      o.receiveShadow = true;
+    }
   });
   const ground = new THREE.Box3().setFromObject(group).min.y;
   if (Number.isFinite(ground)) for (const child of group.children) child.position.y -= ground;
@@ -138,13 +150,17 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
   });
   const contact = new THREE.Mesh(contactGeometry, contactMaterial);
   contact.name = 'Tire_contact_shadow';
+  contact.layers.set(2);
   contact.rotation.x = -Math.PI / 2;
   contact.position.y = 0.001;
   contact.renderOrder = 1;
   group.add(contact);
-  let previousColor = '';
+  let previousColor = '',
+    lastSpeed = 0,
+    acceleration = 0;
   return {
     group,
+    materials: [...unique.values()],
     dispose() {
       ownedGeometry.forEach((g) => g.dispose());
       unique.forEach((m) => m.dispose());
@@ -164,9 +180,56 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
         w.spin.rotation.x += (speed * dt) / w.radius;
         if (w.front) w.steering.rotation.y = -steer * 0.38;
       }
-      body.rotation.z = -steer * Math.min(Math.abs(speed), 40) * 0.00065;
+      const response = 1 - Math.exp(-Math.max(0, dt) * 9);
+      if (dt > 0) {
+        const measured = Math.max(-18, Math.min(12, (speed - lastSpeed) / Math.max(0.001, dt)));
+        acceleration += (measured - acceleration) * response;
+      }
+      lastSpeed = speed;
+      body.rotation.z +=
+        (-steer * Math.min(Math.abs(speed), 40) * 0.0007 - body.rotation.z) * response;
       body.rotation.x +=
-        ((braking ? 0.012 : boost ? -0.008 : 0) - body.rotation.x) * (1 - Math.exp(-dt * 7));
+        (Math.max(-0.018, Math.min(0.018, -acceleration * 0.0011 + (braking ? 0.005 : 0))) -
+          body.rotation.x) *
+        response;
+    },
+  };
+}
+
+export function createRemoteCar(
+  high: THREE.Object3D,
+  low: THREE.Object3D,
+  simple: boolean,
+): CarVisual {
+  if (simple) return createCar(low, true);
+  const near = createCar(high),
+    far = createCar(low, true),
+    group = new THREE.Group();
+  group.add(near.group, far.group);
+  let detailed = true,
+    warming = false;
+  far.group.visible = false;
+  return {
+    group,
+    materials: [...near.materials, ...far.materials],
+    distance(meters) {
+      if (detailed && meters > 65) detailed = false;
+      else if (!detailed && meters < 48) detailed = true;
+      near.group.visible = warming || detailed;
+      far.group.visible = warming || !detailed;
+    },
+    prewarm(enabled) {
+      warming = enabled;
+      near.group.visible = enabled || detailed;
+      far.group.visible = enabled || !detailed;
+    },
+    update(...args) {
+      near.update(...args);
+      far.update(...args);
+    },
+    dispose() {
+      near.dispose();
+      far.dispose();
     },
   };
 }

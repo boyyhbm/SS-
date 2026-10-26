@@ -6,6 +6,9 @@ export default defineConfig([
   ...nextTs,
   globalIgnores([
     '.next/**',
+    '.asset-cache/**',
+    '.asset-tools/**',
+    'public/game-assets/basis-r186/**',
     'node_modules/**',
     'playwright-report/**',
     'test-results/**',

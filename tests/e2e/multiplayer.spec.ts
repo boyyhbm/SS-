@@ -13,6 +13,13 @@ const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3000';
 const password = 'Nexus real online test password';
 const errors: string[] = [];
 async function register(page: Page, suffix: string) {
+  if (process.env.E2E_SOFTWARE_DPR)
+    await page.addInitScript(() =>
+      localStorage.setItem(
+        'nexus-render-quality',
+        JSON.stringify({ state: { quality: 'low' }, version: 0 }),
+      ),
+    );
   const username = `${prefix}_${suffix}`;
   await page.goto('/register');
   await page.locator('[name="username"]').fill(username);

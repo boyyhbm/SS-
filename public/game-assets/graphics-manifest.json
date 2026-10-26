@@ -1,0 +1,1403 @@
+{
+  "version": 2,
+  "basisPath": "/game-assets/basis-r186/",
+  "car": {
+    "ktx2": "/game-assets/car-hero-ktx2-461916c2da.glb",
+    "fallback": "/game-assets/car-hero-webp-1bc28d8689.glb"
+  },
+  "district": {
+    "medium": {
+      "ktx2": "/game-assets/district-next-medium-ktx2-28c519e48d.glb",
+      "fallback": "/game-assets/district-next-medium-webp-4a1e311416.glb"
+    },
+    "high": {
+      "ktx2": "/game-assets/district-next-high-ktx2-bfea2c0e00.glb",
+      "fallback": "/game-assets/district-next-high-webp-fba5e091d0.glb"
+    },
+    "ultra": {
+      "ktx2": "/game-assets/district-ultra-5b90066dec/district.gltf",
+      "fallback": "/game-assets/district-next-high-webp-fba5e091d0.glb"
+    }
+  },
+  "surfaces": {
+    "asphalt": {
+      "color": {
+        "ktx2": "/game-assets/asphalt-next-color-e5deb4846c.ktx2",
+        "webp": "/game-assets/asphalt-next-color-ea5eddf63e.webp"
+      },
+      "normal": {
+        "ktx2": "/game-assets/asphalt-next-normal-b2f9f117e3.ktx2",
+        "webp": "/game-assets/asphalt-next-normal-4f00ce25c9.webp"
+      },
+      "roughness": {
+        "ktx2": "/game-assets/asphalt-next-roughness-b18cd933f3.ktx2",
+        "webp": "/game-assets/asphalt-next-roughness-96fecd1364.webp"
+      }
+    },
+    "pavement": {
+      "color": {
+        "ktx2": "/game-assets/pavement-next-color-9f6d473db0.ktx2",
+        "webp": "/game-assets/pavement-next-color-1cbfe93bb2.webp"
+      },
+      "normal": {
+        "ktx2": "/game-assets/pavement-next-normal-b88715eec7.ktx2",
+        "webp": "/game-assets/pavement-next-normal-c34646d45e.webp"
+      },
+      "roughness": {
+        "ktx2": "/game-assets/pavement-next-roughness-6e5466b762.ktx2",
+        "webp": "/game-assets/pavement-next-roughness-d49e51cfa2.webp"
+      }
+    }
+  },
+  "products": [
+    {
+      "filename": "car-hero-ktx2-461916c2da.glb",
+      "bytes": 6142184,
+      "sha256": "461916c2da6ee1d4c67c04dd40f446bc424a1fff9936a88d0e2b2245de952bda",
+      "triangles": 213195,
+      "textureMaximum": 2048,
+      "textureCount": 13
+    },
+    {
+      "filename": "car-hero-webp-1bc28d8689.glb",
+      "bytes": 3276620,
+      "sha256": "1bc28d8689595d63af2f58e81bdf813f4e9561cfc8d0c48546d43d533144c7b2",
+      "triangles": 213195,
+      "textureMaximum": 2048,
+      "textureCount": 13
+    },
+    {
+      "filename": "district-next-medium-ktx2-28c519e48d.glb",
+      "bytes": 18203368,
+      "sha256": "28c519e48d9fddb6fc7931729059beeec53c6f612017b2a73b09a78bf607cd8b",
+      "triangles": 200458,
+      "textureMaximum": 1024,
+      "textureCount": 71
+    },
+    {
+      "filename": "district-next-medium-webp-4a1e311416.glb",
+      "bytes": 14359308,
+      "sha256": "4a1e311416584f10b3f8d5cccccf5fb4bef4a9fdba62db37d73399b7f18d476a",
+      "triangles": 200458,
+      "textureMaximum": 1024,
+      "textureCount": 71
+    },
+    {
+      "filename": "district-next-high-ktx2-bfea2c0e00.glb",
+      "bytes": 57354600,
+      "sha256": "bfea2c0e00ca83fec59c7b22fc04cde8dda0751f1f80fe59b19b9830f2d1821a",
+      "triangles": 578834,
+      "textureMaximum": 2048,
+      "textureCount": 71
+    },
+    {
+      "filename": "district-next-high-webp-fba5e091d0.glb",
+      "bytes": 39233836,
+      "sha256": "fba5e091d022f7aba9a2969fa3c9e5d67f1a8fb56289d72f1f8e2f71d922c8cd",
+      "triangles": 578834,
+      "textureMaximum": 2048,
+      "textureCount": 71
+    },
+    {
+      "filename": "asphalt-next-color-e5deb4846c.ktx2",
+      "bytes": 3066344,
+      "sha256": "e5deb4846ce48107f7b4ba2d44cf8ae3fef63d0eacdd3f9259fbe3a2d2a976d3",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "asphalt-next-color-ea5eddf63e.webp",
+      "bytes": 1686256,
+      "sha256": "ea5eddf63ea7ff8012f97ea0b624ff30bff6ef3bc56b962bb5b86076f1a081e8",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "asphalt-next-normal-b2f9f117e3.ktx2",
+      "bytes": 4981358,
+      "sha256": "b2f9f117e3a3229133cbf695d7914b3e4cd2d97d550cd2aeb7041d9219e65d6f",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "asphalt-next-normal-4f00ce25c9.webp",
+      "bytes": 2487450,
+      "sha256": "4f00ce25c91ea8a6f2fcd05d9b781c2ab3838a6f8d1ec57521d7ebd333e8bb59",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "asphalt-next-roughness-b18cd933f3.ktx2",
+      "bytes": 1478920,
+      "sha256": "b18cd933f33fecc2169bd25d320cd48b845f9917a6351cf5c5e81e692c05a335",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "asphalt-next-roughness-96fecd1364.webp",
+      "bytes": 77290,
+      "sha256": "96fecd13646397f73ac9fec421e2c9c16df9feef50679b939e78c8ab997a8c21",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-color-9f6d473db0.ktx2",
+      "bytes": 2531642,
+      "sha256": "9f6d473db031a137e6bccef09ca5bd130658d209fe8f9fad05805c094e3743e0",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-color-1cbfe93bb2.webp",
+      "bytes": 996152,
+      "sha256": "1cbfe93bb2296c19e99af41c6dfb98756331e75bcb64eb570e2c83e6a067ef7c",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-normal-b88715eec7.ktx2",
+      "bytes": 3846077,
+      "sha256": "b88715eec7f18a70f4f3364905db4ebd6499b1251e77f59edafa1eb2574487c9",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-normal-c34646d45e.webp",
+      "bytes": 1315956,
+      "sha256": "c34646d45e196db013beecface5854f5f0ac2d03a56ff181f331431e6a107270",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-roughness-6e5466b762.ktx2",
+      "bytes": 933719,
+      "sha256": "6e5466b76259891e231edd0e742cf8908f89902f57c7f12a8b2f7b24120b1ae0",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "pavement-next-roughness-d49e51cfa2.webp",
+      "bytes": 58550,
+      "sha256": "d49e51cfa2256864f1d7ec93a71be03b3936ab360f9e13aa41c851bd3cc62abe",
+      "sourceResolution": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-90b242bb1c.ktx2",
+      "bytes": 524176,
+      "sha256": "90b242bb1cd1230c829dae2512b0fe240cb70fb7f134571fcfd54c120f9e04df",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-186d810831.ktx2",
+      "bytes": 2735714,
+      "sha256": "186d8108310892a74caed559b047796c64ea16b2c3b09731b4dce40af7d0e78d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-4143926443.ktx2",
+      "bytes": 818808,
+      "sha256": "414392644311073810cfde915435b3997a44e55904ec9aa822cbebe8fe2ab9e6",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c3031b1b1e.ktx2",
+      "bytes": 4746957,
+      "sha256": "c3031b1b1e1bb0f303efc282e01670b78f079c9374afc9c8c90d6419e9b0fce1",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-41eadd28cc.ktx2",
+      "bytes": 729649,
+      "sha256": "41eadd28ccff7316a2b3eac55a88f877bdb19be99df98fdb73fa98f73ee1a40a",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-471c142ff8.ktx2",
+      "bytes": 1744778,
+      "sha256": "471c142ff8814825de8f27c932a1edb8a8ac131453390f24d24d475959ab915c",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-67b3d93dca.ktx2",
+      "bytes": 315144,
+      "sha256": "67b3d93dca0d41d1601346eccb5145bd199c15be03041f27095415ebd234f821",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-7a6b02ae01.ktx2",
+      "bytes": 2286809,
+      "sha256": "7a6b02ae0107c7d9a97a7d7507ff2f20dc6948b5407326f1a53aa5e8d345929b",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-5c3db358b9.ktx2",
+      "bytes": 1724959,
+      "sha256": "5c3db358b9e3f9c60c21fffdd5ac319286a73ba41ef164b6b0931cb3dc453952",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-adaf331191.ktx2",
+      "bytes": 802365,
+      "sha256": "adaf3311915e91f18e6d100dab38878f42302c3c84f62b434799d4747bbc2174",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-dc962c7ad4.ktx2",
+      "bytes": 4514873,
+      "sha256": "dc962c7ad48eac4a92c794f7ea1ad088120b314ac6fc5219a032050d6888a3b5",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c90028dc30.ktx2",
+      "bytes": 4331312,
+      "sha256": "c90028dc30d394672ca6bec646a7cff0f1134804298a198e4f1b9b413600be18",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-ff269b8387.ktx2",
+      "bytes": 4123614,
+      "sha256": "ff269b8387b9350624e68f59dc65bc2e3cd593f75a1ba15d6aa9dcbe8c16cc1a",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-30ace668a0.ktx2",
+      "bytes": 786227,
+      "sha256": "30ace668a0f5cb13b737da2511614e0339368ef263261de77b1aec3dfa029f59",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-5ed75d8ecd.ktx2",
+      "bytes": 4433261,
+      "sha256": "5ed75d8ecd46743a00596fe44a04de3c6efb3125208cc04f8b8e98306ab0ead2",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-79549f5786.ktx2",
+      "bytes": 602525,
+      "sha256": "79549f5786fbc846737667ce83c3f96c5ffc4312257b76a3bc2e2aeca0e64d81",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c942703951.ktx2",
+      "bytes": 2193469,
+      "sha256": "c942703951e270930651c0cd8562a26495255b054b966e5fb274aa6ec5cebe5b",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-1a9b9459f4.ktx2",
+      "bytes": 479540,
+      "sha256": "1a9b9459f4a4480119eba67a027ae4d284440604357c854befb75f3327b70995",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-7e4aae8161.ktx2",
+      "bytes": 2078051,
+      "sha256": "7e4aae81612ececde6f606c6ddc250610faadd5a50187343dcaaf1c4d0e51caf",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-f981eb4eb3.ktx2",
+      "bytes": 734252,
+      "sha256": "f981eb4eb37941d26f69b7656b20e568ee45964903c8d2cadbdf9d3fd8fbba60",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c5b31e160c.ktx2",
+      "bytes": 5046229,
+      "sha256": "c5b31e160cdd977bf68efbc974e1658789c5df734c2d4136edc30e0e87e50c13",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-f0b5002b87.ktx2",
+      "bytes": 218979,
+      "sha256": "f0b5002b87023de27cd4cedb0b0801e48fee6f2472575b71a5ebeecb4d53982a",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-6665ede2c0.ktx2",
+      "bytes": 136740,
+      "sha256": "6665ede2c0bf5b29990c3bb10d4467e91fbc03deab708fb20298e8adbbff2da7",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-6d010a1769.ktx2",
+      "bytes": 927609,
+      "sha256": "6d010a1769c4189b4cde62c3c7890c6c8692e019a5addf1c8b6b0d165f6eec3f",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-941d7802f3.ktx2",
+      "bytes": 1480194,
+      "sha256": "941d7802f34b3b7f36d330cf44785f6bc4a8004689878b162a1e109f3d078bff",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-be0f120591.ktx2",
+      "bytes": 895881,
+      "sha256": "be0f120591570bf43d78c7782514225656b6da1f266447045e96696ce709c621",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-135595a660.ktx2",
+      "bytes": 4536780,
+      "sha256": "135595a660cd6c5d330d629afb4d71c4d2e1b33e1f098ef311ccc0410175a0d7",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-787fb8e9fb.ktx2",
+      "bytes": 831411,
+      "sha256": "787fb8e9fb94a28e4e9d3eff06bdef72125ff95e75b7d329bb9a26d2a7e926bd",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-cbbb035a41.ktx2",
+      "bytes": 4837585,
+      "sha256": "cbbb035a4108d0a4e3d2a17e99087e563ddae968ae44e0c0dbb2aad3a292f18d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-12cce5e5ce.ktx2",
+      "bytes": 798371,
+      "sha256": "12cce5e5ce47bbbf5bef0c1437e49bcf07761d5736ccf26eab4b44f3fc382cf3",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-219d1395d7.ktx2",
+      "bytes": 529981,
+      "sha256": "219d1395d7cc20050161890ed59eabf31e1af9d25b30b1ccf21cdcabf917194a",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-8ed0edd462.ktx2",
+      "bytes": 1799937,
+      "sha256": "8ed0edd462ab2a5f7e898b6add000e7952b41dc7e1239452c9ce1919bdc4d7a5",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-2a8ef436e7.ktx2",
+      "bytes": 417443,
+      "sha256": "2a8ef436e7fe2e4ab28bfae05e4574f33e50bf85ec01dd1cb9a9b4e98c06db58",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-8f23a00aa5.ktx2",
+      "bytes": 4464169,
+      "sha256": "8f23a00aa5005db61336ab5febf774bb13b00150045800def330d94d70794a37",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-dd1f0ebdcb.ktx2",
+      "bytes": 2213866,
+      "sha256": "dd1f0ebdcbe44849d17f92926403758771f2a88c7ab22c686b37bc8f68ba1328",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-71beb9fbc1.ktx2",
+      "bytes": 157336,
+      "sha256": "71beb9fbc1158451b73346387d5e22762736901645035b4a5b4053d95e865c35",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-8ee8fd0b06.ktx2",
+      "bytes": 1482284,
+      "sha256": "8ee8fd0b06c52e99ce52d417d6d683fcba52fb1f30965b2bef8eab68a02fd86d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-ac03acf96b.ktx2",
+      "bytes": 310579,
+      "sha256": "ac03acf96bf58920d6901886a05aa9ff58fbd5ba5b4ad80e616ffeb39a37eaa8",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-53e52fee2c.ktx2",
+      "bytes": 1014517,
+      "sha256": "53e52fee2c95dff71c2a4ae65d9af9e09168fefee2e3763d8ee712fc167801c4",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-b5df84f37f.ktx2",
+      "bytes": 4970898,
+      "sha256": "b5df84f37feb8ad834395a42920509e6a4343a195b91b0895bc618ad7853037d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-dbaa5bce1e.ktx2",
+      "bytes": 551647,
+      "sha256": "dbaa5bce1e272f0fd6e4387c1e12c5edb8beba34f0804750b89a41c612db1d11",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-aa6e928a6b.ktx2",
+      "bytes": 2885937,
+      "sha256": "aa6e928a6b1cf371d69dbf2811c8d68177c019eb0e6c34334086b5f17e286aa5",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-d8e4041981.ktx2",
+      "bytes": 784101,
+      "sha256": "d8e40419815d852f915c0b2e0e61414f7c4d31173815d4168ee9701f81fe3ed8",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-a5e0c8c00d.ktx2",
+      "bytes": 4061753,
+      "sha256": "a5e0c8c00dd0b66ab840e0a032684bcba1b818a2aa42bca33300b3ba8c891604",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-06e1f80a2b.ktx2",
+      "bytes": 373826,
+      "sha256": "06e1f80a2bb644fc016fab0685acd59578d6a495aa216a048becbefe6d15eee3",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-17398769b7.ktx2",
+      "bytes": 3059890,
+      "sha256": "17398769b77ac998694d12408c0b6ddd1e7b75801f2a2dcb2815b26700efe38d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-ce308b30cb.ktx2",
+      "bytes": 576169,
+      "sha256": "ce308b30cb0a61be3b937fd3b5079b2be5aa90ca4ceac0a2244350ee336401eb",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-1c60fb5eea.ktx2",
+      "bytes": 4185837,
+      "sha256": "1c60fb5eeafbbf53bfbff6ebea70bf0a3ba1992702ad978a8cdd34e96d4ee3c0",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-21d87da9d9.ktx2",
+      "bytes": 361844,
+      "sha256": "21d87da9d9193289b6fb6c250ff0fb53e8eed06d695a9d7f1f3ecee1ba6ae09c",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-5d9aff3b90.ktx2",
+      "bytes": 1433043,
+      "sha256": "5d9aff3b90829776ce12b5f9b9d1877df9d33ed19dda679ccdc1c101ab4560de",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-fae74130ca.ktx2",
+      "bytes": 360461,
+      "sha256": "fae74130ca47481fa5e7b631289cc9629f41dcdb738e0c720c651dd10dc1343b",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-a0f1223e81.ktx2",
+      "bytes": 1425857,
+      "sha256": "a0f1223e81d959ecd68d3355e00f858883429e91dedef1c65829f283a058be66",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-111635720b.ktx2",
+      "bytes": 1626761,
+      "sha256": "111635720bb693bb8beb93180fb19f239cae186993fc04ba8b1e555090c8abe2",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-d97a048bee.ktx2",
+      "bytes": 431908,
+      "sha256": "d97a048bee64eeed988956bb49d787b448639b327f9b64133561e773a68b4e3f",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-76ddeaee2f.ktx2",
+      "bytes": 3701812,
+      "sha256": "76ddeaee2f81200fbe7f74b165f96038c331244f3dce9f5421a06db9371f5ec8",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-ec337c1cb8.ktx2",
+      "bytes": 187020,
+      "sha256": "ec337c1cb8229a7b63a419250284272e14274b14075f236a836979969aa96662",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-014b459fdb.ktx2",
+      "bytes": 757518,
+      "sha256": "014b459fdbb4b93865b79c03bdee58c84d186b294e6e7ee45656d34f156f09ff",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-eb095a5848.ktx2",
+      "bytes": 3756977,
+      "sha256": "eb095a5848279edf617522400c23c374fc7ab14d9fc1dfb72caf0bdf380361b9",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-7f93b6b6b4.ktx2",
+      "bytes": 314854,
+      "sha256": "7f93b6b6b4c8de5676cc930fc36259c1c6263333db3c6933966363a0243759a5",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-d816962bf2.ktx2",
+      "bytes": 3011089,
+      "sha256": "d816962bf2ea8037b64fedb13d47e874a9dc5d28c3d994d0f9ada92f01ce71ba",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-515e65afc1.ktx2",
+      "bytes": 672797,
+      "sha256": "515e65afc1e4ca5de84a6084241ebecfcc49da10a198c659e714fc7e77bf750d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-b88715eec7.ktx2",
+      "bytes": 3846077,
+      "sha256": "b88715eec7f18a70f4f3364905db4ebd6499b1251e77f59edafa1eb2574487c9",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c0d28560a1.ktx2",
+      "bytes": 852420,
+      "sha256": "c0d28560a196de3ec2784dc70bf1462e995dfad12fd2be01abdfa383128b08d3",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-b2f9f117e3.ktx2",
+      "bytes": 4981358,
+      "sha256": "b2f9f117e3a3229133cbf695d7914b3e4cd2d97d550cd2aeb7041d9219e65d6f",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-e02c7a6ca3.ktx2",
+      "bytes": 536604,
+      "sha256": "e02c7a6ca3f7e57653c2757c450e856ac05e38c27c6239ec3d072b006354f22c",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-105081e361.ktx2",
+      "bytes": 1296922,
+      "sha256": "105081e36170312af3157b770dd95373df5120077c93d015a62220747a26a8ab",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-c1d1596fbf.ktx2",
+      "bytes": 668505,
+      "sha256": "c1d1596fbf8bf8d8e7b4dd44e4fa160f04f193cdb5967d81dacd1f73dfe099b7",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-f313cdd2f1.ktx2",
+      "bytes": 919635,
+      "sha256": "f313cdd2f1a6500d1523379c1a14c03e4e44226e4f8950eeb41f85e8091b3c3d",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-72c00388eb.ktx2",
+      "bytes": 5207946,
+      "sha256": "72c00388eb21ae3210a3b47d114009d1d1d22b40dd76e0076dfac55d75d8327b",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-f2ea720701.ktx2",
+      "bytes": 255138,
+      "sha256": "f2ea7207011a2b773a888affc8cb177c496932e91bf1134049e336813ef6f2ef",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/texture-a2b02241f3.ktx2",
+      "bytes": 243511,
+      "sha256": "a2b02241f328dbc6f9c7e6cbc57e1d761e2318d6544a0b55c60b090ae9599cd6",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/district.bin",
+      "bytes": 7112516,
+      "sha256": "0cdec701dd336ada20c2bbca6a46a470b96b628cb2b13eb34d8587a50c9fe488",
+      "textureMaximum": 2048
+    },
+    {
+      "filename": "district-ultra-5b90066dec/district.gltf",
+      "bytes": 225985,
+      "sha256": "42122aa63d5b25e53fa9ca1bce725a9108b281bd5e40736831b738b8f9b30fb7",
+      "textureMaximum": 2048
+    }
+  ],
+  "sources": [
+    {
+      "key": "car",
+      "url": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/glTF-Binary/CarConcept.glb",
+      "author": "Eric Chadwick / Darmstadt Graphics Group GmbH (2024); original concept by Unity Fan",
+      "license": "CC-BY-4.0",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept",
+      "sha256": "c272098089d78c5cd9fd9f24ff50ee8acf8d932c55f2d55fc10adb6c8998966b",
+      "sourceBytes": 11778688,
+      "commercialUsePermitted": true,
+      "attributionRequired": true
+    },
+    {
+      "key": "environment",
+      "url": "https://raw.githubusercontent.com/pmndrs/drei-assets/master/hdri/venice_sunset_1k.hdr",
+      "author": "HDRI Haven / Poly Haven contributors, mirrored by pmndrs",
+      "license": "CC0-1.0",
+      "page": "https://polyhaven.com/a/venice_sunset",
+      "sha256": "0e72ed46b5316cb5fb67fc81ff85b024a09146fd89ef3811a8d2299647ada118",
+      "sourceBytes": 1397783,
+      "commercialUsePermitted": true,
+      "attributionRequired": false
+    },
+    {
+      "key": "district",
+      "url": "https://github.com/Jamsers/Bistro-Demo-Tweaked",
+      "author": "Amazon Lumberyard; Godot port Logan Preshaw; modifications John James Gutib (Jamsers). NEXUS reconstructs materials, normalizes building pivots, builds LOD and Meshopt/WebP exports.",
+      "license": "CC-BY-4.0",
+      "files": [
+        {
+          "path": "Meshes/Section01/S1B1.glb",
+          "sha256": "d4d1951cd486413a8bfe2829a681934d03cba1fe27816b722cbafcd20585e81a",
+          "bytes": 7185648
+        },
+        {
+          "path": "Scenes/Section01/S1B1.tscn",
+          "sha256": "acbdeef40429bd92e9a17a3ac6fcad99c2ac2660398533a1bce9eddd480e516b",
+          "bytes": 3080
+        },
+        {
+          "path": "Materials/Stone/Brick_Large_Beige.tres",
+          "sha256": "da4af695cd8aabe076400ba421cbeec667a852b8418e95d871c3a02e3110ad34",
+          "bytes": 509
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_Green.tres",
+          "sha256": "600da5b20adf961cc3d3693a4f06e5434726e4e6d1a8a823b873308271bcfe96",
+          "bytes": 510
+        },
+        {
+          "path": "Materials/Metal/Bronze.tres",
+          "sha256": "6d23e2478697d122e900f07aa10cbda9cb8a87be966f0a54cfb3fd3a7efef9f9",
+          "bytes": 503
+        },
+        {
+          "path": "Materials/Stone/Concrete.tres",
+          "sha256": "d16fb30d13dc8172234189218212f15de6fe8167bbfd9e06af589ff0cdcac7bb",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Stone/Concrete_Plaster.tres",
+          "sha256": "8793fa9b00788c41953dd630f390aeb91777bda85441906f4796de868168ec9c",
+          "bytes": 484
+        },
+        {
+          "path": "Materials/Stone/Concrete_Grooved.tres",
+          "sha256": "b00ed382cf93d34070f16a03dcd68bcabc9bc8e4579fa19ea113bb96ff4ecf61",
+          "bytes": 484
+        },
+        {
+          "path": "Materials/Stone/Concrete_Smooth.tres",
+          "sha256": "71d9d1c8e6a0903951363d4a0ca9f4e52d90e989dcc10eb831c41673cd3cfe45",
+          "bytes": 495
+        },
+        {
+          "path": "Materials/Fabric/Curtains.tres",
+          "sha256": "7bf1261c065eed3be0b265a20ab4968cbf5fa939afb9cbf20bba8c9369d84239",
+          "bytes": 545
+        },
+        {
+          "path": "Materials/Metal/Black_Metal.tres",
+          "sha256": "81d3ecf6dbbf6241ad0935a1ccd249219556ccbc97f350da367a9c6eae102c1c",
+          "bytes": 489
+        },
+        {
+          "path": "Meshes/Section01/S1B2.glb",
+          "sha256": "3cdb190d2f974c87d1c4c9ba91ac67089009eae81316862c2d74dea509337595",
+          "bytes": 1189864
+        },
+        {
+          "path": "Scenes/Section01/S1B2.tscn",
+          "sha256": "f86554a321dee2336e8293163eb67ebda45d0afa1e13cc950cd9cbce12cbbd46",
+          "bytes": 3018
+        },
+        {
+          "path": "Materials/Roofing/Roofing_Shingle_Grey.tres",
+          "sha256": "1881697a3ecea7cb68bd8c616b9502ac959f1a7f9282e3ec454071cd96e1ba6d",
+          "bytes": 496
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_White.tres",
+          "sha256": "869573a7e3d40e82f62612d1e9f55f0336b85a3e097761d170086c59429831d7",
+          "bytes": 486
+        },
+        {
+          "path": "Materials/Wood/Doors.tres",
+          "sha256": "f0ca9957a9be0207e205bb81b1ce8f1fbfc9eeb4229415a0f35abedf7e8858b3",
+          "bytes": 459
+        },
+        {
+          "path": "Materials/Stone/Brick_Large_White.tres",
+          "sha256": "d75bf500c195ab0f57bda6dac6c43f3a45b8e3ca7a7c52112404ee06f82596aa",
+          "bytes": 486
+        },
+        {
+          "path": "Meshes/Section02/S2B1.glb",
+          "sha256": "5297ce3fd246621a180114a22bbfe9336fcf712476dff6e5b6f157b501a2510d",
+          "bytes": 3121388
+        },
+        {
+          "path": "Scenes/Section02/S2B1.tscn",
+          "sha256": "b52cc6a57a6a4207021b3e2efda8f6a4829f4f2cf29fcb4163699a6c7e358f5a",
+          "bytes": 7505
+        },
+        {
+          "path": "Materials/Metal/Antenna_Metal.tres",
+          "sha256": "42dad7cb11c2bb3c44900423655b7ba284cb4443684ea6a28608b642925772e4",
+          "bytes": 479
+        },
+        {
+          "path": "Materials/Wood/Wood_Brown.tres",
+          "sha256": "2e66ab18b5b3fab51090e4b8e3d5cbe4b09e064213a1b83c63022409b8316a1c",
+          "bytes": 470
+        },
+        {
+          "path": "Materials/Stone/Concrete2.tres",
+          "sha256": "10d679a67376d13e7878e0bc1e0351b7a494d86be1abdaa45fbc83216b6a18c8",
+          "bytes": 455
+        },
+        {
+          "path": "Materials/Metal/Paris_TrafficSign_A.tres",
+          "sha256": "063a24c91447c566844c06655420c7cbe8ba42ad65bf08e2f3e5ef2dc88c1b33",
+          "bytes": 723
+        },
+        {
+          "path": "Materials/Lights/Emissive_StreeLight.tres",
+          "sha256": "eff2fba72679c64f2a5ac4fa2c276c1a5214c17c67c1ab3036a087318d5941f8",
+          "bytes": 406
+        },
+        {
+          "path": "Materials/Lights/Streetlight_Metal.tres",
+          "sha256": "5c1f27f8905f6880a8042b572e9f850bc2c58e0ee1a1c61e67b1850a909c969c",
+          "bytes": 489
+        },
+        {
+          "path": "Materials/Stone/Plaster.tres",
+          "sha256": "b763224661ca7aaf77dbb5b147cb5d2d3b098db4cfc640da6c628a5ee290f334",
+          "bytes": 452
+        },
+        {
+          "path": "Materials/Metal/Paris_ElectricBox.tres",
+          "sha256": "7dc331e92b07f228a9241463cade6b77c059b77ff88613a0bf804a8c6d4b4abb",
+          "bytes": 460
+        },
+        {
+          "path": "Materials/Stone/Brick_Small_Red_Blend.tres",
+          "sha256": "ac071997a660e7562eb62d6d9308012260467c4fe0948ade2842bb8200910841",
+          "bytes": 505
+        },
+        {
+          "path": "Materials/Lights/StreetLight_Bulb.tres",
+          "sha256": "e45c770829534370899ebdf48f864bcfca903496e66c2af6a46829d0ca20a09d",
+          "bytes": 555
+        },
+        {
+          "path": "Meshes/Section02/BistroProps.glb",
+          "sha256": "1c140fb202fdbd5e1326a42b8bdf1c5dfb7e88926d67a4bf2b849512d269c605",
+          "bytes": 3110308
+        },
+        {
+          "path": "Scenes/Section02/BistroProps.tscn",
+          "sha256": "19a0797d9556ce4d0dc2170ef642bf1d9aa91226aeda26251aeb66f56709899e",
+          "bytes": 5054
+        },
+        {
+          "path": "Materials/Stone/PlantPots.tres",
+          "sha256": "d357995907b447f56748744a1c252710283dfe0d1329b82dc1d6c5bc6f6cd43b",
+          "bytes": 456
+        },
+        {
+          "path": "Materials/Nature/Foliage_Paris_Flowers.tres",
+          "sha256": "76997a456d41d4fec92fb6e7372a9ff579521355c83ba4789d5771e7c3c81988",
+          "bytes": 496
+        },
+        {
+          "path": "Materials/Nature/Foliage_Hedges.tres",
+          "sha256": "7a1e6a5e0b781f3e50512332310273bcec89f9ae24c0e1b84448d4f19aa31915",
+          "bytes": 643
+        },
+        {
+          "path": "Materials/Metal/SideWalkBarrier.tres",
+          "sha256": "bf576c0c090eced4bba1bd25ef2e7f03e310ee8b2c9ef751be1abfe23bb250f3",
+          "bytes": 468
+        },
+        {
+          "path": "Meshes/Section05/S5B1.glb",
+          "sha256": "992a9449fc6bd3ebebaed1938f467e49c541a154c1737713d6d49d3183846dd4",
+          "bytes": 17262596
+        },
+        {
+          "path": "Scenes/Section05/S5B1.tscn",
+          "sha256": "2fc88e5ccf571c5872b0324742d067a7106ad8a3b69390751d3ffd60b7f4c3c3",
+          "bytes": 12836
+        },
+        {
+          "path": "Materials/Stone/Details_Dark.tres",
+          "sha256": "a0af711df6f5ab4d5484e160d1ebc4e45d816cb9062571e13399e7abaadd1a50",
+          "bytes": 476
+        },
+        {
+          "path": "Materials/Metal/Forge_Metal.tres",
+          "sha256": "d54bcf6bed66261034e45b59e32c8e63b5877d3e840be9b51efdb81c545112ac",
+          "bytes": 564
+        },
+        {
+          "path": "Materials/Metal/Rollup_Door.tres",
+          "sha256": "89f80751d4c9618df6e15f7c6dfc1f57edc0e0581b997f8c4aa9b058e4f21886",
+          "bytes": 472
+        },
+        {
+          "path": "Materials/Metal/Metal.tres",
+          "sha256": "d411ab09a4aa6256cfb7c80c53a292e34c53b9787cd2eacc5b863f1c43746d9c",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Wood/Wood_Painted_Cyan.tres",
+          "sha256": "c2d110225490d021af78f11fc0e45a5e2364a21de2200577cd431f1f7e69848d",
+          "bytes": 482
+        },
+        {
+          "path": "Materials/Ground/Pavement_Curbstones.tres",
+          "sha256": "8dd371d0becc61c9ecf26eaa746bb5b99d4701a4c01d0f38229f41167fc90dac",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Roofing/Roofing_Metal_01.tres",
+          "sha256": "3d91a3a798187aabf7e37e6bc6b84af91a8c52ad3e7d2f8561cdc1a6eb5f27dd",
+          "bytes": 488
+        },
+        {
+          "path": "Materials/Miscellaneous/Building_Details.tres",
+          "sha256": "95673308615d5ed8f4c09bf88e7777a209fc02403454c0e74f62224e50d9f00c",
+          "bytes": 500
+        },
+        {
+          "path": "Materials/Nature/Foliage_Trunk.tres",
+          "sha256": "ed86c05768215090400baffc060011bd09222f112f8f6fee1bc9c335bb29dedc",
+          "bytes": 278
+        },
+        {
+          "path": "Materials/Glass/Glass_Exterior.tres",
+          "sha256": "02781cdd99e47b95e31fa910bc9572abb012d5713fc20cd7e7203186972b9dc8",
+          "bytes": 656
+        },
+        {
+          "path": "Materials/Nature/Foliage_Leaves.tres",
+          "sha256": "17982e5dcd99fd2a7cd833431f618d970951b6561c9aed22302e9a8d290ca7c1",
+          "bytes": 557
+        },
+        {
+          "path": "Materials/Nature/Pavement_Ground_Wet.tres",
+          "sha256": "2175d996bb42688d50c896dce6c3368c1f83d174c65ddf1e310c5cf7f6fa8096",
+          "bytes": 477
+        },
+        {
+          "path": "Materials/Fabric/Awning_Hotel_Fabric.tres",
+          "sha256": "b2c74c654373c04ea09476b397220469526befbc7dae17a578b4df69c483c8ee",
+          "bytes": 556
+        },
+        {
+          "path": "Materials/Miscellaneous/Room_Interior.tres",
+          "sha256": "eb04df8efa744d05229b5f5f279026ac55cc0f99b94dd95f9949a013ccc883ba",
+          "bytes": 293
+        },
+        {
+          "path": "Meshes/Section03/S3B1.glb",
+          "sha256": "ce7c8b37a15ba6972b49062bfa24bfe02c9f7408ef52c54d690f41f22133bfed",
+          "bytes": 3461164
+        },
+        {
+          "path": "Scenes/Section03/S3B1.tscn",
+          "sha256": "ef29ead9f22025dbc76330384d29c36f7c6e0fbbf472f70cc62ced1b331522d0",
+          "bytes": 5033
+        },
+        {
+          "path": "Meshes/Section01/S1Details.glb",
+          "sha256": "e6c5815de8c546b1ba9423f2b2befe9d906ac936d34150c76bf1fed1df58ccdf",
+          "bytes": 10375708
+        },
+        {
+          "path": "Scenes/Section01/S1Details.tscn",
+          "sha256": "323a2f5337ff87e1dc2c021adb887d57468fad1539f6a2f36d159d30f18c650e",
+          "bytes": 6937
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Tree_Trunk.tres",
+          "sha256": "5f85665ad3485cf7acff6c776cb624b956603b1436cb292c189d17eadc16ac10",
+          "bytes": 500
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Green_Leaves.tres",
+          "sha256": "669658264543696cac3f5cce3b8a3536213b16a0683b11502857383a3b17f787",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Nature/Foliage_Linde_Orange_Leaves.tres",
+          "sha256": "75c53bacfb9c02fc5d4a75c9e06e3b1ab7b6676791a1532ff02b3226c552beb5",
+          "bytes": 468
+        },
+        {
+          "path": "Materials/Metal/Paris_StreetPivot.tres",
+          "sha256": "5770b2f778bebc76c3121dbfe315011e36545ad3a19332f4ad838d12be519275",
+          "bytes": 472
+        },
+        {
+          "path": "Textures/Fabric/MASTER_Curtains_Normal.png",
+          "sha256": "6181a5878109b2b4764aa80e8430f455701d77e3b85286871c388683f9aeb1ac",
+          "bytes": 2630300
+        },
+        {
+          "path": "Textures/Fabric/MASTER_Curtains_BaseColor.dds",
+          "sha256": "3df6a4f1c9cf53ca5442829fbdeb2fc7c9e6e0651969e11533b5e088c9dbdee4",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_Normal.tga",
+          "sha256": "57169b17d864620b49a7eb7c5b0d9844a522e555ed11c91568439d46862b6a46",
+          "bytes": 131090
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_BaseColor.dds",
+          "sha256": "dfccede154fb2be457ac4b852e105a55627a2f86640d44c342fca2601b230050",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Glass/MASTER_Glass_Exterior_Roughness.png",
+          "sha256": "c430692f78bb7f0f748fd687bd15df0597fb824ea19f1c73c3652f38bcdd7dfe",
+          "bytes": 1077352
+        },
+        {
+          "path": "Textures/Fabric/Awnings_Hotel_Fabric_Normal.png",
+          "sha256": "753002eea8f1c4f89e82d6a392bf04778abd05b2612b7024cbf3bda188776423",
+          "bytes": 4798187
+        },
+        {
+          "path": "Textures/Fabric/Awnings_Hotel_Fabric_BaseColor.dds",
+          "sha256": "53c338e10a0d42c5531da0f2e7aec11135b7f4828de0fb7bd21c9497684e007a",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Ground/Pavement_Curbstones_BaseColor.dds",
+          "sha256": "74d55e379548aefed2c47667642a144cae98ee661e21ca4da474a2b16eac4316",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Lights/Emissive_StreetLight_Emissive.dds",
+          "sha256": "bf89728e2c83ee6b7d296450fd6aa8e77fa9226dcab3eb3f350acba161a69681",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Emissive.dds",
+          "sha256": "47a50d1d719011201cd95776c4db2583943bb10616b19b22235e52463f0df052",
+          "bytes": 2872
+        },
+        {
+          "path": "Textures/Lights/Spotlight_Glass_Emissive_Normal.png",
+          "sha256": "bc2eebb9a0dbeebc6b589a6ea1cd1d7ae359e0ec58bb9b1203520eb94e41eedd",
+          "bytes": 3279876
+        },
+        {
+          "path": "Textures/Lights/Streetlight_Metal_BaseColor.dds",
+          "sha256": "352da936fc056cdad0229b62fe50f6e65e765c9436b04b27cc259afe8a68249d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Ground/Pavement_Curbstones_Normal.png",
+          "sha256": "5f79fcc71ceb380e617b5e973c45a00b911a53ea8283bf67b68564a70b42c844",
+          "bytes": 5891714
+        },
+        {
+          "path": "Textures/Metal/Antenna_Metal_BaseColor.dds",
+          "sha256": "9a4c4c5df383253cc0ca2df1a805d51ac224e69c620a2d045d9176ecfb7513fc",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Lights/Streetlight_Metal_Normal.png",
+          "sha256": "5976b5e40b3f217a9f8602abdae06e94cfc4ee8308831c365ef58b6eb4270a92",
+          "bytes": 5631546
+        },
+        {
+          "path": "Textures/Metal/Antenna_Metal_Normal.png",
+          "sha256": "5a89332c9c06f8d072c8f885fdd85f9cd106e530008748a660c566ba6affe24b",
+          "bytes": 1831105
+        },
+        {
+          "path": "Textures/Metal/ElectricBox_BaseColor.dds",
+          "sha256": "34bc32682d4c43e16f590b75b904ce9ecfb2fb32049d22742e76ce421a216b76",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/ElectricBox_Normal.png",
+          "sha256": "fe1d8c07b67c5615b0b4970847e14b49fb5476299e210b2f86c8c3cbfe88ca3e",
+          "bytes": 1561283
+        },
+        {
+          "path": "Textures/Metal/MASTER_Black_Metal_BaseColor.dds",
+          "sha256": "dabe1f4273034f4a6544f49a26e4d47cbf114f4759843580afabc20c61333088",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Black_Metal_Normal.png",
+          "sha256": "d98c526355bf535668d7e8d3a38bdf564a34ad9600875f0a87c171a0b5a572e4",
+          "bytes": 7609135
+        },
+        {
+          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_BaseColor.dds",
+          "sha256": "bd4613554721fbf1ab9f924956a4dde4b318d9d5496bde2ffc89aa1a2ee904ca",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Bronze_BLENDSHADER_Normal.png",
+          "sha256": "5a89332c9c06f8d072c8f885fdd85f9cd106e530008748a660c566ba6affe24b",
+          "bytes": 1831105
+        },
+        {
+          "path": "Textures/Metal/MASTER_Metal_BaseColor.dds",
+          "sha256": "11b9e2c0c108ac2c33ab89092a474bb240c05aef557bb0ac6a50ffcf1a55d49a",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Forge_Metal_Normal.png",
+          "sha256": "6b9b046d2ed040fb458d6bc755a64b733f1c8d03161b16d4e31bb77499ba7661",
+          "bytes": 1738058
+        },
+        {
+          "path": "Textures/Metal/MASTER_Metal_Normal.png",
+          "sha256": "88556db3c01c66fc68c69e61af494d7af0280aead280eeddc368ec3e36bbfa28",
+          "bytes": 1457901
+        },
+        {
+          "path": "Textures/Metal/MASTER_Rollup_Door_BaseColor.dds",
+          "sha256": "f65a6313360305dfa01b01dba0f428bcb8ee3661e103b6b762fe4041711791ae",
+          "bytes": 496
+        },
+        {
+          "path": "Textures/Metal/MASTER_Forge_Metal_BaseColor.dds",
+          "sha256": "21c5eaee1de278ce4e170aad152e33a1b94ef563b40dc2f9156a3525ff87dc4e",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Metal/MASTER_Rollup_Door_Normal.png",
+          "sha256": "e8f599dc5f4fac4458be6e8f4835c317aab736a086f609209484c5aa211e33fd",
+          "bytes": 3745890
+        },
+        {
+          "path": "Textures/Metal/Paris_StreetPivot_BaseColor.dds",
+          "sha256": "21eeda828f8b98292550947cd1c3aee0f6a16bc42c2960190f217473b7647954",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Paris_StreetPivot_Normal.png",
+          "sha256": "a1e45761fb23da6bb0078b1ce23175d7cbec9fc1b423dba0bd21ddfbaa5b5a3e",
+          "bytes": 1323825
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_BaseColor.dds",
+          "sha256": "035d0cba28f7e00705ba6d0dc87f9616ac58fa441f13a2ecc72b4e2ea27af73f",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_Normal.png",
+          "sha256": "10221159be78e5187a82c785f93992ebbce535977f4b355b64c6ac0ace0a0a4d",
+          "bytes": 1269826
+        },
+        {
+          "path": "Textures/Metal/Paris_TrafficSign_A_Specular.dds",
+          "sha256": "3d5cea824f35e0f23c15c32542d3cbd64f3b844f3ee05980b9ebeda2f5fb7dfa",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Sidewalkbarrier_BaseColor.dds",
+          "sha256": "4b4a5c7e6019f12eb1209ff23585d2ab4d3338a1a90ee16e212412abcd46d581",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Metal/Sidewalkbarrier_Normal.png",
+          "sha256": "adc7485bdaf65896d1ba459e393f37923410c0ad3e13fb473f65029107e587d6",
+          "bytes": 2825951
+        },
+        {
+          "path": "Textures/Miscellaneous/MASTER_Building_Details_BaseColor.dds",
+          "sha256": "d1c82e3a07d252975a92cdc2ae2bd869368f0b0e1c7ecb3cd297d2dd4d422fab",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Miscellaneous/MASTER_Building_Details_Normal.png",
+          "sha256": "c71fc3667638e064c0af819251f97518fa29b86687cccff9e077472ce409da49",
+          "bytes": 4480208
+        },
+        {
+          "path": "Textures/Nature/Foliage_Bux_Hedges46_BaseColor.dds",
+          "sha256": "c18fe165eb4b1b1afe07a7db0c7b6795907a3f2930e90b0b265f171050e0f4ca",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Miscellaneous/MASTER_Room_Interior_BaseColor.dds",
+          "sha256": "160d56ce44e5f3ca169240f21a70460a13a61b801a9f5cb9a11345071d2a1f57",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Foliage_Bux_Hedges46_Normal.png",
+          "sha256": "aed4055de60f3caf0ee5edaf189b21fc64e457869cc77a52910503e7ccd8ff95",
+          "bytes": 7554243
+        },
+        {
+          "path": "Textures/Nature/Foliage_Leaves_BaseColor.dds",
+          "sha256": "220e88463938a2f5e2d0c8ac0492410c56a43e627bb959e5cd76fe0eca018eac",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Leaves_Normal.png",
+          "sha256": "ebac8d478cd4d345bfc0dff9c82a2c85e6c5f0a636b4529e31bfab6fcd68320e",
+          "bytes": 790463
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Green_Leaves_BaseColor.dds",
+          "sha256": "b8c02d24abc1da1dd321458e5442e7ead1eb55f2a21a16ef41b57c94260f9405",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Orange_Leaves_BaseColor.dds",
+          "sha256": "391db874c954b7e5e3c97db138b1fa8bea7e37920155b4f88c711e66c6c098e6",
+          "bytes": 5592560
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Trunk_BaseColor.dds",
+          "sha256": "d1cc632017fea4896bf1541cff534fa53d6a139bee36338a1b82fb91e6f6f5ad",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Foliage_Paris_Flowers_BaseColor.dds",
+          "sha256": "e188a6eeb73babfb40fee8e6c7bad77f6b724941a54a326ef13140fa81daa92c",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Foliage_Paris_Flowers_Normal.png",
+          "sha256": "2d00e670434359c0b8a34d935e10dee3cd8f238c4f469021a4a68d62b8bb4070",
+          "bytes": 2805746
+        },
+        {
+          "path": "Textures/Nature/Foliage_Linde_Tree_Large_Trunk_Normal.png",
+          "sha256": "5ed72c8de555f0d6c177473be22e2ae4e2fdf22c4f13a5ecd39bfb12c0c204bf",
+          "bytes": 8854321
+        },
+        {
+          "path": "Textures/Nature/Foliage_Trunk_BaseColor.dds",
+          "sha256": "67352616aba249b730e70beda508b20f877c38cf19ab16ffd47082bed5a19300",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Pavement_Ground_Wet_BaseColor.dds",
+          "sha256": "b134c53cc5a9c4d3ddf3c37ff115ac6addd6fff42fa032ddb49c1fcd1807aeb7",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_BaseColor.dds",
+          "sha256": "18378c454d003de4e95b55526d28079ad6cb5537ae1fbf08a3de2e45b2c14bdc",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Nature/Pavement_Ground_Wet_Normal.png",
+          "sha256": "460a5d3de8e639049a785782b53f934992ce80ae297cf255c001caa1ca324da5",
+          "bytes": 8479239
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Metal_01_Normal.png",
+          "sha256": "4253205d130be5cd83b3461f52d0448d9bc30c30949cadbf469981a14adb5597",
+          "bytes": 4281465
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Metal_01_BaseColor.dds",
+          "sha256": "f285c5265fac25463c23cd020468e35e444ae307f3220a6b028acfb3f6ccbc02",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Roofing/MASTER_Roofing_Shingle_Grey_Normal.png",
+          "sha256": "049007e6adaf498ba0dd1b391e958abdf99c49cbc24660597f6a36318b97d1d8",
+          "bytes": 8345864
+        },
+        {
+          "path": "Textures/Stone/Concrete2_BaseColor.dds",
+          "sha256": "6394eae366db6979de5c0190542d1b48d8aaf090ad3008164c3d599705c36a65",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/Concrete2_Normal.png",
+          "sha256": "348e92a4378f038099a181171a3c2e9c36ca3b0d7ce880c69f31d72c1611b8f7",
+          "bytes": 3233016
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_BaseColor.dds",
+          "sha256": "880efd79fdbe8c091f3aeb403da68f95a3dd165ab2c5caa10e59fb3ef2b20b82",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_Beige_BLENDSHADER_Normal.png",
+          "sha256": "d7ab07cf3a03cae91e4ed6e043f1b3773ada056a6702610d0f628cc08bef5dd0",
+          "bytes": 8820912
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_White_BaseColor.dds",
+          "sha256": "2962e5cefc4622e1add61c1de440b131cf32908cb52ee0905a36969d35b85f2d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Large_White_Normal.png",
+          "sha256": "4434f10a187c85947abda19b3cac7467a4e478df5c668fce621c99f797e12da9",
+          "bytes": 2935734
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Small_Red_BLENDSHADER_BaseColor.dds",
+          "sha256": "6105c6511cb09f300b05b1e499095c85a65b95524060632524b0b99c89742738",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Brick_Small_Red_BLENDSHADER_Normal.png",
+          "sha256": "3eedefc075aa606551c87bcf374f49d1a6ac8eed3d9a2ce5ad8846c4aed219be",
+          "bytes": 7111799
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_BaseColor.dds",
+          "sha256": "e25548c6f1af25237cfecc14cb63b8ecd8887578b03efe0d8fb901f41bcec2d1",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Grooved_BaseColor.dds",
+          "sha256": "cb02b5a2ac35fa8456a47f5170ddb29eef06cbc944f2c27c9d7c8e4b30ff9eb1",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Grooved_Normal.png",
+          "sha256": "e587d6dfae525debcd33c1978994a702701bc2e63bcddeab72907991f10bd6c3",
+          "bytes": 7225134
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Normal.png",
+          "sha256": "7ac0d3702a4270e5ab28d27b7f666882287a665dc284e1d8df3dcab0c7d84b32",
+          "bytes": 6936118
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Plaster_BaseColor.dds",
+          "sha256": "86b9a40f862ae672bdd8749b567a2b54aa4a17a1a8789fb511c5e95e248efae4",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Plaster_Normal.png",
+          "sha256": "ede70a196f3d68e21844ab16040af9595422d274a4cf2303ba7c65a43e1009ca",
+          "bytes": 5266327
+        },
+        {
+          "path": "Textures/Stone/MASTER_Concrete_Smooth_BLENDSHADER_Normal.png",
+          "sha256": "348e92a4378f038099a181171a3c2e9c36ca3b0d7ce880c69f31d72c1611b8f7",
+          "bytes": 3233016
+        },
+        {
+          "path": "Textures/Stone/Plantpots_BaseColor.dds",
+          "sha256": "18f289ca5e8e4dc111a6f5d8711f3cb891305cad556ce3d3a84945edd0d7560d",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Details_Dark_BaseColor.dds",
+          "sha256": "d1c82e3a07d252975a92cdc2ae2bd869368f0b0e1c7ecb3cd297d2dd4d422fab",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/MASTER_Details_Dark_Normal.png",
+          "sha256": "c71fc3667638e064c0af819251f97518fa29b86687cccff9e077472ce409da49",
+          "bytes": 4480208
+        },
+        {
+          "path": "Textures/Stone/Plantpots_Normal.png",
+          "sha256": "00711670ac57a1329884cc21e63c00feb2cb9f9006c9be0a74d9a0f6b312cea9",
+          "bytes": 5378101
+        },
+        {
+          "path": "Textures/Stone/Plaster_BaseColor.dds",
+          "sha256": "a2bd0599a1748f5caf623764fd26cc7afbdec57b0a619f739cd8c0bf8efb90a8",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Stone/Plaster_Normal.png",
+          "sha256": "3f8a75d2fbab1226c96cca75b14f0aafc46e102e60233a68852115da6b4b8f6e",
+          "bytes": 9292325
+        },
+        {
+          "path": "Textures/Wood/MASTER_Doors_BaseColor.dds",
+          "sha256": "9c47e159df0af111e71dd248cc9d7d96d64f7bddc3b326d054d1ef7285e9b5b4",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Doors_Normal.png",
+          "sha256": "0c785ef9f53a7117bfc5983fbced4cc003eee330b8f87c0dbe28f34a29aeb4ce",
+          "bytes": 1783357
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Brown_BaseColor.dds",
+          "sha256": "b0ca7303b7e82911844ad65f140c7fa70640357ec13619220713745faec36776",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Brown_Normal.png",
+          "sha256": "c5d4d88c628f081edbfb37d4f8502fbc3d3f0040ac560f998bfca282a8b701c1",
+          "bytes": 1013733
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Cyan_BaseColor.dds",
+          "sha256": "f87f6f4f7f9b585a540dadbc45bbed560d7c9299eefeed929eda0ff7de5af9c7",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Cyan_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_BaseColor.dds",
+          "sha256": "e1c21f1075df65a6a295cb293881d1da3d4dad9cbc4f6bd23a17c6c39b38decd",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_Green_BLENDSHADER_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_White_BaseColor.dds",
+          "sha256": "08243aeb8298fca283d14f85de122d2fc8d6b62597956144b951b690b93320a5",
+          "bytes": 2796344
+        },
+        {
+          "path": "Textures/Wood/MASTER_Wood_Painted_White_Normal.png",
+          "sha256": "e219d4798e30d1e433eb0b3b84c37c63dc725683c280f98f1c02b9f7e39c095a",
+          "bytes": 1945681
+        },
+        {
+          "path": "LICENSE-ASSETS",
+          "sha256": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+          "bytes": 18656
+        },
+        {
+          "path": "ATTRIBUTION",
+          "sha256": "9d69bb1066d3b7b7a081c586af3bf36e4674b2a8da275c4527a334ccdbce47c3",
+          "bytes": 6386
+        },
+        {
+          "path": "README.md",
+          "sha256": "39230f21d41f50879c015f35b5e91dddced1ec58d1253ae5f22a595fac226e31",
+          "bytes": 3998
+        }
+      ],
+      "commercialUsePermitted": true,
+      "attributionRequired": true
+    }
+  ],
+  "roadSource": {
+    "name": "Bistro Pavement Ground Wet / Curbstones",
+    "author": "Amazon Lumberyard; Godot port Logan Preshaw; modifications Jamsers",
+    "source": "https://github.com/Jamsers/Bistro-Demo-Tweaked/tree/main/Textures",
+    "license": "CC-BY-4.0",
+    "commercialUsePermitted": true,
+    "attributionRequired": true,
+    "modifications": "Format conversion, KTX2 mip generation; NEXUS-authored roughness based on original .73 material scalar and subtle grain variance; no upscaling"
+  },
+  "notes": [
+    "Original source resolution caps every output; 4096 preset is a ceiling, not an upscaling claim",
+    "Old versioned assets retained for fallback and comparison",
+    "Meshes use Meshopt; building color uses Basis ETC1S, linear maps and hero/road textures use UASTC; full mip chains",
+    "Runtime decoder from Three.js r186 / Binomial Basis Universal Apache-2.0",
+    "Ultra/Cinematic: full source district geometry, native maps up to 2048, 12-bit normals; external immutable glTF pack. WebP fallback deliberately uses the High pack."
+  ],
+  "basisWorker": "/game-assets/basis-r186/ktx-worker-2ca4cdaa3f.js"
+}
