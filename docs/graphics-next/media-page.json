@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-26T11:48:19.357Z",
+  "passed": true,
+  "scope": "Local production build; public URL checked separately after deployment",
+  "route": "/reports/midnight-graphics/index.html",
+  "videoDurationSeconds": 24,
+  "images": [
+    {
+      "file": "high.png",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "ultra.png",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "car-close.png",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "pause.png",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "before.png",
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "file": "after.png",
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "mobileWidth": 390,
+  "mobileHorizontalOverflow": false
+}

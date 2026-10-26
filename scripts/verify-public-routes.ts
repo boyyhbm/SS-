@@ -49,12 +49,16 @@ const browsers = await Promise.all(
     }),
   ),
 );
+const backingScale = Number(process.env.NEXUS_VERIFY_DPR ?? 0.15);
+const drivingSpeed = Number(process.env.NEXUS_VERIFY_SPEED ?? 18);
+assert(Number.isFinite(drivingSpeed) && drivingSpeed >= 7 && drivingSpeed <= 27);
+assert(Number.isFinite(backingScale) && backingScale >= 0.05 && backingScale <= 1);
 const contexts = await Promise.all(
   browsers.map((b) =>
     b.newContext({
       proxy,
       viewport: { width: 960, height: 650 },
-      deviceScaleFactor: 0.15,
+      deviceScaleFactor: backingScale,
       reducedMotion: 'reduce',
     }),
   ),
@@ -76,14 +80,91 @@ const report: {
   stage: string;
   diagnostics?: unknown;
   errorType?: string;
+  events: { client: number; type: string; at: number }[];
 } = {
   date: new Date().toISOString(),
-  scope:
-    'Two real independent authenticated HTTPS/WSS browser clients, Low/DPR .15 functional verification; NOT a GPU or physical controller certification',
+  scope: `Two real independent authenticated HTTPS/WSS browser clients, Low/DPR ${backingScale}, input driver cruise ${drivingSpeed} m/s; functional verification; NOT a GPU or physical controller certification`,
   passed: false,
   routes: [],
   stage: 'login',
+  events: [],
 };
+const checkpoint = async (stage: string) => {
+  report.stage = stage;
+  await writeFile(out, JSON.stringify(report, null, 2) + '\n');
+};
+pages.forEach((p, client) => {
+  p.on('console', (m) => {
+    if (m.text().includes('Colyseus reconnection'))
+      report.events.push({
+        client,
+        type: m.text().includes('successful')
+          ? 'reconnected'
+          : m.text().includes('failed')
+            ? 'reconnect-failed'
+            : 'reconnect-attempt',
+        at: Date.now(),
+      });
+  });
+  p.on('websocket', (s) =>
+    s.on('close', () => report.events.push({ client, type: 'socket-closed', at: Date.now() })),
+  );
+});
+await Promise.all(
+  pages.map((p) =>
+    p.addInitScript(() => {
+      Object.assign(window, { nexusPublicProbe: null });
+      window.addEventListener('nexus-render-stats', (e) =>
+        Object.assign(window, { nexusPublicProbe: (e as CustomEvent).detail }),
+      );
+    }),
+  ),
+);
+const samples: unknown[] = [];
+let sampling = false;
+const probe = setInterval(async () => {
+  if (sampling) return;
+  sampling = true;
+  try {
+    samples.push({
+      at: Date.now(),
+      clients: await Promise.all(
+        pages.map((p) =>
+          p
+            .evaluate(() => {
+              const r = document.querySelector<HTMLElement>('[data-testid=online-player]');
+              const stats = (
+                window as unknown as { nexusPublicProbe: Record<string, unknown> | null }
+              ).nexusPublicProbe;
+              return {
+                phase: r?.dataset.phase,
+                x: r?.dataset.x,
+                z: r?.dataset.z,
+                speed: r?.dataset.speed,
+                checkpoint: document.querySelector('[data-testid=checkpoint]')?.textContent,
+                disconnect: r?.dataset.disconnectCode,
+                stats: stats
+                  ? {
+                      fps: stats.fps,
+                      frameMaxMs: stats.frameMaxMs,
+                      renderCpuMs: stats.renderCpuMs,
+                      networkSnapshotAgeMs: stats.networkSnapshotAgeMs,
+                    }
+                  : null,
+              };
+            })
+            .catch(() => ({ pageUnavailable: true })),
+        ),
+      ),
+    });
+    await writeFile(
+      out.replace(/\.json$/, '-trace.json'),
+      JSON.stringify({ samples, events: report.events }, null, 2) + '\n',
+    );
+  } finally {
+    sampling = false;
+  }
+}, 10000);
 const json = async (p: Page, url: string) => {
   const r = await p.request.get(origin + url);
   assert(r.ok());
@@ -106,7 +187,7 @@ try {
   const socketOrigins = [new Set<string>(), new Set<string>()];
   pages.forEach((p, i) => p.on('websocket', (s) => socketOrigins[i].add(new URL(s.url()).origin)));
   for (const routeId of routeIds) {
-    report.stage = routeId + ': lobby';
+    await checkpoint(routeId + ': lobby');
     const [a, b] = pages;
     await a.goto(origin + '/online/midnight-outlaws');
     await a.getByLabel('Трасса', { exact: true }).selectOption(routeId);
@@ -131,12 +212,12 @@ try {
       assert.equal(await p.getByTestId('online-player').getAttribute('data-route'), routeId);
       await p.getByRole('button', { name: 'Я готов', exact: true }).click();
     }
-    report.stage = routeId + ': ready';
+    await checkpoint(routeId + ': ready');
     await a.waitForFunction(() => document.querySelectorAll('.lobby-person.is-ready').length === 2);
     await a.getByRole('button', { name: 'Начать заезд', exact: true }).click();
-    await installDriver(a, 'gamepad', 'online', 18);
-    await installDriver(b, 'keyboard', 'online', 18);
-    report.stage = routeId + ': race';
+    await installDriver(a, 'gamepad', 'online', drivingSpeed);
+    await installDriver(b, 'keyboard', 'online', drivingSpeed);
+    await checkpoint(routeId + ': race');
     for (const p of pages)
       await p.waitForFunction(
         () =>
@@ -155,7 +236,7 @@ try {
         x,
       );
     }
-    report.stage = routeId + ': results';
+    await checkpoint(routeId + ': results');
     for (const p of pages) {
       await p.waitForFunction(
         () =>
@@ -202,6 +283,10 @@ try {
           const r = document.querySelector<HTMLElement>('[data-testid="online-player"]');
           return {
             phase: r?.dataset.phase,
+            x: r?.dataset.x,
+            z: r?.dataset.z,
+            speed: r?.dataset.speed,
+            checkpoint: document.querySelector('[data-testid=checkpoint]')?.textContent,
             disconnectCode: r?.dataset.disconnectCode,
             renderReady: r?.dataset.ready,
             players: document.querySelectorAll('.lobby-person').length,
@@ -216,6 +301,7 @@ try {
   );
   process.exitCode = 1;
 } finally {
+  clearInterval(probe);
   await Promise.all(browsers.map((b) => b.close()));
   await writeFile(out, JSON.stringify(report, null, 2) + '\n');
   console.log(

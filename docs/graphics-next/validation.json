@@ -1,11 +1,11 @@
 {
   "date": "2026-10-26",
-  "phase": "local graphics/media/security checks passed; CI registration fixture isolated, full CI rerun pending",
+  "phase": "graphics published at ac20982; exact-equivalent collision query optimization awaiting CI/public retest",
   "source": "f7f85b0",
   "typecheck": "passed, repeated after QA tooling changes",
   "lint": "passed, repeated after QA tooling changes",
   "productionBuild": "passed after pause settings fix (isolated QA origins)",
-  "unitTests": 126,
+  "unitTests": 127,
   "localBrowserScenarios": 26,
   "browserNote": "26 passed before the final material/frontage-only tuning; exact final source will also run in GitHub CI",
   "assets": {
@@ -44,7 +44,8 @@
   "nativePhotos": {
     "high": "passed, native 1280x720/DPR1",
     "ultra": "passed, native 1280x720/DPR1",
-    "poseInjection": false
+    "poseInjection": false,
+    "renderingMathUnaffectedByQueryCache": true
   },
   "softwareBenchmarks": {
     "presets": 6,
@@ -94,5 +95,13 @@
       871
     ],
     "report": "render-load/report.json"
-  }
+  },
+  "collisionQueryOptimization": {
+    "referenceParity": "passed >20000 queries, error <1e-9",
+    "syntheticWallStepBeforeMs": 0.881734725,
+    "syntheticWallStepAfterMs": 0.1633962167,
+    "gameplayRulesChanged": false,
+    "publicRetest": "pending"
+  },
+  "publicContinuousAttempt": "failed: second browser disconnected on Sprint; diagnostics preserved"
 }

@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-26T12:39:22.344Z",
+  "scope": "Synthetic isolated CPU fixture at the observed contact position; not gameplay or a network result",
+  "results": [
+    {
+      "hit": false,
+      "heading": 0,
+      "meanMs": 0.5403070833333302,
+      "maxMs": 20.091052999999988,
+      "collisions": 0
+    },
+    {
+      "hit": false,
+      "heading": 1.5707963267948966,
+      "meanMs": 0.20445376666666468,
+      "maxMs": 0.8043109999999842,
+      "collisions": 0
+    },
+    {
+      "hit": false,
+      "heading": 3.141592653589793,
+      "meanMs": 0.2255876083333315,
+      "maxMs": 2.272094999999979,
+      "collisions": 0
+    },
+    {
+      "hit": false,
+      "heading": -1.5707963267948966,
+      "meanMs": 0.19074225000000192,
+      "maxMs": 3.5186519999999746,
+      "collisions": 0
+    },
+    {
+      "hit": true,
+      "heading": 0,
+      "meanMs": 0.9383639583333315,
+      "maxMs": 3.5883650000000102,
+      "collisions": 0
+    },
+    {
+      "hit": true,
+      "heading": 1.5707963267948966,
+      "meanMs": 0.06141534999999673,
+      "maxMs": 1.2667989999999918,
+      "collisions": 0
+    },
+    {
+      "hit": true,
+      "heading": 3.141592653589793,
+      "meanMs": 0.8817347250000007,
+      "maxMs": 2.9937549999999646,
+      "collisions": 120
+    },
+    {
+      "hit": true,
+      "heading": -1.5707963267948966,
+      "meanMs": 0.023325349999995144,
+      "maxMs": 0.15966400000002068,
+      "collisions": 0
+    }
+  ]
+}

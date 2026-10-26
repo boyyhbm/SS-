@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-26T12:08:56.998Z",
+  "scope": "Actual public HTTPS High KTX2 runtime at DPR0.15 on software GPU; functional/security smoke only, not native-resolution visual or gaming-PC performance certification",
+  "stage": "complete",
+  "passed": true,
+  "runtime": {
+    "quality": "high",
+    "format": "KTX2/Basis + Meshopt",
+    "probes": 3,
+    "width": 192,
+    "height": 108
+  },
+  "checks": [
+    "Exact published asset manifest",
+    "KTX2/Basis textures loaded without WebP fallback",
+    "Three local reflection probes",
+    "Main page no-eval CSP",
+    "Isolated static decoder worker policy",
+    "Real keyboard movement and exit to console"
+  ],
+  "errors": []
+}

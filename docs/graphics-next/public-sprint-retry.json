@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-26T12:21:56.756Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR .15 functional verification; NOT a GPU or physical controller certification",
+  "passed": false,
+  "routes": [],
+  "stage": "midnight-sprint: results",
+  "errorType": "TimeoutError",
+  "diagnostics": [
+    {
+      "phase": "results",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    },
+    {
+      "phase": "browse",
+      "disconnectCode": "4003",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    }
+  ]
+}

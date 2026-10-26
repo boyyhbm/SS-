@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-26T12:44:21.170Z",
+  "scope": "Same isolated CPU contact fixture after exact-equivalent clearance optimization; not gameplay FPS",
+  "results": [
+    {
+      "hit": false,
+      "heading": 0,
+      "meanMs": 0.25115160833333194,
+      "maxMs": 6.849896000000001
+    },
+    {
+      "hit": false,
+      "heading": 1.5707963267948966,
+      "meanMs": 0.05962728333333208,
+      "maxMs": 0.40867600000001403
+    },
+    {
+      "hit": false,
+      "heading": 3.141592653589793,
+      "meanMs": 0.052360608333336715,
+      "maxMs": 0.3878639999999791
+    },
+    {
+      "hit": false,
+      "heading": -1.5707963267948966,
+      "meanMs": 0.05203391666666448,
+      "maxMs": 0.285850000000039
+    },
+    {
+      "hit": true,
+      "heading": 0,
+      "meanMs": 0.1943592666666703,
+      "maxMs": 1.0400200000000268
+    },
+    {
+      "hit": true,
+      "heading": 1.5707963267948966,
+      "meanMs": 0.005997316666667511,
+      "maxMs": 0.03002800000001571
+    },
+    {
+      "hit": true,
+      "heading": 3.141592653589793,
+      "meanMs": 0.16339621666666632,
+      "maxMs": 1.5177279999999769
+    },
+    {
+      "hit": true,
+      "heading": -1.5707963267948966,
+      "meanMs": 0.005849491666667935,
+      "maxMs": 0.012272999999993317
+    }
+  ]
+}

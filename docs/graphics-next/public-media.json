@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-26T12:09:01.498Z",
+  "passed": true,
+  "url": "https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html",
+  "records": [
+    {
+      "file": "after.png",
+      "status": 200,
+      "bytes": 988109,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "before.png",
+      "status": 200,
+      "bytes": 549438,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "car-close.png",
+      "status": 200,
+      "bytes": 1055548,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "gameplay.mp4",
+      "status": 200,
+      "bytes": 1906394,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "high.png",
+      "status": 200,
+      "bytes": 1073725,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "bytes": 7893,
+      "sha256Matches": true,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "file": "keyboard.mp4",
+      "status": 200,
+      "bytes": 1916161,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "measurements.json",
+      "status": 200,
+      "bytes": 6131,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "pause.png",
+      "status": 200,
+      "bytes": 273586,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "raw-measurements.json",
+      "status": 200,
+      "bytes": 135102,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "sdk-four-players.json",
+      "status": 200,
+      "bytes": 3635,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "sdk-six-players.json",
+      "status": 200,
+      "bytes": 4395,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "ultra.png",
+      "status": 200,
+      "bytes": 1093208,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "video-frame.png",
+      "status": 200,
+      "bytes": 764368,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "webgpu-probe.json",
+      "status": 200,
+      "bytes": 4582,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    }
+  ]
+}

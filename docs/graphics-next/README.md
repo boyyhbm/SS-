@@ -76,3 +76,11 @@ The public evidence export is generated with `node scripts/export-graphics-evide
 The first exact-release CI attempt failed at a late registration redirect. [A disposable-database reproduction](ci-registration-isolation.json) confirmed HTTP 429 after the shared 30-request quota, HTTP 201 and a real successful redirect after guarded fixture isolation, and HTTP 429 again when the unchanged limit was reached. The existing local-only/disposable-only helper now isolates the online test group; production throttling has not been weakened. Full CI is rerun after this test-fixture correction.
 
 Very slow software GPU stalls can exceed the simulation's bounded catch-up interval. The real-time videos and speed readouts are evidence of actual execution and engine telemetry, not a comfortable-frame-rate or gaming-PC certification.
+
+## Collision query CPU follow-up
+
+The public mixed-input Sprint check exposed a long client-side stall after contact near the second checkpoint and failed reconnection (4003). Lower backing resolution alone did not resolve it. The captured [trace](public-sprint-low-backing-trace.json) and failed attempts remain recorded; they are not reported as passes.
+
+Road clearance previously scanned every sampled segment of straight roads and rebuilt junction adjacency/radius arrays for every point, including each replayed contact step. The exact-equivalent query now caches immutable segments/junction radii, uses one segment for straight roads, and prunes curved segments by exact distance lower bounds. The independent pre-change reference agrees to <1e-9 over more than 20,000 graph/boundary/contact queries. No track, collision rules, vehicle tuning or server result rules changed.
+
+[Before CPU fixture](collision-cpu-diagnostic.json) / [after](collision-cpu-after.json): the sampled wall-contact step fell from about 0.88 to 0.16 ms on this runner. This is a synthetic CPU microbenchmark, not game FPS. The six-preset GPU-limited measurements remain explicitly dated before this CPU optimization; no new hardware FPS claim is inferred from them. The public failed scenario is retested after deployment.

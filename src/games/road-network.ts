@@ -182,38 +182,61 @@ export function closestOnPolyline(p: Point, points: Point[]) {
   }
   return best;
 }
-export function roadClearance(p: Point) {
-  let clearance = -Infinity;
-  for (const e of roadEdges) {
-    const points = edgeSamples[e.id];
-    const a = points[0],
-      b = points.at(-1)!;
-    if (
-      p.x < Math.min(a.x, b.x) - 80 ||
-      p.x > Math.max(a.x, b.x) + 80 ||
-      p.z < Math.min(a.z, b.z) - 80 ||
-      p.z > Math.max(a.z, b.z) + 80
-    )
-      continue;
-    let squared = Infinity;
-    for (let i = 1; i < points.length; i++) {
-      const a = points[i - 1],
-        b = points[i],
+// The graph is immutable at runtime. Cache query geometry and junction radii once;
+// reconciliation can replay many vehicle contacts for each received snapshot.
+const clearanceEdges = roadEdges.map((edge) => {
+  const points = edgeSamples[edge.id],
+    first = points[0],
+    last = points.at(-1)!;
+  const queryPoints = edge.controls ? points : [first, last];
+  return {
+    halfWidth: edge.width / 2,
+    minX: Math.min(first.x, last.x) - 80,
+    maxX: Math.max(first.x, last.x) + 80,
+    minZ: Math.min(first.z, last.z) - 80,
+    maxZ: Math.max(first.z, last.z) + 80,
+    segments: queryPoints.slice(1).map((b, i) => {
+      const a = queryPoints[i],
         dx = b.x - a.x,
         dz = b.z - a.z;
+      return {
+        x: a.x,
+        z: a.z,
+        dx,
+        dz,
+        lengthSquared: dx * dx + dz * dz || 1,
+        minX: Math.min(a.x, b.x),
+        maxX: Math.max(a.x, b.x),
+        minZ: Math.min(a.z, b.z),
+        maxZ: Math.max(a.z, b.z),
+      };
+    }),
+  };
+});
+const clearanceJunctions = roadNodes.map((n) => ({ ...n, radius: junctionRadius(n.id) }));
+export function roadClearance(p: Point) {
+  let clearance = -Infinity;
+  for (const edge of clearanceEdges) {
+    if (p.x < edge.minX || p.x > edge.maxX || p.z < edge.minZ || p.z > edge.maxZ) continue;
+    let squared = Infinity;
+    for (const s of edge.segments) {
+      const bx = Math.max(s.minX - p.x, 0, p.x - s.maxX),
+        bz = Math.max(s.minZ - p.z, 0, p.z - s.maxZ);
+      if (bx * bx + bz * bz >= squared) continue;
       const t = Math.max(
         0,
-        Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / (dx * dx + dz * dz || 1)),
+        Math.min(1, ((p.x - s.x) * s.dx + (p.z - s.z) * s.dz) / s.lengthSquared),
       );
-      const ex = p.x - a.x - dx * t,
-        ez = p.z - a.z - dz * t;
+      const ex = p.x - s.x - s.dx * t,
+        ez = p.z - s.z - s.dz * t;
       squared = Math.min(squared, ex * ex + ez * ez);
     }
-    clearance = Math.max(clearance, e.width / 2 - Math.sqrt(squared));
+    clearance = Math.max(clearance, edge.halfWidth - Math.sqrt(squared));
   }
-  for (const n of roadNodes) clearance = Math.max(clearance, junctionRadius(n.id) - distance(p, n));
+  for (const n of clearanceJunctions) clearance = Math.max(clearance, n.radius - distance(p, n));
   return clearance;
 }
+
 export const CITY_ROUTE_IDS = ['downtown-circuit', 'midnight-sprint', 'industrial-run'] as const;
 export const cityParkedCars = [
   { x: -118, z: 27, heading: Math.PI / 2 },
