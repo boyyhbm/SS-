@@ -1,6 +1,8 @@
 # MIDNIGHT OUTLAWS — graphics update
 
-2026-10-26. Source rendering revision `6250431`; pause UI/tooling revision `f7f85b0`. Release validation is recorded in [validation.json](validation.json). Public rollout status is reported there separately from local checks. Existing road graph, routes, physics, input, authentication, library and server authority are retained. No schema migration or game-result override is introduced.
+2026-10-26. Published application revision `83ece467f0fd7a4d96729d8903e394bfebb5c198`; source rendering revision `6250431`; pause UI/tooling revision `f7f85b0`. Release validation is recorded in [validation.json](validation.json). Existing road graph, routes, physics, input, authentication, library and server authority are retained. No schema migration or game-result override is introduced.
+
+[Open NEXUS](https://nexus-web-ylcv.onrender.com) · [View real videos, High/Ultra captures and measurements](https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html).
 
 ## Implemented rendering
 
@@ -73,7 +75,7 @@ The public evidence export is generated with `node scripts/export-graphics-evide
 
 [High render-load fixtures](render-load/report.json) use 1/2/4/6 visible model actors (476/555/713/871 draw calls) in the same fixed scene. Two actual draws yield one timing interval; this is not gameplay FPS and no synthetic actor is represented as a real network participant.
 
-The first exact-release CI attempt failed at a late registration redirect. [A disposable-database reproduction](ci-registration-isolation.json) confirmed HTTP 429 after the shared 30-request quota, HTTP 201 and a real successful redirect after guarded fixture isolation, and HTTP 429 again when the unchanged limit was reached. The existing local-only/disposable-only helper now isolates the online test group; production throttling has not been weakened. Full CI is rerun after this test-fixture correction.
+The first exact-release CI attempt failed at a late registration redirect. [A disposable-database reproduction](ci-registration-isolation.json) confirmed HTTP 429 after the shared 30-request quota, HTTP 201 and a real successful redirect after guarded fixture isolation, and HTTP 429 again when the unchanged limit was reached. The existing local-only/disposable-only helper now isolates the online test group; production throttling has not been weakened. [Final application CI](https://github.com/boyyhbm/SS-/actions/runs/40331058589) passed on `83ece46`, including 128 unit tests, all 26 browser scenarios, asset validation, lint, types, production build and backup/ownership checks.
 
 Very slow software GPU stalls can exceed the simulation's bounded catch-up interval. The real-time videos and speed readouts are evidence of actual execution and engine telemetry, not a comfortable-frame-rate or gaming-PC certification.
 
@@ -89,6 +91,25 @@ Road clearance previously scanned every sampled segment of straight roads and re
 
 The next public check kept receiving state at the boundary but still showed multi-second processing spikes; the automated keyboard driver also remained against a road boundary without using reverse. Client prediction now retains at most 600 ms (18 commands at 30 Hz) of speculative replay instead of up to three seconds. All input commands are still sent, sequence numbers remain monotonic, acknowledgements restore authoritative state, and the server alone computes physics/results. Normal 50–200 ms links retain their full recent history. This is a bound on client work, not a relaxed result check.
 
-The regression test sends 90 real command objects, verifies the complete ordered outgoing stream and bounded local replay, then verifies authoritative correction after acknowledgement. The integration driver can now recover through ordinary throttle/brake/steering input and actual reverse; it never writes a car pose, checkpoint, result or clock. Ready confirmation waits for the server-backed UI label after a transient disconnect. Failed attempts remain in the evidence. Full CI/public retesting follows this change.
+The regression test sends 90 real command objects, verifies the complete ordered outgoing stream and bounded local replay, then verifies authoritative correction after acknowledgement. The integration driver can now recover through ordinary throttle/brake/steering input and actual reverse; it never writes a car pose, checkpoint, result or clock. Ready confirmation waits for the server-backed UI label after a transient disconnect. Installing the driver for another route releases the previous inputs and removes its timer/listeners, so automated drivers cannot compete across races. Failed attempts remain in the evidence.
 
 [Post-query-cache measurements](post-cpu-metrics/performance-report.json) cover Low, High and Auto on the same software runner, using a short 30-second window. They are not hardware certification or a claim of an FPS increase; Auto may still be adapting when a short sample ends. The latest change affects online speculative replay only; the single-player render/physics measured there is unchanged.
+
+[Control Sprint before the replay bound](public-before-cap-sprint-recovery.json) completed with both independent public clients using real-input recovery at 14 m/s and DPR 0.1. This documents the test driver's recovery separately from the application change; it does not prove that the prediction bound alone improved performance.
+
+## Published functional verification
+
+Both Render services run application `83ece46`. [Persistence after the actual web/game rollout](public-persistence.json) passed before further gameplay: credentials, libraries/favorites, saves, controller profiles, friends and match history remained unchanged. [Public media verification](public-media.json) downloaded all 15 evidence files and matched their hashes. Fresh mobile registration and the High/KTX2/security smoke were verified earlier in this rollout sequence; their timestamps and narrower scope remain in their individual reports.
+
+[All four public routes](public-after-replay-routes.json) passed using two independent authenticated Chromium processes, a virtual analog controller and keyboard, real invitations, WSS, server-acknowledged Ready, moving remote cars, matching results, PostgreSQL history, rematch and UI exit. These checks used three separate executions with the same two owned accounts on one physical runner:
+
+| Route | Client A / B server time, seconds | Driver cruise | Backing DPR |
+| --- | --- | --- | --- |
+| Downtown Circuit | 55.60 / 58.27 | 14 m/s | 0.15 |
+| Midnight Sprint | 100.90 / 113.60 | 14 m/s | 0.15 |
+| Industrial Run | 118.53 / 151.67 | 10 m/s | 0.1 |
+| Legacy Circuit | 44.30 / 41.23 | 14 m/s | 0.1 |
+
+The [continuous attempt](public-after-replay-continuous-attempt.json) verified Downtown/Sprint, then failed when its automated drivers became stuck near Industrial boundaries. That failure remains recorded. The [separate Industrial check](public-after-replay-industrial.json) completed at a calmer test-driver pace using ordinary driving/reverse; the [Legacy check](public-after-replay-legacy.json) completed separately. No race limit, checkpoint, result, pose or server input-expiry rule was changed to obtain these passes.
+
+The [input-driver diagnostic](driver-telemetry-diagnostic.json) completed 18 headless Industrial cases at 7/10/14 m/s and 2/4/30 Hz telemetry for both input methods against shared physics. It does not simulate WAN corrections, GPU stalls or server input expiry and is not browser acceptance evidence. The game already has an independent simulation/input timer. Public traces still show serious software-renderer frame spikes, including multi-second stalls; successful race results do not establish smooth gameplay. Physical GPU frame pacing and competitive inter-car contacts remain outstanding.

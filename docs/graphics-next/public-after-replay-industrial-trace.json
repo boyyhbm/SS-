@@ -1,0 +1,850 @@
+{
+  "samples": [
+    {
+      "at": 1793033011485,
+      "clients": [
+        {
+          "phase": "browse",
+          "x": "95",
+          "z": "0",
+          "heading": "0",
+          "speed": "0",
+          "sampledInput": null,
+          "driverRecoveries": 0,
+          "stats": null
+        },
+        {
+          "sampledInput": null,
+          "driverRecoveries": 0,
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793033021490,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-24",
+          "z": "22.1",
+          "heading": "1.5707963267948966",
+          "speed": "0",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 0,
+          "stats": null
+        },
+        {
+          "sampledInput": null,
+          "driverRecoveries": 0,
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793033031489,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-24",
+          "z": "22.1",
+          "heading": "1.5707963267948966",
+          "speed": "0",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 0,
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "95",
+          "z": "0",
+          "heading": "0",
+          "speed": "0",
+          "sampledInput": {},
+          "driverRecoveries": 0,
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793033041493,
+      "clients": [
+        {
+          "phase": "lobby",
+          "x": "-24",
+          "z": "22.1",
+          "heading": "1.5707963267948966",
+          "speed": "0",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 0,
+          "stats": null
+        },
+        {
+          "phase": "lobby",
+          "x": "-24",
+          "z": "17.9",
+          "heading": "1.5707963267948966",
+          "speed": "0",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 0,
+          "stats": null
+        }
+      ]
+    },
+    {
+      "at": 1793033075308,
+      "clients": [
+        {
+          "phase": "countdown",
+          "x": "-24",
+          "z": "22.1",
+          "heading": "1.5707963267948966",
+          "speed": "0",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "0 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 1.9507437210436478,
+            "frameMaxMs": 1087.800000011921,
+            "renderCpuMs": 46.519999998807904,
+            "networkSnapshotAgeMs": 1068.550048828125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-23.944057397720755",
+          "z": "17.900108761718705",
+          "heading": "1.5668960652250217",
+          "speed": "0.8808946822569432",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "0 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 0.971439673604707,
+            "frameMaxMs": 1067.5999999940395,
+            "renderCpuMs": 86.6000000089407,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033085307,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "53.4219612386663",
+          "z": "20.01218682225861",
+          "heading": "1.581363719852718",
+          "speed": "10.01236354383212",
+          "sampledInput": {
+            "throttle": "0.13228002035693373",
+            "brake": "0",
+            "steer": "0.01598212862040897"
+          },
+          "checkpoint": "1 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.194888178913738,
+            "frameMaxMs": 356.90000000596046,
+            "renderCpuMs": 16.12500000745058,
+            "networkSnapshotAgeMs": 321.550048828125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "63.15998253965413",
+          "z": "22.061066597929273",
+          "heading": "1.6732594858741983",
+          "speed": "9.9563010219825",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "1 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.0764497769150814,
+            "frameMaxMs": 362.30000001192093,
+            "renderCpuMs": 8.25,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033095310,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "99.62903288354998",
+          "z": "-30.717533512163218",
+          "heading": "3.0793787531503876",
+          "speed": "9.921107057696327",
+          "sampledInput": {
+            "throttle": "0.15389094561833672",
+            "brake": "0",
+            "steer": "-0.04652951727015474"
+          },
+          "checkpoint": "1 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.462304163474345,
+            "frameMaxMs": 347.90000000596046,
+            "renderCpuMs": 11.649999998509884,
+            "networkSnapshotAgeMs": 0
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "103.14072784901963",
+          "z": "-52.61217505106499",
+          "heading": "3.1642972534055045",
+          "speed": "8.384089358371348",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "1 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.235145275308615,
+            "frameMaxMs": 238.90000000596046,
+            "renderCpuMs": 10.216666663686434,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033105311,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "133.5859939963124",
+          "z": "-99.64105075230951",
+          "heading": "1.5569350794503294",
+          "speed": "9.963557990921638",
+          "sampledInput": {
+            "throttle": "0.14816756304133336",
+            "brake": "0",
+            "steer": "-0.1165475340918185"
+          },
+          "checkpoint": "2 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.8487443472229588,
+            "frameMaxMs": 283.39999997615814,
+            "renderCpuMs": 12.800000004470348,
+            "networkSnapshotAgeMs": 231.970458984375
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "160.14263379313348",
+          "z": "-101.03863235342827",
+          "heading": "1.3105281325309706",
+          "speed": "9.886182292625344",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "2 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.757826624770807,
+            "frameMaxMs": 254.80000001192093,
+            "renderCpuMs": 8.979999995231628,
+            "networkSnapshotAgeMs": 163.3623046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033115311,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "232.9354865453787",
+          "z": "-99.88535645065866",
+          "heading": "1.4421346128413757",
+          "speed": "9.99999999832661",
+          "sampledInput": {
+            "throttle": "0.13500000036814588",
+            "brake": "0",
+            "steer": "0.9037243509712228"
+          },
+          "checkpoint": "3 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.708541293880718,
+            "frameMaxMs": 231.40000000596046,
+            "renderCpuMs": 11.619999998807907,
+            "networkSnapshotAgeMs": 226.508056640625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "241.37151465769932",
+          "z": "-72.46481181203043",
+          "heading": "-0.29759485000503194",
+          "speed": "10.63404896829817",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "3 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.526115687443711,
+            "frameMaxMs": 407.10000002384186,
+            "renderCpuMs": 9.259999990463257,
+            "networkSnapshotAgeMs": 182.116943359375
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033125312,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "239.99900109343713",
+          "z": "-4.975161855543342",
+          "heading": "-0.0005627468182767084",
+          "speed": "9.996630629358247",
+          "sampledInput": {
+            "throttle": "0.13373976972365975",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "4 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.464978595470832,
+            "frameMaxMs": 222.69999998807907,
+            "renderCpuMs": 6.300000001986821,
+            "networkSnapshotAgeMs": 114.158447265625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "244.02582456515447",
+          "z": "29.37641337825313",
+          "heading": "0.8948340014760973",
+          "speed": "11.32313831708404",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "4 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.364806866924199,
+            "frameMaxMs": 234.40000000596046,
+            "renderCpuMs": 6.899999991059303,
+            "networkSnapshotAgeMs": 14.749267578125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033135311,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "269.9666087745208",
+          "z": "85.53339919324715",
+          "heading": "-0.051100476745621855",
+          "speed": "9.999999998999034",
+          "sampledInput": {
+            "throttle": "0.13500000025909747",
+            "brake": "0",
+            "steer": "0.11652437727014954"
+          },
+          "checkpoint": "4 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.773672055493483,
+            "frameMaxMs": 232.69999998807907,
+            "renderCpuMs": 8.90000000099341,
+            "networkSnapshotAgeMs": 237.955322265625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "258.80798769931636",
+          "z": "122.55260571375625",
+          "heading": "-0.710853378416372",
+          "speed": "11.707579829842786",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "5 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.921663522294591,
+            "frameMaxMs": 300.90000000596046,
+            "renderCpuMs": 7.633333340287209,
+            "networkSnapshotAgeMs": 354.131591796875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033145313,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "205.69487641786387",
+          "z": "140.0548121757555",
+          "heading": "-1.5883822294900067",
+          "speed": "9.99778780382535",
+          "sampledInput": {
+            "throttle": "0.135486683158423",
+            "brake": "0",
+            "steer": "-0.020080229727163567"
+          },
+          "checkpoint": "5 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.105948429946756,
+            "frameMaxMs": 222.19999998807907,
+            "renderCpuMs": 9.383333330353102,
+            "networkSnapshotAgeMs": 202.3369140625
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "156.89313478131257",
+          "z": "139.5401175917837",
+          "heading": "-1.5945913054179917",
+          "speed": "11.71117057179083",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "5 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.894460130374013,
+            "frameMaxMs": 295.7000000178814,
+            "renderCpuMs": 8.600000008940697,
+            "networkSnapshotAgeMs": 64.6748046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033157810,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "157.5713957779768",
+          "z": "140.0043597750944",
+          "heading": "-1.5705638909666848",
+          "speed": "9.961773523809272",
+          "sampledInput": {
+            "throttle": "0.14411165699548698",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "5 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.225286244107666,
+            "frameMaxMs": 414.90000000596046,
+            "renderCpuMs": 23.599999994039536,
+            "networkSnapshotAgeMs": 755.67138671875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "108.07199899561228",
+          "z": "140.2949312869658",
+          "heading": "-1.5900228202974",
+          "speed": "11.036584634039839",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "6 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.017677782225829,
+            "frameMaxMs": 568.5999999940395,
+            "renderCpuMs": 19.30000000198682,
+            "networkSnapshotAgeMs": 610.6748046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033167872,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "96.48600245435192",
+          "z": "140.0049306344731",
+          "heading": "-1.5711124181385931",
+          "speed": "9.171620412805801",
+          "sampledInput": {
+            "throttle": "0.38459981904836366",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "6 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 0.29341001115060666,
+            "frameMaxMs": 4829.5,
+            "renderCpuMs": 35.3500000089407,
+            "networkSnapshotAgeMs": 6723.67138671875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "32.38889476425223",
+          "z": "138.9378586709332",
+          "heading": "-1.526091940414027",
+          "speed": "7.634109297896584",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "6 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 0.37268932617797423,
+            "frameMaxMs": 7151.0999999940395,
+            "renderCpuMs": 45.666666666666664,
+            "networkSnapshotAgeMs": 7752.6748046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033177873,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-37.22865357233557",
+          "z": "139.29041931656434",
+          "heading": "-1.9721788955407509",
+          "speed": "9.998854089587235",
+          "sampledInput": {
+            "throttle": "0.13300235059484133",
+            "brake": "0",
+            "steer": "0.30247813773986004"
+          },
+          "checkpoint": "7 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.371775815381757,
+            "frameMaxMs": 244.40000000596046,
+            "renderCpuMs": 14.8,
+            "networkSnapshotAgeMs": 232.81005859375
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-46.84103827722319",
+          "z": "90.47281992496313",
+          "heading": "-3.4691333646530684",
+          "speed": "9.87495730913677",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "7 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 2.997302427797117,
+            "frameMaxMs": 466.7000000178814,
+            "renderCpuMs": 11.199999998013178,
+            "networkSnapshotAgeMs": 46.6748046875
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033187873,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-39.9305340689575",
+          "z": "51.87907636427994",
+          "heading": "-3.147051454555221",
+          "speed": "9.885119890558522",
+          "sampledInput": {
+            "throttle": "0.1619140995475159",
+            "brake": "0",
+            "steer": "-0.019960899138311693"
+          },
+          "checkpoint": "8 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.4036759700821775,
+            "frameMaxMs": 347.69999998807907,
+            "renderCpuMs": 7.600000001490116,
+            "networkSnapshotAgeMs": 269.021484375
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-33.27770929131453",
+          "z": "10.1424821935306",
+          "heading": "-4.509364473761783",
+          "speed": "-0.006846688363116926",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "8 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 3.322535094342732,
+            "frameMaxMs": 321.39999997615814,
+            "renderCpuMs": 9.25,
+            "networkSnapshotAgeMs": 360.5986328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033197875,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-21.903037945864344",
+          "z": "16.27415806567281",
+          "heading": "-5.049622869661373",
+          "speed": "9.78283557666409",
+          "sampledInput": {
+            "throttle": "0.18277617313390035",
+            "brake": "0",
+            "steer": "-0.042723573688538574"
+          },
+          "checkpoint": "0 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.47187192561189,
+            "frameMaxMs": 362.69999998807907,
+            "renderCpuMs": 6,
+            "networkSnapshotAgeMs": 306.4892578125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-33.599109191643876",
+          "z": "10.15971374730646",
+          "heading": "-4.776405101634929",
+          "speed": "-1.7284101182994975",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "1",
+            "steer": "-1"
+          },
+          "checkpoint": "8 / 9",
+          "driverRecoveries": 2,
+          "stats": {
+            "fps": 3.3729656800572525,
+            "frameMaxMs": 360.19999998807907,
+            "renderCpuMs": 6.875,
+            "networkSnapshotAgeMs": 266.5986328125
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033207875,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-21.903037945864344",
+          "z": "16.27415806567281",
+          "heading": "-5.049622869661373",
+          "speed": "9.78283557666409",
+          "sampledInput": {
+            "throttle": "0.18277617313390035",
+            "brake": "0",
+            "steer": "-0.042723573688538574"
+          },
+          "checkpoint": "0 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 5.022181300795069,
+            "frameMaxMs": 250,
+            "renderCpuMs": 9.183333337306976,
+            "networkSnapshotAgeMs": 140.10595703125
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-36.61206203298433",
+          "z": "8.822582251764121",
+          "heading": "-5.434613137079214",
+          "speed": "2.6219316676811157",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "0"
+          },
+          "checkpoint": "8 / 9",
+          "driverRecoveries": 3,
+          "stats": {
+            "fps": 3.989149513304789,
+            "frameMaxMs": 264,
+            "renderCpuMs": 9.559999996423722,
+            "networkSnapshotAgeMs": 248.458740234375
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033217875,
+      "clients": [
+        {
+          "phase": "racing",
+          "x": "-21.903037945864344",
+          "z": "16.27415806567281",
+          "heading": "-5.049622869661373",
+          "speed": "9.78283557666409",
+          "sampledInput": {
+            "throttle": "0.18277617313390035",
+            "brake": "0",
+            "steer": "-0.042723573688538574"
+          },
+          "checkpoint": "0 / 9",
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.23908435777872,
+            "frameMaxMs": 250.19999998807907,
+            "renderCpuMs": 8.620000004768372,
+            "networkSnapshotAgeMs": 205.697998046875
+          }
+        },
+        {
+          "phase": "racing",
+          "x": "-32.96141082562013",
+          "z": "12.043806833623915",
+          "heading": "-5.466165134719436",
+          "speed": "0.35757037412720644",
+          "sampledInput": {
+            "throttle": "1",
+            "brake": "0",
+            "steer": "1"
+          },
+          "checkpoint": "8 / 9",
+          "driverRecoveries": 4,
+          "stats": {
+            "fps": 4.018646519794359,
+            "frameMaxMs": 290.5,
+            "renderCpuMs": 11.419999998807906,
+            "networkSnapshotAgeMs": 11.623291015625
+          }
+        }
+      ]
+    },
+    {
+      "at": 1793033227876,
+      "clients": [
+        {
+          "phase": "results",
+          "x": "-21.903037945864344",
+          "z": "16.27415806567281",
+          "heading": "-5.049622869661373",
+          "speed": "9.78283557666409",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 0,
+          "stats": {
+            "fps": 4.3044077135207095,
+            "frameMaxMs": 247,
+            "renderCpuMs": 13.219999998807907,
+            "networkSnapshotAgeMs": 192.090576171875
+          }
+        },
+        {
+          "phase": "results",
+          "x": "-21.861241919345154",
+          "z": "20.42933501944916",
+          "heading": "-4.750425704647803",
+          "speed": "12.615270097412381",
+          "sampledInput": {
+            "throttle": "0",
+            "brake": "0",
+            "steer": "0"
+          },
+          "driverRecoveries": 5,
+          "stats": {
+            "fps": 4.250255015387057,
+            "frameMaxMs": 252.2000000178814,
+            "renderCpuMs": 8.280000001192093,
+            "networkSnapshotAgeMs": 0
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793033069776
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793033069777
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793033069983
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793033070677
+    }
+  ]
+}

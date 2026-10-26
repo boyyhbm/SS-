@@ -6,9 +6,11 @@
 
 **Открыть NEXUS: https://nexus-web-ylcv.onrender.com**. Сайт работает независимо от рабочей среды. На публичном HTTPS/WSS проверены регистрация, библиотека, одиночный заезд, все четыре сетевых маршрута двумя независимыми браузерами и сохранность данных после фактического обновления обоих сервисов. Физические геймпады и две разные пользовательские машины не проверялись.
 
-[Развёртывание на Render](docs/render-production.md) · [Фактический статус](docs/production-status.json) · [Публичные проверки](docs/gameplay-update/public-tests.json). Отдельные production Web и Colyseus, private PostgreSQL 16 и постоянный диск загрузок размещены во Frankfurt; конфигурация — [`render.yaml`](render.yaml). Каталог сохранён с исходными ID и датами; приватных записей в локальном источнике не было. Прежняя конфигурация Railway сохранена как альтернативная.
+[Развёртывание на Render](docs/render-production.md) · [Фактический статус](docs/production-status.json) · [Последние публичные проверки](docs/graphics-next/public-after-replay-routes.json). Отдельные production Web и Colyseus, private PostgreSQL 16 и постоянный диск загрузок размещены во Frankfurt; конфигурация — [`render.yaml`](render.yaml). Каталог сохранён с исходными ID и датами; приватных записей в локальном источнике не было. Прежняя конфигурация Railway сохранена как альтернативная.
 
 ## Обновление гонки: маршруты, плавность и траектория
+
+Последнее графическое обновление: [видео, High/Ultra, сравнение и измерения на публичном сайте](https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html) · [технический отчёт и ограничения](docs/graphics-next/README.md). Добавлены HDR, локальные отражения, полная модель автомобиля, сжатые PBR-ресурсы и шесть режимов качества. Производительность измерена на программном SwiftShader; 60 FPS на игровом ПК пока не подтверждены.
 
 [Изменения и ограничения](docs/gameplay-update/README.md) · [Реальные скриншоты](docs/gameplay-update/gallery.md) · [Игровое видео](docs/gameplay-update/gameplay.mp4) · [Измеренная производительность](docs/gameplay-update/performance.md).
 

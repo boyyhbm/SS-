@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-26T16:47:26.425Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR 0.1, input driver cruise 14 m/s; functional verification; NOT a GPU or physical controller certification",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "legacy-circuit",
+      "matchId": "cmvphq1og00100goa1fcmxl6r",
+      "records": [
+        {
+          "place": 2,
+          "seconds": 44.30000000000005,
+          "serverVerified": true
+        },
+        {
+          "place": 1,
+          "seconds": 41.233333333333555,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ]
+    }
+  ],
+  "stage": "complete",
+  "events": []
+}

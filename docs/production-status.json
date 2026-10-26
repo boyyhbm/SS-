@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T02:20:27.497Z",
+  "updatedAt": "2026-10-26T16:51:26.987Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -40,8 +40,8 @@
   },
   "publicAcceptanceTests": {
     "status": "PASSED_ALL_FOUR_ROUTES_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
-    "report": "gameplay-update/public-tests.json",
-    "historicalReport": "world-update/public-tests.json"
+    "report": "graphics-next/production.json",
+    "historicalReport": "gameplay-update/public-tests.json"
   },
   "physicalControllers": "UNVERIFIED",
   "blockers": [],
@@ -84,28 +84,29 @@
     "checksOnApplicationCommit": "SUCCESS",
     "autoDeployTrigger": "checksPass",
     "observedAutomaticTrigger": "new_commit after passing checks; both services reached LIVE and readiness 200",
-    "lastVerifiedCodeCommit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+    "lastVerifiedCodeCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
     "checksOnLastVerifiedCodeCommit": "SUCCESS",
-    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40240880798"
+    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40331058589"
   },
   "knownLimitations": [
     "Physical controllers, Safari/Firefox and geographically separate computers not tested",
     "Active rooms are lost during a multiplayer process restart; completed results and accounts remain durable",
     "Rollout readiness is not instantaneous; an initial probe received a non-success response, then stable new-instance readiness and persistence passed",
-    "Physical gaming GPU/60 FPS unverified; measured software High/1080p average is 0.327 FPS",
     "Private vehicle contacts remain disabled for visitors; higher-DPR software-browser contact attempt lost a connection; cause unresolved",
-    "City facade resolution, sparse blocks and dynamic traffic remain prototype limitations"
+    "City facade resolution, sparse blocks and dynamic traffic remain prototype limitations",
+    "Current software-only render measurements: graphics-next/performance.md and graphics-next/post-cpu-performance.md; no physical gaming GPU or reliable 1% low certification",
+    "Latest public route verification passed functionally across three separate executions at conservative input-driver speeds; software renderer still showed multi-second frame spikes, not smooth gameplay certification"
   ],
   "latestVerifiedRollout": {
     "web": {
       "status": "live",
-      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
       "trigger": "new_commit",
       "healthStatus": 200
     },
     "multiplayer": {
       "status": "live",
-      "commit": "e3773ef4b1d71eb4caf064b1604f379c9a2d3fa6",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
       "trigger": "new_commit",
       "healthStatus": 200
     }
@@ -137,5 +138,16 @@
     "multiplayerVideo": "gameplay-update/multiplayer.mp4",
     "screenshots": "gameplay-update/gallery.md",
     "fullVisualAndHardwareAcceptanceComplete": false
+  },
+  "graphicsUpdate": {
+    "report": "graphics-next/validation.json",
+    "sourceCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+    "publicRoutesPassed": 4,
+    "publicEvidenceUrl": "https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html",
+    "registeredPresets": 6,
+    "fullVisualAndHardwareAcceptanceComplete": false,
+    "publicVehicleContactsEnabled": false,
+    "publicRouteExecutions": 3,
+    "continuousFourRouteAttemptPassed": false
   }
 }

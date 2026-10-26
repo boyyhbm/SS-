@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-26T16:51:26.987Z",
+  "passed": true,
+  "applicationCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+  "ci": {
+    "run": 40331058589,
+    "url": "https://github.com/boyyhbm/SS-/actions/runs/40331058589",
+    "unitTests": 128,
+    "browserScenarios": 26,
+    "conclusion": "success"
+  },
+  "services": {
+    "web": {
+      "status": "live",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    },
+    "multiplayer": {
+      "status": "live",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    }
+  },
+  "postgresql": {
+    "status": "available",
+    "externalConnections": "disabled"
+  },
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
+  "evidenceUrl": "https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html",
+  "routeIds": [
+    "downtown-circuit",
+    "midnight-sprint",
+    "industrial-run",
+    "legacy-circuit"
+  ],
+  "independentBrowsers": 2,
+  "inputs": [
+    "virtual analog gamepad",
+    "keyboard"
+  ],
+  "samePhysicalRunner": true,
+  "hardware60FpsCertified": false,
+  "physicalControllersTested": false,
+  "publicCarContactsEnabled": false,
+  "failedAttemptsPreserved": true,
+  "routeExecutions": 3,
+  "continuousFourRouteAttemptPassed": false,
+  "functionalityDoesNotCertifyFramePacing": true,
+  "testDataCleanup": {
+    "passed": true,
+    "ownedAccountsRemoved": 3,
+    "report": "fixture-cleanup.json"
+  },
+  "publicEvidenceChecks": {
+    "freshRegistration": "public-registration.json, 2026-10-26T12:11:55.665Z, earlier unchanged authentication code",
+    "highKtx2AndCsp": "public-graphics.json, 2026-10-26T12:08:56.998Z, earlier unchanged rendering/security code",
+    "afterActualRollout": "public-persistence.json",
+    "allFourRoutes": "public-after-replay-routes.json",
+    "mediaHashes": "public-media.json"
+  }
+}

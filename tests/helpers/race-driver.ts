@@ -24,6 +24,8 @@ export async function installDriver(
     : cityRoutes.find((r) => r.id === routeId);
   await page.evaluate(
     ({ method, kind, cruiseSpeed, route }) => {
+      const lifecycle = window as unknown as { nexusTestDriverCleanup?: () => void };
+      lifecycle.nexusTestDriverCleanup?.();
       const button = (value = 0) => ({ pressed: value > 0.2, touched: value > 0.2, value });
       const fixture = (
         window as unknown as {
@@ -254,12 +256,24 @@ export async function installDriver(
         pad.timestamp = performance.now();
       }
       update();
+      const simulationListener = (event: Event) => update((event as CustomEvent).detail);
       if (route) {
         const canvas = document.querySelector<HTMLElement>('.race-canvas');
         if (canvas) canvas.dataset.instrumentation = 'true';
-        window.addEventListener('nexus-simulation-tick', (e) => update((e as CustomEvent).detail));
+        window.addEventListener('nexus-simulation-tick', simulationListener);
       }
-      setInterval(update, 1000 / 30);
+      const timer = setInterval(update, 1000 / 30);
+      lifecycle.nexusTestDriverCleanup = () => {
+        clearInterval(timer);
+        window.removeEventListener('nexus-simulation-tick', simulationListener);
+        window.removeEventListener('blur', release);
+        document.removeEventListener('visibilitychange', release);
+        release();
+        pad.axes[0] = 0;
+        pad.buttons[6] = button();
+        pad.buttons[7] = button();
+        if (route) pad.buttons[0] = button();
+      };
     },
     {
       method,

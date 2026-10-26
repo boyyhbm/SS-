@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-26T16:51:15.345Z",
+  "passed": true,
+  "fixtureCount": 3,
+  "scope": "Only explicitly identified owned verification accounts and their isolated records; existing user data retained",
+  "jobs": [
+    {
+      "id": "job-dbfo9e142hec73eqh730",
+      "fixtureCount": 2,
+      "status": "succeeded"
+    },
+    {
+      "id": "job-dbfo9ecs728c738gafrg",
+      "fixtureCount": 1,
+      "status": "succeeded"
+    }
+  ]
+}

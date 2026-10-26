@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-26T16:49:53.858Z",
+  "passed": true,
+  "applicationCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+  "scope": "Two independent authenticated HTTPS/WSS browser clients per route, three separate executions with the same two owned accounts. Virtual analog input and keyboard; software rendering at explicitly recorded low backing resolutions. Functional verification, not graphics performance certification.",
+  "continuousFourRouteAttemptPassed": false,
+  "executions": [
+    "public-after-replay-continuous-attempt.json",
+    "public-after-replay-industrial.json",
+    "public-after-replay-legacy.json"
+  ],
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "matchId": "cmvpcksfa00000goaydfmb27r",
+      "records": [
+        {
+          "place": 1,
+          "seconds": 55.599999999999405,
+          "serverVerified": true
+        },
+        {
+          "place": 2,
+          "seconds": 58.26666666666592,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ],
+      "evidence": "public-after-replay-continuous-attempt.json"
+    },
+    {
+      "routeId": "midnight-sprint",
+      "matchId": "cmvpcmtqq00090goatwtucnai",
+      "records": [
+        {
+          "place": 1,
+          "seconds": 100.89999999999684,
+          "serverVerified": true
+        },
+        {
+          "place": 2,
+          "seconds": 113.59999999999611,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ],
+      "evidence": "public-after-replay-continuous-attempt.json"
+    },
+    {
+      "routeId": "industrial-run",
+      "matchId": "cmvphlgi0000r0goau3cwz2f8",
+      "records": [
+        {
+          "place": 1,
+          "seconds": 118.53333333332917,
+          "serverVerified": true
+        },
+        {
+          "place": 2,
+          "seconds": 151.66666666666063,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ],
+      "evidence": "public-after-replay-industrial.json"
+    },
+    {
+      "routeId": "legacy-circuit",
+      "matchId": "cmvphq1og00100goa1fcmxl6r",
+      "records": [
+        {
+          "place": 2,
+          "seconds": 44.30000000000005,
+          "serverVerified": true
+        },
+        {
+          "place": 1,
+          "seconds": 41.233333333333555,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ],
+      "evidence": "public-after-replay-legacy.json"
+    }
+  ],
+  "checks": [
+    "Private room and real friend invitation",
+    "Both clients see the same route and match",
+    "Server-acknowledged ready and synchronized start",
+    "Visible remote car position changes",
+    "Both ordered routes finish with persisted server-verified results",
+    "Identical result rows on both clients",
+    "Rematch returns both clients to lobby",
+    "Both clients leave through the UI"
+  ],
+  "failedAttemptPreserved": "public-after-replay-continuous-attempt.json"
+}

@@ -140,7 +140,18 @@ const probe = setInterval(async () => {
                 phase: r?.dataset.phase,
                 x: r?.dataset.x,
                 z: r?.dataset.z,
+                heading: r?.dataset.heading,
                 speed: r?.dataset.speed,
+                sampledInput: (() => {
+                  const canvas = document.querySelector<HTMLCanvasElement>('canvas');
+                  return canvas
+                    ? {
+                        throttle: canvas.dataset.throttle,
+                        brake: canvas.dataset.brake,
+                        steer: canvas.dataset.steer,
+                      }
+                    : null;
+                })(),
                 checkpoint: document.querySelector('[data-testid=checkpoint]')?.textContent,
                 disconnect: r?.dataset.disconnectCode,
                 driverRecoveries:
@@ -301,6 +312,7 @@ try {
             phase: r?.dataset.phase,
             x: r?.dataset.x,
             z: r?.dataset.z,
+            heading: r?.dataset.heading,
             speed: r?.dataset.speed,
             checkpoint: document.querySelector('[data-testid=checkpoint]')?.textContent,
             disconnectCode: r?.dataset.disconnectCode,

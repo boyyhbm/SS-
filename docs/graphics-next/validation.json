@@ -1,13 +1,13 @@
 {
   "date": "2026-10-26",
-  "phase": "bounded client prediction and input-only test recovery awaiting exact CI and public retest",
-  "source": "f7f85b0",
+  "phase": "Published and public functional checks passed; full visual/hardware acceptance remains incomplete",
+  "source": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
   "typecheck": "passed, repeated after QA tooling changes",
   "lint": "passed, repeated after QA tooling changes",
-  "productionBuild": "passed after pause settings fix (isolated QA origins)",
+  "productionBuild": "passed in exact application GitHub CI",
   "unitTests": 128,
   "localBrowserScenarios": 26,
-  "browserNote": "26 passed before the final material/frontage-only tuning; exact final source will also run in GitHub CI",
+  "browserNote": "All 26 browser scenarios passed in GitHub CI 40331058589 on the exact published application revision 83ece467f0fd7a4d96729d8903e394bfebb5c198",
   "assets": {
     "passed": true,
     "resources": 91,
@@ -20,7 +20,7 @@
   },
   "physicalGpu": "unavailable",
   "physicalControllers": "not tested",
-  "production": "pending",
+  "production": "LIVE; web and multiplayer health 200, private PostgreSQL available",
   "softwareGpu": "ANGLE Vulkan SwiftShader (Subzero), Chromium 154; not a hardware 60 FPS benchmark",
   "retainedFeatures": [
     "Existing road graph and routes",
@@ -77,6 +77,13 @@
       "diagnosis": "Shared local registration quota exhausted by accumulated fixture accounts",
       "reproduction": "ci-registration-isolation.json",
       "applicationProtectionChanged": false
+    },
+    {
+      "run": 40331058589,
+      "source": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+      "status": "passed",
+      "unitTests": 128,
+      "browserScenarios": 26
     }
   ],
   "renderLoadFixtures": {
@@ -101,9 +108,9 @@
     "syntheticWallStepBeforeMs": 0.881734725,
     "syntheticWallStepAfterMs": 0.1633962167,
     "gameplayRulesChanged": false,
-    "publicRetest": "pending"
+    "publicRetest": "passed with bounded prediction and input-only driver recovery; earlier failures retained"
   },
-  "publicContinuousAttempt": "failed: second browser disconnected on Sprint; diagnostics preserved",
+  "publicContinuousAttempt": "Failed on Industrial driver boundary contact after verified Downtown and Sprint; preserved in public-after-replay-continuous-attempt.json",
   "predictionReplay": {
     "windowMs": 600,
     "maximumCommands": 18,
@@ -111,5 +118,29 @@
     "serverAuthorityChanged": false,
     "regressionTest": "90 ordered outgoing commands, bounded replay, authoritative ACK restore passed"
   },
-  "publicLatestAttempt": "lobby request lost during a brief reconnect; test now confirms Ready acknowledgement; race attempt stalled after automatic keyboard driver contact"
+  "publicLatestAttempt": "All four routes verified across three actual public executions on the same deployed application; Industrial used 10 m/s driver cruise, other routes 14 m/s; successful results do not establish smooth rendering",
+  "applicationCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+  "ci": {
+    "run": 40331058589,
+    "url": "https://github.com/boyyhbm/SS-/actions/runs/40331058589",
+    "unitTests": 128,
+    "browserScenarios": 26,
+    "conclusion": "success"
+  },
+  "publicRoutes": {
+    "passed": true,
+    "count": 4,
+    "report": "public-after-replay-routes.json",
+    "executions": 3,
+    "continuousFourRouteAttemptPassed": false
+  },
+  "publicEvidenceUrl": "https://nexus-web-ylcv.onrender.com/reports/midnight-graphics/index.html",
+  "publicPersistence": "passed after real web/game rollout",
+  "fixtureCleanup": "passed: three owned test accounts only",
+  "fullVisualAndHardwareAcceptanceComplete": false,
+  "finalQaToolingChecks": {
+    "typecheck": "passed",
+    "scopedEslint": "passed",
+    "runtimeRouteVerification": "passed with current lifecycle cleanup and telemetry diagnostics"
+  }
 }

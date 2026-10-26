@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-26T14:22:51.439Z",
+  "scope": "Two real independent authenticated HTTPS/WSS browser clients, Low/DPR 0.15, input driver cruise 14 m/s; functional verification; NOT a GPU or physical controller certification",
+  "passed": false,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "matchId": "cmvpcksfa00000goaydfmb27r",
+      "records": [
+        {
+          "place": 1,
+          "seconds": 55.599999999999405,
+          "serverVerified": true
+        },
+        {
+          "place": 2,
+          "seconds": 58.26666666666592,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ]
+    },
+    {
+      "routeId": "midnight-sprint",
+      "matchId": "cmvpcmtqq00090goatwtucnai",
+      "records": [
+        {
+          "place": 1,
+          "seconds": 100.89999999999684,
+          "serverVerified": true
+        },
+        {
+          "place": 2,
+          "seconds": 113.59999999999611,
+          "serverVerified": true
+        }
+      ],
+      "wss": [
+        "wss://nexus-multiplayer.onrender.com"
+      ]
+    }
+  ],
+  "stage": "industrial-run: results",
+  "events": [
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793024623355
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793024623355
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793024623543
+    },
+    {
+      "client": 0,
+      "type": "reconnected",
+      "at": 1793024624201
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793024708567
+    },
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793024809459
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793024809460
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793024811651
+    },
+    {
+      "client": 0,
+      "type": "reconnected",
+      "at": 1793024812350
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793024814799
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793024814799
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793024815498
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793024817060
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793024861036
+    },
+    {
+      "client": 0,
+      "type": "socket-closed",
+      "at": 1793025043910
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793025043920
+    },
+    {
+      "client": 0,
+      "type": "reconnect-attempt",
+      "at": 1793025044464
+    },
+    {
+      "client": 0,
+      "type": "reconnected",
+      "at": 1793025045360
+    },
+    {
+      "client": 1,
+      "type": "socket-closed",
+      "at": 1793025045524
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793025045524
+    },
+    {
+      "client": 1,
+      "type": "reconnect-attempt",
+      "at": 1793025045934
+    },
+    {
+      "client": 1,
+      "type": "reconnected",
+      "at": 1793025046629
+    }
+  ],
+  "errorType": "AssertionError",
+  "diagnostics": [
+    {
+      "phase": "results",
+      "x": "-32.7552429244603",
+      "z": "9.56860250511396",
+      "speed": "0.7664134318107957",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    },
+    {
+      "phase": "results",
+      "x": "-50.341351096031055",
+      "z": "134.1338431335355",
+      "speed": "0.17048004250715676",
+      "renderReady": "true",
+      "players": 0,
+      "readyPlayers": 0
+    }
+  ]
+}

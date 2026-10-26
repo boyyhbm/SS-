@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-26T12:58:54.847Z",
+  "source": "c1d228ebec8a379d1daa787f88f83676b619311c",
+  "machine": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "cpuQuota": "400000 100000",
+    "memoryLimitBytes": "34359738368",
+    "nodeVersion": "v24.19.0",
+    "browserVersion": "154.0.8037.57",
+    "physicalGamingGpu": false
+  },
+  "scope": "Real single-player software-GPU measurements after exact-query caching; short windows, no hardware FPS or FPS gain claim; online replay cap is separate",
+  "rows": [
+    {
+      "requested": "low",
+      "actual": "low",
+      "canvas": [
+        1632,
+        918
+      ],
+      "frames": 20,
+      "fps": 0.5744270807901002,
+      "frameMs": 1740.865000000596,
+      "p95": 2108,
+      "maxMs": 3472.300000011921,
+      "reliableOnePercentLow": false
+    },
+    {
+      "requested": "high",
+      "actual": "high",
+      "canvas": [
+        1920,
+        1080
+      ],
+      "frames": 4,
+      "fps": 0.07179923497914362,
+      "frameMs": 13927.72500000149,
+      "p95": 15658.90000000596,
+      "maxMs": 15658.90000000596,
+      "reliableOnePercentLow": false
+    },
+    {
+      "requested": "auto",
+      "actual": "low",
+      "canvas": [
+        1468,
+        826
+      ],
+      "frames": 8,
+      "fps": 0.31215126850478997,
+      "frameMs": 3203.574999999255,
+      "p95": 8723.40000000596,
+      "maxMs": 8723.40000000596,
+      "reliableOnePercentLow": false
+    }
+  ]
+}
