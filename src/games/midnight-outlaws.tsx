@@ -247,7 +247,7 @@ export function MidnightOutlaws({
       const localVisuals = new Map(
         vehicles.map((v) => [
           v.vehicleId,
-          createCar(assets.vehicles[v.vehicleId].scene, tier === 'low'),
+          createCar(assets.vehicles[v.vehicleId].scene, tier === 'low', v.steeringLimit),
         ]),
       );
       for (const actor of localVisuals.values()) {
@@ -290,6 +290,7 @@ export function MidnightOutlaws({
             model,
             v.modelAsset === 'concept' ? assets.carLow.scene : model,
             tier === 'low',
+            v.steeringLimit,
           );
           actor.group.userData.vehicleId = v.vehicleId;
           return actor;

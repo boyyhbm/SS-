@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
@@ -22,7 +22,7 @@ import { consoleReturn } from '@/input/focus';
 import { GameControlsHint } from './input-system';
 import { RaceHUD, GraphicsSettings } from './race-hud';
 import { InputNavigation } from './input-navigation';
-import { routeRegistry, type RouteId } from '@/games/route-registry';
+import { routeRegistry, routeIdSchema, type RouteId } from '@/games/route-registry';
 import { GameRouteMap } from './game-route-map';
 import { GameAudioSettings } from './game-audio-settings';
 import { VehicleSelect } from './vehicle-select';
@@ -58,7 +58,11 @@ export function GamePlayer({
   useEffect(() => {
     void useGaragePreference.getState().load();
   }, []);
-  const [routeId, setRouteId] = useState<RouteId>('downtown-circuit');
+  const search = useSearchParams();
+  const [routeId, setRouteId] = useState<RouteId>(() => {
+    const route = routeIdSchema.safeParse(search.get('route'));
+    return route.success && route.data !== 'legacy-circuit' ? route.data : 'downtown-circuit';
+  });
   const [selectedLaps, setSelectedLaps] = useState(3);
   const [trackBrowser, setTrackBrowser] = useState(false);
   const [routeRecords, setRouteRecords] = useState(initialRouteRecords);

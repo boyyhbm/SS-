@@ -25,6 +25,9 @@ type Voice = {
   rpm: number;
 };
 const zero: RaceInput = { throttle: 0, brake: 0, steer: 0, nitro: false };
+// The first digital capture measured -29.5 LUFS for normal solo driving.
+// +7.2 dB makes the default mix audible while the existing compressor retains headroom.
+const masterGain = 1.6;
 const bufferCache = new WeakMap<BaseAudioContext, Map<string, AudioBuffer>>();
 const active = new Set<GameAudioEngine>();
 
@@ -283,7 +286,7 @@ export class GameAudioEngine {
     if (this.ctx && this.master)
       target(
         this.master.gain,
-        paused || this.settings.muted ? 0 : clampAudio(this.settings.master) * 0.7,
+        paused || this.settings.muted ? 0 : clampAudio(this.settings.master) * masterGain,
         this.ctx,
         0.035,
       );

@@ -21,7 +21,11 @@ export interface CarVisual {
     suspension?: { pitch: number; roll: number },
   ) => void;
 }
-export function createCar(template: THREE.Object3D, simple = false): CarVisual {
+export function createCar(
+  template: THREE.Object3D,
+  simple = false,
+  steeringLimit = 0.52,
+): CarVisual {
   const group = new THREE.Group(),
     model = template.clone(true);
   group.add(model);
@@ -179,7 +183,7 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       for (const b of brakes) b.emissiveIntensity = braking ? 4 : 0.8;
       for (const w of wheels) {
         w.spin.rotation.x += (speed * dt) / w.radius;
-        if (w.front) w.steering.rotation.y = -steer * 0.38;
+        if (w.front) w.steering.rotation.y = (-steer * steeringLimit) / (1 + Math.abs(speed) / 14);
       }
       const response = 1 - Math.exp(-Math.max(0, dt) * 9);
       if (dt > 0) {
@@ -205,10 +209,11 @@ export function createRemoteCar(
   high: THREE.Object3D,
   low: THREE.Object3D,
   simple: boolean,
+  steeringLimit = 0.52,
 ): CarVisual {
-  if (simple) return createCar(low, true);
-  const near = createCar(high),
-    far = createCar(low, true),
+  if (simple) return createCar(low, true, steeringLimit);
+  const near = createCar(high, false, steeringLimit),
+    far = createCar(low, true, steeringLimit),
     group = new THREE.Group();
   group.add(near.group, far.group);
   let detailed = true,

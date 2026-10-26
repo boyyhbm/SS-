@@ -1,19 +1,65 @@
-# Complete Racing Experience — implementation evidence
+# Complete Racing Experience — implementation and evidence
 
-Baseline: [baseline.json](baseline.json), application source `94206cb`.
+The preserved baseline is [baseline.json](baseline.json), source `94206cb`. Audio-only `a86cf3a` was deployed first. The integrated content source is `4c5c547`; production acceptance is recorded separately after deployment.
 
-## Phase 1: working game audio
+## Audio
 
-An independent `GameAudioEngine` consumes the existing simulation's speed, throttle/brake, lateral velocity, contact strength and camera position. It does not own or change car transforms. Four RPM bands, load/coast layers, a limiter, wheel-linked shift model, tire rolling/slip, contact transients, spatial remote engines, wind/ambient beds and an original quiet music bed feed separate buses and a headroom compressor. Buffers are generated once per context and reused. Voice counts and collision retriggers are bounded. Quality changes keep the audio context; runtime exit closes it.
+`GameAudioEngine` consumes authoritative/local physics: RPM, gear, throttle/load, wheel slip, contact impulse, position and camera mode. Four RPM bands, load/coast layers, limiter, shift cut/transient, tire rolling/slip, spatial remote engines and bounded Doppler feed separate buses and a compressor. Each registered engine has a different cylinder/timbre profile. City, industrial, mountain, circuit and coastal ambience use distinct original soundscapes. Buffers are cached per context, voices are limited to the local car plus five real peers, and runtime exit closes the context. Starting playback requires actual pointer/key/controller interaction; blocked playback has an explicit UI state.
 
-The current engine uses original synthesized combustion samples and original noise/tonal effects, not field recordings or commercial game audio. This gives working state-dependent sound; professional recording/mixing quality is not claimed. Hood camera receives a closer, filtered mix; there is no cockpit interior. Spatial engine load for remote cars is approximate until authoritative powertrain telemetry is integrated. Weather-specific rain is not advertised.
+This is original synthesized combustion/noise/tonal audio, not professional engine field recordings. Physical speakers/headphones were unavailable. Automated analyser checks establish audible digital output, response to input, gear changes, mute, account-persisted settings and bounded output; they do not certify subjective mixing quality or hardware crackle-free output. No rain system or cockpit interior is advertised.
 
-Master, engine, tires, environment, effects, music and mute are saved as a per-user `GameSave` key through an authenticated, same-origin, strictly validated API. Existing race saves are separate keys. Playback is resumed from user input; an explicit enable-audio state remains visible when a browser blocks it.
+## Six-car garage and actual physics
 
-[Actual browser result](audio-browser.json): real sign-up/library/game launch, audible analyser output after pointer start, keyboard acceleration/RPM rise and gear shift, output below clipping, mute, durable settings and account isolation. Four pure audio tests cover smooth band energy, transmission behavior, actual slip and input validation. Physical speakers/headphones were unavailable, so this does not certify listening quality, crackle-free hardware output or performance on a gaming GPU.
+The account garage supports 3D inspection, orbit via pointer/buttons/right stick, model choice and three body colors. Selection uses authenticated `GameSave` key `garage-v1`. The same IDs/configurations drive single player, server simulation, local prediction, remote model selection and remote audio. Strict message schemas reject unknown IDs, versions and supplied physical overrides. `MatchParticipant.vehicleId/vehicleVersion` preserve the selected model with each new match; old records remain nullable rather than receiving invented identities.
 
-The first local attempt started before the production build finished and got an empty page; the server was restarted after build readiness. The next test incorrectly included the pre-unlock zero-voice sample in its active-voice assertion; it now checks running samples. The actual audio assertions were retained.
+| ID | Class | Drive | Mass | Power |
+| --- | --- | --- | ---: | ---: |
+| meridian-r6 | Street Coupe | RWD | 1350 kg | 210 kW |
+| pocket-gt | Hot Hatch | FWD | 1120 kg | 165 kW |
+| iron-v8 | Muscle | RWD | 1810 kg | 340 kW |
+| vector-rs | AWD Performance | AWD | 1530 kg | 295 kW |
+| apex-r | Track Supercar | RWD | 1260 kg | 380 kW |
+| nova-x | Hypercar | AWD | 1690 kg | 650 kW |
 
-## Content still being integrated
+Torque curves, gearing, final drive, wheel radius, mass, power, drag, tire grip, brake force, steering response/limit and nitro capacity affect movement. The center of mass influences load/steering and inertia. Spring/damping/travel produce bounded body pitch/roll; this remains arcade road-bound physics, not a full suspension/airborne/rollover simulator. Render interpolation retains the fixed simulation and never writes visual poses back into physics. Car orientation uses vehicle-local pitch/bank on elevated roads. World and gated private car contacts use vehicle mass/inertia and capsule dimensions.
 
-The six-vehicle garage, vehicle-dependent physics and new track geometry are subsequent phases. Five distinct Kenney Car Kit source models have explicit CC0 commercial-use permission and are being prepared. Their authored geometry is stylized, substantially simpler than the existing Car Concept. They are not presented as photoreal professional car models. Existing public competitive vehicle contacts and hardware performance limitations remain unchanged.
+[Measured physics benchmarks](vehicle-benchmarks.json) use a flat dry unconstrained surface at 120 Hz, no nitro. Garage bars come from these measurements, not invented ratings. They are game-model results, not claims about real cars. [Browser garage evidence](vehicle-browser.json) records six actual meshes, keyboard movement and durable selection.
+
+## Designed tracks and preserved city
+
+The original city graph and three routes remain. Two curved perimeter boulevards connect existing districts for Free Drive. Clearance uses full sampled curves with a mathematically bounded broad phase; the minimap fits actual network bounds. City route version is now 2, so incompatible clients must reload.
+
+`tracks/geometry.ts` compiles authored centripetal Catmull–Rom splines into shared arc-length sections including elevation, width, banking and grip. Rendering, swept capsule boundaries, surface height/grade, gates, starting grids, minimaps and racing-line elevation use those same sections. Separate route definitions retain ordered checkpoint validation. Gravity and surface grip affect driving, and braking guidance uses the chosen car plus road grade.
+
+- **Velocity Circuit:** original 1.85 km circuit, broad start straight, fast turns, technical switchback, pit buildings, grandstands, grid and curbs; 1–3 laps.
+- **Eagle Ridge:** original 1.88 km mountain sprint with hairpins, ascent from about 15 m to 143 m and a descending finish; pine/rock environment.
+- **Coastline Run:** separate original coastal sprint with long acceleration sections, broad bends, elevation changes, a sea surface, coastal terrain/palms and an arched tunnel.
+- **NEXUS City:** preserved night streets/routes/free drive and the added sweeping perimeter connections.
+
+The track browser uses actual in-game captures, calculated length/radius and the user's real records. No fictional online times or unavailable tracks are used. Heights are continuous, but there is no jump physics, traffic simulation, weather cycle or full open-world mountain exploration.
+
+## Assets and licenses
+
+- Existing **Car Concept**, Eric Chadwick / Darmstadt Graphics Group, CC BY 4.0; original concept Unity Fan. Existing removal/material/LOD modifications and attribution are preserved.
+- Existing **Amazon Lumberyard Bistro**, CC BY 4.0; Godot port Logan Preshaw and modifications John James Gutib (Jamsers).
+- Existing **Venice Sunset HDRI**, HDRI Haven / Poly Haven, CC0.
+- Five distinct **Kenney Car Kit 3.1** models, CC0 1.0, commercial use explicitly permitted. They are stylized models around 2,000 triangles, substantially simpler than Car Concept; photoreal/high-poly quality is not claimed. Different shapes, not six paints of one mesh.
+- **Kenney Racing Kit 2.0** and **Nature Kit** track props, CC0 1.0, commercial use explicitly permitted. Low-poly authored geometry is retained.
+- Original NEXUS road/terrain/tunnel geometry, material preparation and audio DSP.
+
+[Vehicle provenance](../../public/game-assets/vehicle-manifest.json) and [track-prop provenance](../../public/game-assets/track-manifest.json) retain pinned source URLs, SHA-256 hashes, author, license files and modifications. Scripts `prepare-vehicle-assets.mjs` / `prepare-track-assets.mjs` reproduce the pinned imports. `npm run assets:check` validates every shipped resource and license. No unlicensed candidate assets are shipped.
+
+## Verification and limits
+
+- 142 unit tests passed after integrating the driving/contact/route changes. They include all six vehicles completing every city and new spline route through normalized controls, fixed-step equivalence, 3D line clearance/elevation, mass-dependent momentum and cached-road query equivalence.
+- [Six real SDK clients on all six non-legacy routes](multiplayer-six-cars.json): different models, shared starts, ordered server gates/finish, agreeing results, PostgreSQL persistence and rematch. Six rooms ran concurrently (36 genuine clients); this is a functional check, not a capacity certification. One reported client reconnected during the run. [Initial two-client track check](multiplayer-tracks.json) is also retained.
+- [Browser route evidence](tracks-browser.json) is explicit about the scope and revision tested. More recent local/browser/public acceptance is recorded separately; a passing build alone is never treated as gameplay acceptance.
+- GPU performance must be read from the actual capture reports. The available GPU is software SwiftShader; no modern gaming PC, physical controller or 1080p/60 FPS hardware certification is available. Synthetic Gamepad API tests do not certify a named USB/Bluetooth controller.
+- Public competitive car-to-car contacts remain disabled. The private contact solver is gated and currently supports the city routes only. World contacts work on the new tracks. New-track inter-car contact synchronization is not claimed.
+- The five additional cars and nature/racing props need higher-detail licensed replacements to meet the user's visual target. Professional recorded engine layers also remain missing. Do not describe the current content as AAA parity or finished photoreal graphics.
+
+## Extending content
+
+For a car, import a legally verified model, record provenance and hash, add a versioned `VehicleConfig`, measure it with `npx tsx scripts/benchmark-vehicles.ts`, and test SP/server/prediction/remote rendering/audio before publishing. Bump the vehicle version when driving characteristics or collision dimensions change.
+
+For a track, add authored knots/width/bank/grip to the track registry, increment its version on geometry/gate changes, and rebuild both Web and Multiplayer. Do not maintain a separate server map. Test six starting slots, seam/end boundaries, ordered gates, all cars, 3D guidance, render resource cleanup and two independent authenticated browsers before advertising network support.

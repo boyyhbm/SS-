@@ -54,14 +54,14 @@ export default function GarageViewer({
       pmrem = new THREE.PMREMGenerator(renderer),
       environment = pmrem.fromScene(room, 0.04);
     scene.environment = environment.texture;
-    scene.environmentIntensity = 0.8;
+    scene.environmentIntensity = 0.48;
     room.dispose();
     pmrem.dispose();
     const floorGeometry = new THREE.CircleGeometry(9, 96),
       floorMaterial = new THREE.MeshStandardMaterial({
-        color: '#202a30',
-        roughness: 0.62,
-        metalness: 0.18,
+        color: '#0c161b',
+        roughness: 0.8,
+        metalness: 0.08,
       });
     const floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -Math.PI / 2;
@@ -153,7 +153,7 @@ export default function GarageViewer({
       const input = nexusInput.read();
       yaw -= input.lookX * dt * 1.5;
       pitch = THREE.MathUtils.clamp(pitch + input.lookY * dt * 0.6, 0.02, 0.7);
-      const radius = 8.8;
+      const radius = 7.8;
       camera.position.set(
         Math.sin(yaw) * radius * Math.cos(pitch),
         1.05 + Math.sin(pitch) * radius,

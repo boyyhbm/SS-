@@ -1819,6 +1819,9 @@ body:has(.online-playing) .controller-hints {
   width: 100%;
 }
 .modal:has(.vehicle-garage) {
+  margin: auto;
+  max-height: 92dvh;
+  overflow: auto;
   width: min(1140px, 96vw);
   max-width: 1140px;
   padding: 0;
@@ -1865,7 +1868,7 @@ body:has(.online-playing) .controller-hints {
   letter-spacing: 0.01em;
 }
 .garage-viewer {
-  height: 360px;
+  height: 330px;
   width: 100%;
   cursor: grab;
   touch-action: none;
@@ -2042,6 +2045,7 @@ body:has(.online-playing) .controller-hints {
   padding: 6px 10px;
 }
 .modal:has(.track-browser) {
+  margin: auto;
   width: min(1040px, 95vw);
   max-width: 1040px;
 }

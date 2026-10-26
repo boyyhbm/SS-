@@ -415,7 +415,17 @@ export function createTrackWorld(
       const p = sampleRoadDistance(road, s),
         q = roadSectionPoint(p, -p.width / 2 - 4);
       q.y = terrainHeight(q.x, q.z);
-      rocks.push({ ...q, heading: s * 0.03, height: 1.4 + Math.abs(Math.sin(s * 0.05)) * 1.7 });
+      const bounds = propsManifest.models.rock_largeA.bounds;
+      const aspect =
+        Math.max(bounds.max[0] - bounds.min[0], bounds.max[2] - bounds.min[2]) /
+        (bounds.max[1] - bounds.min[1]);
+      // The source is a low, wide boulder. Bound its footprint, not its height,
+      // so it cannot overhang the drivable corridor or its visible barrier.
+      rocks.push({
+        ...q,
+        heading: s * 0.03,
+        height: (2.4 + Math.abs(Math.sin(s * 0.05)) * 1.2) / aspect,
+      });
     }
     instances(coast ? 'tree_palm' : 'tree_pineDefaultA', treesA);
     instances(coast ? 'tree_palm' : 'tree_pineRoundA', treesB);

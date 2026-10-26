@@ -142,9 +142,9 @@
     },
     "tree_pineDefaultA": {
       "pack": "nature",
-      "path": "/game-assets/track-props/tree_pineDefaultA-5740b59d5f.glb",
-      "bytes": 16744,
-      "sha256": "5740b59d5f2e52107f2d8363b8eafc1c58ff24454f3dbfe9e84cc52e71384963",
+      "path": "/game-assets/track-props/tree_pineDefaultA-743551ea93.glb",
+      "bytes": 16828,
+      "sha256": "743551ea939b0f5ce06c4098622edcf5bd14e570f22e4bb7c268a0c70f39838d",
       "sourceSha256": "60d8f352fa3659ed275e06cbddfecf8f92c8effe2977c2f2d7b29b6c9b582e46",
       "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/nature/tree_pineDefaultA.glb",
       "bounds": {
@@ -163,9 +163,9 @@
     },
     "tree_pineRoundA": {
       "pack": "nature",
-      "path": "/game-assets/track-props/tree_pineRoundA-ba4cda81e9.glb",
-      "bytes": 14016,
-      "sha256": "ba4cda81e9f1a1194ea992433bbef76b02f574819fbad7302440386b387ab459",
+      "path": "/game-assets/track-props/tree_pineRoundA-53018b3d23.glb",
+      "bytes": 14100,
+      "sha256": "53018b3d23f802b4469cb9692e2982cd183bf0906bda17a604c7a8b92978c84e",
       "sourceSha256": "7dc9711f31585eafdcb965d0649c30af5e19f2def1955f7a915081d30759ef8e",
       "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/nature/tree_pineRoundA.glb",
       "bounds": {
@@ -184,9 +184,9 @@
     },
     "tree_palm": {
       "pack": "nature",
-      "path": "/game-assets/track-props/tree_palm-3b41e29437.glb",
-      "bytes": 13128,
-      "sha256": "3b41e294379301bbee3ac7428763320d2545e3091bebdb3c5aeead80922b37f1",
+      "path": "/game-assets/track-props/tree_palm-dc72a2ab59.glb",
+      "bytes": 13212,
+      "sha256": "dc72a2ab594b0613609e1b55663454f1d291be07b0b430429db07cee721516d9",
       "sourceSha256": "27bbb23d26ed788d84de6df2f7fab0acc3fe0ff16c7d08cdcfa1fffcb11de324",
       "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/nature/tree_palm.glb",
       "bounds": {
@@ -205,9 +205,9 @@
     },
     "rock_largeA": {
       "pack": "nature",
-      "path": "/game-assets/track-props/rock_largeA-b82f6d319c.glb",
-      "bytes": 7072,
-      "sha256": "b82f6d319c894f599a45049ce57cde8089f5d5f6b35de175c292d495a927241e",
+      "path": "/game-assets/track-props/rock_largeA-39a802a559.glb",
+      "bytes": 7156,
+      "sha256": "39a802a559981d645d21d949c759c6b899e449900105217f565b1e12d8a9f41d",
       "sourceSha256": "6dd15390fd96501dcd1454765a17ba61dbbd8d47705dfe5149c8dd92b353ce25",
       "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/nature/rock_largeA.glb",
       "bounds": {
@@ -226,9 +226,9 @@
     },
     "rock_largeC": {
       "pack": "nature",
-      "path": "/game-assets/track-props/rock_largeC-57feecd40c.glb",
-      "bytes": 6528,
-      "sha256": "57feecd40cdbef7e99e7e8e3e92a9caac310081250f8d6fe64c3e84d1181a9f2",
+      "path": "/game-assets/track-props/rock_largeC-5677b7ac85.glb",
+      "bytes": 6612,
+      "sha256": "5677b7ac85ee9fe4e3dc9f035099e1b4486a62ebceaa7785fcaef96d66420af6",
       "sourceSha256": "23aee8b727adeaf260207af3e0615dc69aa766c6d87de1d44cbc8c2711d74dd1",
       "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/nature/rock_largeC.glb",
       "bounds": {
@@ -245,5 +245,8 @@
       },
       "triangles": 72
     }
-  }
+  },
+  "modifications": [
+    "Embedded source textures; explicit dielectric rough materials for nature assets; source geometry retained"
+  ]
 }

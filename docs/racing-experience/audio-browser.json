@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-26T18:24:27.233Z",
+  "date": "2026-10-26T22:46:48.162Z",
   "passed": true,
   "scope": "Actual authenticated game runtime, pointer start and keyboard throttle; Web Audio analyser output; software graphics at declared functional DPR",
   "checks": [
@@ -14,8 +14,8 @@
     "Foreign origin and userId injection rejected"
   ],
   "idleRPM": 850,
-  "maximumRPM": 6256.020223967473,
-  "maximumPeak": 0.08360107988119125,
+  "maximumRPM": 5547.004785419695,
+  "maximumPeak": 0.17934125661849976,
   "shifts": 1,
   "physicalSpeakersOrHeadphonesTested": false,
   "sourceRecordings": false

@@ -69,6 +69,17 @@ for (const filename of ['vehicle-manifest.json', 'track-manifest.json']) {
     const bytes = await fs.readFile(file);
     assert.equal(bytes.length, model.bytes);
     assert.equal(hash(bytes), model.sha256);
+    if (model.pack === 'nature') {
+      const gltf = JSON.parse(bytes.subarray(20, 20 + bytes.readUInt32LE(12)).toString());
+      for (const material of gltf.materials ?? []) {
+        assert.equal(
+          material.pbrMetallicRoughness?.metallicFactor,
+          0,
+          'Nature material must explicitly be dielectric',
+        );
+        assert((material.pbrMetallicRoughness?.roughnessFactor ?? 1) >= 0.85);
+      }
+    }
     assert(model.path.includes(model.sha256.slice(0, 10)));
     assert(/^[a-f0-9]{64}$/.test(model.sourceSha256));
     assert(

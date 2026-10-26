@@ -8,11 +8,22 @@ import { execFileSync } from 'node:child_process';
 import os from 'node:os';
 import { db } from '../src/lib/db';
 import { installDriver } from '../tests/helpers/race-driver';
+import { vehicleIdSchema } from '../src/games/vehicles/config';
+import { routeIdSchema } from '../src/games/route-registry';
 const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3001',
   quality = process.argv[2] ?? 'high',
   mode = process.argv[3] ?? 'stills';
-if (!['high', 'ultra', 'low'].includes(quality) || !['stills', 'video'].includes(mode))
-  throw Error('Use high|ultra|low stills|video');
+if (!['high', 'ultra', 'low'].includes(quality) || !['stills', 'video', 'garage'].includes(mode))
+  throw Error('Use high|ultra|low stills|video|garage [routeIds] [vehicleId] [seconds]');
+const routes = process.argv[4]?.split(',').map((id) => routeIdSchema.parse(id)) ?? [
+  'downtown-circuit',
+  'velocity-circuit',
+  'eagle-ridge',
+  'coastline-run',
+];
+const vehicleOverride = process.argv[5] ? vehicleIdSchema.parse(process.argv[5]) : undefined;
+const captureSeconds = Math.max(6, Math.min(60, Number(process.argv[6] ?? 24)));
+const suffix = vehicleOverride ? '-' + vehicleOverride : '';
 const database = new URL(process.env.DATABASE_URL!);
 if (
   !['localhost', '127.0.0.1'].includes(database.hostname) ||
@@ -39,6 +50,9 @@ const context = await browser.newContext({
   viewport: { width: 1280, height: 720 },
   deviceScaleFactor: 1,
 });
+// tsx preserves nested function names with an esbuild helper. Serialized
+// Playwright input fixtures need that identity helper in the browser as well.
+await context.addInitScript('globalThis.__name = (fn) => fn;');
 await context.addInitScript(
   ({ quality }) => {
     localStorage.setItem(
@@ -90,7 +104,7 @@ const page = await context.newPage();
 page.setDefaultTimeout(180000);
 const errors: string[] = [],
   ids: string[] = [];
-page.on('pageerror', (error) => errors.push(error.message));
+page.on('pageerror', (error) => errors.push(error.name));
 const report = {
   date: new Date().toISOString(),
   quality,
@@ -98,6 +112,9 @@ const report = {
   viewport: [1280, 720],
   devicePixelRatio: 1,
   sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  sourceUncommitted:
+    execFileSync('git', ['status', '--porcelain', '--', 'src'], { encoding: 'utf8' }).trim()
+      .length > 0,
   scope:
     'Actual NEXUS game runtime. Normal keyboard/Gamepad API fixture controls only. Canvas capture includes live game audio, not a prerecorded engine track. No pose injection or generated images.',
   host: {
@@ -134,12 +151,14 @@ try {
     headers: { Origin: origin },
     data: { racingLine: 'full' },
   });
-  for (const route of ['downtown-circuit', 'velocity-circuit', 'eagle-ridge', 'coastline-run']) {
-    await page.goto(origin + '/play/midnight-outlaws?developer=1');
+  for (const route of routes) {
+    const sceneName = (vehicleOverride ? vehicleOverride + '-' : '') + route;
+    console.log(JSON.stringify({ stage: 'loading', route, quality, mode }));
+    await page.goto(origin + '/play/midnight-outlaws?developer=1&route=' + route);
     await page.waitForFunction(
       () => document.querySelector('canvas')?.dataset.assets === 'glb-loaded',
     );
-    if (route !== 'downtown-circuit') {
+    if ((await page.getByTestId('race-player').getAttribute('data-route')) !== route) {
       await page.locator(`[data-route-option="${route}"]`).click();
       await page.waitForFunction(
         (id) =>
@@ -151,16 +170,17 @@ try {
     await page
       .getByLabel('Автомобиль', { exact: true })
       .selectOption(
-        route === 'coastline-run'
-          ? 'nova-x'
-          : route === 'eagle-ridge'
-            ? 'pocket-gt'
-            : 'meridian-r6',
+        vehicleOverride ??
+          (route === 'coastline-run'
+            ? 'nova-x'
+            : route === 'eagle-ridge'
+              ? 'pocket-gt'
+              : 'meridian-r6'),
       );
     await page.evaluate(() => {
       document.querySelector<HTMLElement>('.race-canvas')!.dataset.instrumentation = 'true';
     });
-    if (route === 'downtown-circuit' && mode === 'stills') {
+    if ((route === 'downtown-circuit' && mode === 'stills') || mode === 'garage') {
       await page.getByRole('button', { name: 'Открыть гараж', exact: true }).click();
       await page.waitForFunction(
         () =>
@@ -169,6 +189,14 @@ try {
       );
       await page.screenshot({ path: `${out}/images/garage-${quality}.png` });
       await page.getByRole('button', { name: 'Закрыть гараж', exact: true }).click();
+      if (mode === 'garage') {
+        report.scenes.push({
+          route,
+          screenshot: `images/garage-${quality}.png`,
+          scope: 'Actual full-detail garage viewer; no gameplay performance claim',
+        });
+        break;
+      }
     }
     const gpu = await page.locator('.race-canvas canvas').evaluate((canvas) => {
       const gl = (canvas as HTMLCanvasElement).getContext('webgl2')!,
@@ -210,11 +238,11 @@ try {
         };
         recorder.start(500);
       });
-      await page.waitForTimeout(24000);
+      await page.waitForTimeout(captureSeconds * 1000);
     } else {
       await page.waitForTimeout(6000);
     }
-    await page.screenshot({ path: `${out}/images/${route}-${quality}.png` });
+    await page.screenshot({ path: `${out}/images/${sceneName}-${quality}.png` });
     await page.keyboard.press('Escape');
     const measurement = await page.evaluate(() => {
       const w = window as unknown as { experience: { stats: unknown[]; audio: unknown } };
@@ -234,8 +262,8 @@ try {
           reader.readAsDataURL(blob);
         });
       });
-      const source = `${raw}/${route}-${quality}.webm`,
-        destination = `${out}/clips/${route}-${quality}.mp4`;
+      const source = `${raw}/${sceneName}-${quality}.webm`,
+        destination = `${out}/clips/${sceneName}-${quality}.mp4`;
       await writeFile(source, Buffer.from(base64, 'base64'));
       execFileSync('ffmpeg', [
         '-hide_banner',
@@ -263,25 +291,39 @@ try {
     }
     report.scenes.push({
       route,
-      screenshot: `images/${route}-${quality}.png`,
-      ...(mode === 'video' ? { clip: `clips/${route}-${quality}.mp4` } : {}),
+      screenshot: `images/${sceneName}-${quality}.png`,
+      ...(mode === 'video' ? { clip: `clips/${sceneName}-${quality}.mp4` } : {}),
       stats: measurement.stats,
       audio: measurement.audio,
     });
     console.log(
       JSON.stringify({ captured: route, quality, mode, samples: measurement.stats.length }),
     );
+    await writeFile(
+      `${out}/capture-${quality}-${mode}${suffix}.json`,
+      JSON.stringify(report, null, 2) + '\n',
+    );
   }
   report.passed = errors.length === 0;
 } catch (error) {
-  report.errors.push(error instanceof Error ? error.message : String(error));
+  // Playwright call logs may contain generated credentials or HTTP cookies.
+  // Full diagnostics stay private; public evidence contains only the error class.
+  await writeFile(
+    `${raw}/capture-error-private.txt`,
+    error instanceof Error ? (error.stack ?? error.message) : String(error),
+    { mode: 0o600 },
+  );
+  report.errors.push(error instanceof Error ? error.name : 'CaptureError');
   process.exitCode = 1;
 } finally {
   await context.close();
   await browser.close();
   await db.user.deleteMany({ where: { id: { in: ids }, username: { startsWith: 'captureqa_' } } });
   await db.$disconnect();
-  await writeFile(`${out}/capture-${quality}-${mode}.json`, JSON.stringify(report, null, 2) + '\n');
+  await writeFile(
+    `${out}/capture-${quality}-${mode}${suffix}.json`,
+    JSON.stringify(report, null, 2) + '\n',
+  );
   console.log(
     JSON.stringify({ passed: report.passed, scenes: report.scenes.length, errors: report.errors }),
   );

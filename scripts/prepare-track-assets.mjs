@@ -26,6 +26,9 @@ const io = new NodeIO().registerExtensions(ALL_EXTENSIONS),
     mirror: 'https://github.com/leaukojo/carlito/tree/' + ref + '/kit/raw',
     packs: {},
     models: {},
+    modifications: [
+      'Embedded source textures; explicit dielectric rough materials for nature assets; source geometry retained',
+    ],
   };
 for (const [pack, names] of Object.entries(packs)) {
   const cache = '.asset-cache/racing-experience/props/' + pack;
@@ -66,6 +69,11 @@ for (const [pack, names] of Object.entries(packs)) {
       }
     }
     const doc = await io.read(cache + '/' + name + '.glb');
+    // These source exports omit metallicFactor (glTF defaults it to 1).
+    // Leaves, bark and soil are dielectrics, not reflective metal.
+    if (pack === 'nature')
+      for (const material of doc.getRoot().listMaterials())
+        material.setMetallicFactor(0).setRoughnessFactor(0.92);
     const bounds = { min: [Infinity, Infinity, Infinity], max: [-Infinity, -Infinity, -Infinity] };
     let triangles = 0;
     for (const n of doc.getRoot().listNodes()) {

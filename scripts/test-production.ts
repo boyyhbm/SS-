@@ -141,6 +141,7 @@ const contexts = await Promise.all(
   ),
 );
 const pages = await Promise.all(contexts.map((context) => context.newPage()));
+for (const context of contexts) await context.addInitScript('globalThis.__name = (fn) => fn;');
 for (const page of pages) page.setDefaultTimeout(180000);
 async function json<T>(page: Page, route: string): Promise<T> {
   const res = await page.request.get(origin + route);

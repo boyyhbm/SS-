@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-26T20:02:16.183Z",
+  "date": "2026-10-26T22:52:43.697Z",
   "scope": "Real browser rendering and normalized input. No pose injection. Synthetic Gamepad API fixture; no physical controller certification.",
   "tracks": [
     {
@@ -9,10 +9,10 @@
       "input": "keyboard",
       "completed": true,
       "stats": {
-        "minY": -0.09938720429540937,
-        "maxY": 4.000812699952825,
-        "maxSpeed": 26.131171065055344,
-        "steps": 2383
+        "minY": -0.09938890986784721,
+        "maxY": 4.006826669165279,
+        "maxSpeed": 26.1265436925969,
+        "steps": 2409
       }
     },
     {
@@ -23,9 +23,22 @@
       "completed": true,
       "stats": {
         "minY": 15.629167990458097,
-        "maxY": 143.0902893988931,
-        "maxSpeed": 26.020574312793663,
+        "maxY": 143.09004977645301,
+        "maxSpeed": 26.024132199494215,
         "steps": 2404
+      }
+    },
+    {
+      "trackId": "coastline-run",
+      "trackVersion": 1,
+      "lengthMeters": 2349.243266945987,
+      "input": "Gamepad API fixture",
+      "completed": true,
+      "stats": {
+        "minY": 19.123939043749417,
+        "maxY": 58.08271321066328,
+        "maxSpeed": 26.012212174958062,
+        "steps": 2818
       }
     }
   ]
