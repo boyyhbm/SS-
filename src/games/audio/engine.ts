@@ -7,6 +7,8 @@ import {
   type EngineAudioProfile,
 } from './config';
 import { clampAudio, engineLayerWeights, EngineSoundTelemetry } from './telemetry';
+import { getVehicle } from '../vehicles/config';
+import { fillSoundscape } from './soundscape';
 
 export type GameAudioStatus = 'locked' | 'running' | 'suspended' | 'unavailable';
 type SoundPose = RaceState & { collisionImpulse?: number };
@@ -76,7 +78,9 @@ function combustion(ctx: BaseAudioContext, p: EngineAudioProfile, rpm: number, l
         Math.sin(phase) +
         0.4 * Math.sin(phase * 2 + 0.2) +
         (loaded ? 0.32 : 0.13) * Math.sin(phase * 3 + 0.7);
-      const exhaust = Math.sin(phase / (p.cylinders / 2)) * 0.12 * p.exhaust;
+      const exhaust =
+        Math.sin(phase / (p.cylinders / 2)) * 0.12 * p.exhaust +
+        Math.sin(phase * 5) * p.mechanical * 0.035;
       const combustionNoise = ((seed / 0xffffffff) * 2 - 1) * (loaded ? 0.08 : 0.025);
       out[i] =
         (pulse * 0.32 + exhaust + combustionNoise) *
@@ -165,7 +169,15 @@ export class GameAudioEngine {
     this.rolling = filteredNoise(this.channels.tires, 550, 'lowpass');
     this.squeal = filteredNoise(this.channels.tires, 2200, 'bandpass');
     this.wind = filteredNoise(this.channels.environment, 900, 'lowpass');
-    this.ambient = filteredNoise(this.channels.environment, 140, 'lowpass');
+    this.ambient = this.loop(
+      buffer(
+        ctx,
+        'soundscape:' + this.environment,
+        (out, rate) => fillSoundscape(out, rate, this.environment),
+        18,
+      ),
+      this.channels.environment,
+    );
     this.music = this.loop(
       buffer(
         ctx,
@@ -277,7 +289,28 @@ export class GameAudioEngine {
       );
   }
   setEnvironment(environment: AudioEnvironment) {
+    if (this.environment === environment) return;
     this.environment = environment;
+    if (this.ctx && this.channels) {
+      const previous = this.ambient;
+      if (previous) {
+        target(previous.gain.gain, 0, this.ctx, 0.1);
+        previous.source.stop(this.ctx.currentTime + 0.7);
+        previous.source.onended = () => {
+          previous.source.disconnect();
+          previous.gain.disconnect();
+        };
+      }
+      this.ambient = this.loop(
+        buffer(
+          this.ctx,
+          'soundscape:' + environment,
+          (out, rate) => fillSoundscape(out, rate, environment),
+          18,
+        ),
+        this.channels.environment,
+      );
+    }
   }
   setListener(x: number, y: number, z: number, heading: number, cameraMode: number) {
     this.listener.x = x;
@@ -320,7 +353,7 @@ export class GameAudioEngine {
       doppler = clampAudio(343 / (343 + (state.vx * dx + state.vz * dz) / distance), 0.92, 1.08);
       const p = voice.panner!;
       target(p.positionX, state.x, ctx);
-      target(p.positionY, 0.8, ctx);
+      target(p.positionY, (state.y ?? 0) + 0.8, ctx);
       target(p.positionZ, state.z, ctx);
     }
     voice.loops.forEach((loop, i) => {
@@ -334,7 +367,8 @@ export class GameAudioEngine {
         i < 4
           ? weights[i] * (0.34 + sound.load * 0.23)
           : i === 4
-            ? sound.load * 0.28
+            ? sound.load *
+              (0.28 + ((voice.profile.turbo * sound.rpm) / voice.profile.maxRPM) * 0.12)
             : (1 - sound.load) * (sound.rpm / voice.profile.maxRPM) * 0.18;
       target(loop.gain.gain, level, ctx, 0.025);
     });
@@ -393,7 +427,12 @@ export class GameAudioEngine {
       if (id !== 'local' && !present.has(id)) this.removeVoice(id);
     for (const peer of peers.slice(0, 5))
       this.updateVoice(
-        this.voice(peer.id, peer.audioProfile ?? this.profile, true),
+        this.voice(
+          peer.id,
+          peer.audioProfile ??
+            (peer.state.vehicleId ? getVehicle(peer.state.vehicleId).audioProfile : this.profile),
+          true,
+        ),
         peer.state,
         { ...zero, throttle: Math.abs(peer.state.speed) > 1 ? 0.6 : 0 },
         dt,

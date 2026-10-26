@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-26T19:58:52.246Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "velocity-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9646132564060999,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpojf3w0002ekmjzyuolut5",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpojf4f0004ekmjmjkijhef",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpojf3w0002ekmjzyuolut5",
+          "finish": 68.33333333333202,
+          "place": 2
+        },
+        {
+          "id": "cmvpojf4f0004ekmjmjkijhef",
+          "finish": 68.0999999999987,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "eagle-ridge",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.942435219790094,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpojfbl0007ekmj5m8kozxq",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpojf2n0000ekmjlvnrtejd",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpojfbl0007ekmj5m8kozxq",
+          "finish": 71.63333333333183,
+          "place": 2
+        },
+        {
+          "id": "cmvpojf2n0000ekmjlvnrtejd",
+          "finish": 71.1666666666652,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 2
+}

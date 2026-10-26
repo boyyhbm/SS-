@@ -27,6 +27,11 @@ export class RacePresentation {
     Object.assign(this.visual, this.current);
     for (const key of channels)
       this.visual[key] = this.previous[key] + (this.current[key] - this.previous[key]) * t;
+    for (const key of ['y', 'roadPitch', 'roadBank', 'bodyPitch', 'bodyRoll', 'rpm'] as const) {
+      const a = this.previous[key],
+        b = this.current[key];
+      if (a !== undefined && b !== undefined) this.visual[key] = a + (b - a) * t;
+    }
     this.visual.heading =
       this.previous.heading + angleDelta(this.previous.heading, this.current.heading) * t;
     if (this.current.lap === this.previous.lap)

@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { buildRacingLine, racingLineColor, assistAhead, type RacingLineMode } from '../racing-line';
 import type { RouteId } from '../route-registry';
 import type { RaceState } from '../racing-physics';
+import { getTrack, isTrackId } from '../tracks/registry';
+import { projectRoad } from '../tracks/geometry';
 export function createRacingLine(scene: THREE.Scene) {
   const geometry = new THREE.BufferGeometry(),
     material = new THREE.MeshBasicMaterial({
@@ -18,7 +20,7 @@ export function createRacingLine(scene: THREE.Scene) {
   mesh.name = 'Dynamic_racing_line';
   mesh.layers.set(2);
   scene.add(mesh);
-  let id: RouteId | undefined,
+  let id: string | undefined,
     data: ReturnType<typeof buildRacingLine>,
     colors: THREE.Float32BufferAttribute,
     nearest = 0;
@@ -34,9 +36,11 @@ export function createRacingLine(scene: THREE.Scene) {
       mesh.visible = mode !== 'off';
       stats.red = stats.yellow = stats.green = 0;
       if (mode === 'off') return stats;
-      if (id !== route) {
-        id = route;
-        data = buildRacingLine(route);
+      const key = route + ':' + (state.vehicleId ?? 'legacy');
+      if (id !== key) {
+        id = key;
+        data = buildRacingLine(route, state.vehicleId);
+        const road = isTrackId(route) ? getTrack(route).roadGeometry : null;
         selected.length = 0;
         const positions: number[] = [],
           rgba: number[] = [];
@@ -59,7 +63,9 @@ export function createRacingLine(scene: THREE.Scene) {
             [0.65, -1.95],
             [0, -0.65],
           ]) {
-            positions.push(p.x - p.tz * l + p.tx * f, 0.054, p.z + p.tx * l + p.tz * f);
+            const x = p.x - p.tz * l + p.tx * f,
+              z = p.z + p.tx * l + p.tz * f;
+            positions.push(x, (road ? projectRoad(road, x, z).height : 0) + 0.054, z);
             rgba.push(0, 0, 0, 0);
           }
           selected.push({ index: i, first, count: 12 });

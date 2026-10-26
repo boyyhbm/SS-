@@ -12,15 +12,6 @@ function referenceClearance(p: Point) {
   let clearance = -Infinity;
   for (const e of roadEdges) {
     const points = edgeSamples[e.id];
-    const a = points[0],
-      b = points.at(-1)!;
-    if (
-      p.x < Math.min(a.x, b.x) - 80 ||
-      p.x > Math.max(a.x, b.x) + 80 ||
-      p.z < Math.min(a.z, b.z) - 80 ||
-      p.z > Math.max(a.z, b.z) + 80
-    )
-      continue;
     let squared = Infinity;
     for (let i = 1; i < points.length; i++) {
       const a = points[i - 1],

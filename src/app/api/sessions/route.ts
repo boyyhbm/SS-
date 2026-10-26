@@ -4,7 +4,8 @@ import { db } from '@/lib/db';
 import { requireUser } from '@/lib/auth';
 import { api, assertSameOrigin, ApiError, rateLimit } from '@/lib/security';
 import { isPlayable } from '@/games/registry';
-import { CITY_ROUTE_IDS } from '@/games/road-network';
+import { routeIdSchema } from '@/games/route-registry';
+import { vehicleIdSchema } from '@/games/vehicles/config';
 const schema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('start'), gameId: z.string().max(64) }),
   z.object({
@@ -15,7 +16,8 @@ const schema = z.discriminatedUnion('action', [
     action: z.literal('lap'),
     sessionId: z.string().max(64),
     seconds: z.number().finite().min(8).max(3600),
-    routeId: z.enum(CITY_ROUTE_IDS).optional(),
+    routeId: routeIdSchema.optional(),
+    vehicleId: vehicleIdSchema.optional(),
   }),
 ]);
 export async function POST(request: Request) {
@@ -76,13 +78,14 @@ export async function POST(request: Request) {
             z.object({
               seconds: z.number().finite().min(8).max(3600),
               recordedAt: z.iso.datetime(),
+              vehicleId: vehicleIdSchema.optional(),
             }),
           )
           .max(10)
           .safeParse(previousHistory?.saveData);
         const bestLaps = [
           ...(history.success ? history.data : []),
-          { seconds: input.seconds, recordedAt: new Date().toISOString() },
+          { seconds: input.seconds, recordedAt: new Date().toISOString(), ...(input.vehicleId ? {vehicleId:input.vehicleId} : {}) },
         ]
           .sort((a, b) => a.seconds - b.seconds)
           .slice(0, 10);

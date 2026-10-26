@@ -18,6 +18,7 @@ export interface CarVisual {
     boost: boolean,
     dt: number,
     color?: string,
+    suspension?: { pitch: number; roll: number },
   ) => void;
 }
 export function createCar(template: THREE.Object3D, simple = false): CarVisual {
@@ -167,7 +168,7 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
       contactGeometry.dispose();
       contactMaterial.dispose();
     },
-    update(speed, steer, braking, boost, dt, color = 'silver') {
+    update(speed, steer, braking, boost, dt, color = 'silver', suspension) {
       if (previousColor !== color) {
         previousColor = color;
         for (const p of paint)
@@ -192,6 +193,10 @@ export function createCar(template: THREE.Object3D, simple = false): CarVisual {
         (Math.max(-0.018, Math.min(0.018, -acceleration * 0.0011 + (braking ? 0.005 : 0))) -
           body.rotation.x) *
         response;
+      if (suspension) {
+        body.rotation.x = suspension.pitch;
+        body.rotation.z = suspension.roll;
+      }
     },
   };
 }

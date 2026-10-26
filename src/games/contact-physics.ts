@@ -7,7 +7,14 @@ export const contactTuning = {
   friction: 0.26,
   maxImpactYaw: 1.1,
 };
-export type ContactBody = { vx: number; vz: number; heading: number; impactYaw: number };
+export type ContactBody = {
+  vx: number;
+  vz: number;
+  heading: number;
+  impactYaw: number;
+  mass?: number;
+  yawInertia?: number;
+};
 export function applyContactImpulse(
   body: ContactBody,
   nx: number,
@@ -15,7 +22,11 @@ export function applyContactImpulse(
   rx: number,
   rz: number,
 ) {
-  const t = contactTuning,
+  const t = {
+      ...contactTuning,
+      mass: body.mass ?? contactTuning.mass,
+      yawInertia: body.yawInertia ?? contactTuning.yawInertia,
+    },
     omega = body.impactYaw,
     vn = (body.vx + omega * rz) * nx + (body.vz - omega * rx) * nz;
   if (vn >= -0.02) return 0;

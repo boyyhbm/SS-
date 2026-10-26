@@ -2,6 +2,7 @@
 import { compatibleRoute, type RouteId } from '../games/route-registry';
 import { Client, type Room, type SeatReservation } from '@colyseus/sdk';
 import type { MultiplayerAction, RoomSnapshot } from './contracts';
+import { VEHICLE_VERSION, vehicleIdSchema, type VehicleId } from '../games/vehicles/config';
 export interface NetworkPrediction<State> {
   connected: boolean;
   offset: number;
@@ -57,6 +58,18 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
     room.reconnection.maxEnqueuedMessages = 0;
     this.prediction = this.createPrediction(ticket.userId, (command) => this.sendInput(command));
     room.onMessage('snapshot', (snapshot: RoomSnapshot<State>) => {
+      if (
+        snapshot.players.some(
+          (p) =>
+            p.vehicleId !== undefined &&
+            (!vehicleIdSchema.safeParse(p.vehicleId).success ||
+              p.vehicleVersion !== VEHICLE_VERSION),
+        )
+      ) {
+        this.emit('vehicleMismatch');
+        void this.leaveRoom();
+        return;
+      }
       if (snapshot.route && !compatibleRoute(snapshot.route)) {
         this.emit('routeMismatch');
         void this.leaveRoom();
@@ -155,6 +168,9 @@ export class NexusMultiplayerSDK<State, Input, Prediction extends NetworkPredict
   }
   chooseCar(car: string) {
     this.room?.send('car', car);
+  }
+  chooseVehicle(vehicleId: VehicleId) {
+    this.room?.send('vehicle', { vehicleId, vehicleVersion: VEHICLE_VERSION });
   }
   configure(laps: number, routeId?: RouteId, carContacts?: boolean) {
     this.room?.send('settings', {

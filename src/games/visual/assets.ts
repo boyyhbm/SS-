@@ -6,6 +6,9 @@ import { qualityPresets, type RenderTier } from './quality';
 import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js';
 import { prepareTexture } from './texture-budget';
 import manifest from '../../../public/game-assets/graphics-manifest.json';
+import { vehicles, type VehicleId } from '../vehicles/config';
+import trackManifest from '../../../public/game-assets/track-manifest.json';
+import { getTrack, type TrackId } from '../tracks/registry';
 // The fixed static worker has its own restricted policy. The application
 // document keeps its existing no-eval policy and never executes user code.
 class StaticKTX2Loader extends KTX2Loader {
@@ -23,6 +26,8 @@ class StaticKTX2Loader extends KTX2Loader {
   }
 }
 export interface RaceAssets {
+  trackProps: Record<string, GLTF>;
+  vehicles: Record<VehicleId, GLTF>;
   car: GLTF;
   carLow: GLTF;
   districtMedium: GLTF;
@@ -41,6 +46,7 @@ export async function loadRaceAssets(
   progress: (value: number) => void,
   renderer?: THREE.WebGLRenderer,
   preferCompressed = true,
+  trackId?: TrackId,
 ): Promise<RaceAssets> {
   const start = performance.now(),
     manager = new THREE.LoadingManager();
@@ -71,10 +77,27 @@ export async function loadRaceAssets(
       ? districts.ultra
       : districts.high;
   const districtPromise = loader.loadAsync(
-    low ? '/game-assets/district-low.glb' : choose(districtPack),
+    low || trackId ? '/game-assets/district-low.glb' : choose(districtPack),
   );
-  const lowPromise = low ? districtPromise : loader.loadAsync('/game-assets/district-low.glb');
+  const lowPromise =
+    low || trackId ? districtPromise : loader.loadAsync('/game-assets/district-low.glb');
   const carLowPromise = loader.loadAsync('/game-assets/car-low.glb');
+  const vehicleModels = Promise.all(
+    vehicles
+      .filter((v) => v.modelAsset !== 'concept')
+      .map(async (v) => [v.vehicleId, await loader.loadAsync(v.modelAsset)] as const),
+  );
+  const propModels = Promise.all(
+    Object.entries(trackManifest.models)
+      .filter(
+        ([, asset]) =>
+          !!trackId &&
+          (asset.pack === (getTrack(trackId).environment === 'circuit' ? 'racing' : 'nature') ||
+            (asset.pack === 'racing' &&
+              (asset.path.includes('lightPostModern') || asset.path.includes('barrierWall')))),
+      )
+      .map(async ([key, asset]) => [key, await loader.loadAsync(asset.path)] as const),
+  );
   const surface = async (kind: 'asphalt' | 'pavement') => {
     const load = (role: 'color' | 'normal' | 'roughness') =>
       low
@@ -108,7 +131,7 @@ export async function loadRaceAssets(
           : loader.loadAsync(medium ? '/game-assets/car-high.glb' : choose(manifest.car)),
         carLowPromise,
         districtPromise,
-        low
+        low || trackId
           ? lowPromise
           : medium
             ? districtPromise
@@ -118,7 +141,17 @@ export async function loadRaceAssets(
         surface('asphalt'),
         surface('pavement'),
       ]);
-    for (const gltf of [car, carLow, district, districtMedium, districtLow])
+    const extraVehicles = await vehicleModels;
+    const trackProps = Object.fromEntries(await propModels);
+    for (const gltf of [
+      car,
+      carLow,
+      district,
+      districtMedium,
+      districtLow,
+      ...extraVehicles.map((v) => v[1]),
+      ...Object.values(trackProps),
+    ])
       gltf.scene.traverse((o) => {
         if (o instanceof THREE.Mesh)
           for (const m of Array.isArray(o.material) ? o.material : [o.material])
@@ -136,6 +169,11 @@ export async function loadRaceAssets(
     environment.mapping = THREE.EquirectangularReflectionMapping;
     progress(100);
     return {
+      trackProps,
+      vehicles: Object.fromEntries([['meridian-r6', car], ...extraVehicles]) as Record<
+        VehicleId,
+        GLTF
+      >,
       car,
       carLow,
       district,
@@ -150,7 +188,7 @@ export async function loadRaceAssets(
   } catch (error) {
     if (ktx) {
       manager.onProgress = () => {};
-      return loadRaceAssets(tier, progress, renderer, false);
+      return loadRaceAssets(tier, progress, renderer, false, trackId);
     }
     throw error;
   } finally {
@@ -181,6 +219,8 @@ export function disposeObjectResources(root: THREE.Object3D) {
 
 export function disposeRaceAssets(assets: RaceAssets, scene = new THREE.Scene()) {
   scene.add(
+    ...Object.values(assets.trackProps).map((p) => p.scene),
+    ...Object.values(assets.vehicles).map((v) => v.scene),
     assets.car.scene,
     assets.carLow.scene,
     assets.district.scene,

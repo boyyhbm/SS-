@@ -14,17 +14,25 @@ import { createWorld } from './visual/world';
 import { createCar, createRemoteCar, type CarVisual } from './visual/car';
 import { ChaseCameraRig, projectedHeight } from './visual/camera';
 import { createCityWorld } from './visual/city-world';
-import { initialCityRace, stepCityRace, type CityRaceState } from './city-driving';
-import { getCityRoute } from './road-network';
-import { isCityRoute, type RouteId } from './route-registry';
+import { stepCityRace, type CityRaceState } from './city-driving';
+import { isCityRoute, getRoute, type RouteId } from './route-registry';
+import { isTrackId, getTrack } from './tracks/registry';
+import { stepTrackRace, type TrackRaceState } from './tracks/physics';
+import { projectRoad, sampleRoadDistance } from './tracks/geometry';
+import { createTrackWorld } from './visual/track-world';
 import { qualityPresets, useRenderSettings, type RenderTier } from './visual/quality';
 import { createRenderPipeline } from './visual/pipeline';
 import { useUI } from '../lib/ui-store';
-import { initialRace, stepRace, type RaceInput, type RaceState } from './racing-physics';
+import { stepRace, type RaceInput, type RaceState } from './racing-physics';
 import { GameAudioEngine, type GameAudioStatus } from './audio/engine';
 import { audioText } from './audio/config';
 import { useGameAudioSettings } from './audio/settings';
+import { initialPlayableState } from './initial-state';
+import { DEFAULT_VEHICLE, getVehicle, vehicles, type VehicleId } from './vehicles/config';
 export interface RaceTelemetry {
+  vehicleId?: VehicleId;
+  gear?: number;
+  rpm?: number;
   speed: number;
   nitro: number;
   lap: number;
@@ -44,6 +52,7 @@ export function MidnightOutlaws({
   presentationKey = 'single',
   paused,
   onReady,
+  onLoading,
   onError,
   onLap,
   onTelemetry,
@@ -54,11 +63,15 @@ export function MidnightOutlaws({
   networkRef,
   routeId = networkRef ? 'legacy-circuit' : 'downtown-circuit',
   freeDrive = false,
+  vehicleId,
+  paint = 'silver',
+  laps,
 }: {
   language: 'ru' | 'en';
   presentationKey?: string;
   paused: boolean;
   onReady: () => void;
+  onLoading?: () => void;
   onError: () => void;
   onLap: (time: number) => void;
   onTelemetry: (state: RaceTelemetry) => void;
@@ -69,16 +82,20 @@ export function MidnightOutlaws({
   networkRef?: React.RefObject<RaceNetworkDriver | null>;
   routeId?: RouteId;
   freeDrive?: boolean;
+  vehicleId?: VehicleId;
+  paint?: string;
+  laps?: number;
 }) {
   const host = useRef<HTMLDivElement>(null),
     audio = useRef<GameAudioEngine | null>(null),
-    state = useRef<RaceState | CityRaceState>({
-      ...(isCityRoute(routeId) ? initialCityRace(routeId) : initialRace()),
+    state = useRef<RaceState | CityRaceState | TrackRaceState>({
+      ...initialPlayableState(routeId, vehicleId),
       bestLap: initialBestLap,
     }),
     pausedRef = useRef(paused);
   const quality = useRenderSettings((s) => s.quality);
   const cityScene = isCityRoute(routeId);
+  const trackScene = isTrackId(routeId) ? routeId : undefined;
   const bestRef = useRef(initialBestLap);
   const [audioStatus, setAudioStatus] = useState<GameAudioStatus>('locked');
   useEffect(() => {
@@ -113,32 +130,37 @@ export function MidnightOutlaws({
   useEffect(() => {
     bestRef.current = initialBestLap;
   }, [initialBestLap]);
-  const cityOptions = useRef({ routeId, freeDrive });
+  const cityOptions = useRef({ routeId, freeDrive, laps });
+  const vehicleOptions = useRef({ vehicleId, paint });
   useEffect(() => {
-    cityOptions.current = { routeId, freeDrive };
-  }, [routeId, freeDrive]);
+    vehicleOptions.current = { vehicleId, paint };
+  }, [vehicleId, paint]);
+  useEffect(() => {
+    cityOptions.current = { routeId, freeDrive, laps };
+  }, [routeId, freeDrive, laps]);
   const [loading, setLoading] = useState(0),
     [failure, setFailure] = useState(false);
-  const callbacks = useRef({ onReady, onError, onLap, onTelemetry, onPause });
+  const callbacks = useRef({ onReady, onLoading, onError, onLap, onTelemetry, onPause });
   const presentation = useRef(presentationKey);
   useEffect(() => {
     presentation.current = presentationKey;
   }, [presentationKey]);
   useEffect(() => {
-    callbacks.current = { onReady, onError, onLap, onTelemetry, onPause };
-  }, [onReady, onError, onLap, onTelemetry, onPause]);
+    callbacks.current = { onReady, onLoading, onError, onLap, onTelemetry, onPause };
+  }, [onReady, onLoading, onError, onLap, onTelemetry, onPause]);
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
   useEffect(() => {
     state.current = {
-      ...(isCityRoute(routeId) ? initialCityRace(routeId) : initialRace()),
+      ...initialPlayableState(routeId, vehicleId),
       bestLap: bestRef.current,
     };
-  }, [restartKey, routeId, networkRef]);
+  }, [restartKey, routeId, networkRef, vehicleId]);
   useEffect(() => {
     if (!host.current) return;
     const container = host.current;
+    callbacks.current.onLoading?.();
     void useRacingPreferences.getState().load();
     let cancelled = false,
       disposeScene = () => {};
@@ -181,6 +203,7 @@ export function MidnightOutlaws({
                 if (!cancelled) setLoading(n * 0.5);
               },
               () => cancelled,
+              trackScene,
             )
           : quality;
       if (cancelled) return;
@@ -188,6 +211,8 @@ export function MidnightOutlaws({
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, preset.dpr));
       renderer.shadowMap.enabled = preset.shadows;
       renderer.domElement.dataset.quality = tier;
+      renderer.domElement.dataset.track =
+        trackScene ?? (cityScene ? 'nexus-city' : 'legacy-circuit');
       const assets = await loadRaceAssets(
         tier,
         (v) => {
@@ -197,6 +222,8 @@ export function MidnightOutlaws({
             );
         },
         renderer,
+        true,
+        trackScene,
       );
       renderer.domElement.dataset.assetFormat = assets.assetFormat;
       if (cancelled) {
@@ -213,11 +240,37 @@ export function MidnightOutlaws({
       camera.layers.enable(1);
       camera.layers.enable(2);
       const cityWorld = cityScene ? createCityWorld(scene, assets, tier, renderer) : undefined;
-      const world = cityWorld ?? createWorld(scene, assets, tier, renderer);
-      const visual = createCar(assets.car.scene, tier === 'low'),
+      const trackWorld = trackScene
+        ? createTrackWorld(scene, assets, tier, renderer, trackScene)
+        : undefined;
+      const world = cityWorld ?? trackWorld ?? createWorld(scene, assets, tier, renderer);
+      const localVisuals = new Map(
+        vehicles.map((v) => [
+          v.vehicleId,
+          createCar(assets.vehicles[v.vehicleId].scene, tier === 'low'),
+        ]),
+      );
+      for (const actor of localVisuals.values()) {
+        scene.add(actor.group);
+        actor.group.visible = false;
+      }
+      let visual = localVisuals.get(vehicleOptions.current.vehicleId ?? DEFAULT_VEHICLE)!,
         car = visual.group;
-      scene.add(car);
-      const carBounds = new THREE.Box3().setFromObject(car);
+      car.visible = true;
+      const bounds = new Map(
+        [...localVisuals].map(([id, actor]) => [id, new THREE.Box3().setFromObject(actor.group)]),
+      );
+      const carBounds = bounds.get(vehicleOptions.current.vehicleId ?? DEFAULT_VEHICLE)!.clone();
+      const modelTriangles = new Map(
+        vehicles.map((v) => {
+          let triangles = 0;
+          assets.vehicles[v.vehicleId].scene.traverse((o) => {
+            if (o instanceof THREE.Mesh)
+              triangles += (o.geometry.index?.count ?? o.geometry.attributes.position.count) / 3;
+          });
+          return [v.vehicleId, triangles] as const;
+        }),
+      );
       const pipeline = createRenderPipeline(
         renderer,
         scene,
@@ -230,14 +283,23 @@ export function MidnightOutlaws({
       const remoteCars = new Map<string, CarVisual>();
       // Pre-create the bounded remote actor pool while loading. Only real server
       // player IDs can make these actors visible; no fake online participants.
-      const pool = Array.from({ length: 5 }, () =>
-        createRemoteCar(assets.car.scene, assets.carLow.scene, tier === 'low'),
+      const pool = vehicles.flatMap((v) =>
+        Array.from({ length: 5 }, () => {
+          const model = assets.vehicles[v.vehicleId].scene;
+          const actor = createRemoteCar(
+            model,
+            v.modelAsset === 'concept' ? assets.carLow.scene : model,
+            tier === 'low',
+          );
+          actor.group.userData.vehicleId = v.vehicleId;
+          return actor;
+        }),
       );
       for (const actor of pool) {
         scene.add(actor.group);
         actor.group.visible = false;
       }
-      const allActors = [visual, ...pool];
+      const allActors = [...localVisuals.values(), ...pool];
       let reflections: Awaited<ReturnType<typeof createLocalReflections>> = null;
       let bootstrapDisposed = false;
       const disposeBootstrap = () => {
@@ -255,21 +317,44 @@ export function MidnightOutlaws({
       };
       disposeScene = disposeBootstrap;
       try {
-        reflections = cityWorld
-          ? await createLocalReflections(
-              renderer,
-              scene,
-              tier,
-              (x, z) => {
-                if (cancelled) throw new Error('Scene loading cancelled');
-                cityWorld.prepareCapture();
-                world.update({ ...state.current, x, z }, false, 0, false);
-              },
-              (n) => {
-                if (!cancelled) setLoading(85 + n * 10);
-              },
-            )
-          : null;
+        reflections =
+          cityWorld || trackWorld
+            ? await createLocalReflections(
+                renderer,
+                scene,
+                tier,
+                (x, z) => {
+                  if (cancelled) throw new Error('Scene loading cancelled');
+                  cityWorld?.prepareCapture();
+                  trackWorld?.prepareCapture();
+                  world.update(
+                    {
+                      ...state.current,
+                      x,
+                      z,
+                      y: trackScene
+                        ? projectRoad(getTrack(trackScene).roadGeometry, x, z).height
+                        : 0,
+                    },
+                    false,
+                    0,
+                    false,
+                  );
+                },
+                (n) => {
+                  if (!cancelled) setLoading(85 + n * 10);
+                },
+                trackScene
+                  ? Array.from({ length: tier === 'high' ? 3 : 5 }, (_, i) => {
+                      const p = sampleRoadDistance(
+                        getTrack(trackScene).roadGeometry,
+                        (i * getTrack(trackScene).length) / (tier === 'high' ? 3 : 5),
+                      );
+                      return [p.x, p.z, p.y + 1.5];
+                    })
+                  : undefined,
+              )
+            : null;
       } catch (error) {
         disposeBootstrap();
         throw error;
@@ -281,7 +366,9 @@ export function MidnightOutlaws({
       cityWorld?.prepareCapture();
       world.update(state.current, false, 0, false);
       const actorProbes = new Map(allActors.map((v) => [v, reflections?.bind(v.materials)]));
-      const roadProbe = cityWorld && reflections?.bind(cityWorld.reflectionMaterials);
+      const roadProbe =
+        (cityWorld || trackWorld) &&
+        reflections?.bind((cityWorld ?? trackWorld)!.reflectionMaterials);
       renderer.domElement.dataset.reflectionProbes = String(reflections?.count ?? 0);
       let previousFrame = performance.now();
       let frame = 0,
@@ -328,7 +415,11 @@ export function MidnightOutlaws({
         const network = networkRef?.current;
         audio.current?.setPaused(pausedRef.current || document.hidden);
         audio.current?.setEnvironment(
-          cityOptions.current.routeId === 'industrial-run' ? 'industrial' : 'city',
+          isTrackId(cityOptions.current.routeId)
+            ? getTrack(cityOptions.current.routeId).environment
+            : cityOptions.current.routeId === 'industrial-run'
+              ? 'industrial'
+              : 'city',
         );
         if (pausedRef.current && !network) {
           clock.reset();
@@ -368,13 +459,28 @@ export function MidnightOutlaws({
           else {
             const lap =
               'routeId' in race
-                ? stepCityRace(race, drivingInput, dt, cityOptions.current.freeDrive)
+                ? isTrackId(race.routeId)
+                  ? stepTrackRace(
+                      race as TrackRaceState,
+                      drivingInput,
+                      dt,
+                      cityOptions.current.freeDrive,
+                      cityOptions.current.laps,
+                    )
+                  : stepCityRace(
+                      race as CityRaceState,
+                      drivingInput,
+                      dt,
+                      cityOptions.current.freeDrive,
+                      cityOptions.current.laps,
+                    )
                 : stepRace(race, drivingInput, dt);
             if (lap !== null) callbacks.current.onLap(lap);
           }
           physicsMs += performance.now() - stepStarted;
           physicsSteps++;
           poses.push(race);
+          if (race.vehicleId) audio.current?.setProfile(getVehicle(race.vehicleId).audioProfile);
           audio.current?.update(race, drivingInput, dt);
           if (race.lap > previousLap) void nexusInput.haptic('finish');
           previousLap = race.lap;
@@ -389,7 +495,7 @@ export function MidnightOutlaws({
           callbacks.current.onTelemetry({
             ...state.current,
             ...('routeId' in state.current
-              ? { checkpointCount: getCityRoute(state.current.routeId).gates.length }
+              ? { checkpointCount: getRoute(state.current.routeId).gates.length }
               : {}),
           });
           lastHud = now;
@@ -440,7 +546,20 @@ export function MidnightOutlaws({
         previousFrame = now;
         const input = drivingInput;
         const network = networkRef?.current;
-        let sceneKey = `${presentation.current}:${pausedRef.current}:${cityOptions.current.routeId}:${useRacingPreferences.getState().mode}:${useRenderSettings.getState().dynamicFov}`;
+        const wantedVehicle =
+          network?.vehicle?.() ?? vehicleOptions.current.vehicleId ?? DEFAULT_VEHICLE;
+        const wantedVisual = localVisuals.get(wantedVehicle)!;
+        renderer.domElement.dataset.vehicle = wantedVehicle;
+        renderer.domElement.dataset.modelTriangles = String(modelTriangles.get(wantedVehicle));
+        if (wantedVisual !== visual) {
+          visual.group.visible = false;
+          visual = wantedVisual;
+          car = visual.group;
+          car.visible = true;
+          carBounds.copy(bounds.get(wantedVehicle)!);
+          renderDirty = true;
+        }
+        let sceneKey = `${presentation.current}:${pausedRef.current}:${cityOptions.current.routeId}:${useRacingPreferences.getState().mode}:${useRenderSettings.getState().dynamicFov}:${wantedVehicle}:${vehicleOptions.current.paint}`;
         if (renderedRoute !== cityOptions.current.routeId) {
           cameraRig.reset();
           renderedRoute = cityOptions.current.routeId;
@@ -452,12 +571,28 @@ export function MidnightOutlaws({
           for (const peer of peers) {
             sceneKey += `:${peer.id}:${peer.car}:${peer.connected}:${peer.finish}`;
             let ghost = remoteCars.get(peer.id);
+            const peerVehicle = peer.vehicleId ?? DEFAULT_VEHICLE;
+            if (ghost && ghost.group.userData.vehicleId !== peerVehicle) {
+              ghost.group.visible = false;
+              remoteCars.delete(peer.id);
+              ghost = undefined;
+            }
             if (!ghost) {
-              ghost = pool.find((actor) => ![...remoteCars.values()].includes(actor));
+              ghost = pool.find(
+                (actor) =>
+                  actor.group.userData.vehicleId === peerVehicle &&
+                  ![...remoteCars.values()].includes(actor),
+              );
               if (!ghost) continue;
               remoteCars.set(peer.id, ghost);
             }
-            ghost.group.position.set(peer.state.x, 0.025, peer.state.z);
+            const peerY = trackScene
+              ? projectRoad(getTrack(trackScene).roadGeometry, peer.state.x, peer.state.z).height
+              : (peer.state.y ?? 0);
+            ghost.group.position.set(peer.state.x, peerY + 0.025, peer.state.z);
+            ghost.group.rotation.order = 'YXZ';
+            ghost.group.rotation.x = -(peer.state.roadPitch ?? 0);
+            ghost.group.rotation.z = peer.state.roadBank ?? 0;
             ghost.group.rotation.y = peer.state.heading;
             ghost.group.visible = peer.connected || peer.finish !== null;
             const peerBrake =
@@ -475,6 +610,9 @@ export function MidnightOutlaws({
               peerBoost,
               pausedRef.current ? 0 : dt,
               peer.car,
+              peer.state.vehicleId
+                ? { pitch: peer.state.bodyPitch ?? 0, roll: peer.state.bodyRoll ?? 0 }
+                : undefined,
             );
           }
           for (const [id, ghost] of remoteCars)
@@ -483,9 +621,11 @@ export function MidnightOutlaws({
               remoteCars.delete(id);
             }
         }
-        car.position.set(race.x, 0.03, race.z);
+        car.position.set(race.x, (race.y ?? 0) + 0.03, race.z);
+        car.rotation.order = 'YXZ';
+        car.rotation.x = -(race.roadPitch ?? 0);
         car.rotation.y = race.heading;
-        car.rotation.z = 0;
+        car.rotation.z = race.roadBank ?? 0;
         const boost = !pausedRef.current && input.nitro && race.nitro > 0 && race.speed > 4;
         const braking = !pausedRef.current && (input.brake > 0.1 || !!input.handbrake);
         visual.update(
@@ -494,7 +634,8 @@ export function MidnightOutlaws({
           braking,
           boost,
           pausedRef.current ? 0 : dt,
-          network?.car(),
+          network?.car() ?? vehicleOptions.current.paint,
+          race.vehicleId ? { pitch: race.bodyPitch ?? 0, roll: race.bodyRoll ?? 0 } : undefined,
         );
         actorProbes.get(visual)?.update(race.x, race.z, dt);
         roadProbe?.update(race.x, race.z, dt);
@@ -526,7 +667,7 @@ export function MidnightOutlaws({
           cameraMode,
           useRenderSettings.getState().dynamicFov,
           reduced,
-          cityWorld?.clipCamera,
+          cityWorld?.clipCamera ?? trackWorld?.clipCamera,
         );
         audio.current?.setListener(
           camera.position.x,
@@ -595,7 +736,7 @@ export function MidnightOutlaws({
           callbacks.current.onTelemetry({
             ...state.current,
             ...('routeId' in state.current
-              ? { checkpointCount: getCityRoute(state.current.routeId).gates.length }
+              ? { checkpointCount: getRoute(state.current.routeId).gates.length }
               : {}),
           });
           lastHud = now;
@@ -618,10 +759,18 @@ export function MidnightOutlaws({
       };
       // Compile every pooled actor before hiding it; a joining player must not
       // create GPU buffers or compile a new car shader during a fast corner.
-      car.position.set(state.current.x, 0.03, state.current.z);
+      car.position.set(state.current.x, (state.current.y ?? 0) + 0.03, state.current.z);
       car.rotation.y = state.current.heading;
-      cameraRig.update(state.current, 0, 0, false, true, cityWorld?.clipCamera);
-      pool.forEach((actor, i) => {
+      cameraRig.update(
+        state.current,
+        0,
+        0,
+        false,
+        true,
+        cityWorld?.clipCamera ?? trackWorld?.clipCamera,
+      );
+      const warmingActors = allActors.filter((actor) => actor !== visual);
+      warmingActors.forEach((actor, i) => {
         actor.group.position.set(
           state.current.x + (i % 2 ? 3 : -3),
           0.03,
@@ -632,7 +781,7 @@ export function MidnightOutlaws({
       });
       await renderer.compileAsync(scene, camera);
       renderer.render(scene, camera);
-      pool.forEach((actor) => {
+      warmingActors.forEach((actor) => {
         actor.prewarm?.(false);
         actor.group.visible = false;
       });
@@ -649,7 +798,7 @@ export function MidnightOutlaws({
       cancelled = true;
       disposeScene();
     };
-  }, [inputRef, networkRef, quality, cityScene]);
+  }, [inputRef, networkRef, quality, cityScene, trackScene]);
   return (
     <div className="race-canvas" ref={host} data-visual-version="city-radiance-3">
       {loading < 100 && !failure && (

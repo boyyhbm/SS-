@@ -8,7 +8,8 @@ import {
   type RouteGate,
 } from './road-network';
 import { initialRace, TRACK_RADIUS } from './racing-physics';
-export const ROUTE_IDS = ['legacy-circuit', ...CITY_ROUTE_IDS] as const;
+import { trackRegistry, TRACK_IDS } from './tracks/registry';
+export const ROUTE_IDS = ['legacy-circuit', ...CITY_ROUTE_IDS, ...TRACK_IDS] as const;
 export type RouteId = (typeof ROUTE_IDS)[number];
 export const routeIdSchema = z.enum(ROUTE_IDS);
 export interface RouteSelection {
@@ -25,6 +26,7 @@ export interface RegisteredRoute {
   kind: 'circuit' | 'sprint';
   maxPlayers: number;
   laps: number;
+  length: number;
   start: Point & { heading: number };
   grid: (Point & { heading: number })[];
   gates: RouteGate[];
@@ -61,6 +63,7 @@ export const routeRegistry: RegisteredRoute[] = [
     kind: 'circuit',
     maxPlayers: 6,
     laps: 1,
+    length: Math.PI * 2 * TRACK_RADIUS,
     start: initialRace(),
     grid: Array.from({ length: 6 }, (_, i) => ({
       ...initialRace(),
@@ -76,17 +79,33 @@ export const routeRegistry: RegisteredRoute[] = [
   },
   ...cityRoutes.map((r) => ({
     routeId: r.id,
-    routeVersion: 1,
+    routeVersion: 2,
     name: r.name,
     nameRu: r.nameRu,
     kind: r.kind,
     maxPlayers: 6,
     laps: r.laps,
+    length: r.length,
     start: r.start,
     grid: grid(r.start),
     gates: r.gates,
     finish: r.gates.at(-1)!,
     geometry: r.path,
+  })),
+  ...trackRegistry.map((t) => ({
+    routeId: t.trackId,
+    routeVersion: t.trackVersion,
+    name: t.trackName,
+    nameRu: t.trackNameRu,
+    kind: t.kind,
+    maxPlayers: t.maxPlayers,
+    laps: t.laps,
+    length: t.length,
+    start: t.start,
+    grid: t.startGrid,
+    gates: t.checkpoints,
+    finish: t.finishLine,
+    geometry: t.roadGeometry.sections,
   })),
 ];
 export function getRoute(id: RouteId) {

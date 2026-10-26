@@ -18,6 +18,9 @@ import {
 import { liveRooms, metrics, online } from './state';
 import { signConnectionToken, verifyConnectionToken, type ConnectionClaims } from './token';
 import { selectRoute, getRoute, routeIdSchema, type RouteId } from '../src/games/route-registry';
+import { VEHICLE_VERSION, vehicleIdSchema, DEFAULT_VEHICLE } from '../src/games/vehicles/config';
+import { isTrackId, getTrack } from '../src/games/tracks/registry';
+import { configureVehicle } from '../src/games/vehicles/state';
 const neutral = { throttle: 0, brake: 0, steer: 0, nitro: false };
 type Player = NetworkPlayer & {
   latest: InputCommand | null;
@@ -133,6 +136,23 @@ export class NexusRaceRoom extends Room {
         this.sendSnapshot();
       }
     });
+    this.onMessage('vehicle', (client, raw: unknown) => {
+      metrics.messages++;
+      const p = this.player(client);
+      const parsed = z
+        .object({ vehicleId: vehicleIdSchema, vehicleVersion: z.literal(VEHICLE_VERSION) })
+        .strict()
+        .safeParse(raw);
+      if (!p || this.phase !== 'lobby' || !parsed.success) {
+        metrics.rejectedMessages++;
+        return;
+      }
+      p.vehicleId = parsed.data.vehicleId;
+      p.vehicleVersion = VEHICLE_VERSION;
+      configureVehicle(p.state, p.vehicleId);
+      p.ready = false;
+      this.sendSnapshot();
+    });
     this.onMessage('settings', (client, raw: unknown) => {
       metrics.messages++;
       const settings = z
@@ -154,7 +174,7 @@ export class NexusRaceRoom extends Room {
         this.laps = this.route.laps;
         [...this.players.values()].forEach((p, i) => {
           p.ready = false;
-          p.state = this.adapter.initialState(i, this.route);
+          p.state = this.adapter.initialState(i, this.route, p.vehicleId);
         });
         this.sendSnapshot();
       }
@@ -176,7 +196,7 @@ export class NexusRaceRoom extends Room {
           p.ready = false;
           p.finish = null;
           p.place = null;
-          p.state = this.adapter.initialState(i, this.route);
+          p.state = this.adapter.initialState(i, this.route, p.vehicleId);
           p.latest = null;
         });
         void this.unlock();
@@ -250,9 +270,11 @@ export class NexusRaceRoom extends Room {
       username: user.username,
       avatar: user.avatar,
       car: 'silver',
+      vehicleId: DEFAULT_VEHICLE,
+      vehicleVersion: VEHICLE_VERSION,
       ready: false,
       connected: true,
-      state: this.adapter.initialState(this.players.size, this.route),
+      state: this.adapter.initialState(this.players.size, this.route, DEFAULT_VEHICLE),
       ack: -1,
       finish: null,
       place: null,
@@ -339,11 +361,26 @@ export class NexusRaceRoom extends Room {
         process.env.NEXUS_PRIVATE_CAR_CONTACTS === '1' &&
         this.route.routeId !== 'legacy-circuit',
       players: [...this.players.values()].map(
-        ({ id, username, avatar, car, ready, connected, state, ack, finish, place }) => ({
+        ({
           id,
           username,
           avatar,
           car,
+          vehicleId,
+          vehicleVersion,
+          ready,
+          connected,
+          state,
+          ack,
+          finish,
+          place,
+        }) => ({
+          id,
+          username,
+          avatar,
+          car,
+          vehicleId,
+          vehicleVersion,
           ready,
           connected,
           state: { ...state },
@@ -379,7 +416,12 @@ export class NexusRaceRoom extends Room {
             laps: this.laps,
             carContacts: this.route.carContacts ?? false,
             participants: {
-              create: [...this.players.values()].map((p) => ({ userId: p.id, car: p.car })),
+              create: [...this.players.values()].map((p) => ({
+                userId: p.id,
+                car: p.car,
+                vehicleId: p.vehicleId,
+                vehicleVersion: p.vehicleVersion,
+              })),
             },
           },
         });
@@ -395,7 +437,7 @@ export class NexusRaceRoom extends Room {
       this.elapsed = 0;
       this.contactEvents = 0;
       [...this.players.values()].forEach((p, i) => {
-        p.state = this.adapter.initialState(i, this.route);
+        p.state = this.adapter.initialState(i, this.route, p.vehicleId);
         p.finish = null;
         p.place = null;
         p.latest = null;
@@ -458,7 +500,7 @@ export class NexusRaceRoom extends Room {
         ) ||
         Math.hypot(p.state.x - previous.x, p.state.z - previous.z) > 5
       ) {
-        p.state = this.adapter.initialState(0, this.route);
+        p.state = this.adapter.initialState(0, this.route, p.vehicleId);
         metrics.rejectedMessages++;
       }
       if (p.state.lap > this.laps) {
@@ -472,7 +514,7 @@ export class NexusRaceRoom extends Room {
     metrics.tickMaxMs = Math.max(metrics.tickMaxMs, duration);
     if (
       [...this.players.values()].every((p) => p.finish !== null || p.departed) ||
-      this.elapsed >= (this.route.routeId === 'legacy-circuit' ? 120 : 240) * this.laps
+      this.elapsed >= (isTrackId(this.route.routeId) ? getTrack(this.route.routeId).durationLimitSeconds : this.route.routeId === 'legacy-circuit' ? 120 : 240) * this.laps
     ) {
       this.phase = 'results';
       this.sendSnapshot();

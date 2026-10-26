@@ -3,10 +3,12 @@ import { stepNetworkRace } from '../games/network-racing';
 import { selectRoute, type RouteSelection } from '../games/route-registry';
 import { angleDelta } from '../games/presentation';
 import { FIXED_DT, type InputCommand, type NetworkPlayer, type RoomSnapshot } from './contracts';
+import type { VehicleId } from '../games/vehicles/config';
 export interface RaceNetworkDriver {
   frame(input: RaceInput, dt: number): RaceState;
   remotePlayers(): NetworkPlayer[];
   car(): string;
+  vehicle?(): VehicleId | undefined;
   route(): RouteSelection;
   snapshotAgeMs?(): number;
 }
@@ -115,6 +117,11 @@ export class RacePrediction implements RaceNetworkDriver {
         const state = { ...b.state };
         state.x = a.state.x + (b.state.x - a.state.x) * t;
         state.z = a.state.z + (b.state.z - a.state.z) * t;
+        for (const key of ['y', 'roadPitch', 'roadBank', 'bodyPitch', 'bodyRoll', 'rpm'] as const) {
+          const av = a.state[key],
+            bv = b.state[key];
+          if (av !== undefined && bv !== undefined) state[key] = av + (bv - av) * t;
+        }
         state.heading =
           a.state.heading +
           Math.atan2(
@@ -143,5 +150,8 @@ export class RacePrediction implements RaceNetworkDriver {
   }
   car() {
     return this.snapshot?.players.find((p) => p.id === this.userId)?.car ?? 'silver';
+  }
+  vehicle() {
+    return this.snapshot?.players.find((p) => p.id === this.userId)?.vehicleId;
   }
 }

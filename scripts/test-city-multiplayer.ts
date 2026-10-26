@@ -12,7 +12,8 @@ import { RacePrediction } from '../src/multiplayer/prediction';
 import type { RoomSnapshot } from '../src/multiplayer/contracts';
 import { cityRoutes } from '../src/games/road-network';
 import { routeDriver } from '../tests/helpers/city-driver';
-import { compatibleRoute } from '../src/games/route-registry';
+import { compatibleRoute, routeRegistry } from '../src/games/route-registry';
+import { vehicles, VEHICLE_VERSION } from '../src/games/vehicles/config';
 const internal = process.env.MULTIPLAYER_INTERNAL_URL ?? 'http://localhost:2568';
 const endpoint = process.env.NEXT_PUBLIC_MULTIPLAYER_URL ?? 'ws://localhost:2568';
 if (
@@ -24,6 +25,15 @@ const playerCount = Number(process.env.NEXUS_TEST_PLAYERS ?? 2);
 assert(Number.isInteger(playerCount) && playerCount >= 2 && playerCount <= 6);
 const contactMode = process.env.NEXUS_TEST_CONTACTS === '1';
 const faultMode = process.env.NEXUS_TEST_NETWORK === '1';
+const vehicleMode = process.env.NEXUS_TEST_VEHICLES === '1';
+const requested = process.env.NEXUS_TEST_ROUTES?.split(',');
+const testRoutes = requested
+  ? requested.map((id) => {
+      const r = routeRegistry.find((r) => r.routeId === id);
+      assert(r && r.routeId !== 'legacy-circuit', 'Unknown requested route');
+      return { id: r.routeId, kind: r.kind, path: r.geometry };
+    })
+  : cityRoutes;
 const delayed = new Set<ReturnType<typeof setTimeout>>();
 const ids: string[] = [],
   rooms: Room[] = [],
@@ -55,13 +65,13 @@ async function control(id: string, body: unknown) {
 try {
   const game = await db.game.findUniqueOrThrow({ where: { slug: 'midnight-outlaws' } });
   const runs = await Promise.allSettled(
-    cityRoutes.map(async (route, routeIndex) => {
+    testRoutes.map(async (route, routeIndex) => {
       const profile = faultMode
         ? [
             { rtt: 50, jitter: 0, loss: 0 },
             { rtt: 100, jitter: 10, loss: 0 },
             { rtt: 200, jitter: 20, loss: 0.02 },
-          ][routeIndex]
+          ][routeIndex % 3]
         : { rtt: 0, jitter: 0, loss: 0 };
       let seed = 8041 + routeIndex;
       const random = () => {
@@ -202,6 +212,25 @@ try {
         () => a.snapshot?.laps === 1 && b.snapshot?.route?.routeId === route.id,
         'route config',
       );
+      if (vehicleMode) {
+        for (let i = 0; i < peers.length; i++)
+          peers[i].room.send('vehicle', {
+            vehicleId: vehicles[i % vehicles.length].vehicleId,
+            vehicleVersion: VEHICLE_VERSION,
+          });
+        await wait(
+          () =>
+            peers.every((peer) =>
+              peer.snapshot!.players.every(
+                (p, i) =>
+                  p.vehicleId === vehicles[i % vehicles.length].vehicleId &&
+                  p.vehicleVersion === VEHICLE_VERSION,
+              ),
+            ),
+          'authoritative vehicle profiles',
+        );
+        a.room.send('vehicle', { vehicleId: 'client-invented', vehicleVersion: 1, mass: 1 });
+      }
       for (const p of peers) p.room.send('ready', true);
       await wait(() => a.snapshot!.players.every((p) => p.ready), 'ready');
       a.room.send('start');
@@ -228,7 +257,7 @@ try {
         b.room.connection.close(4010, 'Temporary QA disconnect');
         await wait(() => b.reconnects > 0, 'reconnection', 15000);
       }
-      await wait(() => peers.every((p) => p.snapshot?.saved === true), 'results');
+      await wait(() => peers.every((p) => p.snapshot?.saved === true), 'results', 300000);
       raceTimers.forEach(clearInterval);
       assert.ok(a.snapshot!.players.every((p) => p.finish !== null));
       const results = (p: Peer) =>
@@ -247,6 +276,12 @@ try {
       if (contactMode)
         assert.ok(verifiedContactEvents > 0, 'actual authoritative car contacts must occur');
       assert.ok(match.participants.every((p) => p.result?.serverVerified && p.result.didFinish));
+      if (vehicleMode)
+        for (let i = 0; i < users.length; i++) {
+          const participant = match.participants.find((p) => p.userId === users[i].id)!;
+          assert.equal(participant.vehicleId, vehicles[i % vehicles.length].vehicleId);
+          assert.equal(participant.vehicleVersion, VEHICLE_VERSION);
+        }
       const verifiedResults = results(a);
       a.room.send('rematch');
       await wait(() => peers.every((p) => p.snapshot?.phase === 'lobby'), 'rematch');
@@ -269,6 +304,11 @@ try {
         contactEvents: verifiedContactEvents,
         mode: route.kind,
         players: playerCount,
+        vehicles: match.participants.map((p) => ({
+          userId: p.userId,
+          vehicleId: p.vehicleId,
+          vehicleVersion: p.vehicleVersion,
+        })),
         serverFinishSeconds: verifiedResults,
         startsAtAgreed: true,
         resultsAgreed: true,

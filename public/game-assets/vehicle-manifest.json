@@ -1,0 +1,62 @@
+{
+  "source": "Kenney Car Kit 3.1",
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "commercialUse": true,
+  "sourceUrl": "https://kenney.nl/assets/car-kit",
+  "mirror": "https://github.com/leaukojo/carlito/tree/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked",
+  "licenseFile": "/game-assets/vehicles/Kenney-Car-Kit-License.txt",
+  "modifications": [
+    "Metric normalization",
+    "Articulated wheel naming",
+    "Source palette separated into PBR materials",
+    "Original geometry retained"
+  ],
+  "models": {
+    "hatchback-sports": {
+      "path": "/game-assets/vehicles/hatchback-sports-b147d5e3ef.glb",
+      "bytes": 218600,
+      "sha256": "b147d5e3ef1d91094eab0cc3094c7aca99dad6c71073ebcab719ecb31db7686f",
+      "sourceSha256": "bd5c9d4c3b4bdd254a66b8426563a68b1487ae7a5076df3a2488e6ffed7be64f",
+      "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked/hatchback-sports.glb",
+      "triangles": 2088,
+      "nativeSourceDetail": "stylized authored Car Kit geometry; not a high-poly photoreal vehicle"
+    },
+    "sedan": {
+      "path": "/game-assets/vehicles/sedan-3ee651bf49.glb",
+      "bytes": 195448,
+      "sha256": "3ee651bf490fe02abec65a172b47774dc6a22abc131efcfcb417d6ad27e868ea",
+      "sourceSha256": "b532ea7d2c59f7f6b22b138cf1955218a2c1898f1cea932af4d3fd563c3959b7",
+      "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked/sedan.glb",
+      "triangles": 2032,
+      "nativeSourceDetail": "stylized authored Car Kit geometry; not a high-poly photoreal vehicle"
+    },
+    "sedan-sports": {
+      "path": "/game-assets/vehicles/sedan-sports-960b4fba85.glb",
+      "bytes": 204372,
+      "sha256": "960b4fba85a88cbdcd030d624f746a47edf2db51606f1ee8512d766916cb4939",
+      "sourceSha256": "2889c428ca1dd9c975c3ff760eb8757883490410555ab60b818f712f583826d6",
+      "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked/sedan-sports.glb",
+      "triangles": 2088,
+      "nativeSourceDetail": "stylized authored Car Kit geometry; not a high-poly photoreal vehicle"
+    },
+    "race": {
+      "path": "/game-assets/vehicles/race-18932d6e4d.glb",
+      "bytes": 189156,
+      "sha256": "18932d6e4d8a5c62acba26d59d9169a78183a721212015f843a5b8c545c27768",
+      "sourceSha256": "e1408c4c6e135f5a39c5f34cbfbcac9ae21c5c491e793fdee74bccac8334d942",
+      "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked/race.glb",
+      "triangles": 1952,
+      "nativeSourceDetail": "stylized authored Car Kit geometry; not a high-poly photoreal vehicle"
+    },
+    "race-future": {
+      "path": "/game-assets/vehicles/race-future-93c404601d.glb",
+      "bytes": 198120,
+      "sha256": "93c404601d69aef751502d162db6d34484011a98f9b4af4b05f3e05fc7882fea",
+      "sourceSha256": "869e2a58d2c12de474e824aff137334491b8f234b97127cf23f1ea04e42deec6",
+      "sourceUrl": "https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/kit/raw/parked/race-future.glb",
+      "triangles": 2068,
+      "nativeSourceDetail": "stylized authored Car Kit geometry; not a high-poly photoreal vehicle"
+    }
+  }
+}

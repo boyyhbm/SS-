@@ -1,0 +1,518 @@
+{
+  "date": "2026-10-26T21:51:32.136Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 2,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9563936167712563,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskao20004kwmjhvral08r",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskals0000kwmj0rmw569q",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskamy0002kwmj6pos0rbq",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcj7001ekwmjvhjiqun2",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskaqy0006kwmjeggck5wl",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcjl001kkwmj1180d985",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskao20004kwmjhvral08r",
+          "finish": 33.800000000000644,
+          "place": 6
+        },
+        {
+          "id": "cmvpskals0000kwmj0rmw569q",
+          "finish": 33.66666666666732,
+          "place": 5
+        },
+        {
+          "id": "cmvpskamy0002kwmj6pos0rbq",
+          "finish": 32.76666666666737,
+          "place": 4
+        },
+        {
+          "id": "cmvpskcj7001ekwmjvhjiqun2",
+          "finish": 32.40000000000072,
+          "place": 3
+        },
+        {
+          "id": "cmvpskaqy0006kwmjeggck5wl",
+          "finish": 30.366666666667335,
+          "place": 1
+        },
+        {
+          "id": "cmvpskcjl001kkwmj1180d985",
+          "finish": 30.46666666666734,
+          "place": 2
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "midnight-sprint",
+      "routeVersion": 2,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.965326003897161,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskaun0008kwmjofqre7ds",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskawz000akwmj9ibmb4b1",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskazk000ckwmjng27lysf",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskb0o000ekwmjly0e3jbt",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskck4001okwmjqmhiqrsf",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskb3e000gkwmjf865q84q",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskaun0008kwmjofqre7ds",
+          "finish": 41.43333333333354,
+          "place": 6
+        },
+        {
+          "id": "cmvpskawz000akwmj9ibmb4b1",
+          "finish": 41.266666666666886,
+          "place": 5
+        },
+        {
+          "id": "cmvpskazk000ckwmjng27lysf",
+          "finish": 40.766666666666914,
+          "place": 4
+        },
+        {
+          "id": "cmvpskb0o000ekwmjly0e3jbt",
+          "finish": 40.100000000000286,
+          "place": 3
+        },
+        {
+          "id": "cmvpskck4001okwmjqmhiqrsf",
+          "finish": 39.133333333333674,
+          "place": 2
+        },
+        {
+          "id": "cmvpskb3e000gkwmjf865q84q",
+          "finish": 38.933333333333685,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "industrial-run",
+      "routeVersion": 2,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9649757114515644,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskcjg001hkwmjmxlihgf3",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskb6i000ikwmjhff025mz",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcjb001fkwmjbrw36y9c",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbee000kkwmjgjb5rozf",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbgb000mkwmjefnjxlzb",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbqs000skwmjf1yseyud",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskcjg001hkwmjmxlihgf3",
+          "finish": 47.466666666666534,
+          "place": 6
+        },
+        {
+          "id": "cmvpskb6i000ikwmjhff025mz",
+          "finish": 46.599999999999916,
+          "place": 5
+        },
+        {
+          "id": "cmvpskcjb001fkwmjbrw36y9c",
+          "finish": 46.099999999999945,
+          "place": 4
+        },
+        {
+          "id": "cmvpskbee000kkwmjgjb5rozf",
+          "finish": 45.76666666666663,
+          "place": 3
+        },
+        {
+          "id": "cmvpskbgb000mkwmjefnjxlzb",
+          "finish": 43.73333333333341,
+          "place": 2
+        },
+        {
+          "id": "cmvpskbqs000skwmjf1yseyud",
+          "finish": 43.70000000000008,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "velocity-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9659050961946294,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskbll000okwmjprsl9ovc",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbmn000qkwmjf5gjhnvv",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskck4001nkwmjwdhzpm2a",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbrj000ukwmjxh0f3mhn",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbs3000wkwmjtmo48r0y",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbzh0012kwmj0dmkilig",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskbll000okwmjprsl9ovc",
+          "finish": 68.29999999999869,
+          "place": 5
+        },
+        {
+          "id": "cmvpskbmn000qkwmjf5gjhnvv",
+          "finish": 68.0999999999987,
+          "place": 4
+        },
+        {
+          "id": "cmvpskck4001nkwmjwdhzpm2a",
+          "finish": 68.36666666666535,
+          "place": 6
+        },
+        {
+          "id": "cmvpskbrj000ukwmjxh0f3mhn",
+          "finish": 67.76666666666539,
+          "place": 3
+        },
+        {
+          "id": "cmvpskbs3000wkwmjtmo48r0y",
+          "finish": 67.33333333333208,
+          "place": 2
+        },
+        {
+          "id": "cmvpskbzh0012kwmj0dmkilig",
+          "finish": 67.29999999999875,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "eagle-ridge",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9656867320072533,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskbwv000ykwmj9u78arw6",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskc1v0014kwmj55qg26re",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskbxp0010kwmjmln3l8xd",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskck2001mkwmjg7wqoibe",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcam0016kwmjp70g9vmn",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcd30018kwmjvbcx409w",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskbwv000ykwmj9u78arw6",
+          "finish": 71.5999999999985,
+          "place": 6
+        },
+        {
+          "id": "cmvpskc1v0014kwmj55qg26re",
+          "finish": 71.19999999999852,
+          "place": 5
+        },
+        {
+          "id": "cmvpskbxp0010kwmjmln3l8xd",
+          "finish": 70.69999999999855,
+          "place": 4
+        },
+        {
+          "id": "cmvpskck2001mkwmjg7wqoibe",
+          "finish": 69.9999999999986,
+          "place": 3
+        },
+        {
+          "id": "cmvpskcam0016kwmjp70g9vmn",
+          "finish": 68.93333333333199,
+          "place": 2
+        },
+        {
+          "id": "cmvpskcd30018kwmjvbcx409w",
+          "finish": 68.56666666666534,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "coastline-run",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 2,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 1,
+      "reconciliationErrorP95Meters": 0.966044864158364,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 6,
+      "vehicles": [
+        {
+          "userId": "cmvpskcij001ckwmj6qyeoi08",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcdy001akwmj18ex2zxn",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcjg001gkwmjwxnamidb",
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskckn001ukwmj9g2gux5s",
+          "vehicleId": "vector-rs",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskck5001pkwmj05a812u8",
+          "vehicleId": "apex-r",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpskcm70028kwmju09n4il3",
+          "vehicleId": "nova-x",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpskcij001ckwmj6qyeoi08",
+          "finish": 83.16666666666451,
+          "place": 5
+        },
+        {
+          "id": "cmvpskcdy001akwmj18ex2zxn",
+          "finish": 83.3666666666645,
+          "place": 6
+        },
+        {
+          "id": "cmvpskcjg001gkwmjwxnamidb",
+          "finish": 82.69999999999787,
+          "place": 4
+        },
+        {
+          "id": "cmvpskckn001ukwmj9g2gux5s",
+          "finish": 82.49999999999788,
+          "place": 3
+        },
+        {
+          "id": "cmvpskck5001pkwmj05a812u8",
+          "finish": 82.13333333333124,
+          "place": 2
+        },
+        {
+          "id": "cmvpskcm70028kwmju09n4il3",
+          "finish": 81.93333333333125,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 6
+}

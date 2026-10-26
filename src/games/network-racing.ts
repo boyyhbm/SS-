@@ -2,11 +2,27 @@ import { initialRace, stepRace, type RaceState, type RaceInput } from './racing-
 import { resolveVehicleContacts } from './vehicle-contacts';
 import { initialCityRace, stepCityRace, type CityRaceState } from './city-driving';
 import { getRoute, isCityRoute, type RouteSelection } from './route-registry';
-export function initialNetworkRace(slot: number, config?: RouteSelection): RaceState {
+import { configureVehicle } from './vehicles/state';
+import type { VehicleId } from './vehicles/config';
+import { isTrackId } from './tracks/registry';
+import { initialTrackRace, stepTrackRace, type TrackRaceState } from './tracks/physics';
+export function initialNetworkRace(
+  slot: number,
+  config?: RouteSelection,
+  vehicleId?: VehicleId,
+): RaceState {
   const id = config?.routeId ?? 'legacy-circuit',
     r = getRoute(id),
     start = r.grid[slot % r.maxPlayers];
-  return Object.assign(isCityRoute(id) ? initialCityRace(id) : initialRace(), start);
+  const state = Object.assign(
+    isTrackId(id)
+      ? initialTrackRace(id, vehicleId)
+      : isCityRoute(id)
+        ? initialCityRace(id)
+        : initialRace(),
+    start,
+  );
+  return vehicleId ? configureVehicle(state, vehicleId) : state;
 }
 export function stepNetworkRace(
   state: RaceState,
@@ -14,6 +30,8 @@ export function stepNetworkRace(
   dt: number,
   config?: RouteSelection,
 ) {
+  if (config && isTrackId(config.routeId))
+    return stepTrackRace(state as TrackRaceState, input, dt, false, config.laps);
   if (config && isCityRoute(config.routeId)) {
     let lap: number | null = null,
       collision = false,

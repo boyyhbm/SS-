@@ -90,6 +90,23 @@ export const roadEdges = [
     { x: 30, z: 230 },
     { x: 100, z: 210 },
   ]),
+  // Sweeping perimeter boulevards extend Free Drive without replacing old streets.
+  {
+    ...edge('r0', 'i0', 'industrial', [
+      { x: -200, z: -320 },
+      { x: 25, z: -285 },
+    ]),
+    width: 18,
+    lanes: 4,
+  },
+  {
+    ...edge('r3', 'i5', 'industrial', [
+      { x: -60, z: 370 },
+      { x: 275, z: 335 },
+    ]),
+    width: 18,
+    lanes: 4,
+  },
 ];
 export const nodeById = Object.fromEntries(roadNodes.map((n) => [n.id, n]));
 export const edgeById = Object.fromEntries(roadEdges.map((e) => [e.id, e]));
@@ -191,10 +208,10 @@ const clearanceEdges = roadEdges.map((edge) => {
   const queryPoints = edge.controls ? points : [first, last];
   return {
     halfWidth: edge.width / 2,
-    minX: Math.min(first.x, last.x) - 80,
-    maxX: Math.max(first.x, last.x) + 80,
-    minZ: Math.min(first.z, last.z) - 80,
-    maxZ: Math.max(first.z, last.z) + 80,
+    minX: Math.min(...points.map((p) => p.x)),
+    maxX: Math.max(...points.map((p) => p.x)),
+    minZ: Math.min(...points.map((p) => p.z)),
+    maxZ: Math.max(...points.map((p) => p.z)),
     segments: queryPoints.slice(1).map((b, i) => {
       const a = queryPoints[i],
         dx = b.x - a.x,
@@ -216,8 +233,13 @@ const clearanceEdges = roadEdges.map((edge) => {
 const clearanceJunctions = roadNodes.map((n) => ({ ...n, radius: junctionRadius(n.id) }));
 export function roadClearance(p: Point) {
   let clearance = -Infinity;
+  for (const n of clearanceJunctions) clearance = Math.max(clearance, n.radius - distance(p, n));
   for (const edge of clearanceEdges) {
-    if (p.x < edge.minX || p.x > edge.maxX || p.z < edge.minZ || p.z > edge.maxZ) continue;
+    const bx = Math.max(edge.minX - p.x, 0, p.x - edge.maxX),
+      bz = Math.max(edge.minZ - p.z, 0, p.z - edge.maxZ);
+    // AABB distance bounds the exact signed clearance; curved boulevards must
+    // never disappear from contacts merely because their endpoints are far away.
+    if (edge.halfWidth - Math.hypot(bx, bz) <= clearance) continue;
     let squared = Infinity;
     for (const s of edge.segments) {
       const bx = Math.max(s.minX - p.x, 0, p.x - s.maxX),
@@ -233,7 +255,6 @@ export function roadClearance(p: Point) {
     }
     clearance = Math.max(clearance, edge.halfWidth - Math.sqrt(squared));
   }
-  for (const n of clearanceJunctions) clearance = Math.max(clearance, n.radius - distance(p, n));
   return clearance;
 }
 

@@ -21,7 +21,7 @@ export class EngineSoundTelemetry {
     this.rpm = profile.idleRPM;
   }
   update(
-    state: Pick<RaceState, 'speed' | 'vx' | 'vz' | 'heading'>,
+    state: Pick<RaceState, 'speed' | 'vx' | 'vz' | 'heading' | 'rpm' | 'gear' | 'wheelSlip'>,
     input: RaceInput,
     dt: number,
   ): EngineSoundState {
@@ -32,7 +32,12 @@ export class EngineSoundTelemetry {
     const wheelRPM = (speed / (2 * Math.PI * p.wheelRadius)) * 60;
     let coupled = wheelRPM * p.gearRatios[this.gear - 1] * p.finalDrive;
     let shift = false;
-    if (this.sinceShift > 0.38 && state.speed >= 0) {
+    const physical = state.rpm !== undefined && state.gear !== undefined;
+    if (physical) {
+      shift = this.gear !== state.gear;
+      this.gear = Math.max(1, state.gear!);
+      coupled = state.rpm!;
+    } else if (this.sinceShift > 0.38 && state.speed >= 0) {
       if (coupled > p.maxRPM * 0.89 && this.gear < p.gearRatios.length) {
         this.gear++;
         shift = true;
@@ -43,11 +48,13 @@ export class EngineSoundTelemetry {
     }
     if (shift) {
       this.sinceShift = 0;
-      coupled = wheelRPM * p.gearRatios[this.gear - 1] * p.finalDrive;
+      coupled = physical ? state.rpm! : wheelRPM * p.gearRatios[this.gear - 1] * p.finalDrive;
     }
     const throttle = clampAudio(input.throttle);
     const target = clampAudio(
-      Math.max(p.idleRPM, coupled, speed < 3 ? p.idleRPM + throttle * 2600 : p.idleRPM),
+      physical
+        ? coupled
+        : Math.max(p.idleRPM, coupled, speed < 3 ? p.idleRPM + throttle * 2600 : p.idleRPM),
       p.idleRPM,
       p.maxRPM * 1.02,
     );
@@ -60,7 +67,7 @@ export class EngineSoundTelemetry {
       rpm: this.rpm,
       gear: state.speed < -0.2 ? -1 : this.gear,
       load: throttle * (this.sinceShift < 0.11 ? 0.22 : 1),
-      slip: Math.max(slip, input.handbrake && speed > 6 ? 0.65 : 0),
+      slip: Math.max(slip, state.wheelSlip ?? 0, input.handbrake && speed > 6 ? 0.65 : 0),
       rolling: clampAudio(speed / 55),
       limiter: target >= p.maxRPM * 0.99,
       shift,

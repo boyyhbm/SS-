@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { routeIdSchema, type RouteSelection } from '../games/route-registry';
 import type { RaceInput, RaceState } from '../games/racing-physics';
+import type { VehicleId } from '../games/vehicles/config';
 export const SIMULATION_HZ = 30;
 export const SNAPSHOT_HZ = 15;
 export const FIXED_DT = 1 / SIMULATION_HZ;
@@ -23,6 +24,8 @@ export interface NetworkPlayer<State = RaceState> {
   username: string;
   avatar: string;
   car: (typeof cars)[number];
+  vehicleId?: VehicleId;
+  vehicleVersion?: number;
   ready: boolean;
   connected: boolean;
   state: State;
@@ -79,7 +82,7 @@ export interface MultiplayerAdapter<State = RaceState> {
     dt: number,
     route?: RouteSelection,
   ): number | void;
-  initialState(slot: number, route?: RouteSelection): State;
+  initialState(slot: number, route?: RouteSelection, vehicleId?: VehicleId): State;
   simulate(state: State, input: RaceInput, dt: number, route?: RouteSelection): number | null;
 }
 export type PresenceStatus = 'online' | 'inGame' | 'inLobby' | 'away' | 'offline';

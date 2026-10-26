@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
-import { cityRoutes, type Point } from '../../src/games/road-network.ts';
+import { type Point } from '../../src/games/road-network.ts';
+import { routeRegistry } from '../../src/games/route-registry.ts';
 export async function installDriver(
   page: Page,
   method: 'gamepad' | 'keyboard' = 'gamepad',
@@ -19,9 +20,14 @@ export async function installDriver(
       z: a.z + ((b.z - a.z) * n) / steps,
     }));
   });
+  const registered = routeRegistry.find(
+    (r) => r.routeId === routeId && r.routeId !== 'legacy-circuit',
+  );
   const route = drivingPath
     ? { path: densePath!, kind: 'circuit' as const }
-    : cityRoutes.find((r) => r.id === routeId);
+    : registered
+      ? { path: registered.geometry, kind: registered.kind }
+      : undefined;
   await page.evaluate(
     ({ method, kind, cruiseSpeed, route }) => {
       const lifecycle = window as unknown as { nexusTestDriverCleanup?: () => void };

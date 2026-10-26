@@ -306,6 +306,8 @@ model MatchParticipant {
   matchId      String
   userId       String
   car          String
+  vehicleId    String?
+  vehicleVersion Int?
   disconnected Boolean          @default(false)
   match        MultiplayerMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
   user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)

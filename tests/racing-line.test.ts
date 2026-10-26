@@ -9,6 +9,8 @@ import {
 import { createRacingLine } from '../src/games/visual/racing-line';
 import { cityRoutes, roadClearance, distance } from '../src/games/road-network';
 import { initialCityRace } from '../src/games/city-driving';
+import { trackRegistry } from '../src/games/tracks/registry';
+import { projectRoad } from '../src/games/tracks/geometry';
 it.each(cityRoutes.map((r) => r.id))(
   'keeps the complete %s guide on actual road and obeys braking constraints',
   (id) => {
@@ -52,4 +54,34 @@ it('reuses GPU buffers while updating colors and hides all guide geometry when d
   expect(mesh.visible).toBe(false);
   guide.dispose();
   expect(scene.children).toHaveLength(0);
+});
+it('places mountain and banked-circuit guidance on the real 3D surface and uses vehicle braking', () => {
+  for (const track of trackRegistry) {
+    const light = buildRacingLine(track.trackId, 'apex-r'),
+      heavy = buildRacingLine(track.trackId, 'iron-v8');
+    expect(light.samples.some((p, i) => p.targetSpeed > heavy.samples[i].targetSpeed + 0.1)).toBe(
+      true,
+    );
+    for (const sample of light.samples) {
+      const surface = projectRoad(track.roadGeometry, sample.x, sample.z);
+      expect(sample.y).toBeCloseTo(surface.height, 5);
+      expect(surface.clearance).toBeGreaterThan(2);
+    }
+    const scene = new THREE.Scene(),
+      guide = createRacingLine(scene);
+    guide.update(
+      track.trackId,
+      { ...initialCityRace('downtown-circuit'), vehicleId: 'apex-r' },
+      'full',
+    );
+    const positions = (
+      scene.getObjectByName('Dynamic_racing_line') as THREE.Mesh
+    ).geometry.getAttribute('position');
+    for (let i = 0; i < positions.count; i += 12)
+      expect(positions.getY(i)).toBeCloseTo(
+        projectRoad(track.roadGeometry, positions.getX(i), positions.getZ(i)).height + 0.054,
+        3,
+      );
+    guide.dispose();
+  }
 });

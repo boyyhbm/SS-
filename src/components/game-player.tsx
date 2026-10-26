@@ -22,12 +22,17 @@ import { consoleReturn } from '@/input/focus';
 import { GameControlsHint } from './input-system';
 import { RaceHUD, GraphicsSettings } from './race-hud';
 import { InputNavigation } from './input-navigation';
-import { cityRoutes, type CityRouteId } from '@/games/road-network';
+import { routeRegistry, type RouteId } from '@/games/route-registry';
 import { GameRouteMap } from './game-route-map';
 import { GameAudioSettings } from './game-audio-settings';
+import { VehicleSelect } from './vehicle-select';
+import { useGaragePreference } from '@/games/vehicles/preferences';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
 });
+const selectableRoutes = routeRegistry
+  .filter((r) => r.routeId !== 'legacy-circuit')
+  .map((r) => ({ ...r, id: r.routeId }));
 export function GamePlayer({
   gameId,
   title,
@@ -42,11 +47,16 @@ export function GamePlayer({
   initialBestLap: number | null;
   initialHistory: { seconds: number; recordedAt: string }[];
   initialRouteRecords?: Partial<
-    Record<CityRouteId, { best: number | null; history: { seconds: number; recordedAt: string }[] }>
+    Record<RouteId, { best: number | null; history: { seconds: number; recordedAt: string }[] }>
   >;
 }) {
   const [mode, setMode] = useState<'practice' | 'timeTrial'>('timeTrial');
-  const [routeId, setRouteId] = useState<CityRouteId>('downtown-circuit');
+  const garage = useGaragePreference();
+  useEffect(() => {
+    void useGaragePreference.getState().load();
+  }, []);
+  const [routeId, setRouteId] = useState<RouteId>('downtown-circuit');
+  const [selectedLaps, setSelectedLaps] = useState(3);
   const [routeRecords, setRouteRecords] = useState(initialRouteRecords);
   const history = routeRecords[routeId]?.history ?? [];
   const routeBest = routeRecords[routeId]?.best ?? null;
@@ -188,7 +198,13 @@ export function GamePlayer({
         const res = await fetch('/api/sessions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'lap', sessionId: session.current, seconds, routeId }),
+          body: JSON.stringify({
+            action: 'lap',
+            sessionId: session.current,
+            seconds,
+            routeId,
+            vehicleId: garage.value.vehicleId,
+          }),
         });
         if (!res.ok) throw new Error();
         const result = await res.json();
@@ -209,7 +225,7 @@ export function GamePlayer({
         setNotice(t('saveFailed'));
       }
     },
-    [t, mode, routeId],
+    [t, mode, routeId, garage.value.vehicleId],
   );
   async function exit() {
     setPaused(true);
@@ -261,6 +277,7 @@ export function GamePlayer({
         language={language}
         paused={paused || !started}
         onReady={() => setReady(true)}
+        onLoading={() => setReady(false)}
         onError={() => setError(t('gameError'))}
         onLap={lap}
         onTelemetry={setTelemetry}
@@ -270,6 +287,9 @@ export function GamePlayer({
         initialBestLap={routeBest}
         routeId={routeId}
         freeDrive={mode === 'practice'}
+        vehicleId={garage.value.vehicleId}
+        paint={garage.value.paint}
+        laps={selectedLaps}
       />
       <div className="player-topbar">
         <button className="player-brand" onClick={exit} aria-label={t('exitGame')}>
@@ -309,7 +329,7 @@ export function GamePlayer({
       </div>
       {started && (
         <>
-          <RaceHUD telemetry={telemetry} language={language} mode={mode} />
+          <RaceHUD telemetry={telemetry} language={language} mode={mode} laps={selectedLaps} />
           {telemetry.finished && mode !== 'practice' && !paused && (
             <div className="pause-overlay route-finish-overlay">
               <div className="route-finish-card">
@@ -373,13 +393,14 @@ export function GamePlayer({
             {!started && (
               <div className="route-selection" aria-label={language === 'ru' ? 'Маршрут' : 'Route'}>
                 <GameRouteMap routeId={routeId} overview language={language} />
-                {cityRoutes.map((r) => (
+                {selectableRoutes.map((r) => (
                   <button
                     key={r.id}
                     data-route-option={r.id}
                     className={routeId === r.id ? 'selected' : ''}
                     onClick={() => {
                       setRouteId(r.id);
+                      setSelectedLaps(r.kind === 'sprint' ? 1 : r.laps);
                       setRestartKey((x) => x + 1);
                     }}
                   >
@@ -390,21 +411,37 @@ export function GamePlayer({
                           ? 'Спринт'
                           : 'Sprint'
                         : language === 'ru'
-                          ? '3 круга'
-                          : '3 laps'}{' '}
+                          ? 'Кольцо'
+                          : 'Circuit'}{' '}
                       · {(r.length / 1000).toFixed(1)} {language === 'ru' ? 'км' : 'km'}
                     </span>
                   </button>
                 ))}
                 <small>
                   {language === 'ru'
-                    ? 'Все три маршрута доступны также в сетевом лобби.'
-                    : 'All three routes are also available in the online lobby.'}
+                    ? 'Маршруты доступны также в сетевом лобби.'
+                    : 'Routes are also available in the online lobby.'}
                 </small>
               </div>
             )}
             {!started && (
               <div className="solo-modes">
+                {routeRegistry.find((r) => r.routeId === routeId)?.kind === 'circuit' && (
+                  <label className="route-lap-choice">
+                    {language === 'ru' ? 'Круги' : 'Laps'}
+                    <select
+                      aria-label={language === 'ru' ? 'Круги' : 'Laps'}
+                      value={selectedLaps}
+                      onChange={(e) => setSelectedLaps(Number(e.target.value))}
+                    >
+                      {[1, 2, 3].map((n) => (
+                        <option value={n} key={n}>
+                          {n}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
                 {(['practice', 'timeTrial'] as const).map((value) => (
                   <button
                     key={value}
@@ -466,6 +503,7 @@ export function GamePlayer({
                 </div>
               </details>
             )}
+            {!started && <VehicleSelect language={language} />}
             <GraphicsSettings language={language} />
             <GameAudioSettings language={language} />
             <button

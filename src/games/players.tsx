@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { z } from 'zod';
 import type { ComponentType } from 'react';
 import type { Language } from '@/lib/i18n';
-import { CITY_ROUTE_IDS } from './road-network';
+import { ROUTE_IDS } from './route-registry';
 export interface GameRuntimeContext {
   gameId: string;
   title: string;
@@ -31,7 +31,7 @@ function MidnightAdapter({ gameId, title, language, initialSaves }: GameRuntimeC
       initialBestLap={best}
       initialHistory={history.success ? history.data : []}
       initialRouteRecords={Object.fromEntries(
-        CITY_ROUTE_IDS.map((id) => {
+        ROUTE_IDS.filter(id => id !== 'legacy-circuit').map((id) => {
           const record = z
             .object({ seconds: z.number().finite() })
             .safeParse(initialSaves[`best-lap:${id}`]);

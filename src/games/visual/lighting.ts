@@ -38,8 +38,8 @@ export function createShadowLighting(
   key.shadow.needsUpdate = true;
   if (dynamic) setup(dynamic, 1);
   const texel = preset.shadowDistance / Math.max(512, preset.shadowSize);
-  const place = (light: THREE.DirectionalLight, x: number, z: number) => {
-    focus.set(x, 0, z);
+  const place = (light: THREE.DirectionalLight, x: number, z: number, y = 0) => {
+    focus.set(x, y, z);
     const a = focus.dot(right),
       b = focus.dot(up);
     focus.addScaledVector(right, Math.round(a / texel) * texel - a);
@@ -48,13 +48,13 @@ export function createShadowLighting(
     light.position.copy(focus).add(offset);
   };
   return {
-    update(x: number, z: number) {
-      if (Math.hypot(x - last.x, z - last.z) > 10) {
-        place(key, x, z);
-        last.set(x, 0, z);
+    update(x: number, z: number, y = 0) {
+      if (Math.hypot(x - last.x, y - last.y, z - last.z) > 10) {
+        place(key, x, z, y);
+        last.set(x, y, z);
         key.shadow.needsUpdate = true;
       }
-      if (dynamic) place(dynamic, x, z);
+      if (dynamic) place(dynamic, x, z, y);
     },
     dispose() {
       key.shadow.map?.dispose();

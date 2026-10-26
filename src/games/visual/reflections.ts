@@ -9,13 +9,15 @@ export async function createLocalReflections(
   tier: RenderTier,
   beforeCapture: (x: number, z: number) => void,
   progress: (fraction: number) => void,
+  customPositions?: number[][],
 ) {
   if (!qualityPresets[tier].reflection || !renderer.extensions.has('EXT_color_buffer_float'))
     return null;
   const global = scene.environment;
   if (!(global instanceof THREE.Texture)) return null;
   const positions =
-    tier === 'high'
+    customPositions ??
+    (tier === 'high'
       ? [
           [-140, 20],
           [170, 20],
@@ -27,7 +29,7 @@ export async function createLocalReflections(
           [170, 35],
           [-290, 40],
           [130, -100],
-        ];
+        ]);
   const probes: Probe[] = [],
     pmrem = new THREE.PMREMGenerator(renderer);
   const oldTarget = renderer.getRenderTarget(),
@@ -41,7 +43,7 @@ export async function createLocalReflections(
   });
   renderer.shadowMap.autoUpdate = false;
   try {
-    for (const [x, z] of positions) {
+    for (const [x, z, y = 1.5] of positions) {
       beforeCapture(x, z);
       const cube = new THREE.WebGLCubeRenderTarget(256, {
         type: THREE.HalfFloatType,
@@ -53,7 +55,7 @@ export async function createLocalReflections(
         Math.max(300, qualityPresets[tier].cityDistance * 0.8),
         cube,
       );
-      camera.position.set(x, 1.5, z);
+      camera.position.set(x, y, z);
       camera.layers.set(0);
       camera.update(renderer, scene);
       const target = pmrem.fromCubemap(cube.texture);

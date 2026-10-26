@@ -6,6 +6,11 @@ const config: NextConfig = {
   async headers() {
     return [
       {
+        source:
+          '/game-assets/:pack(vehicles|track-props)/:file([a-zA-Z0-9_-]+-[a-f0-9]{10}\\.[a-z0-9]+)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
         source: '/game-assets/:pack(district-ultra-[a-f0-9]{10})/:file',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },

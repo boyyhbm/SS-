@@ -49,6 +49,35 @@ for (const source of manifest.sources) {
   assert.equal(source.commercialUsePermitted, true);
   assert(source.author && source.url);
 }
+// Every new, pinned CC0 pack is independently hashed and shipped with its license.
+for (const filename of ['vehicle-manifest.json', 'track-manifest.json']) {
+  const pack = JSON.parse(await fs.readFile(root + '/' + filename));
+  assert.equal(pack.license, 'CC0-1.0');
+  assert.equal(pack.commercialUse, true);
+  assert(pack.author && pack.mirror);
+  const licenses = pack.licenseFile
+    ? [pack.licenseFile]
+    : Object.values(pack.packs).map((p) => p.licenseFile);
+  for (const filename of licenses) {
+    const license = await fs.readFile(path.resolve('public', '.' + filename), 'utf8');
+    assert(/Creative Commons Zero|CC0/.test(license));
+    assert(/commercial (purposes|projects)/i.test(license));
+  }
+  for (const model of Object.values(pack.models)) {
+    const file = path.resolve('public', '.' + model.path);
+    assert(file.startsWith(root + path.sep));
+    const bytes = await fs.readFile(file);
+    assert.equal(bytes.length, model.bytes);
+    assert.equal(hash(bytes), model.sha256);
+    assert(model.path.includes(model.sha256.slice(0, 10)));
+    assert(/^[a-f0-9]{64}$/.test(model.sourceSha256));
+    assert(
+      model.sourceUrl.startsWith(
+        'https://raw.githubusercontent.com/leaukojo/carlito/3c098d5612dd545f00c7355bedd1cb6fb6576b9c/',
+      ),
+    );
+  }
+}
 console.log(
   JSON.stringify({
     passed: true,

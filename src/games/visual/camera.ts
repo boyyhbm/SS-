@@ -8,7 +8,14 @@ export const cameraProfiles = [
   { name: 'Showcase', distance: -5.8, height: 1.9, lookAhead: 0, targetHeight: 0.8 },
 ] as const;
 export const cameraTuning = { headingResponse: 7, baseFov: 58, maxDynamicFov: 0.8 };
-export type CameraPose = { x: number; z: number; heading: number; speed: number };
+export type CameraPose = {
+  x: number;
+  z: number;
+  heading: number;
+  speed: number;
+  y?: number;
+  roadPitch?: number;
+};
 const clipDirection = new THREE.Vector3(),
   clipHit = new THREE.Vector3(),
   clipRay = new THREE.Ray();
@@ -82,7 +89,7 @@ export class ChaseCameraRig {
     // add speed / response metres of lag (8.3 m at 150 km/h with the old response of 5).
     this.camera.position.set(
       pose.x - sin * profile.distance,
-      profile.height,
+      (pose.y ?? 0) + profile.height,
       pose.z - cos * profile.distance,
     );
     if (mode === 3) {
@@ -91,12 +98,12 @@ export class ChaseCameraRig {
     }
     this.target.set(
       pose.x + sin * profile.lookAhead,
-      profile.targetHeight,
+      (pose.y ?? 0) + profile.targetHeight + Math.tan(pose.roadPitch ?? 0) * profile.lookAhead,
       pose.z + cos * profile.lookAhead,
     );
     // Collision is measured from the vehicle, not the look-ahead point. An
     // obstacle in front of the car must not pull a camera that sits behind it.
-    this.anchor.set(pose.x, profile.targetHeight, pose.z);
+    this.anchor.set(pose.x, (pose.y ?? 0) + profile.targetHeight, pose.z);
     clip?.(this.anchor, this.camera.position);
     this.boom.subVectors(this.camera.position, this.anchor);
     const desiredLength = this.boom.length();
@@ -112,7 +119,7 @@ export class ChaseCameraRig {
       this.camera.position
         .copy(this.anchor)
         .addScaledVector(this.boom, this.boomLength / desiredLength);
-    if (mode < 2) this.camera.position.y = Math.max(1.6, this.camera.position.y);
+    if (mode < 2) this.camera.position.y = Math.max((pose.y ?? 0) + 1.6, this.camera.position.y);
     this.camera.lookAt(this.target);
     const fov =
       cameraTuning.baseFov +

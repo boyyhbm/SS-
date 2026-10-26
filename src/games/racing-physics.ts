@@ -1,3 +1,6 @@
+import type { VehicleId } from './vehicles/config';
+import { vehicleDimensions } from './vehicles/config';
+import { stepVehicleMotion, type VehicleMotionState } from './vehicle-motion';
 export const TRACK_RADIUS = 95,
   ROAD_HALF_WIDTH = 12;
 export interface RaceInput {
@@ -8,6 +11,19 @@ export interface RaceInput {
   handbrake?: boolean;
 }
 export interface RaceState {
+  vehicleId?: VehicleId;
+  vehicleVersion?: number;
+  gear?: number;
+  rpm?: number;
+  shiftTime?: number;
+  wheelSlip?: number;
+  mass?: number;
+  yawInertia?: number;
+  bodyPitch?: number;
+  bodyRoll?: number;
+  y?: number;
+  roadPitch?: number;
+  roadBank?: number;
   x: number;
   z: number;
   heading: number;
@@ -42,6 +58,18 @@ export function initialRace(): RaceState {
 const clamp = (x: number, min: number, max: number) => Math.max(min, Math.min(max, x));
 export function stepRace(state: RaceState, input: RaceInput, dt: number): number | null {
   dt = clamp(dt, 0, 0.05);
+  if (state.vehicleId) {
+    const dims = vehicleDimensions(state.vehicleId);
+    stepVehicleMotion(state as VehicleMotionState, input, dt, (x, z, heading) => {
+      let allowed = Infinity;
+      for (const offset of [-dims.halfSpine, 0, dims.halfSpine]) {
+        const r = Math.hypot(x + Math.sin(heading) * offset, z + Math.cos(heading) * offset);
+        allowed = Math.min(allowed, ROAD_HALF_WIDTH - Math.abs(r - TRACK_RADIUS) - dims.radius);
+      }
+      return allowed;
+    });
+    return advanceLegacyGates(state);
+  }
   state.lapTime += dt;
   state.collision = false;
   state.steering += (clamp(input.steer, -1, 1) - state.steering) * Math.min(1, dt * 8);
@@ -73,6 +101,9 @@ export function stepRace(state: RaceState, input: RaceInput, dt: number): number
     state.vz *= 0.6;
     state.collision = true;
   }
+  return advanceLegacyGates(state);
+}
+function advanceLegacyGates(state: RaceState): number | null {
   const angle = ((Math.atan2(state.z, state.x) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
   const target = ((state.nextCheckpoint % 4) * Math.PI) / 2;
   const angularDistance = Math.abs(Math.atan2(Math.sin(angle - target), Math.cos(angle - target)));

@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-26T20:02:16.183Z",
+  "scope": "Real browser rendering and normalized input. No pose injection. Synthetic Gamepad API fixture; no physical controller certification.",
+  "tracks": [
+    {
+      "trackId": "velocity-circuit",
+      "trackVersion": 1,
+      "lengthMeters": 1849.1029602489907,
+      "input": "keyboard",
+      "completed": true,
+      "stats": {
+        "minY": -0.09938720429540937,
+        "maxY": 4.000812699952825,
+        "maxSpeed": 26.131171065055344,
+        "steps": 2383
+      }
+    },
+    {
+      "trackId": "eagle-ridge",
+      "trackVersion": 1,
+      "lengthMeters": 1878.3750004015253,
+      "input": "Gamepad API fixture",
+      "completed": true,
+      "stats": {
+        "minY": 15.629167990458097,
+        "maxY": 143.0902893988931,
+        "maxSpeed": 26.020574312793663,
+        "steps": 2404
+      }
+    }
+  ]
+}

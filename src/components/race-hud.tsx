@@ -9,8 +9,8 @@ import { useRenderSettings, type RenderQuality } from '@/games/visual/quality';
 import { Modal } from './modal';
 import { InputGlyph } from './input-system';
 import { GameRouteMap } from './game-route-map';
-import { getCityRoute } from '@/games/road-network';
-import { isCityRoute } from '@/games/route-registry';
+import { getRoute } from '@/games/route-registry';
+import { getVehicle } from '@/games/vehicles/config';
 const route = Array.from({ length: 97 }, (_, i) => {
   const a = (i / 96) * Math.PI * 2;
   return `${i ? 'L' : 'M'} ${90 + Math.cos(a) * 62} ${65 + Math.sin(a) * 43}`;
@@ -34,10 +34,14 @@ export function RaceHUD({
 }) {
   const t = (key: Parameters<typeof visualText>[1]) => visualText(language, key),
     speed = Math.round(Math.abs(telemetry.speed) * 3.6),
-    gear = Math.max(1, Math.min(6, Math.ceil(speed / 38))),
-    revs = speed ? Math.min(1, 0.25 + (speed - (gear - 1) * 38) / 45) : 0.17,
-    currentRoute =
-      telemetry.routeId && isCityRoute(telemetry.routeId) ? getCityRoute(telemetry.routeId) : null,
+    vehicle = telemetry.vehicleId ? getVehicle(telemetry.vehicleId) : null,
+    gear = telemetry.gear ?? Math.max(1, Math.min(6, Math.ceil(speed / 38))),
+    revs = telemetry.rpm
+      ? telemetry.rpm / (vehicle?.maxRPM ?? 7600)
+      : speed
+        ? Math.min(1, 0.25 + (speed - (gear - 1) * 38) / 45)
+        : 0.17,
+    currentRoute = telemetry.routeId ? getRoute(telemetry.routeId) : null,
     totalLaps = laps ?? currentRoute?.laps,
     checkpointCount = telemetry.checkpointCount ?? 4;
   return (
@@ -83,7 +87,7 @@ export function RaceHUD({
       <div className="race-route">
         {currentRoute ? (
           <GameRouteMap
-            routeId={currentRoute.id}
+            routeId={currentRoute.routeId}
             x={telemetry.x}
             z={telemetry.z}
             heading={telemetry.heading}
@@ -143,8 +147,8 @@ export function RaceHUD({
           <small>
             {currentRoute
               ? language === 'ru'
-                ? 'ГОРОДСКАЯ СЕТЬ / 03'
-                : 'CITY NETWORK / 03'
+                ? 'ГОНОЧНЫЙ МАРШРУТ'
+                : 'RACE ROUTE'
               : '01 / AFTER HOURS'}
           </small>
         </div>
@@ -172,7 +176,12 @@ export function RaceHUD({
           </span>
           <div>
             {Array.from({ length: 20 }, (_, i) => (
-              <i key={i} className={i / 20 < telemetry.nitro / 100 ? 'charged' : ''} />
+              <i
+                key={i}
+                className={
+                  i / 20 < telemetry.nitro / (vehicle?.nitroCapacity ?? 100) ? 'charged' : ''
+                }
+              />
             ))}
           </div>
         </div>
@@ -282,6 +291,19 @@ export function GraphicsSettings({ language }: { language: 'ru' | 'en' }) {
               pmndrs/drei-assets.
             </p>
             <p>
+              <strong>Car Kit 3.1 · Racing Kit 2.0 · Nature Kit</strong>
+              <br />
+              Kenney, CC0 1.0.{' '}
+              {language === 'ru'
+                ? 'Изменены масштаб, материалы и шарниры колёс.'
+                : 'Scale, materials and wheel pivots adapted.'}
+            </p>
+            <p>
+              {language === 'ru'
+                ? 'Звук: оригинальный многослойный синтез NEXUS, без записей из коммерческих игр.'
+                : 'Audio: original NEXUS layered synthesis. No commercial-game recordings.'}
+            </p>
+            <p>
               {language === 'ru'
                 ? 'Трасса, PBR-асфальт, свет, интерфейс и эффекты: NEXUS.'
                 : 'Track, PBR asphalt, lighting, UI and effects: NEXUS.'}
@@ -291,6 +313,16 @@ export function GraphicsSettings({ language }: { language: 'ru' | 'en' }) {
             </a>
             <a href="/game-assets/licenses/CC-BY-4.0.txt" target="_blank" rel="noreferrer">
               Creative Commons Attribution 4.0
+            </a>
+            <a href="/game-assets/vehicle-manifest.json" target="_blank" rel="noreferrer">
+              {language === 'ru'
+                ? 'Автомобили: источники и лицензии'
+                : 'Vehicle sources and licenses'}
+            </a>
+            <a href="/game-assets/track-manifest.json" target="_blank" rel="noreferrer">
+              {language === 'ru'
+                ? 'Окружение трасс: источники и лицензии'
+                : 'Track environment sources and licenses'}
             </a>
           </div>
         </Modal>

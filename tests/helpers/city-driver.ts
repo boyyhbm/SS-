@@ -2,7 +2,7 @@ import { closestOnPolyline, distance, type CityRoute } from '../../src/games/roa
 import { steeringAngle } from '../../src/games/city-driving';
 import type { RaceState, RaceInput } from '../../src/games/racing-physics';
 // QA input controller only. It never writes positions, checkpoints or results.
-export function routeDriver(route: CityRoute, state: RaceState): RaceInput {
+export function routeDriver(route: Pick<CityRoute, 'path' | 'kind'>, state: RaceState): RaceInput {
   const nearest = closestOnPolyline(state, route.path);
   let i = nearest.index,
     remaining = 8 + Math.abs(state.speed) * 0.4,

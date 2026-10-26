@@ -5,6 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { randomBytes } from 'node:crypto';
 import { writeFile } from 'node:fs/promises';
 import { cityRoutes } from '../../src/games/road-network';
+import { routeRegistry, getRoute } from '../../src/games/route-registry';
 import { installDriver } from '../helpers/race-driver';
 const origin = process.env.TEST_BASE_URL ?? 'http://localhost:3000';
 const ids: string[] = [];
@@ -22,7 +23,9 @@ test.afterAll(async () => {
   await db.$disconnect();
 });
 const cases = [
-  ...cityRoutes.map((route) => ({ route, contacts: false })),
+  ...routeRegistry
+    .filter((r) => r.routeId !== 'legacy-circuit')
+    .map((r) => ({ route: { id: r.routeId, kind: r.kind, path: r.geometry }, contacts: false })),
   { route: cityRoutes[0], contacts: true },
 ];
 for (const { route, contacts } of cases)
@@ -198,6 +201,12 @@ for (const { route, contacts } of cases)
           'data-racing-line',
           p === a ? 'full' : 'corners',
         );
+        await p
+          .getByLabel('Автомобиль', { exact: true })
+          .selectOption(p === a ? 'pocket-gt' : 'iron-v8');
+        await expect(
+          p.locator('.lobby-person').filter({ hasText: p === a ? 'Pocket GT' : 'Iron V8' }),
+        ).toBeVisible();
         await p.getByRole('button', { name: 'Я готов', exact: true }).click();
       }
       await a.getByRole('button', { name: 'Начать заезд', exact: true }).click();
@@ -228,7 +237,9 @@ for (const { route, contacts } of cases)
           expect(
             Number(await p.getByTestId('online-player').getAttribute('data-contact-events')),
           ).toBeGreaterThan(0);
-      expect(m.routeVersion).toBe(1);
+      expect(m.routeVersion).toBe(getRoute(route.id).routeVersion);
+      expect(m.participants.find((p) => p.userId === users[0].id)?.vehicleId).toBe('pocket-gt');
+      expect(m.participants.find((p) => p.userId === users[1].id)?.vehicleId).toBe('iron-v8');
       expect(m.participants.every((p) => p.result?.didFinish && p.result.serverVerified)).toBe(
         true,
       );

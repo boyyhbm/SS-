@@ -41,6 +41,9 @@ import { GameControlsHint } from './input-system';
 import { nexusInput } from '@/input/manager';
 import { RaceHUD, GraphicsSettings } from './race-hud';
 import { GameAudioSettings } from './game-audio-settings';
+import { VehicleSelect } from './vehicle-select';
+import { useGaragePreference } from '@/games/vehicles/preferences';
+import { getVehicle } from '@/games/vehicles/config';
 import { InputNavigation } from './input-navigation';
 const Race = dynamic(() => import('@/games/midnight-outlaws').then((m) => m.MidnightOutlaws), {
   ssr: false,
@@ -63,6 +66,10 @@ export function OnlinePlayer({
   partySearch?: boolean;
 }) {
   const router = useRouter();
+  const garage = useGaragePreference();
+  useEffect(() => {
+    void useGaragePreference.getState().load();
+  }, []);
   const t = useCallback((key: MultiplayerText) => multiplayerText(language, key), [language]);
   const [sdk] = useState(
     () =>
@@ -71,6 +78,7 @@ export function OnlinePlayer({
       ),
   );
   const previousPhase = useRef<string>('');
+  const initialVehicleRoom = useRef('');
   const [snapshot, setSnapshot] = useState<RoomSnapshot | null>(null);
   const [social, setSocial] = useState<SocialData | null>(null);
   const [rooms, setRooms] = useState<RoomSummary[]>([]);
@@ -104,6 +112,12 @@ export function OnlinePlayer({
   const input = useRef<RaceInput>({ throttle: 0, brake: 0, steer: 0, nitro: false });
   const [now, setNow] = useState(0);
   const me = snapshot?.players.find((p) => p.id === userId);
+  useEffect(() => {
+    if (!snapshot) initialVehicleRoom.current = '';
+    if (snapshot?.phase === 'lobby' && me && garage.loaded && initialVehicleRoom.current !== snapshot.roomId) {
+      initialVehicleRoom.current = snapshot.roomId; sdk.chooseVehicle(garage.value.vehicleId);
+    }
+  }, [snapshot, me, garage.loaded, garage.value.vehicleId, sdk]);
   const leader = snapshot?.leaderId === userId;
   const playing = snapshot?.phase === 'racing' || snapshot?.phase === 'countdown';
   const canStart =
@@ -241,6 +255,7 @@ export function OnlinePlayer({
           language={language}
           paused={!playing || menu || !connected}
           onReady={() => setRenderReady(true)}
+          onLoading={() => setRenderReady(false)}
           onError={() => setError(t('networkUnavailable'))}
           onLap={() => {}}
           onTelemetry={setTelemetry}
@@ -250,6 +265,7 @@ export function OnlinePlayer({
           initialBestLap={null}
           routeId={snapshot.route?.routeId ?? 'legacy-circuit'}
           networkRef={network}
+          vehicleId={me?.vehicleId}
         />
       )}
       {!snapshot && <div className="online-art" />}
@@ -553,6 +569,7 @@ export function OnlinePlayer({
                         {p.username} {p.id === snapshot.leaderId && <Crown size={13} />}
                       </strong>
                       <span>
+                        {p.vehicleId ? getVehicle(p.vehicleId).displayName + ' / ' : ''}
                         {t(p.car)} /{' '}
                         {p.connected ? t(p.ready ? 'ready' : 'notReady') : t('reconnecting')}
                       </span>
@@ -607,6 +624,7 @@ export function OnlinePlayer({
             <aside className="lobby-customize">
               <span className="eyebrow">NEXUS GARAGE / 01</span>
               <h2>{t('car')}</h2>
+              <VehicleSelect language={language} onSelect={(id) => sdk.chooseVehicle(id)} />
               <div className="car-swatches">
                 {cars.map((car) => (
                   <button

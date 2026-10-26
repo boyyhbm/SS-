@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-26T18:37:09.334Z",
+  "scope": "Deterministic flat dry physics benchmark at 120 Hz, no nitro, no walls; measured model behavior, not real-car claims or render performance",
+  "vehicleVersion": 1,
+  "results": [
+    {
+      "vehicleId": "meridian-r6",
+      "zeroTo100Seconds": 5.066666666666666,
+      "zeroTo200Seconds": 19.5,
+      "maximumSpeedKmh": 243.86798424528686,
+      "braking100Meters": 25.226083761625816,
+      "braking100Seconds": 1.60833333333333,
+      "steeringHeadingChangeRad": 0.11168342039023024,
+      "tireGrip": 1.06
+    },
+    {
+      "vehicleId": "pocket-gt",
+      "zeroTo100Seconds": 5.225,
+      "zeroTo200Seconds": 24.1,
+      "maximumSpeedKmh": 229.4502476391295,
+      "braking100Meters": 24.42066964680362,
+      "braking100Seconds": 1.5416666666666636,
+      "steeringHeadingChangeRad": 0.15457502030337242,
+      "tireGrip": 1.02
+    },
+    {
+      "vehicleId": "iron-v8",
+      "zeroTo100Seconds": 4.258333333333333,
+      "zeroTo200Seconds": 15.1,
+      "maximumSpeedKmh": 262.7009405629606,
+      "braking100Meters": 31.2420162847279,
+      "braking100Seconds": 2.0249999999999955,
+      "steeringHeadingChangeRad": 0.0872022785151098,
+      "tireGrip": 0.94
+    },
+    {
+      "vehicleId": "vector-rs",
+      "zeroTo100Seconds": 4.008333333333333,
+      "zeroTo200Seconds": 14.25,
+      "maximumSpeedKmh": 272.98300060730435,
+      "braking100Meters": 24.062609214859386,
+      "braking100Seconds": 1.5333333333333303,
+      "steeringHeadingChangeRad": 0.11561026709102605,
+      "tireGrip": 1.16
+    },
+    {
+      "vehicleId": "apex-r",
+      "zeroTo100Seconds": 3.0833333333333335,
+      "zeroTo200Seconds": 9.716666666666667,
+      "maximumSpeedKmh": 294.8981338755978,
+      "braking100Meters": 19.1713513549531,
+      "braking100Seconds": 1.1999999999999982,
+      "steeringHeadingChangeRad": 0.13293435611560725,
+      "tireGrip": 1.28
+    },
+    {
+      "vehicleId": "nova-x",
+      "zeroTo100Seconds": 2.8,
+      "zeroTo200Seconds": 7.516666666666667,
+      "maximumSpeedKmh": 360.45011229070855,
+      "braking100Meters": 23.768757146870858,
+      "braking100Seconds": 1.5083333333333304,
+      "steeringHeadingChangeRad": 0.10099234025064074,
+      "tireGrip": 1.12
+    }
+  ]
+}
