@@ -1,6 +1,6 @@
 {
   "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
-  "updatedAt": "2026-10-27T19:17:26.658Z",
+  "updatedAt": "2026-10-27T19:31:49.212Z",
   "stage": "release-checks",
   "passed": false,
   "ci": {
@@ -81,12 +81,12 @@
           },
           {
             "name": "Real browser scenarios",
-            "status": "in_progress",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           },
           {
             "name": "Authoritative Forge duels and network faults",
-            "status": "pending",
+            "status": "in_progress",
             "conclusion": null
           },
           {
