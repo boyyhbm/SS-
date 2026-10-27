@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-27T19:01:33.051Z",
+  "updatedAt": "2026-10-27T19:01:40.784Z",
+  "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
+  "runUrl": "https://github.com/boyyhbm/SS-/actions/runs/40565165376",
+  "passed": false,
+  "stage": "baseline-ready",
+  "scope": "Actual public HTTPS/WSS. Two independent authenticated Chromium processes, normal keyboard/Pointer Lock input. Reduced software-GPU backing resolution. Not a physical-device or final-art acceptance.",
+  "ci": null,
+  "services": null,
+  "persistence": {
+    "baselinePredatesRelease": true,
+    "beforeCaptured": true,
+    "comparedAfterRollout": false
+  },
+  "checks": [
+    "Two actual public registrations, separate initially empty libraries, secure cookies, racing favorites, saved controller profiles and friendship"
+  ],
+  "websocketOrigins": [],
+  "records": [],
+  "shots": 0,
+  "hits": 0,
+  "score": null,
+  "errors": [],
+  "failure": null
+}
