@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-27T00:06:15.508Z",
+  "passed": true,
+  "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "scope": "Track picker controlled by standard-layout virtual Gamepad API buttons; setup uses normal registration inputs. No focus injection, mouse clicks or keyboard actions during track navigation checks. No physical controller certification.",
+  "routes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "checks": [
+    "Six routes reachable and selectable via spatial focus",
+    "Selected coastal route applied to actual game runtime",
+    "Road assets load after route switch",
+    "Gamepad cancel closes track picker"
+  ]
+}

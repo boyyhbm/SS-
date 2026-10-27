@@ -1,6 +1,6 @@
 # Complete Racing Experience — implementation and evidence
 
-The preserved baseline is [baseline.json](baseline.json), source `94206cb`. Audio-only `a86cf3a` was deployed first. The integrated content was implemented in `72f9b66`, `4c5c547` and `b423f2c`; capture reports retain their actual source revisions. Production acceptance is recorded separately after deployment.
+The preserved baseline is [baseline.json](baseline.json), source `94206cb`. Audio-only `a86cf3a` was deployed first. The integrated content was implemented in `72f9b66`, `4c5c547`, `b423f2c` and `4df492e`; capture reports retain their actual source revisions. Production acceptance is recorded separately after deployment.
 
 ## Audio
 
@@ -12,14 +12,14 @@ This is original synthesized combustion/noise/tonal audio, not professional engi
 
 The account garage supports 3D inspection, orbit via pointer/buttons/right stick, model choice and three body colors. Selection uses authenticated `GameSave` key `garage-v1`. The same IDs/configurations drive single player, server simulation, local prediction, remote model selection and remote audio. Strict message schemas reject unknown IDs, versions and supplied physical overrides. `MatchParticipant.vehicleId/vehicleVersion` preserve the selected model with each new match; old records remain nullable rather than receiving invented identities.
 
-| ID | Class | Drive | Mass | Power |
-| --- | --- | --- | ---: | ---: |
-| meridian-r6 | Street Coupe | RWD | 1350 kg | 210 kW |
-| pocket-gt | Hot Hatch | FWD | 1120 kg | 165 kW |
-| iron-v8 | Muscle | RWD | 1810 kg | 340 kW |
-| vector-rs | AWD Performance | AWD | 1530 kg | 295 kW |
-| apex-r | Track Supercar | RWD | 1260 kg | 380 kW |
-| nova-x | Hypercar | AWD | 1690 kg | 650 kW |
+| ID          | Class           | Drive |    Mass |  Power |
+| ----------- | --------------- | ----- | ------: | -----: |
+| meridian-r6 | Street Coupe    | RWD   | 1350 kg | 210 kW |
+| pocket-gt   | Hot Hatch       | FWD   | 1120 kg | 165 kW |
+| iron-v8     | Muscle          | RWD   | 1810 kg | 340 kW |
+| vector-rs   | AWD Performance | AWD   | 1530 kg | 295 kW |
+| apex-r      | Track Supercar  | RWD   | 1260 kg | 380 kW |
+| nova-x      | Hypercar        | AWD   | 1690 kg | 650 kW |
 
 Torque curves, gearing, final drive, wheel radius, mass, power, drag, tire grip, brake force, steering response/limit and nitro capacity affect movement. The center of mass influences load/steering and inertia. Spring/damping/travel produce bounded body pitch/roll; this remains arcade road-bound physics, not a full suspension/airborne/rollover simulator. Render interpolation retains the fixed simulation and never writes visual poses back into physics. Car orientation uses vehicle-local pitch/bank on elevated roads. World and gated private car contacts use vehicle mass/inertia and capsule dimensions.
 
@@ -51,6 +51,10 @@ The track browser uses actual in-game captures, calculated length/radius and the
 
 ## Verification and limits
 
+- [Gamepad garage navigation](garage-controller.json) and [track-picker navigation](track-controller.json) passed with standard-layout virtual controllers: six models, six track cards, actual selection, account save and cancel. Test setup uses ordinary registration fields; physical controllers remain unverified.
+- [Local release checks](local-checks.json): 144 unit tests, TypeScript, ESLint, production build, 107 hashed resources and separately recorded browser scenarios.
+- [Six recorded engine profiles](recorded-audio-levels.json) have measurable non-silent decoded audio with peaks below full scale. These are actual runtime recordings, not substituted engine files. The report gallery includes all six clips plus a real two-browser race on Velocity Circuit.
+- [New-track delay/jitter/loss check](multiplayer-network-faults.json) passed at simulated 50/100/200 ms RTT; the last profile adds ±20 ms jitter and 2% command loss. This is application-message simulation, not TCP-loss or geographic latency certification. [Legacy route with configured cars](multiplayer-legacy.json) also completed with two real SDK clients.
 - Unit coverage includes all six vehicles completing every city and new spline route through normalized controls, fixed-step equivalence, 3D line clearance/elevation, mass-dependent momentum and cached-road query equivalence. Two additional SDK tests verify that queued obsolete snapshots are coalesced before prediction/UI work, and pending snapshots cannot repopulate a room after leaving. Test totals and final CI results are recorded with the release evidence.
 - [Six real SDK clients on all six non-legacy routes](multiplayer-six-cars.json): different models, shared starts, ordered server gates/finish, agreeing results, PostgreSQL persistence and rematch. Six rooms ran concurrently (36 genuine clients); this is a functional check, not a capacity certification. One reported client reconnected during the run. [Initial two-client track check](multiplayer-tracks.json) is also retained.
 - [Browser route evidence](tracks-browser.json) is explicit about the scope and revision tested. More recent local/browser/public acceptance is recorded separately; a passing build alone is never treated as gameplay acceptance.

@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-27T00:03:06.388Z",
+  "passed": true,
+  "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "scope": "Garage and track picker controlled by standard-layout virtual Gamepad API buttons; setup uses normal registration inputs. No focus injection, mouse clicks or keyboard actions during garage/navigation checks. No physical controller certification.",
+  "vehicles": [
+    "meridian-r6",
+    "pocket-gt",
+    "iron-v8",
+    "vector-rs",
+    "apex-r",
+    "nova-x"
+  ],
+  "checks": [
+    "Six models reachable via spatial focus",
+    "Model-specific 3D preview loads",
+    "Body color selection",
+    "Orbit action",
+    "Select/save through gamepad",
+    "Account preference verified",
+    "Gamepad cancel closes garage"
+  ]
+}

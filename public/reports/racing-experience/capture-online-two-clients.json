@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-26T23:55:12.717Z",
+  "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "passed": true,
+  "quality": "low",
+  "mode": "two-client-functional-video",
+  "scope": "Actual two independent authenticated Chromium processes on the isolated local Next.js/Colyseus servers. Different vehicles, virtual Gamepad API vs keyboard, server-authoritative start/checkpoints/finish, identical PostgreSQL-backed results and rematch. Low/DPR0.15; not visual-quality or physical-controller certification. Side-by-side recordings are cropped and trimmed at unchanged speed, with no generated frames; Playwright recording has no audio. Public WSS checks are recorded separately.",
+  "scenes": [
+    {
+      "route": "velocity-circuit",
+      "screenshot": "images/velocity-two-clients-functional.jpg",
+      "clip": "clips/velocity-two-clients-functional.mp4",
+      "vehicles": [
+        "iron-v8",
+        "pocket-gt"
+      ]
+    }
+  ],
+  "browserTest": {
+    "passed": true,
+    "durationMinutes": 3.1,
+    "independentAccounts": 2,
+    "startsAtAgreed": true,
+    "resultsAgreed": true,
+    "savedToPostgres": true,
+    "rematch": true,
+    "poseInjection": false
+  }
+}

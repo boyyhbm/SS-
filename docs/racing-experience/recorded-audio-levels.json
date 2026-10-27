@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-26T23:51:49.691Z",
+  "passed": true,
+  "scope": "FFmpeg volumedetect on the decoded mixed audio from six actual runtime recordings. Establishes non-silent digital output and headroom, not subjective mixing quality, physical speaker output or absence of all playback artifacts.",
+  "records": [
+    {
+      "vehicleId": "meridian-r6",
+      "meanDbFS": -26.7,
+      "peakDbFS": -16.3,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    },
+    {
+      "vehicleId": "pocket-gt",
+      "meanDbFS": -29.1,
+      "peakDbFS": -16.9,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    },
+    {
+      "vehicleId": "iron-v8",
+      "meanDbFS": -28.5,
+      "peakDbFS": -17.1,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    },
+    {
+      "vehicleId": "vector-rs",
+      "meanDbFS": -29.3,
+      "peakDbFS": -19.4,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    },
+    {
+      "vehicleId": "apex-r",
+      "meanDbFS": -29,
+      "peakDbFS": -18.3,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    },
+    {
+      "vehicleId": "nova-x",
+      "meanDbFS": -27.1,
+      "peakDbFS": -13.1,
+      "nonSilent": true,
+      "decodedPeakBelowFullScale": true
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-26T23:48:22.883Z",
+  "source": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "checks": {
+    "typeScript": "PASSED",
+    "eslint": "PASSED",
+    "productionBuild": "PASSED",
+    "hashedAssets": {
+      "passed": true,
+      "count": 107,
+      "totalBytes": 301619500
+    },
+    "unit": {
+      "passed": true,
+      "files": 26,
+      "tests": 144
+    }
+  },
+  "localBrowser": {
+    "audio": {
+      "passed": true,
+      "durationSeconds": 46.7
+    },
+    "sixCarGarage": {
+      "passed": true,
+      "durationMinutes": 5
+    },
+    "threeNewTracksSinglePlayer": {
+      "passed": true,
+      "durationMinutes": 5.9
+    },
+    "threeNewTracksTwoIndependentBrowsers": {
+      "passed": true,
+      "durationMinutes": 9.9
+    },
+    "privateMixedCarCityContactsRetry": {
+      "passed": true,
+      "durationMinutes": 1.9,
+      "scope": "A previous attempt exhausted reconnection; one successful retry after snapshot coalescing does not establish production contact stability"
+    }
+  },
+  "limitations": [
+    "Browser runs use software WebGL with reduced backing resolution for functional checks",
+    "Native-resolution runtime captures report severe software GPU stalls",
+    "Physical GPU/controller and 1080p60 not certified",
+    "Public car contacts disabled; new-track inter-car contacts unsupported"
+  ]
+}

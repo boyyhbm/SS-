@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-26T23:43:35.734Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "legacy-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 0,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 1,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9643428662168948,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpwkec70002mimjrt0zbwct",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpwkeb20000mimjhmju2g6d",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpwkec70002mimjrt0zbwct",
+          "finish": 22.833333333333627,
+          "place": 2
+        },
+        {
+          "id": "cmvpwkeb20000mimjhmju2g6d",
+          "finish": 22.800000000000292,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 2
+}

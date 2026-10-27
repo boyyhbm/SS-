@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-26T23:41:48.217Z",
+  "passed": true,
+  "routes": [
+    {
+      "routeId": "velocity-circuit",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 50,
+        "jitter": 0,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 51,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.4155865802831861,
+      "contactEvents": 0,
+      "mode": "circuit",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpwi4e00005timj0brvwsma",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpwi4h20009timjnsuzoyfq",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpwi4e00005timj0brvwsma",
+          "finish": 68.33333333333202,
+          "place": 2
+        },
+        {
+          "id": "cmvpwi4h20009timjnsuzoyfq",
+          "finish": 68.06666666666537,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "eagle-ridge",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 100,
+        "jitter": 10,
+        "loss": 0
+      },
+      "measuredRttMedianMs": 100,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9493026835159319,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpwi48y0000timjjtd8kjxs",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpwi4bz0002timjo96ipiyk",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpwi48y0000timjjtd8kjxs",
+          "finish": 71.56666666666517,
+          "place": 2
+        },
+        {
+          "id": "cmvpwi4bz0002timjo96ipiyk",
+          "finish": 71.09999999999853,
+          "place": 1
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    },
+    {
+      "routeId": "coastline-run",
+      "routeVersion": 1,
+      "carContacts": false,
+      "networkSimulation": {
+        "rtt": 200,
+        "jitter": 20,
+        "loss": 0.02
+      },
+      "measuredRttMedianMs": 201,
+      "simulationScope": "Application-message delay/jitter/drop, not a geographic WAN or TCP loss benchmark",
+      "reconnects": 0,
+      "reconciliationErrorP95Meters": 0.9716672365880713,
+      "contactEvents": 0,
+      "mode": "sprint",
+      "players": 2,
+      "vehicles": [
+        {
+          "userId": "cmvpwi4f60007timje6jsyl02",
+          "vehicleId": "meridian-r6",
+          "vehicleVersion": 1
+        },
+        {
+          "userId": "cmvpwi4r8000dtimj7y9oc6xx",
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1
+        }
+      ],
+      "serverFinishSeconds": [
+        {
+          "id": "cmvpwi4f60007timje6jsyl02",
+          "finish": 83.16666666666451,
+          "place": 1
+        },
+        {
+          "id": "cmvpwi4r8000dtimj7y9oc6xx",
+          "finish": 83.33333333333117,
+          "place": 2
+        }
+      ],
+      "startsAtAgreed": true,
+      "resultsAgreed": true,
+      "savedToPostgres": true,
+      "rematch": true
+    }
+  ],
+  "scope": "Real SDK clients and authoritative PostgreSQL results; no rendered/GPU performance claim",
+  "playerCount": 2
+}

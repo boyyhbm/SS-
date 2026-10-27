@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-26T23:42:19.596Z",
+  "date": "2026-10-27T00:07:15.519Z",
   "passed": true,
   "scope": "Actual browser runtime screenshots and live game-audio recordings. Shared 5-vCPU SwiftShader runner, capture overhead and concurrent functional QA; not a standalone gaming-PC benchmark. High/Ultra are severely GPU limited here. 1080p/60 FPS on physical hardware is unverified.",
   "host": {
@@ -163,6 +163,126 @@
       "backingPixelRatio": 1
     }
   ],
+  "twoClientRace": {
+    "passed": true,
+    "durationMinutes": 3.1,
+    "independentAccounts": 2,
+    "startsAtAgreed": true,
+    "resultsAgreed": true,
+    "savedToPostgres": true,
+    "rematch": true,
+    "poseInjection": false
+  },
+  "engines": [
+    {
+      "vehicleId": "meridian-r6",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 6637.896613344107,
+        "gear": 2,
+        "peak": 0.11090932041406631,
+        "rms": 0.053842091865092985,
+        "shifts": 1,
+        "impacts": 0,
+        "updates": 586,
+        "slip": 0
+      },
+      "clip": "clips/meridian-r6-velocity-circuit-low.mp4"
+    },
+    {
+      "vehicleId": "pocket-gt",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 4712.378955897157,
+        "gear": 3,
+        "peak": 0.06708788126707077,
+        "rms": 0.03709084119705699,
+        "shifts": 2,
+        "impacts": 0,
+        "updates": 577,
+        "slip": 0
+      },
+      "clip": "clips/pocket-gt-velocity-circuit-low.mp4"
+    },
+    {
+      "vehicleId": "iron-v8",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 5752.736886860738,
+        "gear": 2,
+        "peak": 0.06983212381601334,
+        "rms": 0.030637245640153667,
+        "shifts": 1,
+        "impacts": 0,
+        "updates": 557,
+        "slip": 0
+      },
+      "clip": "clips/iron-v8-velocity-circuit-low.mp4"
+    },
+    {
+      "vehicleId": "vector-rs",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 4913.146225140126,
+        "gear": 3,
+        "peak": 0.0693618506193161,
+        "rms": 0.03779271981381115,
+        "shifts": 2,
+        "impacts": 0,
+        "updates": 553,
+        "slip": 0
+      },
+      "clip": "clips/vector-rs-velocity-circuit-low.mp4"
+    },
+    {
+      "vehicleId": "apex-r",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 6647.944224042115,
+        "gear": 2,
+        "peak": 0.07964687794446945,
+        "rms": 0.0332548149078337,
+        "shifts": 1,
+        "impacts": 0,
+        "updates": 558,
+        "slip": 0
+      },
+      "clip": "clips/apex-r-velocity-circuit-low.mp4"
+    },
+    {
+      "vehicleId": "nova-x",
+      "sourceCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+      "audio": {
+        "status": "running",
+        "voices": 1,
+        "transient": 0,
+        "rpm": 6265.108828153245,
+        "gear": 2,
+        "peak": 0.08104483783245087,
+        "rms": 0.037934860326249806,
+        "shifts": 1,
+        "impacts": 0,
+        "updates": 527,
+        "slip": 0
+      },
+      "clip": "clips/nova-x-velocity-circuit-low.mp4"
+    }
+  ],
   "resources": [
     {
       "filename": "images/downtown-circuit-low.png",
@@ -233,6 +353,76 @@
       "filename": "images/garage-high.png",
       "bytes": 219092,
       "sha256": "a97b05223da81705d8bfa9065646ecce4ab6bd8d86f587e8ce2f250a6b055263"
+    },
+    {
+      "filename": "images/velocity-two-clients-functional.jpg",
+      "bytes": 51041,
+      "sha256": "62687eeacc71418885fa2a7d78439da73b147af871cf07dc8767a2e152c2a315"
+    },
+    {
+      "filename": "clips/velocity-two-clients-functional.mp4",
+      "bytes": 7460590,
+      "sha256": "cad37082f525e1b15074e4d11c93dc8a95b3552336b451cb70b32735cf2356b3"
+    },
+    {
+      "filename": "images/meridian-r6-velocity-circuit-low.png",
+      "bytes": 614387,
+      "sha256": "ed9d1b75c926a4594aec41696e01b7150e20cd53c0e6a5d17992f875e425f1d2"
+    },
+    {
+      "filename": "clips/meridian-r6-velocity-circuit-low.mp4",
+      "bytes": 805077,
+      "sha256": "81c7bdb12a5992ab009b1d9064f47d0bbce7ee7f89265c7cac6cc6a42d4d62b5"
+    },
+    {
+      "filename": "images/pocket-gt-velocity-circuit-low.png",
+      "bytes": 590455,
+      "sha256": "ec9c976564a3cb93de335b9131f0f44b4a5f9f81e41b2466a133f4e349ca6c9f"
+    },
+    {
+      "filename": "clips/pocket-gt-velocity-circuit-low.mp4",
+      "bytes": 913372,
+      "sha256": "64b35bd944566c79be997fa9d7758a13eefa44272b21b900454933e20837fb7d"
+    },
+    {
+      "filename": "images/iron-v8-velocity-circuit-low.png",
+      "bytes": 589929,
+      "sha256": "c83f0d497cab0ad4c5b5cf272133587f2e120116b05113bf4fe21a860225cb36"
+    },
+    {
+      "filename": "clips/iron-v8-velocity-circuit-low.mp4",
+      "bytes": 853769,
+      "sha256": "59feb670123af619252f0ca5d1838c25806a73a4592b6af1af0d7893e0683c5b"
+    },
+    {
+      "filename": "images/vector-rs-velocity-circuit-low.png",
+      "bytes": 591766,
+      "sha256": "1f76f0b0eeedd0446da27af5e5b4f9298af7ed54326694286758e588da370831"
+    },
+    {
+      "filename": "clips/vector-rs-velocity-circuit-low.mp4",
+      "bytes": 734838,
+      "sha256": "7318a7ca75da5e910b5b9cd199471bdb20a85f5e82abd4674cdc631edb1dc6f1"
+    },
+    {
+      "filename": "images/apex-r-velocity-circuit-low.png",
+      "bytes": 605092,
+      "sha256": "f504f9f62e8f006315fe2c8010aada8676b666a2fb5867bcfa4ac0035ec35291"
+    },
+    {
+      "filename": "clips/apex-r-velocity-circuit-low.mp4",
+      "bytes": 816450,
+      "sha256": "bf13fb2e02483e9bb339fb0be7c7b4bda5a53965428b7f9da6cc73f1036cb020"
+    },
+    {
+      "filename": "images/nova-x-velocity-circuit-low.png",
+      "bytes": 600513,
+      "sha256": "8a49d215a425f11c9c5f3f414c40d773f4d8a812b9917408421660ccb29900f7"
+    },
+    {
+      "filename": "clips/nova-x-velocity-circuit-low.mp4",
+      "bytes": 886052,
+      "sha256": "a803ad5707065c77460479154704007d693442006f38ab57b3bd70c5187c86b8"
     }
   ]
 }
