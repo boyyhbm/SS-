@@ -1,0 +1,31 @@
+name: FOLD public verification
+on:
+  push:
+    branches: [verification/fold-zero]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: fold-public-verification
+  cancel-in-progress: false
+jobs:
+  public-duel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          # This trusted, isolated verification branch publishes redacted
+          # evidence back to itself. It never writes to the release branch.
+          persist-credentials: true
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Check the real release and play an actual public duel
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NEXUS_PUBLIC_SOURCE: 5bfa6c3478e0cea7b95cb173fb5e30de444701cd
+        run: node --import tsx scripts/verify-forge-public.ts
