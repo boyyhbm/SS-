@@ -1,6 +1,6 @@
 {
   "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
-  "updatedAt": "2026-10-27T19:35:20.771Z",
+  "updatedAt": "2026-10-27T19:36:15.770Z",
   "stage": "public-media",
   "passed": false,
   "ci": {
@@ -126,29 +126,30 @@
   "media": [
     {
       "filename": "index.html",
-      "status": 502,
-      "sha256MatchesSource": false
+      "status": 200,
+      "sha256MatchesSource": true
     },
     {
       "filename": "first-duel.mp4",
-      "status": 502,
-      "sha256MatchesSource": false
+      "status": 200,
+      "sha256MatchesSource": true
     },
     {
       "filename": "high-menu.png",
-      "status": 502,
-      "sha256MatchesSource": false
+      "status": 200,
+      "sha256MatchesSource": true
     },
     {
       "filename": "ultra-menu.png",
-      "status": 502,
-      "sha256MatchesSource": false
+      "status": 200,
+      "sha256MatchesSource": true
     }
   ],
   "health": [
     {
       "url": "https://nexus-web-ylcv.onrender.com/api/health",
-      "ok": false
+      "status": 200,
+      "ok": true
     },
     {
       "url": "https://nexus-multiplayer.onrender.com/health",
