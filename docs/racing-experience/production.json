@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-27T05:37:56.696Z",
+  "passed": true,
+  "scope": "Functional racing-content release and readiness regression; full visual/hardware acceptance remains incomplete.",
+  "applicationCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "publicUrl": "https://nexus-web-ylcv.onrender.com",
+  "reportUrl": "https://nexus-web-ylcv.onrender.com/reports/racing-experience/index.html",
+  "ci": {
+    "run": "https://github.com/boyyhbm/SS-/actions/runs/40446481908",
+    "unitTests": 147,
+    "browserScenarios": 32,
+    "status": "PASSED"
+  },
+  "services": {
+    "web": {
+      "status": "LIVE",
+      "commit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+      "deployId": "dep-dbg2cpq9lscs738siq9g",
+      "healthStatus": 200,
+      "trigger": "new_commit"
+    },
+    "multiplayer": {
+      "status": "LIVE",
+      "commit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+      "deployId": "dep-dbg2cq29lscs738siqh0",
+      "healthStatus": 200,
+      "trigger": "new_commit"
+    },
+    "postgresql": {
+      "status": "AVAILABLE",
+      "region": "frankfurt",
+      "publicAccess": "DISABLED",
+      "majorVersion": 16
+    }
+  },
+  "vehicles": 6,
+  "locations": 4,
+  "newDesignedTracks": 3,
+  "publicRoutesVerified": 7,
+  "publicRoutesReport": "public-routes.json",
+  "publicPersistenceReport": "public-persistence.json",
+  "freshMobileRegistrationAndLibrary": {
+    "report": "public-registration.json",
+    "testedArtifact": "02d6f120cc3714a8606abfa7be6c5dd3b3631189",
+    "authCodeUnchangedSince": true
+  },
+  "mediaIntegrity": "public-media.json",
+  "readyRegression": "ready-state-regression.json",
+  "audioLevels": "recorded-audio-levels.json",
+  "localSixCarsAndSixRoutes": "multiplayer-six-cars.json",
+  "networkFaultSimulation": "multiplayer-network-faults.json",
+  "publicHarnessSources": "qa/provenance.json",
+  "qaAccounts": {
+    "count": 3,
+    "scope": "Owned automated-test accounts with example.test emails; no fake online population. Private credential ledgers are not published."
+  },
+  "fullVisualAndHardwareAcceptanceComplete": false,
+  "publicVehicleContactsEnabled": false,
+  "knownLimitations": [
+    "Five additional vehicle models and track props are stylized CC0 assets, not the requested high-detail visual quality; the Muscle archetype currently uses a generic sedan body.",
+    "Engine and ambient audio are original synthesis, not professional field recordings. Physical speaker/headphone output was not tested.",
+    "Public car-to-car contacts remain OFF. New-track synchronized vehicle contacts are not released. City private contacts remain gated.",
+    "No physical gaming GPU/controller, geographically separate computers or Safari/Firefox certification. The actual native-resolution SwiftShader captures are severely GPU limited; 1080p/60 FPS is unverified.",
+    "Road-bound arcade physics has no airborne/rollover simulation, full cockpit interior, traffic or weather system.",
+    "Active rooms are lost during a multiplayer process restart; existing accounts, saves and completed results were checked across actual deployments.",
+    "The public seven-route evidence uses three executions, conservative automated input and no video encoding. Published gameplay recordings are separate actual runtime captures.",
+    "Two earlier legacy lobby preparations did not reach both ready. A separately acknowledged retry passed; the cause of those earlier setup failures was not established."
+  ]
+}

@@ -1,0 +1,51 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {chromium} from '@playwright/test';import {installDriver} from './public-race-driver';import {routeRegistry} from '../src/games/route-registry';
+const ledger=JSON.parse(fs.readFileSync('/tmp/nexus-production-DzvIaa/state.json','utf8'));const origin='https://nexus-web-ylcv.onrender.com';assert.equal(ledger.origin,origin);assert(/^release_[a-f0-9]{8}$/.test(ledger.prefix));assert.equal(ledger.accounts.length,2);
+const proxyURL=new URL(process.env.HTTPS_PROXY??process.env.HTTP_PROXY!);const proxy={server:proxyURL.origin,username:proxyURL.username||undefined,password:proxyURL.password||undefined};
+const browsers=await Promise.all([0,1].map(()=>chromium.launch({executablePath:'/usr/bin/chromium',proxy,args:['--no-sandbox','--enable-unsafe-swiftshader','--disable-background-timer-throttling','--disable-renderer-backgrounding','--disable-backgrounding-occluded-windows']})));
+const contexts=await Promise.all(browsers.map(b=>b.newContext({proxy,viewport:{width:960,height:650},deviceScaleFactor:.15,reducedMotion:'reduce',...(process.env.NEXUS_PUBLIC_RECORD==='1'?{recordVideo:{dir:'storage/racing-experience/public-two-clients',size:{width:960,height:650}}}:{})})));
+for(const c of contexts){await c.addInitScript('globalThis.__name = (fn)=>fn;');await c.addInitScript(()=>localStorage.setItem('nexus-render-quality',JSON.stringify({state:{quality:'low'},version:0})))}
+const pages=await Promise.all(contexts.map(c=>c.newPage())),sockets=[[] as string[],[] as string[]],errors:string[]=[];for(const [i,p]of pages.entries()){p.setDefaultTimeout(180000);p.on('pageerror',e=>errors.push(e.name));p.on('websocket',s=>sockets[i].push(new URL(s.url()).origin));}
+let probing=false;const probe=setInterval(async()=>{if(probing)return;probing=true;try{const clients=await Promise.all(pages.map(p=>p.evaluate(()=>{const root=document.querySelector<HTMLElement>('[data-testid="online-player"]'),canvas=document.querySelector<HTMLCanvasElement>('.race-canvas canvas');return {phase:root?.dataset.phase,route:root?.dataset.route,speed:root?.dataset.speed,x:root?.dataset.x,z:root?.dataset.z,closeCode:root?.dataset.disconnectCode,checkpoint:document.querySelector('[data-testid="checkpoint"]')?.textContent,input:canvas?{throttle:canvas.dataset.throttle,steer:canvas.dataset.steer}:null,physics:(window as unknown as {nexusDriverLastSample?:unknown}).nexusDriverLastSample,recoveries:(window as unknown as {nexusDriverRecoveries?:number}).nexusDriverRecoveries??0}})));fs.writeFileSync('/tmp/nexus-ready-public-probe.json',JSON.stringify({date:new Date().toISOString(),clients}),{mode:0o600})}catch{}finally{probing=false}},10000);const videoClock=Date.now(),videoRanges=[] as {routeId:string,startSeconds:number,endSeconds:number}[];let stage='login';const report={date:new Date().toISOString(),origin,applicationCommit:'d36fc8149a8cade6a62914aaafdadc3395a948d2',webArtifactCommit:'d36fc8149a8cade6a62914aaafdadc3395a948d2',selectionScope:'Ready is clicked immediately after selection. Downtown holds the actual garage POST until Ready is observed disabled, then releases it. Server-confirmed configuration and two real finishes remain mandatory. Driver uses the selected vehicle wheelbase/steering limit and fixed 30Hz keyboard PWM; it never writes game poses, gates or results.',passed:false,driverCruiseMetresPerSecond:12,captureEnabled:process.env.NEXUS_PUBLIC_RECORD==='1',scope:'Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification',routes:[] as unknown[],errors};
+const post=(i:number,url:string,data:unknown)=>pages[i].request.post(origin+url,{headers:{Origin:origin},data});
+try{
+ for(let i=0;i<pages.length;i++){
+  const account=ledger.accounts[i],p=pages[i];assert.equal(account.username,ledger.prefix+(i?'_b':'_a'));
+  await p.goto(origin+'/login');await p.locator('[name="email"]').fill(account.email);await p.locator('[name="password"]').fill(account.password);await p.locator('.auth-submit').click();await p.waitForURL(origin+'/');
+  const data=await(await p.request.get(origin+'/api/console')).json();assert.equal(data.user.id,account.id);
+ }
+ const requested=process.env.NEXUS_PUBLIC_TEST_ROUTES?.split(',');assert(!requested||requested.every(id=>routeRegistry.some(r=>r.routeId===id)));for(const route of [...routeRegistry.filter(r=>r.routeId!=='legacy-circuit'),...routeRegistry.filter(r=>r.routeId==='legacy-circuit')].filter(r=>!requested||requested.includes(r.routeId))){
+  const ids=['pocket-gt','iron-v8'];stage=route.routeId+' garage';console.log(JSON.stringify({stage}));
+  for(let i=0;i<pages.length;i++)assert((await post(i,'/api/garage',{vehicleId:ids[i],paint:i?'violet':'cyan'})).ok());
+  const [a,b]=pages;stage=route.routeId+' room';
+  await a.goto(origin+'/online/midnight-outlaws');await a.getByLabel('Трасса',{exact:true}).selectOption(route.routeId);await a.getByLabel('участников',{exact:true}).selectOption('2');await a.locator('.room-setup > div .button').click();
+  await a.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-ready')==='true');
+  const roomId=await a.getByTestId('online-player').getAttribute('data-room');assert((await post(0,'/api/social',{action:'gameInvite',userId:ledger.accounts[1].id,roomId})).ok());
+  await b.goto(origin+'/online/midnight-outlaws?room='+roomId);await b.getByRole('button',{name:/Приглашение в гонку/}).click();await b.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-ready')==='true');
+  for(let i=0;i<pages.length;i++){
+   let releaseGarage=()=>{};const p=pages[i];if(route.routeId==='downtown-circuit'){let release=()=>{};const hold=new Promise<void>(resolve=>{release=resolve;setTimeout(resolve,10000)});releaseGarage=release;await p.route('**/api/garage',async request=>{if(request.request().method()==='POST')await hold;await request.continue()})}assert.equal(await p.getByTestId('online-player').getAttribute('data-route'),route.routeId);
+   await p.getByLabel('Автомобиль',{exact:true}).selectOption(ids[i]);if(route.routeId==='downtown-circuit'){try{assert(await p.getByRole('button',{name:'Я готов',exact:true}).isDisabled())}finally{releaseGarage()}}await p.waitForFunction(id=>document.querySelector('.race-canvas canvas')?.getAttribute('data-vehicle')===id,ids[i]);
+   await p.getByRole('button',{name:'Я готов',exact:true}).click();
+  }
+  const videoStart=(Date.now()-videoClock)/1000;stage=route.routeId+' driving';console.log(JSON.stringify({stage}));await a.getByRole('button',{name:'Начать заезд',exact:true}).click();
+  await installDriver(a,'gamepad','online',12);await installDriver(b,'keyboard','online',12);
+  for(const p of pages)await p.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-phase')==='racing');
+  const match=await a.getByTestId('online-player').getAttribute('data-match');assert.equal(await b.getByTestId('online-player').getAttribute('data-match'),match);
+  for(const p of pages){await p.waitForFunction(()=>document.querySelector('.race-canvas canvas')?.getAttribute('data-remote-cars')==='1');await p.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-phase')==='results',null,{timeout:300000});await p.getByText('Результаты сохранены',{exact:false}).waitFor()}
+  videoRanges.push({routeId:route.routeId,startSeconds:videoStart,endSeconds:(Date.now()-videoClock)/1000});assert.deepEqual(await a.locator('.result-row').allTextContents(),await b.locator('.result-row').allTextContents());
+  const records=[];
+  for(let i=0;i<pages.length;i++){
+   const social=await(await pages[i].request.get(origin+'/api/social')).json(),record=social.history.find((h:{match:{id:string}})=>h.match.id===match);
+   assert.equal(record?.result?.serverVerified,true);assert.equal(record?.result?.didFinish,true);assert.equal(record.vehicleId,ids[i]);assert.equal(record.vehicleVersion,1);assert.equal(record.match.routeVersion,route.routeVersion);
+   records.push({vehicleId:record.vehicleId,vehicleVersion:record.vehicleVersion,place:record.result.place,timeSeconds:record.result.timeSeconds,serverVerified:true});
+  }
+  assert(sockets.every(s=>s.length&&s.every(origin=>origin==='wss://nexus-multiplayer.onrender.com')));
+  await a.locator('.results-actions button.primary').click();for(const p of pages)await p.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-phase')==='lobby');
+  for(const p of pages){await p.getByRole('button',{name:'Выйти из лобби',exact:true}).click();await p.waitForFunction(()=>document.querySelector('[data-testid="online-player"]')?.getAttribute('data-phase')==='browse')}
+  report.routes.push({routeId:route.routeId,routeVersion:route.routeVersion,matchId:match,records,resultsAgreed:true,rematch:true,explicitRoomLeave:true,wss:true});console.log(JSON.stringify({passed:route.routeId}));
+  fs.writeFileSync('docs/racing-experience/public-routes-progress.json',JSON.stringify(report,null,2)+'\n');
+ }
+ assert.equal(errors.length,0);report.passed=true;
+}catch(error){fs.writeFileSync('/tmp/nexus-experience-public-routes-error-private.txt',error instanceof Error?error.stack??error.message:String(error),{mode:0o600});process.exitCode=1}
+finally{
+ clearInterval(probe);await Promise.all(contexts.map(c=>c.close()));const videoPaths=(await Promise.all(pages.map(p=>p.video()?.path()??null))).filter(Boolean);fs.mkdirSync('storage/racing-experience/public-two-clients',{recursive:true});fs.writeFileSync('storage/racing-experience/public-two-clients/index.json',JSON.stringify({videoPaths,ranges:videoRanges,scope:'Actual public WSS clients, Low DPR0.15; Playwright video has no audio; functional evidence'},null,2));await Promise.all(browsers.map(b=>b.close()));fs.mkdirSync('docs/racing-experience',{recursive:true});fs.writeFileSync('docs/racing-experience/public-routes.json',JSON.stringify({...report,stage},null,2)+'\n');console.log(JSON.stringify({passed:report.passed,routes:report.routes.length,stage}));
+}

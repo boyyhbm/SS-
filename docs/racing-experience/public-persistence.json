@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-27T04:25:35.955Z",
+  "passed": true,
+  "independentAccounts": 2,
+  "webInstanceChanged": true,
+  "gameInstanceChanged": true,
+  "scope": "Exact account-owned libraries, favorites, saves, controller profiles, friendships and prior match history across the readiness-fix rollout. Existing history includes unfinished test attempts; race acceptance is assessed separately."
+}

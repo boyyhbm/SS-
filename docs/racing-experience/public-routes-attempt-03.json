@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-27T03:55:04.919Z",
+  "origin": "https://nexus-web-ylcv.onrender.com",
+  "applicationCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "webArtifactCommit": "02d6f120cc3714a8606abfa7be6c5dd3b3631189",
+  "selectionScope": "This run waits for the visible account-save completion before Ready. The earlier immediate-click failure is preserved separately; idempotent selection and pending-save UI fixes are under separate regression testing.",
+  "passed": false,
+  "scope": "Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification",
+  "routes": [],
+  "errors": [],
+  "stage": "downtown-circuit driving",
+  "diagnosis": "Both clients entered the race and received identical authoritative results, but the second test driver did not finish. End-of-run footage shows the Muscle car creeping at a boundary after checkpoint 3/7, while the first client completed its lap. This attempt does not pass two-finisher acceptance. The test input driver is being adapted to each vehicle steering geometry and controlled keyboard pulse timing; game physics/results are not overridden."
+}

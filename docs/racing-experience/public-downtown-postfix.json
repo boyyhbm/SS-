@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-27T04:45:03.185Z",
+  "origin": "https://nexus-web-ylcv.onrender.com",
+  "applicationCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "webArtifactCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "selectionScope": "Ready is clicked immediately after selection. Downtown holds the actual garage POST until Ready is observed disabled, then releases it. Server-confirmed configuration and two real finishes remain mandatory. Driver uses the selected vehicle wheelbase/steering limit and fixed 30Hz keyboard PWM; it never writes game poses, gates or results.",
+  "passed": true,
+  "driverCruiseMetresPerSecond": 12,
+  "captureEnabled": false,
+  "scope": "Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification",
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 2,
+      "records": [
+        {
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1,
+          "place": 1,
+          "timeSeconds": 58.96666666666588,
+          "serverVerified": true
+        },
+        {
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1,
+          "place": 2,
+          "timeSeconds": 72.3333333333318,
+          "serverVerified": true
+        }
+      ],
+      "resultsAgreed": true,
+      "rematch": true,
+      "explicitRoomLeave": true,
+      "wss": true
+    }
+  ],
+  "errors": [],
+  "stage": "downtown-circuit driving"
+}

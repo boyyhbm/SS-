@@ -1,0 +1,310 @@
+import type { Page } from '@playwright/test';
+import { type Point } from '../src/games/road-network.ts';
+import { getVehicle, vehicleIdSchema } from '../src/games/vehicles/config.ts';
+import { routeRegistry } from '../src/games/route-registry.ts';
+export async function installDriver(
+  page: Page,
+  method: 'gamepad' | 'keyboard' = 'gamepad',
+  kind: 'online' | 'single' = 'online',
+  cruiseSpeed?: number,
+  drivingPath?: Point[],
+) {
+  const selected = vehicleIdSchema.safeParse(await page.locator('.race-canvas canvas').getAttribute('data-vehicle'));
+  const vehicle = getVehicle(selected.success ? selected.data : 'meridian-r6');
+  const vehicleTuning = { wheelbase: vehicle.wheelbase, steeringLimit: vehicle.steeringLimit };
+  const routeId = await page
+    .getByTestId(kind === 'single' ? 'race-player' : 'online-player')
+    .getAttribute('data-route');
+  const densePath = drivingPath?.flatMap((a, i) => {
+    const b = drivingPath[i + 1];
+    if (!b) return [a];
+    const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 0.8));
+    return Array.from({ length: steps }, (_, n) => ({
+      x: a.x + ((b.x - a.x) * n) / steps,
+      z: a.z + ((b.z - a.z) * n) / steps,
+    }));
+  });
+  const registered = routeRegistry.find(
+    (r) => r.routeId === routeId && r.routeId !== 'legacy-circuit',
+  );
+  const route = drivingPath
+    ? { path: densePath!, kind: 'circuit' as const }
+    : registered
+      ? { path: registered.geometry, kind: registered.kind }
+      : undefined;
+  await page.evaluate(
+    ({ method, kind, cruiseSpeed, route, vehicleTuning }) => {
+      const lifecycle = window as unknown as { nexusTestDriverCleanup?: () => void };
+      lifecycle.nexusTestDriverCleanup?.();
+      const button = (value = 0) => ({ pressed: value > 0.2, touched: value > 0.2, value });
+      const fixture = (
+        window as unknown as {
+          nexusTestPads?: {
+            pads: {
+              id: string;
+              index: number;
+              connected: boolean;
+              mapping: string;
+              timestamp: number;
+              axes: number[];
+              buttons: { value: number; pressed: boolean; touched: boolean }[];
+            }[];
+            connected: boolean;
+          };
+        }
+      ).nexusTestPads;
+      const pad = fixture?.pads[0] ?? {
+        id: 'NEXUS automated input device',
+        index: 0,
+        connected: true,
+        mapping: 'standard',
+        timestamp: 0,
+        axes: [0, 0, 0, 0],
+        buttons: Array.from({ length: 18 }, () => button()),
+      };
+      let neutralSamples = 0;
+      if (method === 'gamepad' && !fixture)
+        Object.defineProperty(navigator, 'getGamepads', {
+          configurable: true,
+          value: () => [
+            neutralSamples++ < 3
+              ? { ...pad, axes: [0, 0, 0, 0], buttons: pad.buttons.map(() => button()) }
+              : pad,
+          ],
+        });
+      let driving = false;
+      let duty = 0;
+      let lastTurnSlot = -1, turning = false;
+      let accelerating = true;
+      let reverseUntil = 0, gentleUntil = 0;
+      let latestSample: {x:number;z:number;heading:number;speed:number}|undefined;
+      let progress: {x:number;z:number;at:number}|null = null;
+      let recoveryOrigin = {x:0,z:0};
+      const held = new Set<string>();
+      const key = (code: string, down: boolean) => {
+        if (held.has(code) === down) return;
+        if (down) held.add(code);
+        else held.delete(code);
+        (document.querySelector('canvas') ?? document.body).dispatchEvent(
+          new KeyboardEvent(down ? 'keydown' : 'keyup', {
+            code,
+            key: code.startsWith('Key') ? code.slice(3).toLowerCase() : code,
+            bubbles: true,
+          }),
+        );
+      };
+      const release = () => {
+        for (const code of [...held]) key(code, false);
+      };
+      // The real input manager neutralizes keys on blur. Reset the fixture too,
+      // so its next tick sends a new keydown rather than retaining a stale held bit.
+      window.addEventListener('blur', release);
+      document.addEventListener('visibilitychange', release);
+      function update(sample?: { x: number; z: number; heading: number; speed: number }) {
+        const root = document.querySelector(
+          kind === 'online' ? '[data-testid="online-player"]' : '[data-testid="race-player"]',
+        ) as HTMLElement | null;
+        if (
+          root &&
+          (kind === 'online'
+            ? root.dataset.phase === 'racing'
+            : !document.querySelector('.pause-overlay')) &&
+          !(window as unknown as { nexusDriverPaused?: boolean }).nexusDriverPaused
+        ) {
+          driving = true;
+          const x = sample?.x ?? Number(root.dataset.x),
+            z = sample?.z ?? Number(root.dataset.z),
+            heading = sample?.heading ?? Number(root.dataset.heading),
+            speed =
+              sample?.speed ??
+              (kind === 'online'
+                ? Number(root.dataset.speed)
+                : Number(document.querySelector('[data-testid="speed"]')?.textContent ?? 0) / 3.6);
+          const desired = -Math.atan2(z, x),
+            error = Math.atan2(Math.sin(desired - heading), Math.cos(desired - heading));
+          let steer = Math.max(
+            -1,
+            Math.min(1, -error * 2.8 + (Math.hypot(x, z) - 95) * 0.09 + speed / (95 * 1.12)),
+          );
+          let targetSpeed = cruiseSpeed;
+          if (route) {
+            const path = route.path;
+            let index = 0,
+              minimum = Infinity;
+            for (let i = 1; i < path.length; i++) {
+              const a = path[i - 1],
+                b = path[i],
+                dx = b.x - a.x,
+                dz = b.z - a.z,
+                t = Math.max(
+                  0,
+                  Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz || 1)),
+                ),
+                d = Math.hypot(x - a.x - dx * t, z - a.z - dz * t);
+              if (d < minimum) {
+                minimum = d;
+                index = i - 1;
+              }
+            }
+            let remaining = 8 + speed * 0.4,
+              target = path[index],
+              i = index,
+              wraps = 0;
+            while (remaining > 0) {
+              if (i >= path.length - 1) {
+                if (route.kind === 'circuit' && wraps++ < 1) i = 0;
+                else break;
+              }
+              const a = path[i],
+                b = path[++i],
+                len = Math.hypot(b.x - a.x, b.z - a.z);
+              if (remaining < len) {
+                target = {
+                  x: a.x + ((b.x - a.x) * remaining) / len,
+                  z: a.z + ((b.z - a.z) * remaining) / len,
+                };
+                break;
+              }
+              remaining -= len;
+              target = b;
+            }
+            const angle = Math.atan2(target.x - x, target.z - z),
+              err = Math.atan2(Math.sin(angle - heading), Math.cos(angle - heading)),
+              look = Math.max(4, Math.hypot(target.x - x, target.z - z));
+            steer = Math.max(
+              -1,
+              Math.min(
+                1,
+                -Math.atan2(2 * vehicleTuning.wheelbase * Math.sin(err), look) / (vehicleTuning.steeringLimit / (1 + Math.abs(speed) / 14)),
+              ),
+            );
+            if (Math.abs(err)>Math.PI/2) steer=-Math.sign(err);
+            const override =
+              (window as unknown as { nexusDriverCruiseSpeed?: number }).nexusDriverCruiseSpeed ??
+              cruiseSpeed ??
+              27;
+            targetSpeed = Math.min(
+              override,
+              Math.abs(err)>Math.PI/2 ? 6 : Math.abs(err) > 0.55 ? 10 : Math.abs(err) > 0.22 ? 17 : override,
+            );
+          }
+          const now = performance.now();
+          // A contact can retain wheel speed while body translation is blocked.
+          // Detect body progress, rather than treating wheel speed as movement.
+          if (route && now > gentleUntil && (targetSpeed ?? 0) > 4) {
+            if (!progress) progress = {x,z,at:now};
+            if (now-progress.at > 2000) {
+              if (Math.hypot(x-progress.x,z-progress.z) < Math.min(vehicleTuning.wheelbase,(targetSpeed ?? 0)*0.25)) {
+                reverseUntil=now+4000; gentleUntil=reverseUntil+3000;
+                recoveryOrigin={x,z};
+                const w=window as unknown as {nexusDriverRecoveries?:number};
+                w.nexusDriverRecoveries=(w.nexusDriverRecoveries??0)+1;
+              }
+              progress={x,z,at:now};
+            }
+          } else progress=null;
+          const reversing = now < reverseUntil;
+          if (reversing) steer = Math.hypot(x-recoveryOrigin.x,z-recoveryOrigin.z) < vehicleTuning.wheelbase ? 0 : -steer;
+          else if (now < gentleUntil) targetSpeed = Math.min(targetSpeed ?? 10, 10);
+          if (method === 'gamepad') {
+            const boosting =
+              !!route &&
+              (window as unknown as { nexusDriverNitro?: boolean }).nexusDriverNitro === true;
+            if (route) pad.buttons[0] = button(boosting && !reversing ? 1 : 0);
+            // Public WAN checks can opt into a calmer pace for software rendering.
+            // The default retains the full-throttle local integration fixture.
+            pad.axes[0] =
+              targetSpeed === undefined
+                ? steer
+                : Math.abs(steer) < 0.001
+                  ? 0
+                  : Math.sign(steer) * (0.15 + Math.abs(steer) * 0.85);
+            pad.buttons[7] = button(
+              reversing || targetSpeed === 0
+                ? 0
+                : targetSpeed === undefined
+                  ? 1
+                  : Math.max(
+                      0,
+                      Math.min(
+                        1,
+                        (route
+                          ? (0.8 + 0.0055 * targetSpeed * targetSpeed) / (boosting ? 17 : 10)
+                          : 0.2) +
+                          (targetSpeed - speed) * (route ? 0.22 : 0.15),
+                      ),
+                    ),
+            );
+            pad.buttons[6] = button(
+              reversing
+                ? 1
+                : targetSpeed === 0
+                  ? speed > 0.05
+                    ? 1
+                    : 0
+                  : route && targetSpeed !== undefined && speed > targetSpeed + 2
+                    ? Math.min(1, (speed - targetSpeed) * 0.12)
+                    : 0,
+            );
+          } else {
+            // One PWM decision per physics-sized time slot; timer and telemetry
+            // callbacks must not advance the same keyboard duty cycle twice.
+            const slot = Math.floor(now * 30 / 1000);
+            if (slot !== lastTurnSlot) {
+              duty += Math.abs(steer);
+              turning = duty >= 1;
+              if (turning) duty -= 1;
+              lastTurnSlot = slot;
+            }
+            const turn = turning;
+            if (targetSpeed === undefined || speed < targetSpeed - 1) accelerating = true;
+            else if (speed > targetSpeed + 2) accelerating = false;
+            key('KeyW', !reversing && accelerating);
+            key(
+              'KeyS',
+              reversing || (targetSpeed !== undefined && speed > targetSpeed + (route ? 2 : 7)),
+            );
+            key('KeyD', turn && steer > 0);
+            key('KeyA', turn && steer < 0);
+          }
+        } else if (driving) {
+          // Release our driving input once on leaving the race/pause transition.
+          // Repeated neutral writes would erase real UI confirmation presses.
+          driving = false;
+          pad.buttons[7] = button();
+          pad.buttons[6] = button();
+          if (route) pad.buttons[0] = button();
+          pad.axes[0] = 0;
+          for (const code of ['KeyW', 'KeyA', 'KeyD', 'KeyS']) key(code, false);
+        }
+        pad.timestamp = performance.now();
+      }
+      update();
+      const simulationListener = (event: Event) => {latestSample=(event as CustomEvent).detail;(window as unknown as {nexusDriverLastSample:unknown}).nexusDriverLastSample=latestSample;update(latestSample)};
+      if (route) {
+        const canvas = document.querySelector<HTMLElement>('.race-canvas');
+        if (canvas) canvas.dataset.instrumentation = 'true';
+        window.addEventListener('nexus-simulation-tick', simulationListener);
+      }
+      const timer = setInterval(()=>update(latestSample), 1000 / 30);
+      lifecycle.nexusTestDriverCleanup = () => {
+        clearInterval(timer);
+        window.removeEventListener('nexus-simulation-tick', simulationListener);
+        window.removeEventListener('blur', release);
+        document.removeEventListener('visibilitychange', release);
+        release();
+        pad.axes[0] = 0;
+        pad.buttons[6] = button();
+        pad.buttons[7] = button();
+        if (route) pad.buttons[0] = button();
+      };
+    },
+    {
+      method,
+      kind,
+      vehicleTuning,
+      cruiseSpeed: cruiseSpeed ?? (kind === 'single' ? 18 : undefined),
+      route: route ? { path: route.path, kind: route.kind } : null,
+    },
+  );
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-27T03:32:43.783Z",
+  "scope": "Fresh real account on public HTTPS production, mobile viewport",
+  "stage": "complete",
+  "passed": true,
+  "checks": [
+    "Actual registration HTTP201",
+    "New personal library empty",
+    "Secure HTTP-only session cookie",
+    "Authenticated game add",
+    "Logout removes session",
+    "Login restores same account and library",
+    "390px mobile layout fits"
+  ]
+}

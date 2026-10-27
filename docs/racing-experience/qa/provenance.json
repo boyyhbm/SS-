@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-27T05:07:26.548Z",
+  "scope": "Exact sources used for the public functional verification. The common input driver and main acceptance harness cover the city and five-route executions; the legacy variant additionally waits for each ready acknowledgement and observes bounded socket diagnostics. All use normal input and read-only state observation. Private ledger paths are references, not credentials; credential files and raw diagnostics are not published. These text artifacts are not loaded by the application.",
+  "records": [
+    {
+      "file": "public-input-driver.ts.txt",
+      "sha256": "5467ea8067fa2380ec726551c718fed0d7411fbe12630e07394f5774443fb344"
+    },
+    {
+      "file": "public-acceptance.ts.txt",
+      "sha256": "80175e7f05e8ba175e58e3d30e8990ef3d26149cc8f038d766b1b8b1d349e5c4"
+    },
+    {
+      "file": "public-legacy-acceptance.ts.txt",
+      "sha256": "c7e4ca5fcbccbdef5c4df907aacad9a202d8eb3bc66b4a30b09c4c0eb0e43fff",
+      "scope": "Successful separate legacy retry; read-only socket diagnostics are retained privately, not published."
+    }
+  ],
+  "updatedAt": "2026-10-27T05:39:20.275Z"
+}

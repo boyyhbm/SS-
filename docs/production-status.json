@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T16:51:26.987Z",
+  "updatedAt": "2026-10-27T05:37:56.696Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -39,9 +39,9 @@
     }
   },
   "publicAcceptanceTests": {
-    "status": "PASSED_ALL_FOUR_ROUTES_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
-    "report": "graphics-next/production.json",
-    "historicalReport": "gameplay-update/public-tests.json"
+    "status": "PASSED_ALL_SEVEN_ROUTES_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
+    "report": "racing-experience/production.json",
+    "historicalReport": "graphics-next/production.json"
   },
   "physicalControllers": "UNVERIFIED",
   "blockers": [],
@@ -83,32 +83,35 @@
     "branch": "main",
     "checksOnApplicationCommit": "SUCCESS",
     "autoDeployTrigger": "checksPass",
-    "observedAutomaticTrigger": "new_commit after passing checks; both services reached LIVE and readiness 200",
-    "lastVerifiedCodeCommit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+    "observedAutomaticTrigger": "Both d36 services deployed automatically after the full GitHub checks passed; public readiness and canonical account persistence verified.",
+    "lastVerifiedCodeCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
     "checksOnLastVerifiedCodeCommit": "SUCCESS",
-    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40331058589"
+    "checksRun": "https://github.com/boyyhbm/SS-/actions/runs/40446481908"
   },
   "knownLimitations": [
-    "Physical controllers, Safari/Firefox and geographically separate computers not tested",
-    "Active rooms are lost during a multiplayer process restart; completed results and accounts remain durable",
-    "Rollout readiness is not instantaneous; an initial probe received a non-success response, then stable new-instance readiness and persistence passed",
-    "Private vehicle contacts remain disabled for visitors; higher-DPR software-browser contact attempt lost a connection; cause unresolved",
-    "City facade resolution, sparse blocks and dynamic traffic remain prototype limitations",
-    "Current software-only render measurements: graphics-next/performance.md and graphics-next/post-cpu-performance.md; no physical gaming GPU or reliable 1% low certification",
-    "Latest public route verification passed functionally across three separate executions at conservative input-driver speeds; software renderer still showed multi-second frame spikes, not smooth gameplay certification"
+    "Five additional vehicle models and track props are stylized CC0 assets, not the requested high-detail visual quality; the Muscle archetype currently uses a generic sedan body.",
+    "Engine and ambient audio are original synthesis, not professional field recordings. Physical speaker/headphone output was not tested.",
+    "Public car-to-car contacts remain OFF. New-track synchronized vehicle contacts are not released. City private contacts remain gated.",
+    "No physical gaming GPU/controller, geographically separate computers or Safari/Firefox certification. The actual native-resolution SwiftShader captures are severely GPU limited; 1080p/60 FPS is unverified.",
+    "Road-bound arcade physics has no airborne/rollover simulation, full cockpit interior, traffic or weather system.",
+    "Active rooms are lost during a multiplayer process restart; existing accounts, saves and completed results were checked across actual deployments.",
+    "The public seven-route evidence uses three executions, conservative automated input and no video encoding. Published gameplay recordings are separate actual runtime captures.",
+    "Two earlier legacy lobby preparations did not reach both ready. A separately acknowledged retry passed; the cause of those earlier setup failures was not established."
   ],
   "latestVerifiedRollout": {
     "web": {
-      "status": "live",
-      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
-      "trigger": "new_commit",
-      "healthStatus": 200
+      "status": "LIVE",
+      "commit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+      "deployId": "dep-dbg2cpq9lscs738siq9g",
+      "healthStatus": 200,
+      "trigger": "new_commit"
     },
     "multiplayer": {
-      "status": "live",
-      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
-      "trigger": "new_commit",
-      "healthStatus": 200
+      "status": "LIVE",
+      "commit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+      "deployId": "dep-dbg2cq29lscs738siqh0",
+      "healthStatus": 200,
+      "trigger": "new_commit"
     }
   },
   "worldUpdate": {
@@ -137,7 +140,9 @@
     "gameplayVideo": "gameplay-update/gameplay.mp4",
     "multiplayerVideo": "gameplay-update/multiplayer.mp4",
     "screenshots": "gameplay-update/gallery.md",
-    "fullVisualAndHardwareAcceptanceComplete": false
+    "fullVisualAndHardwareAcceptanceComplete": false,
+    "historical": true,
+    "supersededBy": "racing-experience/production.json"
   },
   "graphicsUpdate": {
     "report": "graphics-next/validation.json",
@@ -148,6 +153,32 @@
     "fullVisualAndHardwareAcceptanceComplete": false,
     "publicVehicleContactsEnabled": false,
     "publicRouteExecutions": 3,
-    "continuousFourRouteAttemptPassed": false
+    "continuousFourRouteAttemptPassed": false,
+    "historical": true,
+    "supersededBy": "racing-experience/production.json"
+  },
+  "previousVerifiedRollout": {
+    "web": {
+      "status": "live",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    },
+    "multiplayer": {
+      "status": "live",
+      "commit": "83ece467f0fd7a4d96729d8903e394bfebb5c198",
+      "trigger": "new_commit",
+      "healthStatus": 200
+    }
+  },
+  "racingExperience": {
+    "report": "racing-experience/production.json",
+    "sourceCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+    "vehicles": 6,
+    "locations": 4,
+    "publicRoutesPassed": 7,
+    "publicEvidenceUrl": "https://nexus-web-ylcv.onrender.com/reports/racing-experience/index.html",
+    "fullVisualAndHardwareAcceptanceComplete": false,
+    "publicVehicleContactsEnabled": false
   }
 }

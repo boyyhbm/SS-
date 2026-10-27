@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-27T04:22:57.611Z",
+  "applicationCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "passed": true,
+  "unitTests": 147,
+  "messageHandlerRegressions": 3,
+  "realServerDuplicateSelectionRace": "ready-selection-integration.json",
+  "browserDelayedGarageSave": {
+    "passed": true,
+    "delayMs": 750,
+    "durationMinutes": 1.6,
+    "independentClients": 2
+  },
+  "publicDriverLocalValidation": {
+    "passed": true,
+    "durationMinutes": 1.9,
+    "sourceSha256": "af7aa1e3f607150a8f0ca905f56936eea0057eb47438081ae980023cd3abc6f8",
+    "vehicles": ["pocket-gt", "iron-v8"],
+    "inputMethods": ["virtual Gamepad API", "keyboard"],
+    "geometryFromVehicleConfig": true,
+    "keyboardPwmHz": 30,
+    "normalInputsOnly": true
+  },
+  "scope": "Current application production build in isolated worktree, disposable local database; public deployment acceptance is separate. No physical controller or GPU performance claim."
+}

@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-27T03:33:04.821Z",
+  "origin": "https://nexus-web-ylcv.onrender.com",
+  "passed": false,
+  "scope": "Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification",
+  "routes": [],
+  "errors": [],
+  "stage": "downtown-circuit driving",
+  "diagnosis": "Initial public harness selected an already active vehicle, then immediately pressed Ready while its account save was still pending. Late duplicate vehicle/paint messages cleared both readiness flags. Start remained disabled; no race started. Fix: idempotent server selections and disable Ready until account save plus authoritative selection acknowledgement."
+}

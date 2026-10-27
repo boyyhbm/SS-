@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-27T04:25:38.342Z",
+  "origin": "https://nexus-web-ylcv.onrender.com",
+  "applicationCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "webArtifactCommit": "d36fc8149a8cade6a62914aaafdadc3395a948d2",
+  "selectionScope": "Ready is clicked immediately after selection. Downtown holds the actual garage POST until Ready is observed disabled, then releases it. Server-confirmed configuration and two real finishes remain mandatory. Driver uses the selected vehicle wheelbase/steering limit and fixed 30Hz keyboard PWM; it never writes game poses, gates or results.",
+  "passed": false,
+  "scope": "Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification",
+  "routes": [],
+  "errors": [],
+  "stage": "downtown-circuit driving",
+  "diagnosis": "Ready/save regression passed on deployed d36: both started and agreed on results, but neither finished the acceptance run. The input fixture advanced keyboard PWM from two callbacks, mixed fresh simulation samples with stale DOM coordinates, and used wheel speed to detect blockage. The next harness caches the newest read-only simulation sample, measures body translation for recovery and omits video encoding for the functional pass. Game poses/results are never injected."
+}

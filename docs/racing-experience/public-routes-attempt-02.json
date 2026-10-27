@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-27T03:46:49.234Z",
+  "origin": "https://nexus-web-ylcv.onrender.com",
+  "applicationCommit": "4df492e21d723ff6c95f59c3a0c7f0c96077e6b6",
+  "webArtifactCommit": "02d6f120cc3714a8606abfa7be6c5dd3b3631189",
+  "selectionScope": "This run waits for the visible account-save completion before Ready. The earlier immediate-click failure is preserved separately; idempotent selection and pending-save UI fixes are under separate regression testing.",
+  "passed": false,
+  "scope": "Two independent authenticated Chromium processes on public HTTPS/WSS; software GPU and DPR0.15, functional evidence, not gaming-PC performance or physical controller certification",
+  "routes": [
+    {
+      "routeId": "downtown-circuit",
+      "routeVersion": 2,
+      "records": [
+        {
+          "vehicleId": "pocket-gt",
+          "vehicleVersion": 1,
+          "place": 1,
+          "timeSeconds": 48.79999999999979,
+          "serverVerified": true
+        },
+        {
+          "vehicleId": "iron-v8",
+          "vehicleVersion": 1,
+          "place": 2,
+          "timeSeconds": 88.16666666666423,
+          "serverVerified": true
+        }
+      ],
+      "resultsAgreed": true,
+      "rematch": true,
+      "wss": true
+    }
+  ],
+  "errors": [],
+  "stage": "midnight-sprint room",
+  "diagnosis": "The first public race and rematch passed. The harness then hard-navigated away without explicitly leaving the lobby. The existing one-room-per-user/reconnection rule correctly refused a second room while the other client remained in the previous lobby. The test now uses Leave Room for both clients before creating the next room."
+}

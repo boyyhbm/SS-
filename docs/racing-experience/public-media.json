@@ -1,0 +1,301 @@
+{
+  "date": "2026-10-27T04:51:50.990Z",
+  "passed": true,
+  "url": "https://nexus-web-ylcv.onrender.com/reports/racing-experience/index.html",
+  "records": [
+    {
+      "file": "capture-high-garage.json",
+      "status": 200,
+      "bytes": 793,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-high-stills.json",
+      "status": 200,
+      "bytes": 33313,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-apex-r.json",
+      "status": 200,
+      "bytes": 18741,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-iron-v8.json",
+      "status": 200,
+      "bytes": 18499,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-meridian-r6.json",
+      "status": 200,
+      "bytes": 18564,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-nova-x.json",
+      "status": 200,
+      "bytes": 18357,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-pocket-gt.json",
+      "status": 200,
+      "bytes": 19639,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video-vector-rs.json",
+      "status": 200,
+      "bytes": 15975,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-low-video.json",
+      "status": 200,
+      "bytes": 88033,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-online-two-clients.json",
+      "status": 200,
+      "bytes": 1183,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "capture-ultra-stills.json",
+      "status": 200,
+      "bytes": 9048,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "clips/apex-r-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 816450,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/coastline-run-low.mp4",
+      "status": 200,
+      "bytes": 1117514,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/downtown-circuit-low.mp4",
+      "status": 200,
+      "bytes": 1482066,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/eagle-ridge-low.mp4",
+      "status": 200,
+      "bytes": 1404890,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/iron-v8-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 853769,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/meridian-r6-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 805077,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/nova-x-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 886052,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/pocket-gt-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 913372,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/vector-rs-velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 734838,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/velocity-circuit-low.mp4",
+      "status": 200,
+      "bytes": 1263742,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "clips/velocity-two-clients-functional.mp4",
+      "status": 200,
+      "bytes": 7460590,
+      "sha256Matches": true,
+      "contentType": "video/mp4"
+    },
+    {
+      "file": "evidence.json",
+      "status": 200,
+      "bytes": 13510,
+      "sha256Matches": true,
+      "contentType": "application/json; charset=UTF-8"
+    },
+    {
+      "file": "images/apex-r-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 605092,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/coastline-run-high.png",
+      "status": 200,
+      "bytes": 849065,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/coastline-run-low.png",
+      "status": 200,
+      "bytes": 582896,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/downtown-circuit-high.png",
+      "status": 200,
+      "bytes": 1135557,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/downtown-circuit-low.png",
+      "status": 200,
+      "bytes": 760173,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/eagle-ridge-high.png",
+      "status": 200,
+      "bytes": 836951,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/eagle-ridge-low.png",
+      "status": 200,
+      "bytes": 588536,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/garage-high.png",
+      "status": 200,
+      "bytes": 219092,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/iron-v8-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 589929,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/meridian-r6-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 614387,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/nova-x-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 600513,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/pocket-gt-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 590455,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/vector-rs-velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 591766,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/velocity-circuit-high.png",
+      "status": 200,
+      "bytes": 828628,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/velocity-circuit-low.png",
+      "status": 200,
+      "bytes": 571050,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/velocity-circuit-ultra.png",
+      "status": 200,
+      "bytes": 833522,
+      "sha256Matches": true,
+      "contentType": "image/png"
+    },
+    {
+      "file": "images/velocity-two-clients-functional.jpg",
+      "status": 200,
+      "bytes": 51041,
+      "sha256Matches": true,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "bytes": 11422,
+      "sha256Matches": true,
+      "contentType": "text/html; charset=UTF-8"
+    },
+    {
+      "file": "style.css",
+      "status": 200,
+      "bytes": 1142,
+      "sha256Matches": true,
+      "contentType": "text/css; charset=UTF-8"
+    }
+  ]
+}
