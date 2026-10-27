@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-27T14:51:13.498Z",
+  "scope": "Exact Forge engine source hashes in the isolated production build used by native High/Ultra capture and the first completed browser duel. Later changes preload account settings and refresh committed statistics; capture imagery remains an actual runtime render.",
+  "files": [
+    {
+      "file": "src/games/fold/animation.ts",
+      "sha256": "eea0e668b18509eec694d0ec3343e9809c5246e24a8d8a6c97de4f79dc44a910"
+    },
+    {
+      "file": "src/games/fold/arena-system.ts",
+      "sha256": "886f7b48e27fd61f03fabcb06089b5126dc914dc513c02f8c7771310227502d5"
+    },
+    {
+      "file": "src/games/fold/arena.ts",
+      "sha256": "0f326d55c5d0f63e8db860e120ed6f72f2dfa501485198a354dca7c57bb5d329"
+    },
+    {
+      "file": "src/games/fold/assets.ts",
+      "sha256": "c46a9eb87db5a6d2296dd0af0c23a90d7f8db948d90de92a65463d9803a5a036"
+    },
+    {
+      "file": "src/games/fold/audio.ts",
+      "sha256": "ef2473e22ea453f6f03f0db0b84ccf5cce792d4a115c205befaca8053ead01da"
+    },
+    {
+      "file": "src/games/fold/camera.ts",
+      "sha256": "3e6d1ecfa2c3b05f1cd81302e14564c63ece3777a6daa286eddd4f4c1db489bf"
+    },
+    {
+      "file": "src/games/fold/combat.ts",
+      "sha256": "a5256b0e44248d38566062d57287e4e51011848ea9eb8223a178b10ee89f0485"
+    },
+    {
+      "file": "src/games/fold/config.ts",
+      "sha256": "e31345c4f97a31db9322aa76bd8356a6c699f9cebc73e846588ba792761edd44"
+    },
+    {
+      "file": "src/games/fold/contracts.ts",
+      "sha256": "3571d245396fbc4be39825290efe9c93b8e5ac16c94e65325213f66ceaa98ae8"
+    },
+    {
+      "file": "src/games/fold/effects.ts",
+      "sha256": "f1f0701434ec0b0a76806f30308d5fba33921f132970c3dfac7abe0ec6ddca75"
+    },
+    {
+      "file": "src/games/fold/input.ts",
+      "sha256": "2dafcddb62eaf5dd30edc252bcbab18df16513a13b364a5bbb05817e726cc1a9"
+    },
+    {
+      "file": "src/games/fold/networking.ts",
+      "sha256": "4d0edeaeaaf5814e2c910e042e4c506cf198fb2721e494837ad3b796769fbe24"
+    },
+    {
+      "file": "src/games/fold/performance.ts",
+      "sha256": "6367f9f563393b8c29046eb5be58864b302824db466e76951b55b6a92dc8d5a4"
+    },
+    {
+      "file": "src/games/fold/physics.ts",
+      "sha256": "1054061f6488461d4557a182df84743c5aa94224f14046eb3f73f494034c0366"
+    },
+    {
+      "file": "src/games/fold/prediction.ts",
+      "sha256": "c1138365d17ff8d2ade263d6438b65635f734d663e9e6636b05019192c32cef1"
+    },
+    {
+      "file": "src/games/fold/renderer.ts",
+      "sha256": "bbac1105c8636a2f71a00733011f95db90720203a354ee4b2bb238d1ed8cf211"
+    },
+    {
+      "file": "src/games/fold/runtime.ts",
+      "sha256": "24a89a7b32e9afbfff6305e1abccd2d4337e89622fe2325cea5fe3929e430183"
+    },
+    {
+      "file": "src/games/fold/settings.ts",
+      "sha256": "de02e9cb02196e0af4434dab5001facb3acd07b9135a0b400f8f84ecc8fcf8bd"
+    },
+    {
+      "file": "src/games/fold/simulation.ts",
+      "sha256": "ef3829bb5426dfa78c2b315ac706ed529a8e16f52690435d1603142ee27a4fdb"
+    },
+    {
+      "file": "src/games/fold/ui-bridge.ts",
+      "sha256": "09e04bd28a6c8b9a570a37507e5c377f80201ed396c7dc3e4bec02e9370a9929"
+    }
+  ]
+}

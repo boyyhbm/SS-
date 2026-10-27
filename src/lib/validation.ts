@@ -54,14 +54,18 @@ export const gameSchema = z
     title: z.string().trim().min(2).max(80),
     description: z.string().trim().min(10).max(4000),
     descriptionEn: z.string().trim().min(10).max(4000),
-    genre: z.enum(['racing', 'adventure', 'exploration', 'puzzle']),
+    genre: z.enum(['racing', 'shooter', 'adventure', 'exploration', 'puzzle']),
     cover: assetSchema,
     banner: assetSchema,
     status: z.enum(['DRAFT', 'COMING_SOON', 'AVAILABLE']),
-    runtimeKey: z.enum(['midnight-outlaws', '']).nullable(),
+    runtimeKey: z.enum(['midnight-outlaws', 'fold-zero', '']).nullable(),
     sortOrder: z.number().int().min(0).max(10000),
     published: z.boolean(),
   })
-  .refine((v) => v.status !== 'AVAILABLE' || v.runtimeKey === 'midnight-outlaws', {
-    message: 'runtimeRequired',
-  });
+  .refine(
+    (v) =>
+      v.status !== 'AVAILABLE' || ['midnight-outlaws', 'fold-zero'].includes(v.runtimeKey ?? ''),
+    {
+      message: 'runtimeRequired',
+    },
+  );

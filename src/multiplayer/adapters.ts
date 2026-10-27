@@ -1,5 +1,11 @@
 import { initialNetworkRace, stepNetworkRace, simulateNetworkGroup } from '../games/network-racing';
 import type { MultiplayerAdapter } from './contracts';
+import { foldCapabilities } from '../games/fold/config';
+export function multiplayerCapabilities(runtimeKey: string) {
+  return runtimeKey === 'fold-zero'
+    ? foldCapabilities
+    : multiplayerAdapters[runtimeKey]?.capabilities;
+}
 export const multiplayerAdapters: Record<string, MultiplayerAdapter> = {
   'midnight-outlaws': {
     capabilities: {

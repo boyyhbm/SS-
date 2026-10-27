@@ -2,8 +2,9 @@ import { notFound, redirect } from 'next/navigation';
 import { currentUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { isPlayable } from '@/games/registry';
-import { multiplayerAdapters } from '@/multiplayer/adapters';
+import { multiplayerCapabilities } from '@/multiplayer/adapters';
 import { OnlinePlayer } from '@/components/online-player';
+import { FoldPlayer } from '@/components/fold-player';
 export default async function OnlinePage({
   params,
   searchParams,
@@ -23,9 +24,29 @@ export default async function OnlinePage({
     !entry ||
     !isPlayable(entry.game) ||
     !entry.game.runtimeKey ||
-    !multiplayerAdapters[entry.game.runtimeKey]?.capabilities.onlineMultiplayer
+    !multiplayerCapabilities(entry.game.runtimeKey)?.onlineMultiplayer
   )
     notFound();
+  if (entry.game.runtimeKey === 'fold-zero') {
+    const settings = await db.gameSave.findUnique({
+      where: {
+        userId_gameId_saveKey: {
+          userId: user.id,
+          gameId: entry.gameId,
+          saveKey: 'forge-settings-v1',
+        },
+      },
+    });
+    return (
+      <FoldPlayer
+        gameId={entry.gameId}
+        title={entry.game.title}
+        language={user.settings?.language === 'en' ? 'en' : 'ru'}
+        initialSaves={settings ? { 'forge-settings-v1': settings.saveData } : {}}
+        initialRoom={query.room?.slice(0, 64)}
+      />
+    );
+  }
   return (
     <OnlinePlayer
       gameId={entry.gameId}

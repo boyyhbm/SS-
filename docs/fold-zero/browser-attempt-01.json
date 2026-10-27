@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-27T13:39:05.085Z",
+  "passed": false,
+  "independentAccounts": 2,
+  "independentBrowserProcesses": 2,
+  "realVideo": true,
+  "scope": "Virtual standard Gamepad API and normal keyboard/Pointer Lock mouse events; read-only server-state observations, no pose/health/result injection. Not physical hardware or real-player skill testing.",
+  "inputMethods": ["virtual gamepad", "keyboard / mouse"],
+  "checks": ["NEXUS registration, personal library, runtime launch and saved settings"],
+  "performance": [],
+  "errors": []
+}

@@ -44,7 +44,7 @@ import { Modal } from './modal';
 import { AdminPanel } from './admin-panel';
 import { SocialHub, SocialPresence, FriendsDrawer } from './social-hub';
 import { multiplayerText } from '@/multiplayer/i18n';
-import { multiplayerAdapters } from '@/multiplayer/adapters';
+import { multiplayerCapabilities } from '@/multiplayer/adapters';
 import { updatePreferencesAction } from '@/app/actions';
 export type ConsoleView =
   'home' | 'discover' | 'library' | 'game' | 'profile' | 'admin' | 'friends' | 'controllers';
@@ -242,7 +242,7 @@ export function Console({
         {entry &&
           playable &&
           target.runtimeKey &&
-          multiplayerAdapters[target.runtimeKey]?.capabilities.onlineMultiplayer && (
+          multiplayerCapabilities(target.runtimeKey)?.onlineMultiplayer && (
             <Link
               className="button online-action"
               onClick={() => rememberReturn(location.pathname, target.id)}
@@ -543,7 +543,7 @@ export function Console({
                     )}
                   </label>
                   <div className="genre-tabs">
-                    {['all', 'racing', 'adventure', 'exploration', 'puzzle'].map((g) => (
+                    {['all', 'racing', 'shooter', 'adventure', 'exploration', 'puzzle'].map((g) => (
                       <button
                         className={genre === g ? 'selected' : ''}
                         key={g}

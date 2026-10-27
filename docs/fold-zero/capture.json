@@ -1,0 +1,330 @@
+{
+  "date": "2026-10-27T14:36:36.306Z",
+  "scope": "Actual running Foundry main-menu environment, native CSS/DPR1, software GPU. These are not combat screenshots or a gaming-PC benchmark.",
+  "hardware": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "memoryBytes": 35743760384
+  },
+  "presets": [
+    {
+      "quality": "high",
+      "viewport": {
+        "width": 1280,
+        "height": 720,
+        "dpr": 1
+      },
+      "renderBuffer": {
+        "width": 1280,
+        "height": 720
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "samples": [
+        {
+          "fps": 0,
+          "frameMs": 0,
+          "onePercentLow": 0,
+          "p99Ms": 0,
+          "physicsMs": 0,
+          "renderMs": 548.9000000059605,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.4196039025211782,
+          "frameMs": 2383.199951171875,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0,
+          "renderMs": 11.699999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.5333760103591622,
+          "frameMs": 1874.8499755859375,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.7000000178813934,
+          "renderMs": 6.800000011920929,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.5980384455789395,
+          "frameMs": 1672.13330078125,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 2.2000000178813934,
+          "renderMs": 4.300000011920929,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6504382379237491,
+          "frameMs": 1537.4249877929688,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 7.5,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6834055533608678,
+          "frameMs": 1463.2599853515626,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 4.699999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6936736978513912,
+          "frameMs": 1441.5999959309895,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 5.199999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.717985537719883,
+          "frameMs": 1392.7857142857142,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0,
+          "renderMs": 5.9000000059604645,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.7396312971389961,
+          "frameMs": 1352.0249938964844,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0,
+          "renderMs": 7.5,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.7297612913084873,
+          "frameMs": 1370.3111029730903,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 5.200000017881393,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.7194606960562673,
+          "frameMs": 1389.9299926757812,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 5.5,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.7182031919346623,
+          "frameMs": 1392.3636252663352,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 6.699999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6923409828076896,
+          "frameMs": 1444.3749898274739,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 15.900000005960464,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6824433633238406,
+          "frameMs": 1465.3230637770432,
+          "onePercentLow": 0.4196039025211782,
+          "p99Ms": 2383.199951171875,
+          "physicsMs": 0.20000001788139343,
+          "renderMs": 18,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6471773886486041,
+          "frameMs": 1545.1714128766741,
+          "onePercentLow": 0.38711676173048376,
+          "p99Ms": 2583.199951171875,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 2.699999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.6374217617698413,
+          "frameMs": 1568.8199869791667,
+          "onePercentLow": 0.38711676173048376,
+          "p99Ms": 2583.199951171875,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 4.199999988079071,
+          "drawCalls": 45
+        }
+      ]
+    },
+    {
+      "quality": "ultra",
+      "viewport": {
+        "width": 1280,
+        "height": 720,
+        "dpr": 1
+      },
+      "renderBuffer": {
+        "width": 1536,
+        "height": 864
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "samples": [
+        {
+          "fps": 0,
+          "frameMs": 0,
+          "onePercentLow": 0,
+          "p99Ms": 0,
+          "physicsMs": 0,
+          "renderMs": 779.2000000178814,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.3157961122846384,
+          "frameMs": 3166.60009765625,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 3.199999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.41380451247456185,
+          "frameMs": 2416.6000366210938,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 11.200000017881393,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.43063849183026603,
+          "frameMs": 2322.133341471354,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 3.0999999940395355,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.45284215179899656,
+          "frameMs": 2208.2749938964844,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.4000000059604645,
+          "renderMs": 4,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.4784826381009417,
+          "frameMs": 2089.939990234375,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 28.80000001192093,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.4838865779390978,
+          "frameMs": 2066.5999959309897,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.19999998807907104,
+          "renderMs": 9.5,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.500017857780635,
+          "frameMs": 1999.9285714285713,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.20000001788139343,
+          "renderMs": 3.9000000059604645,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.5015862658002334,
+          "frameMs": 1993.6750030517578,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 7.699999988079071,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.49226864543777277,
+          "frameMs": 2031.4111192491318,
+          "onePercentLow": 0.3157961122846384,
+          "p99Ms": 3166.60009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 5.299999982118607,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.4528472747524416,
+          "frameMs": 2208.2500122070314,
+          "onePercentLow": 0.26317174249955716,
+          "p99Ms": 3799.800048828125,
+          "physicsMs": 0.10000002384185791,
+          "renderMs": 28.100000023841858,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.4174731469520256,
+          "frameMs": 2395.3636474609375,
+          "onePercentLow": 0.23438415563107934,
+          "p99Ms": 4266.5,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 20.100000023841858,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.37462420252450235,
+          "frameMs": 2669.3416849772134,
+          "onePercentLow": 0.17596030033192744,
+          "p99Ms": 5683.10009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 21.599999994039536,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.3474514398065519,
+          "frameMs": 2878.1000319260816,
+          "onePercentLow": 0.17596030033192744,
+          "p99Ms": 5683.10009765625,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 4.5,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.3425906174482249,
+          "frameMs": 2918.9357474190847,
+          "onePercentLow": 0.17596030033192744,
+          "p99Ms": 5683.10009765625,
+          "physicsMs": 0,
+          "renderMs": 2.7000000178813934,
+          "drawCalls": 45
+        },
+        {
+          "fps": 0.3426096771491817,
+          "frameMs": 2918.7733642578123,
+          "onePercentLow": 0.17596030033192744,
+          "p99Ms": 5683.10009765625,
+          "physicsMs": 0,
+          "renderMs": 1.5,
+          "drawCalls": 45
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

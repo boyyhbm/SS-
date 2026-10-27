@@ -6,7 +6,6 @@ import { Server, matchMaker } from '@colyseus/core';
 import { WebSocketTransport } from '@colyseus/ws-transport';
 import { db } from '../src/lib/db';
 import { multiplayerActionSchema } from '../src/multiplayer/contracts';
-import { multiplayerAdapters } from '../src/multiplayer/adapters';
 import { gameServerAdapter, registeredGameServers } from './registry';
 import { liveRooms, metrics, online, partyRooms, presence, publicRooms } from './state';
 import { signConnectionToken, verifyConnectionToken } from './token';
@@ -207,7 +206,6 @@ const gameServer = new Server({
             !entry.game.published ||
             entry.game.status !== 'AVAILABLE' ||
             !entry.game.runtimeKey ||
-            !multiplayerAdapters[entry.game.runtimeKey] ||
             !gameServerAdapter(entry.game.runtimeKey)
           )
             throw new Error('Game unavailable');
@@ -238,13 +236,16 @@ const gameServer = new Server({
             });
             if (eligible !== members.length) throw new Error('All party members need this game');
           }
+          if (members.length > gameServerAdapter(entry.game.runtimeKey).maxPlayers)
+            throw new Error('Party exceeds mode capacity');
           if (body.action === 'quick' && !room) {
             for (const candidate of liveRooms.values()) {
               if (
                 candidate.privateRoom ||
                 candidate.phase !== 'lobby' ||
                 candidate.gameId !== entry.gameId ||
-                candidate.route?.routeId !== selectRoute(body.routeId).routeId
+                (gameServerAdapter(entry.game.runtimeKey).raceRoutes &&
+                  candidate.route?.routeId !== selectRoute(body.routeId).routeId)
               )
                 continue;
               const listing = await matchMaker.getRoomById(candidate.roomId);
@@ -273,7 +274,13 @@ const gameServer = new Server({
                 runtimeKey: entry.game.runtimeKey,
                 ownerId: user.id,
                 private: body.action === 'quick' ? false : (body.private ?? true),
-                maxPlayers: Math.max(members.length, body.maxPlayers ?? 6),
+                maxPlayers: Math.min(
+                  gameServerAdapter(entry.game.runtimeKey).maxPlayers,
+                  Math.max(
+                    members.length,
+                    body.maxPlayers ?? gameServerAdapter(entry.game.runtimeKey).maxPlayers,
+                  ),
+                ),
                 admitted: members,
                 creationToken: signConnectionToken({
                   sub: user.id,
@@ -392,7 +399,7 @@ try {
     data: { status: 'ABORTED', endedAt: new Date() },
   });
   ready = true;
-  console.log('NEXUS multiplayer ready; region=europe, simulation=30Hz, snapshots=15Hz');
+  console.log('NEXUS multiplayer ready; region=europe, racing=30/15Hz, forge=60/20Hz');
 } catch {
   if (!stopping) {
     console.error('Game server could not acquire ownership');

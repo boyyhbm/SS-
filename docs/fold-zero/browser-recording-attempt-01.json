@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-27T14:53:37.123Z",
+  "passed": false,
+  "independentAccounts": 2,
+  "independentBrowserProcesses": 2,
+  "realVideo": true,
+  "scope": "Virtual standard Gamepad API and normal keyboard/Pointer Lock mouse events; read-only server-state observations, no pose/health/result injection. Not physical hardware or real-player skill testing.",
+  "inputMethods": ["virtual gamepad", "keyboard / mouse"],
+  "checks": [
+    "NEXUS registration, personal library, runtime launch and saved settings",
+    "Friend request, acceptance, private invitation and common lobby"
+  ],
+  "performance": [],
+  "errors": [],
+  "recordedFiles": [
+    "/workspace/SS-/storage/forge-recordings/page@916c27f77e3008075e7149b576fb38ea.webm"
+  ],
+  "audio": [],
+  "observedShots": 0,
+  "observedHits": 0,
+  "lastRoundReason": "",
+  "videoMatchStartSeconds": 96.164,
+  "videoMatchEndSeconds": 0,
+  "audioRecording": null
+}

@@ -70,5 +70,23 @@
     "version": "1.0.0",
     "createdAt": "2026-10-23T22:46:19.613Z",
     "updatedAt": "2026-10-23T22:46:19.613Z"
+  },
+  {
+    "id": "nexus_fold_zero_v1",
+    "slug": "fold-zero",
+    "title": "FOLD: ZERO",
+    "description": "Играбельная версия в разработке. Дуэль 1 на 1 на перестраиваемой арене THE FOUNDRY: управляй укрытиями, победи соперника или захвати Core. Графика и анимации первого этапа временные.",
+    "descriptionEn": "Playable development build. A real 1v1 duel in THE FOUNDRY: transform cover, eliminate your opponent or override the Core. First-stage art and animation are provisional.",
+    "genre": "shooter",
+    "cover": "/art/fold-foundry.webp",
+    "banner": "/art/fold-foundry.webp",
+    "screenshots": ["/art/fold-foundry.webp"],
+    "status": "AVAILABLE",
+    "runtimeKey": "fold-zero",
+    "sortOrder": 1,
+    "published": true,
+    "version": "0.1.0",
+    "createdAt": "2026-10-27T06:00:00.000Z",
+    "updatedAt": "2026-10-27T06:00:00.000Z"
   }
 ]

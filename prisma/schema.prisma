@@ -324,6 +324,7 @@ model MatchResult {
   timeSeconds    Float?
   didFinish      Boolean          @default(false)
   serverVerified Boolean          @default(true)
+  details        Json?
   participant    MatchParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
 }
 

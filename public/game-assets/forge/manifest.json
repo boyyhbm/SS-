@@ -1,0 +1,34 @@
+{
+  "title": "FOLD: ZERO foundation assets",
+  "author": "NEXUS project",
+  "source": "scripts/build-forge-assets.py",
+  "license": "Original project assets; no external copyrighted game content",
+  "status": "Provisional first-playable art, not final premium assets",
+  "resources": [
+    {
+      "file": "/game-assets/forge/pilot-cyan.glb",
+      "bytes": 447460,
+      "sha256": "e628daf223d57c956e993c841e035e9964922b241f9780d89621c82767c38fed"
+    },
+    {
+      "file": "/game-assets/forge/pilot-coral.glb",
+      "bytes": 477212,
+      "sha256": "6759d43489877c1c98f7d16791eb4aeea0eee9196dfd4d4faedb866abb1fc2e3"
+    },
+    {
+      "file": "/game-assets/forge/vector-r9.glb",
+      "bytes": 249960,
+      "sha256": "03b111f561bd7f7108cb94053acb1dda978572a7f4736887a02c368cfa62aa38"
+    },
+    {
+      "file": "/game-assets/forge/forge-module.glb",
+      "bytes": 110564,
+      "sha256": "3d38135629d15d7711e52ca55c05fe971db8080d2c3f8ad12020337da51315c0"
+    },
+    {
+      "file": "/game-assets/forge/fold-node.glb",
+      "bytes": 42664,
+      "sha256": "63d7f26471af10a497c3643214e0d12f262be004d77a00cc82dd3810ca49d1b2"
+    }
+  ]
+}

@@ -185,7 +185,7 @@ export function AdminPanel({
                   value={form.genre}
                   onChange={(e) => setForm({ ...form, genre: e.target.value })}
                 >
-                  {['racing', 'adventure', 'exploration', 'puzzle'].map((g) => (
+                  {['racing', 'shooter', 'adventure', 'exploration', 'puzzle'].map((g) => (
                     <option key={g} value={g}>
                       {t(g as TextKey)}
                     </option>
@@ -200,6 +200,7 @@ export function AdminPanel({
                 >
                   <option value="">{t('noRuntime')}</option>
                   <option value="midnight-outlaws">MIDNIGHT OUTLAWS / Three.js</option>
+                  <option value="fold-zero">FOLD: ZERO / NEXUS FORGE</option>
                 </select>
               </label>
             </div>

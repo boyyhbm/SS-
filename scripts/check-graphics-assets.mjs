@@ -92,6 +92,23 @@ for (const filename of ['vehicle-manifest.json', 'track-manifest.json']) {
     );
   }
 }
+// Original, provisional Forge assets are checked separately from the licensed
+// racing packs; their provenance and development status are explicit.
+const forge = JSON.parse(await fs.readFile(root + '/forge/manifest.json'));
+assert.equal(forge.author, 'NEXUS project');
+assert(forge.source === 'scripts/build-forge-assets.py');
+for (const asset of forge.resources) {
+  const file = path.resolve('public', '.' + asset.file);
+  assert(file.startsWith(root + path.sep));
+  const bytes = await fs.readFile(file);
+  assert.equal(hash(bytes), asset.sha256);
+  assert.equal(bytes.length, asset.bytes);
+  assert(bytes.length < 2 * 1024 * 1024);
+  const gltf = JSON.parse(bytes.subarray(20, 20 + bytes.readUInt32LE(12)).toString());
+  if (asset.file.includes('pilot-')) assert((gltf.animations?.length ?? 0) >= 10);
+  extraResources++;
+  total += bytes.length;
+}
 console.log(
   JSON.stringify({
     passed: true,

@@ -1,5 +1,6 @@
 import { multiplayerAdapters } from '../multiplayer/adapters';
 import type { MultiplayerCapabilities } from '../multiplayer/contracts';
+import { foldCapabilities } from './fold/config';
 export type RuntimeType =
   'three' | 'react-canvas' | 'webgl' | 'wasm' | 'webgpu' | 'external-sandbox';
 export interface GameManifest {
@@ -34,6 +35,23 @@ export interface FutureRuntimeAdapter {
 }
 // Only explicitly registered, reviewed internal modules can run. No dynamic user paths.
 export const runtimeRegistry: Record<string, GameManifest> = {
+  'fold-zero': {
+    id: 'fold-zero',
+    slug: 'fold-zero',
+    title: 'FOLD: ZERO',
+    description: 'Playable development build: 1v1 duels in a transforming arena.',
+    genre: 'shooter',
+    cover: '/art/fold-foundry.webp',
+    banner: '/art/fold-foundry.webp',
+    screenshots: ['/art/fold-foundry.webp'],
+    multiplayer: foldCapabilities,
+    runtimeType: 'three',
+    entrypoint: 'NexusForge',
+    supportedInputs: ['keyboard', 'gamepad'],
+    supportedPlatforms: ['desktop'],
+    version: '0.1.0',
+    status: 'available',
+  },
   'midnight-outlaws': {
     id: 'midnight-outlaws',
     slug: 'midnight-outlaws',

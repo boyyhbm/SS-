@@ -58,6 +58,10 @@ jobs:
         env:
           E2E_EXTERNAL_SERVER: '1'
         run: npm run test:e2e -- --trace=off
+      - name: Authoritative Forge duels and network faults
+        env:
+          NEXUS_TEST_NETWORK: '1'
+        run: npm run test:forge
       - name: Publish redacted browser failure summaries
         if: failure()
         run: node scripts/annotate-browser-failures.mjs
