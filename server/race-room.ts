@@ -137,8 +137,10 @@ export class NexusRaceRoom extends Room {
       const p = this.player(client);
       const car = z.enum(cars).safeParse(raw);
       if (p && this.phase === 'lobby' && car.success) {
-        p.car = car.data;
-        p.ready = false;
+        if (p.car !== car.data) {
+          p.car = car.data;
+          p.ready = false;
+        }
         this.sendSnapshot();
       }
     });
@@ -153,10 +155,12 @@ export class NexusRaceRoom extends Room {
         metrics.rejectedMessages++;
         return;
       }
-      p.vehicleId = parsed.data.vehicleId;
-      p.vehicleVersion = VEHICLE_VERSION;
-      configureVehicle(p.state, p.vehicleId);
-      p.ready = false;
+      if (p.vehicleId !== parsed.data.vehicleId || p.vehicleVersion !== VEHICLE_VERSION) {
+        p.vehicleId = parsed.data.vehicleId;
+        p.vehicleVersion = VEHICLE_VERSION;
+        configureVehicle(p.state, p.vehicleId);
+        p.ready = false;
+      }
       this.sendSnapshot();
     });
     this.onMessage('settings', (client, raw: unknown) => {

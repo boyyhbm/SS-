@@ -117,6 +117,7 @@ try {
         reconnects: number;
         errors: number[];
         rtts: number[];
+        selectionAckTime: number;
       };
       async function connect(i: number, roomId?: string): Promise<Peer> {
         const ticket = await control(
@@ -142,6 +143,7 @@ try {
           reconnects: 0,
           errors: [],
           rtts: [],
+          selectionAckTime: 0,
           prediction: new RacePrediction(users[i].id, (input) => {
             if (random() < profile.loss) return;
             schedule(() => {
@@ -161,8 +163,11 @@ try {
         );
         room.onMessage('event', () => {});
         room.onMessage('notice', () => {});
-        room.onMessage('pong', (p: { echo: number }) =>
-          schedule(() => peer.rtts.push(Date.now() - p.echo)),
+        room.onMessage('pong', (p: { echo: number; serverTime: number }) =>
+          schedule(() => {
+            if (p.echo === -1) peer.selectionAckTime = p.serverTime;
+            else peer.rtts.push(Date.now() - p.echo);
+          }),
         );
         timers.push(
           setInterval(() => {
@@ -233,6 +238,29 @@ try {
       }
       for (const p of peers) p.room.send('ready', true);
       await wait(() => a.snapshot!.players.every((p) => p.ready), 'ready');
+      if (vehicleMode) {
+        for (const peer of peers) {
+          const player = peer.snapshot!.players.find((p) => p.id === peer.prediction.userId);
+          assert(player);
+          peer.room.send('vehicle', {
+            vehicleId: player.vehicleId,
+            vehicleVersion: VEHICLE_VERSION,
+          });
+          peer.room.send('car', player.car);
+          peer.room.send('ping', -1);
+        }
+        await wait(
+          () =>
+            peers.every(
+              (p) => p.selectionAckTime > 0 && p.snapshot!.serverTime >= p.selectionAckTime,
+            ),
+          'late duplicate selections',
+        );
+        assert(
+          a.snapshot!.players.every((p) => p.ready),
+          'unchanged selection must retain ready',
+        );
+      }
       a.room.send('start');
       a.room.send('start');
       const raceTimers = peers.map((p) =>

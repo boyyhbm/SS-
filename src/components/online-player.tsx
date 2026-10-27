@@ -126,9 +126,15 @@ export function OnlinePlayer({
     }
   }, [snapshot, me, garage.loaded, garage.value.vehicleId, garage.value.paint, sdk]);
   const leader = snapshot?.leaderId === userId;
+  const selectionConfirmed =
+    garage.loaded &&
+    !garage.busy &&
+    me?.vehicleId === garage.value.vehicleId &&
+    me?.car === garage.value.paint;
   const playing = snapshot?.phase === 'racing' || snapshot?.phase === 'countdown';
   const canStart =
     leader &&
+    selectionConfirmed &&
     snapshot.phase === 'lobby' &&
     snapshot.players.length >= 2 &&
     snapshot.players.every((p) => p.ready && p.connected);
@@ -603,7 +609,7 @@ export function OnlinePlayer({
               <div className="lobby-actions">
                 <button
                   className={`button ${me?.ready ? 'secondary' : 'primary'}`}
-                  disabled={!renderReady || !connected}
+                  disabled={!renderReady || !connected || !selectionConfirmed}
                   onClick={() => sdk.ready(!me?.ready)}
                 >
                   <Check size={18} />
@@ -644,7 +650,10 @@ export function OnlinePlayer({
                     key={car}
                     className={`car-swatch swatch-${car} ${me?.car === car ? 'selected' : ''}`}
                     aria-label={t(car)}
-                    onClick={() => sdk.chooseCar(car)}
+                    disabled={garage.busy}
+                    onClick={async () => {
+                      if (await garage.save(garage.value.vehicleId, car)) sdk.chooseCar(car);
+                    }}
                   >
                     <i />
                     {t(car)}

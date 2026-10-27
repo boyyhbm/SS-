@@ -201,9 +201,17 @@ for (const { route, contacts } of cases)
           'data-racing-line',
           p === a ? 'full' : 'corners',
         );
+        if (route.id === 'downtown-circuit' && !contacts)
+          await p.route('**/api/garage', async (request) => {
+            if (request.request().method() === 'POST')
+              await new Promise((resolve) => setTimeout(resolve, 750));
+            await request.continue();
+          });
         await p
           .getByLabel('Автомобиль', { exact: true })
           .selectOption(p === a ? 'pocket-gt' : 'iron-v8');
+        if (route.id === 'downtown-circuit' && !contacts)
+          await expect(p.getByRole('button', { name: 'Я готов', exact: true })).toBeDisabled();
         await expect(
           p.locator('.lobby-person').filter({ hasText: p === a ? 'Pocket GT' : 'Iron V8' }),
         ).toBeVisible();
