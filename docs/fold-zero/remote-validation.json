@@ -1,10 +1,10 @@
 {
   "date": "2026-10-27T19:01:33.051Z",
-  "updatedAt": "2026-10-27T19:38:11.457Z",
+  "updatedAt": "2026-10-27T19:44:02.268Z",
   "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
   "runUrl": "https://github.com/boyyhbm/SS-/actions/runs/40565165376",
   "passed": false,
-  "stage": "public-rollout-and-persistence-passed",
+  "stage": "failed",
   "scope": "Actual public HTTPS/WSS. Two independent authenticated Chromium processes, normal keyboard/Pointer Lock input. Reduced software-GPU backing resolution. Not a physical-device or final-art acceptance.",
   "ci": {
     "id": 40564108744,
@@ -131,13 +131,20 @@
     "scope": "These two new owned fixture accounts only: identity, racing library/favorite, controller profiles, garage/audio/racing settings, saves and friends. No historical-match claim for these initially new accounts."
   },
   "checks": [
-    "Two actual public registrations, separate initially empty libraries, secure cookies, racing favorites, saved controller profiles and friendship"
+    "Two actual public registrations, separate initially empty libraries, secure cookies, racing favorites, saved controller profiles and friendship",
+    "Actual WSS friend invitation, shared private lobby, both ready and synchronized start"
   ],
-  "websocketOrigins": [],
+  "websocketOrigins": [
+    "wss://nexus-multiplayer.onrender.com"
+  ],
   "records": [],
   "shots": 0,
   "hits": 0,
   "score": null,
   "errors": [],
-  "failure": null
+  "failure": {
+    "name": "AssertionError",
+    "stage": "duel",
+    "sourceLine": "400"
+  }
 }
