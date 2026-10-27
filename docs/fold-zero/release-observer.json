@@ -1,18 +1,18 @@
 {
   "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
-  "updatedAt": "2026-10-27T19:31:49.212Z",
+  "updatedAt": "2026-10-27T19:32:41.323Z",
   "stage": "release-checks",
   "passed": false,
   "ci": {
     "id": 40564108744,
     "url": "https://github.com/boyyhbm/SS-/actions/runs/40564108744",
-    "status": "in_progress",
-    "conclusion": null,
+    "status": "completed",
+    "conclusion": "success",
     "jobs": [
       {
         "name": "checks",
-        "status": "in_progress",
-        "conclusion": null,
+        "status": "completed",
+        "conclusion": "success",
         "steps": [
           {
             "name": "Set up job",
@@ -86,33 +86,38 @@
           },
           {
             "name": "Authoritative Forge duels and network faults",
-            "status": "in_progress",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           },
           {
             "name": "Publish redacted browser failure summaries",
-            "status": "pending",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "skipped"
           },
           {
             "name": "Run actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
-            "status": "pending",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "skipped"
           },
           {
             "name": "Stop only this CI database and services",
-            "status": "pending",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           },
           {
             "name": "Post Run actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
-            "status": "pending",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
           },
           {
             "name": "Post Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
-            "status": "pending",
-            "conclusion": null
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
           }
         ]
       }
