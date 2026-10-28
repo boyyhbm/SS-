@@ -8,6 +8,7 @@ import type { ForgeState, ForgePlayer } from './contracts';
 import { ForgeAnimation } from './animation';
 import { ForgeCamera } from './camera';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { FoundryArt } from './foundry-art';
 const presets = {
   competitive: { scale: 1, shadows: 0 },
   low: { scale: 0.6, shadows: 0 },
@@ -21,6 +22,7 @@ export class ForgeRenderer {
   readonly cameraController = new ForgeCamera();
   readonly camera = this.cameraController.camera;
   readonly assets = new ForgeAssets();
+  readonly architecture: FoundryArt;
   private environment: T.WebGLRenderTarget | null = null;
   private modules = new Map<string, T.Object3D>();
   private moduleSlots = new Map<string, number>();
@@ -28,13 +30,13 @@ export class ForgeRenderer {
   private nodes = new Map<string, T.Object3D>();
   private pilots = new Map<
     string,
-    { object: T.Object3D; animation: ForgeAnimation; marker: T.Object3D }
+    { object: T.Object3D; animation: ForgeAnimation; marker: T.Object3D; contact: T.Mesh }
   >();
   private ownedGeometries: T.BufferGeometry[] = [];
   private ownedMaterials: T.Material[] = [];
   private weapon: T.Object3D | null = null;
   private core: T.Mesh | null = null;
-  private sun = new T.DirectionalLight('#fff4df', 3);
+  private sun = new T.DirectionalLight('#ffe7c8', 1.9);
   private size = { w: 1, h: 1 };
   private currentQuality = '';
   private autoQuality: 'low' | 'competitive' | 'medium' = 'medium';
@@ -57,11 +59,17 @@ export class ForgeRenderer {
     host.appendChild(this.canvas);
     this.renderer.outputColorSpace = T.SRGBColorSpace;
     this.renderer.toneMapping = T.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.1;
+    this.renderer.toneMappingExposure = 0.95;
     this.renderer.shadowMap.type = T.PCFSoftShadowMap;
-    this.scene.background = new T.Color('#bacbd7');
-    this.scene.fog = new T.Fog('#bacbd7', 50, 120);
-    this.scene.add(new T.HemisphereLight('#d9eeff', '#597071', 2));
+    this.renderer.shadowMap.needsUpdate = true;
+    this.scene.background = new T.Color('#30445e');
+    this.scene.fog = new T.Fog('#30445e', 50, 115);
+    this.scene.add(new T.HemisphereLight('#bcd7ea', '#54606a', 1.05));
+    const industrialFill = new T.PointLight('#ffc39a', 65, 27, 2);
+    industrialFill.position.set(-17, 5.1, -2);
+    const researchFill = new T.PointLight('#a8e5f0', 65, 27, 2);
+    researchFill.position.set(17, 5.1, 2);
+    this.scene.add(industrialFill, researchFill);
     this.sun.position.set(-18, 32, 12);
     this.sun.castShadow = true;
     this.sun.shadow.camera.left = -28;
@@ -77,9 +85,12 @@ export class ForgeRenderer {
       room = new RoomEnvironment();
     this.environment = pmrem.fromScene(room, 0.05);
     this.scene.environment = this.environment.texture;
+    this.scene.environmentIntensity = 0.5;
     room.dispose();
     pmrem.dispose();
     this.scene.add(this.camera);
+    this.architecture = new FoundryArt(this.renderer);
+    this.scene.add(this.architecture.root);
     this.updateSettings(settings);
     this.resize();
   }
@@ -94,13 +105,20 @@ export class ForgeRenderer {
   async initialize() {
     await this.assets.load();
     if (this.disposed) return;
+    await this.architecture.initialize(this.assets);
+    if (this.disposed) return;
     const poses: T.Object3D[] = [];
+    const styles: { base: string; accent: string }[] = [];
     for (const d of foundrySolids) {
       if (d.id === 'floor') {
         const floor = new T.Mesh(
           this.geometry(new T.BoxGeometry(d.size.x, d.size.y, d.size.z)),
           this.material(
-            new T.MeshStandardMaterial({ color: '#687b85', roughness: 0.83, metalness: 0.05 }),
+            new T.MeshStandardMaterial({
+              color: palette.graphite,
+              roughness: 0.9,
+              metalness: 0.03,
+            }),
           ),
         );
         floor.position.copy(d.p);
@@ -114,6 +132,21 @@ export class ForgeRenderer {
       object.rotation.set(d.pitch ?? 0, d.yaw ?? 0, 0);
       object.updateMatrix();
       poses.push(object);
+      const base = d.id.startsWith('roof')
+        ? palette.navy
+        : d.id.startsWith('deck') || d.id.startsWith('ramp') || d.id.startsWith('low')
+          ? palette.concrete
+          : d.id === 'reactor-a' || d.id === 'flank-a'
+            ? '#685549'
+            : d.id === 'reactor-b' || d.id === 'flank-b'
+              ? palette.teal
+              : d.id.includes('shell')
+                ? palette.steel
+                : palette.graphite;
+      styles.push({
+        base,
+        accent: d.p.x < 0 ? palette.orange : d.p.x > 0 ? palette.cyan : palette.yellow,
+      });
     }
     for (const d of foldDefinitions) {
       const object = new T.Object3D();
@@ -123,6 +156,11 @@ export class ForgeRenderer {
       object.updateMatrix();
       this.moduleSlots.set(d.id, poses.length);
       poses.push(object);
+      styles.push({
+        base: d.id === 'bridge' ? '#7d8781' : palette.steel,
+        accent:
+          d.id === 'shutter' ? palette.orange : d.id === 'pivot' ? palette.violet : palette.yellow,
+      });
       this.modules.set(d.id, object);
       const instance = this.assets.instance('fold-node').object;
       instance.position.set(d.node.x, 0, d.node.z);
@@ -183,11 +221,28 @@ export class ForgeRenderer {
       for (const g of geometries) g.dispose();
       if (!geometry) throw Error('Forge module merge failed');
       this.ownedGeometries.push(geometry);
-      const batch = new T.InstancedMesh(geometry, material, poses.length);
+      const m = material.clone() as T.MeshStandardMaterial;
+      this.ownedMaterials.push(m);
+      const body = /Warm ceramic/i.test(material.name),
+        accent = /energy|yellow/i.test(material.name);
+      m.color.set(
+        body || accent ? '#ffffff' : /alloy/i.test(material.name) ? '#758392' : palette.graphite,
+      );
+      m.roughness = body ? 0.64 : accent ? 0.52 : 0.5;
+      m.metalness = body ? 0.18 : accent ? 0.1 : 0.5;
+      m.emissive.set(accent ? '#397f8d' : '#000000');
+      m.emissiveIntensity = accent ? 0.18 : 0;
+      const batch = new T.InstancedMesh(geometry, m, poses.length);
       batch.instanceMatrix.setUsage(T.DynamicDrawUsage);
       batch.castShadow = true;
       batch.receiveShadow = true;
-      for (const [i, pose] of poses.entries()) batch.setMatrixAt(i, pose.matrix);
+      for (const [i, pose] of poses.entries()) {
+        batch.setMatrixAt(i, pose.matrix);
+        batch.setColorAt(
+          i,
+          new T.Color(body ? styles[i].base : accent ? styles[i].accent : '#ffffff'),
+        );
+      }
       batch.computeBoundingSphere();
       this.moduleBatches.push(batch);
       this.scene.add(batch);
@@ -202,13 +257,6 @@ export class ForgeRenderer {
       const beam = new T.Mesh(beamG, beamM);
       beam.position.set(x, 6, 0);
       this.scene.add(beam);
-    }
-    const lineG = this.geometry(new T.BoxGeometry(0.08, 0.015, 30)),
-      lineM = this.material(new T.MeshBasicMaterial({ color: palette.yellow }));
-    for (const x of [-19, 19]) {
-      const m = new T.Mesh(lineG, lineM);
-      m.position.set(x, 0.012, 0);
-      this.scene.add(m);
     }
     const core = new T.Mesh(
       this.geometry(new T.IcosahedronGeometry(0.65, 1)),
@@ -257,7 +305,6 @@ export class ForgeRenderer {
     );
     this.scene.add(warmup);
     this.weapon.visible = true;
-    await this.renderer.compileAsync(this.scene, this.camera);
     this.weapon.visible = false;
     this.scene.remove(warmup);
   }
@@ -278,11 +325,13 @@ export class ForgeRenderer {
     if (key === this.currentQuality) return;
     this.currentQuality = key;
     const p = presets[key];
+    this.architecture.setDetail(key === 'low' || key === 'competitive' ? 'low' : 'high');
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5) * p.scale);
     this.renderer.shadowMap.enabled = p.shadows > 0;
     this.sun.shadow.mapSize.setScalar(p.shadows || 256);
     this.sun.shadow.map?.dispose();
     this.sun.shadow.map = null;
+    this.renderer.shadowMap.needsUpdate = true;
     this.resize();
   }
   private pilot(p: ForgePlayer) {
@@ -295,8 +344,10 @@ export class ForgeRenderer {
       );
       marker.position.y = 2.15;
       object.add(marker);
+      const contact = this.architecture.actorContact();
+      object.add(contact);
       this.scene.add(object);
-      actor = { object, marker, animation: new ForgeAnimation(object, clips) };
+      actor = { object, marker, contact, animation: new ForgeAnimation(object, clips) };
       this.pilots.set(p.id, actor);
     }
     return actor;
@@ -313,6 +364,9 @@ export class ForgeRenderer {
     menu: boolean,
     aim = false,
   ) {
+    // Static menu architecture needs one shadow update. Combat keeps full
+    // moving-player/module shadows; this does not freeze an active match.
+    this.renderer.shadowMap.autoUpdate = !!state;
     if (this.core) {
       this.core.rotation.y = time * 0.5;
       this.core.position.y = 1.2 + Math.sin(time) * 0.1;
@@ -334,6 +388,7 @@ export class ForgeRenderer {
         actor.object.visible = p.id !== localId && p.hp > 0;
         actor.object.position.set(p.x, p.y - 0.9, p.z);
         actor.object.rotation.y = p.yaw + Math.PI;
+        actor.contact.visible = p.grounded && this.architecture.contacts.visible;
         actor.animation.update(p, dt, state.phase);
       }
     } else {
@@ -381,6 +436,7 @@ export class ForgeRenderer {
     for (const batch of this.moduleBatches) batch.dispose();
     this.moduleBatches.length = 0;
     this.assets.dispose();
+    this.architecture.dispose();
     for (const g of this.ownedGeometries) g.dispose();
     for (const m of this.ownedMaterials) m.dispose();
     this.environment?.dispose();

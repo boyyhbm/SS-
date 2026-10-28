@@ -1,4 +1,4 @@
-export const FORGE_VERSION = 1;
+export const FORGE_VERSION = 2;
 export const FOLD_HZ = 60;
 export const FOLD_DT = 1 / FOLD_HZ;
 export const FOLD_SNAPSHOT_HZ = 20;
@@ -53,11 +53,15 @@ export const foldCapabilities = {
   supportsReconnection: true,
 } as const;
 export const palette = {
-  navy: '#18243e',
-  cyan: '#55ddf4',
+  navy: '#1b2945',
+  steel: '#334866',
+  concrete: '#a6a59f',
+  teal: '#397f8d',
+  orange: '#ff9759',
+  cyan: '#4adcf2',
   coral: '#ff806d',
   white: '#f4f2ea',
-  yellow: '#ffce67',
-  violet: '#9d85ff',
-  graphite: '#303b52',
+  yellow: '#ffd36b',
+  violet: '#9274e8',
+  graphite: '#303747',
 };

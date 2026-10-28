@@ -109,6 +109,21 @@ for (const asset of forge.resources) {
   extraResources++;
   total += bytes.length;
 }
+for (const filename of ['manifest.json', 'textures.json']) {
+  const pack = JSON.parse(await fs.readFile(root + '/forge/foundry/' + filename, 'utf8'));
+  assert.equal(pack.author, 'NEXUS project');
+  assert.equal(pack.commercialUsePermitted, true);
+  for (const resource of pack.resources) {
+    const file = path.resolve('public', '.' + resource.file);
+    assert(file.startsWith(root + '/forge/foundry/'));
+    const bytes = await fs.readFile(file);
+    assert.equal(bytes.length, resource.bytes);
+    assert.equal(hash(bytes), resource.sha256);
+    assert(bytes.length < 2 * 1024 * 1024);
+    total += bytes.length;
+    extraResources++;
+  }
+}
 console.log(
   JSON.stringify({
     passed: true,

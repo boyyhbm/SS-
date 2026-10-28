@@ -12,8 +12,14 @@ export interface ForgeFrameStats {
 // Diagnostic events expose copies of already received state, never commands.
 export class ForgeUIBridge {
   onFrame: (stats: ForgeFrameStats, hit: boolean) => void = () => {};
+  private localAim = { yaw: 0, pitch: 0 };
+  aim(yaw: number, pitch: number) { this.localAim.yaw = yaw; this.localAim.pitch = pitch; }
   state(snapshot: ForgeSnapshot, aim: { yaw: number; pitch: number }) {
-    window.dispatchEvent(new CustomEvent('nexus-forge-aim', { detail: { ...aim } }));
+    this.aim(aim.yaw, aim.pitch);
+    // Separate observation storage, never read by input/simulation. Updating
+    // the same object at input cadence avoids stale network-cadence feedback
+    // in diagnostic device fixtures, without per-step event allocations.
+    window.dispatchEvent(new CustomEvent('nexus-forge-aim', { detail: this.localAim }));
     window.dispatchEvent(
       new CustomEvent('nexus-forge-state', {
         detail: snapshot.game ? structuredClone(snapshot.game) : null,

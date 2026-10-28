@@ -15,17 +15,22 @@ export class ForgeAssets {
   async load() {
     const loader = new GLTFLoader();
     await Promise.all(
-      ['pilot-cyan', 'pilot-coral', 'vector-r9', 'forge-module', 'fold-node'].map(async (name) => {
-        const gltf = await loader.loadAsync(`/game-assets/forge/${name}.glb`);
-        this.assets.set(name, gltf);
-      }),
+      ['pilot-cyan', 'pilot-coral', 'vector-r9', 'forge-module', 'fold-node', 'foundry-kit'].map(
+        async (name) => {
+          const path = name === 'foundry-kit' ? 'foundry/foundry-kit' : name;
+          const gltf = await loader.loadAsync(`/game-assets/forge/${path}.glb`);
+          this.assets.set(name, gltf);
+        },
+      ),
     );
     if (this.disposed) this.release();
   }
-  instance(name: string) {
+  instance(name: string, part?: string) {
     const asset = this.assets.get(name);
     if (!asset) throw Error('Forge asset unavailable');
-    const object = clone(asset.scene);
+    const source = part ? asset.scene.getObjectByName(part) : asset.scene;
+    if (!source) throw Error('Forge architectural part unavailable');
+    const object = clone(source);
     object.traverse((o) => {
       if (o instanceof SkinnedMesh) this.skeletons.add(o.skeleton);
       if (o instanceof Mesh) {

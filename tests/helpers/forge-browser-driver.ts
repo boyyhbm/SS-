@@ -6,10 +6,12 @@ export function installForgeBrowserDriver({
   id,
   slot,
   device,
+  tour = false,
 }: {
   id: string;
   slot: number;
   device?: 'gamepad' | 'keyboard';
+  tour?: boolean;
 }) {
   const inputDevice = device ?? (slot === 0 ? 'gamepad' : 'keyboard');
   const w = window as unknown as {
@@ -59,9 +61,27 @@ export function installForgeBrowserDriver({
       if (round !== s.round) {
         round = s.round;
         index = 0;
-        foldStage = slot === 0 && round === 1;
+        foldStage = slot === 0 && !folded;
         const sign = p.z > 0 ? 1 : -1;
-        points = foldStage
+        points = foldStage && tour && p.z > 0
+          ? [
+              { x: -18.5, z: 13 },
+              { x: -18.5, z: 2 },
+              { x: -18.5, z: 13 },
+              { x: -3.5, z: 13 },
+              { x: -3.5, z: 6 },
+              { x: -6, z: 6 },
+            ]
+          : foldStage && p.z < 0
+            ? [
+                { x: -3.5, z: -13 },
+                { x: -19.5, z: -13 },
+                { x: -19.5, z: 13 },
+                { x: -3.5, z: 13 },
+                { x: -3.5, z: 6 },
+                { x: -6, z: 6 },
+              ]
+          : foldStage
           ? [
               { x: -3.5, z: 13 },
               { x: -3.5, z: 6 },

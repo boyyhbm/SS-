@@ -1,0 +1,22 @@
+{
+  "title": "THE FOUNDRY / Industrial + Research architectural kit",
+  "author": "NEXUS project",
+  "source": "scripts/build-foundry-kit.py",
+  "license": "Original project assets; commercial use permitted by the project owner",
+  "commercialUsePermitted": true,
+  "resources": [
+    {
+      "file": "/game-assets/forge/foundry/foundry-kit.glb",
+      "bytes": 835788,
+      "sha256": "0185edc06eab686cf366dcd6d37332a36bfeeec13c1172cb43d5a6a5abc3f50f"
+    }
+  ],
+  "parts": [
+    "service-column",
+    "vent-bank",
+    "pipe-bank",
+    "research-inset",
+    "bulkhead-frame",
+    "core-crown"
+  ]
+}

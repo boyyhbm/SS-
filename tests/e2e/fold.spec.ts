@@ -25,6 +25,7 @@ test.afterAll(async () => {
 test('two independent accounts play a server-verified Fold duel with different input devices', async () => {
   test.setTimeout(720000);
   const recording = process.env.NEXUS_CAPTURE_ONLINE === '1';
+  const artCapture = process.env.NEXUS_FORGE_ART_CAPTURE === '1';
   const browsers = await Promise.all(
     [0, 1].map(() =>
       chromium.launch({
@@ -75,6 +76,9 @@ test('two independent accounts play a server-verified Fold duel with different i
     videoMatchEndSeconds: 0,
     audioRecording: null as { path: string; offsetSeconds: number } | null,
     startClicks: 0,
+    graphics: artCapture ? 'Medium client A / Competitive client B; reduced software backing resolution' : 'Competitive; functional software-GPU verification',
+    foldTransitions: [new Set<string>(), new Set<string>()],
+    screenshots: [] as string[],
   };
   try {
     for (const [i, p] of pages.entries()) {
@@ -212,7 +216,7 @@ test('two independent accounts play a server-verified Fold duel with different i
       );
       expect(
         (
-          await post(p, '/api/fold-settings', { ...defaultForgeSettings, quality: 'competitive' })
+          await post(p, '/api/fold-settings', { ...defaultForgeSettings, quality: artCapture && i === 0 ? 'medium' : 'competitive' })
         ).status(),
       ).toBe(200);
       await p.goto('/play/fold-zero');
@@ -285,7 +289,7 @@ test('two independent accounts play a server-verified Fold duel with different i
     await b.waitForFunction(() => !!document.pointerLockElement);
     console.log(JSON.stringify({ forgeStage: 'duel started' }));
     for (const [slot, p] of pages.entries())
-      await p.evaluate(installForgeBrowserDriver, { id: ids[slot], slot });
+      await p.evaluate(installForgeBrowserDriver, { id: ids[slot], slot, tour: artCapture });
     const started = Date.now();
     let lastProbe = 0;
     let previousRound = 0;
@@ -300,11 +304,23 @@ test('two independent accounts play a server-verified Fold duel with different i
           })),
         ),
       );
-      for (const client of clients)
+      for (const [index, client] of clients.entries()) {
+        for (const node of client.game?.nodes ?? [])
+          if (node.state === 1) report.foldTransitions[index].add(node.id + ':1');
         for (const e of client.game?.events ?? []) {
           if (e.type === 'shot') shots.add(e.id);
           if (e.type === 'hit') hits.add(e.id);
         }
+      }
+      if (artCapture && clients[0].game?.phase === 'active') {
+        const p = clients[0].game.players.find(p => p.id === ids[0]);
+        const zone = p ? p.x < -15 ? 'industrial' : p.x > 15 ? 'research' : 'central' : null;
+        if (zone && !report.screenshots.some(path => path.endsWith(zone + '.png'))) {
+          await fs.mkdir('public/reports/fold-controls/gameplay', { recursive: true });
+          const path = 'public/reports/fold-controls/gameplay/' + zone + '.png';
+          await a.screenshot({ path }); report.screenshots.push(path);
+        }
+      }
       if (clients[0].game?.round !== previousRound) {
         previousRound = clients[0].game?.round ?? 0;
         console.log(JSON.stringify({ forgeRound: previousRound, score: clients[0].game?.score }));
@@ -334,11 +350,7 @@ test('two independent accounts play a server-verified Fold duel with different i
     report.lastRoundReason = outcomes[0].reason;
     expect(shots.size).toBeGreaterThan(0);
     expect(hits.size).toBeGreaterThan(0);
-    expect(
-      await a.evaluate(
-        () => (window as unknown as { forgeDriver: { folded: boolean } }).forgeDriver.folded,
-      ),
-    ).toBe(true);
+    expect(report.foldTransitions.every(nodes => nodes.has('shutter:1'))).toBe(true);
     const records = await db.matchParticipant.findMany({
       where: { userId: { in: ids }, match: { game: { slug: 'fold-zero' }, status: 'FINISHED' } },
       include: { result: true },
@@ -405,14 +417,14 @@ test('two independent accounts play a server-verified Fold duel with different i
     expect(errors).toEqual([]);
     report.passed = true;
   } finally {
-    await fs.mkdir('docs/fold-zero', { recursive: true });
+    await fs.mkdir('docs/fold-controls', { recursive: true });
     for (const c of contexts) await c.close();
     if (recording)
       for (const p of pages) {
         const path = await p.video()?.path();
         if (path) report.recordedFiles.push(path);
       }
-    await fs.writeFile('docs/fold-zero/browser.json', JSON.stringify(report, null, 2) + '\n');
+    await fs.writeFile('docs/fold-controls/gameplay.json', JSON.stringify({ ...report, foldTransitions: report.foldTransitions.map(nodes => [...nodes]) }, null, 2) + '\n');
     for (const b of browsers) await b.close();
   }
 });

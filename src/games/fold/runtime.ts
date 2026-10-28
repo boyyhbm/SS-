@@ -105,6 +105,7 @@ export class NexusForgeRuntime {
         this.input.pitch = p.pitch;
       }
       this.lastRound = game.round;
+      this.ui.aim(this.input.yaw, this.input.pitch);
     }
     if (!this.prediction && !this.pendingPrediction) {
       this.pendingPrediction = true;
@@ -154,6 +155,7 @@ export class NexusForgeRuntime {
         ? Math.max(0, Math.floor(this.latest.game.tick + (now - this.receivedAt) * 0.06 - 5.1))
         : 0;
       const command = this.input.sample(this.seq, visibleTick, FOLD_DT);
+      this.ui.aim(command.yaw, command.pitch);
       if (this.network.connected && this.latest?.game) {
         this.seq++;
         this.network.sendInput(command);

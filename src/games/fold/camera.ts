@@ -24,8 +24,9 @@ export class ForgeCamera {
       // the exact same interpolated pose as local presentation, never raw ticks.
       this.camera.rotation.set(pitch, yaw, 0, 'YXZ');
     } else {
-      this.camera.position.set(18 + Math.sin(time * 0.06) * 1.5, 10, 20);
-      this.camera.lookAt(0, 1, 0);
+      // Keep the menu viewpoint inside the architecture, below the wing roofs.
+      this.camera.position.set(17 + Math.sin(time * 0.06) * 0.6, 4.3, 14.5);
+      this.camera.lookAt(-1, 1.5, -1);
     }
     const fov = menu || !aim ? 76 : 64;
     if (Math.abs(this.camera.fov - fov) > 0.005) {

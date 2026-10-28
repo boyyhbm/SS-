@@ -38,6 +38,10 @@ export const foundrySolids: ArenaSolid[] = [
   solid('ramp-west', -10, 0.96, 6.8, 5, 0.35, 7, 'ivory', 0.32),
   solid('ramp-east', 10, 0.96, -6.8, 5, 0.35, 7, 'ivory', -0.32),
   solid('core-plinth', 0, 0.18, 0, 3.2, 0.36, 3.2, 'dark'),
+  // Balanced, visible wing roofs. Their lower face is above the maximum
+  // reachable player height, but server rays still hit the real ceiling.
+  solid('roof-industrial', -17.25, 6.8, 0, 8.5, 0.4, 34, 'dark'),
+  solid('roof-research', 17.25, 6.8, 0, 8.5, 0.4, 34, 'dark'),
 ];
 export interface FoldDefinition {
   id: string;

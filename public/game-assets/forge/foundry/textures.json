@@ -1,0 +1,58 @@
+{
+  "author": "NEXUS project",
+  "source": "scripts/build-foundry-textures.py",
+  "license": "Original project textures; commercial use permitted by the project owner",
+  "commercialUsePermitted": true,
+  "colorSpace": {
+    "color": "sRGB",
+    "normal": "linear",
+    "roughness": "linear"
+  },
+  "resources": [
+    {
+      "file": "/game-assets/forge/foundry/floor-color-256.png",
+      "bytes": 17954,
+      "sha256": "6f18f7efc60eaf3c83ebd2210becccb8fb08ee65775630e20fa9525908c04622"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-normal-256.png",
+      "bytes": 15024,
+      "sha256": "a9c8ff292661805891b6855899722783101970c461e2d93f47ed4b4ae19f4feb"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-roughness-256.png",
+      "bytes": 13504,
+      "sha256": "9b20aa18b6cb280316b3e17ab6dc571f5cb270f47ce4b374159d5d135a76afc0"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-color-512.png",
+      "bytes": 58932,
+      "sha256": "37575076c5ae06f8042e549852180a1ae8975ae780eccb932360c64b79a65b20"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-normal-512.png",
+      "bytes": 43092,
+      "sha256": "b93d3050ffedcc7499ab7e4a7d5272b2dd07ea4cc1de3485b38ff69224261dfb"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-roughness-512.png",
+      "bytes": 49178,
+      "sha256": "f349a6f46c87d335d4141fda0630c938cd6fe2f34757e9ea8128caae2c641f7f"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-color-1024.png",
+      "bytes": 209365,
+      "sha256": "4f1b72e0cd1394141de4378ce591c06adaa4718ec5e02113fb2b4838b92352f6"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-normal-1024.png",
+      "bytes": 143107,
+      "sha256": "46a22d68282b4719cb7a7b6fa9eb58174997317551ecd40fe93bbcac8571ca52"
+    },
+    {
+      "file": "/game-assets/forge/foundry/floor-roughness-1024.png",
+      "bytes": 169180,
+      "sha256": "842b039721390d24852ba630ec342387b817e7df0f280fdef137e4d6cff0641f"
+    }
+  ]
+}
