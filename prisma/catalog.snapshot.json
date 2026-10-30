@@ -8,7 +8,9 @@
     "genre": "racing",
     "cover": "/art/midnight-cover.svg",
     "banner": "/art/midnight-banner.svg",
-    "screenshots": ["/art/midnight-gameplay.webp"],
+    "screenshots": [
+      "/art/midnight-gameplay.webp"
+    ],
     "status": "AVAILABLE",
     "runtimeKey": "midnight-outlaws",
     "sortOrder": 0,
@@ -80,7 +82,9 @@
     "genre": "shooter",
     "cover": "/art/fold-foundry.webp",
     "banner": "/art/fold-foundry.webp",
-    "screenshots": ["/art/fold-foundry.webp"],
+    "screenshots": [
+      "/art/fold-foundry.webp"
+    ],
     "status": "AVAILABLE",
     "runtimeKey": "fold-zero",
     "sortOrder": 1,
@@ -88,5 +92,23 @@
     "version": "0.1.0",
     "createdAt": "2026-10-27T06:00:00.000Z",
     "updatedAt": "2026-10-27T06:00:00.000Z"
+  },
+  {
+    "id": "nexus_nfsu_experimental_v1",
+    "slug": "need-for-speed-underground",
+    "title": "Need for Speed: Underground",
+    "description": "2003 · Гонки · Экспериментальный браузерный порт nfsu1-web. Требуются собственная совместимая копия SPEED.EXE 1.4 и локальная подготовка WASM. Chrome 140+, WebGPU, OPFS и SharedArrayBuffer. Игровые файлы не распространяются.",
+    "descriptionEn": "2003 · Racing · Experimental nfsu1-web integration. Requires your own compatible SPEED.EXE 1.4 and locally prepared Wasm. Chrome 140+, WebGPU, OPFS and SharedArrayBuffer. No game content distributed.",
+    "genre": "racing",
+    "cover": "/art/underground-local.svg",
+    "banner": "/art/underground-local.svg",
+    "screenshots": [],
+    "status": "AVAILABLE",
+    "runtimeKey": "nfs-underground",
+    "sortOrder": 2,
+    "published": true,
+    "version": "0.1.0-experimental",
+    "createdAt": "2026-10-30T00:00:00.000Z",
+    "updatedAt": "2026-10-30T00:00:00.000Z"
   }
 ]

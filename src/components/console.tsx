@@ -196,6 +196,12 @@ export function Console({
   function launch(target: GameDTO) {
     rememberReturn(location.pathname, target.id);
     playSound('launch');
+    if (target.runtimeKey === 'nfs-underground') {
+      // COOP/COEP require a document response; an SPA transition cannot enable isolation.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      location.assign(`/play/${target.slug}`);
+      return;
+    }
     startTransition(() => router.push(`/play/${target.slug}`));
   }
   function select(target: GameDTO) {
@@ -255,7 +261,13 @@ export function Console({
         {entry && playable ? (
           <button className="button primary" onClick={() => launch(target)} disabled={pending}>
             <Play size={18} fill="currentColor" />
-            {pending ? t('loading') : t('playNow')}
+            {pending
+              ? t('loading')
+              : target.runtimeKey === 'nfs-underground'
+                ? ui.language === 'ru'
+                  ? 'Настроить / запустить'
+                  : 'Setup / Launch'
+                : t('playNow')}
             <InputGlyph action="confirm" fallback="↵" />
           </button>
         ) : playable ? (
@@ -419,7 +431,13 @@ export function Console({
                 >
                   <div className="hero-kicker">
                     <span className="live-dot" />
-                    {emptyHome ? t('welcome') : t(isPlayable(game) ? 'prototype' : 'comingSoon')}
+                    {emptyHome
+                      ? t('welcome')
+                      : game.runtimeKey === 'nfs-underground'
+                        ? ui.language === 'ru'
+                          ? 'ЭКСПЕРИМЕНТАЛЬНАЯ ИНТЕГРАЦИЯ'
+                          : 'EXPERIMENTAL INTEGRATION'
+                        : t(isPlayable(game) ? 'prototype' : 'comingSoon')}
                     <span className="kicker-line" />
                   </div>
                   <h2 className={emptyHome ? 'hero-welcome' : ''}>
@@ -440,7 +458,9 @@ export function Console({
                     <i />
                     {isPlayable(game) ? (
                       <>
-                        <span>{t('free')}</span>
+                        <span>
+                          {game.runtimeKey === 'nfs-underground' ? 'Своя копия' : t('free')}
+                        </span>
                         <i />
                         <Gamepad2 size={15} />
                         <Monitor size={14} />
@@ -665,7 +685,33 @@ export function Console({
                 <span className="eyebrow">{t('behindGame')}</span>
                 <h2>{t('about')}</h2>
                 <p className="detail-description">{description}</p>
-                {isPlayable(game) ? (
+                {game.runtimeKey === 'nfs-underground' ? (
+                  <div className="concept-notice">
+                    <div>
+                      <h3>Experimental Integration · Stage A</h3>
+                      <p>
+                        Оригинальный порт nfsu1-web. Требуется собственная SPEED.EXE 1.4 и локальная
+                        утилита подготовки WASM. NEXUS не распространяет оригинальные игровые файлы.
+                      </p>
+                      <p>
+                        WebGPU · WebAssembly threads · OPFS. Совместимость конкретной копии, игровых
+                        режимов и физических контроллеров проверяется отдельно. Сетевые гонки не
+                        подключены.
+                      </p>
+                      <p>
+                        Сохранения и резервные копии остаются на устройстве; облачная передача
+                        игровых сохранений выключена.
+                      </p>
+                      <a
+                        href="https://github.com/lguilherme44/nfsu1-web"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Исходный проект ↗
+                      </a>
+                    </div>
+                  </div>
+                ) : isPlayable(game) ? (
                   <>
                     <h3>{t('features')}</h3>
                     <ul className="feature-list">
@@ -735,19 +781,32 @@ export function Console({
                     <dd>{game.version}</dd>
                   </div>
                   <div>
-                    <dt>{t('bestLap')}</dt>
+                    <dt>{game.runtimeKey === 'nfs-underground' ? 'Год выпуска' : t('bestLap')}</dt>
                     <dd>
-                      {(
-                        data.saves.find(
-                          (s) => s.gameId === game.id && s.saveKey === 'best-lap:downtown-circuit',
-                        ) ?? data.saves.find((s) => s.gameId === game.id)
-                      )?.saveData.seconds?.toFixed(2) ?? '—'}{' '}
-                      s
+                      {game.runtimeKey === 'nfs-underground' ? (
+                        '2003'
+                      ) : (
+                        <>
+                          {(
+                            data.saves.find(
+                              (s) =>
+                                s.gameId === game.id && s.saveKey === 'best-lap:downtown-circuit',
+                            ) ?? data.saves.find((s) => s.gameId === game.id)
+                          )?.saveData.seconds?.toFixed(2) ?? '—'}{' '}
+                          s
+                        </>
+                      )}
                     </dd>
                   </div>
                 </dl>
                 <h4>{t('requirements')}</h4>
-                <p>{isPlayable(game) ? t('requirementsBody') : t('conceptNotice')}</p>
+                <p>
+                  {game.runtimeKey === 'nfs-underground'
+                    ? 'Desktop · Chrome 140+ · WebGPU · SharedArrayBuffer · локальный комплект SPEED.EXE 1.4. Нужны свободное место в OPFS и память для исходного WASM (по умолчанию от 1 ГБ).'
+                    : isPlayable(game)
+                      ? t('requirementsBody')
+                      : t('conceptNotice')}
+                </p>
                 {owned && (
                   <button className="danger-link" onClick={() => libraryAction(game, 'remove')}>
                     <Trash2 size={15} />
@@ -1075,13 +1134,15 @@ function GameCard({
           <p>
             {t(game.genre as TextKey)}
             <span>·</span>
-            {t(
-              isPlayable(game)
-                ? 'free'
-                : game.published && game.status === 'COMING_SOON'
-                  ? 'comingSoon'
-                  : 'unavailable',
-            )}
+            {game.runtimeKey === 'nfs-underground'
+              ? '2003 · Experimental · Own files'
+              : t(
+                  isPlayable(game)
+                    ? 'free'
+                    : game.published && game.status === 'COMING_SOON'
+                      ? 'comingSoon'
+                      : 'unavailable',
+                )}
           </p>
         </div>
         {entry ? (

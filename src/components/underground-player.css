@@ -1,0 +1,59 @@
+.underground-launcher {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #10151b;
+  color: #e6efed;
+}
+.underground-launcher > header {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  border-bottom: 1px solid #ffffff20;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+.underground-launcher > header a,
+.underground-launcher > header button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d5e4de;
+  background: none;
+  border: 0;
+  text-decoration: none;
+}
+.underground-status {
+  font-size: 10px;
+  line-height: 1.6;
+  padding: 9px 24px;
+  color: #b7ce98;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 35px;
+}
+.underground-launcher iframe {
+  border: 0;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: #10151b;
+}
+.underground-launcher > .button {
+  align-self: center;
+  margin: 50px;
+}
+.underground-direct {
+  align-self: flex-start;
+  margin: 0 24px 10px;
+  padding: 9px 15px;
+  background: #c6e966;
+  color: #172012;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}

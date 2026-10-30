@@ -1,0 +1,143 @@
+{
+  "repository": "https://github.com/lguilherme44/nfsu1-web",
+  "commit": "327b22c39041f197a4cfdf2544f81799b332b6c7",
+  "license": "MIT; see LICENSE; EA assets and translated game code excluded",
+  "originalFiles": [
+    {
+      "path": "LICENSE",
+      "sha256": "d62239d9202b5ef0e27c85dd820b50444294aefa61702264fd781a0899daac97"
+    },
+    {
+      "path": "registry-defaults.txt",
+      "sha256": "4e5479e832398697b0b6af804c11c6202fb1be910b50942e5f417366fe7fab1a"
+    },
+    {
+      "path": "src/app/contract.ts",
+      "sha256": "1cb590b3ba00088d6724901056792edd032a9144c5d060860988c940890010d0"
+    },
+    {
+      "path": "src/app/game.ts",
+      "sha256": "6f77753937d1fc57dfe669eb7c8557d0257976780b559829d96dcb0a8171d9bd"
+    },
+    {
+      "path": "src/app/loader.ts",
+      "sha256": "b998ad6e1c99d8114d1c3bbdbd18f562e6ec01bbb92432274999bb2014dfa49b"
+    },
+    {
+      "path": "src/app/status.ts",
+      "sha256": "62d50797905a5cd8d11edee5d86c8fbcd995e919367a40a22fc57dd650e58a99"
+    },
+    {
+      "path": "src/app/subsystems.ts",
+      "sha256": "7b438dca9844079e751150b4eef7f27f7856ed6f2d21f30b2ecf42687aef6802"
+    },
+    {
+      "path": "src/app/ug1save.ts",
+      "sha256": "70135c72bb20dbcfd953fb9c137aa4207a6ca12af4eef82a3fa44d447d794335"
+    },
+    {
+      "path": "src/audio/index.ts",
+      "sha256": "ccde8dc86ab22c6d403a27ff96288dfdead28b3acb4c20ed439e8d5d14628dfb"
+    },
+    {
+      "path": "src/audio/proto.ts",
+      "sha256": "649792c9b9c2484d9ff1ddc5b3d05a0dae7b19dc1a35bb4c29a8bd5a0fbe3319"
+    },
+    {
+      "path": "src/audio/worklet.ts",
+      "sha256": "325c3330ce4f35a56e27167907bd647475dfd2582412c6662eccee1f9cfda7cd"
+    },
+    {
+      "path": "src/gpu/dxt.ts",
+      "sha256": "d49794043cd0378f0888cf0563b28f69d151153ef49aa365ce0dec5e6926bd91"
+    },
+    {
+      "path": "src/gpu/encoder.ts",
+      "sha256": "395ae0a206fe997dae1162581ef51188415208566d4c3f30f1f705a72e76a76f"
+    },
+    {
+      "path": "src/gpu/index.ts",
+      "sha256": "d06374f6b18135a91b5c243cd914ecb83c03147428cf6f47805423aba731b82d"
+    },
+    {
+      "path": "src/gpu/png-worker.ts",
+      "sha256": "3e58a897801447a44eebbfe5ab7f76b82ceee48f4102894c753044930cd55064"
+    },
+    {
+      "path": "src/gpu/proto.ts",
+      "sha256": "ab674e07d30cae362a10f077cd310de8d148adf23e81ad678b58294a0aaae4c5"
+    },
+    {
+      "path": "src/gpu/shader-abi.ts",
+      "sha256": "2da5c245e32c4a81000f1e0fe47db15bb5d4459019ea634053c38b621a60351c"
+    },
+    {
+      "path": "src/gpu/wgsl.ts",
+      "sha256": "b632bf4387ed46bd68e480af57a490e38c80924947a2b4033943ec3d667a0d3c"
+    },
+    {
+      "path": "src/host/abi.ts",
+      "sha256": "63f16171af3f7aea818b4c974be9c78a399d067a2def9a8ead94d5368b898585"
+    },
+    {
+      "path": "src/host/datacache.ts",
+      "sha256": "8f6097ec1d50eaab94f060366a699fe480cc386c86c2cdea95a4a3ab3991de52"
+    },
+    {
+      "path": "src/host/game-worker.ts",
+      "sha256": "8be86cf6677f8f62e3167b14daaa7c7cea0296bb9cb71d98e7739d71333d60eb"
+    },
+    {
+      "path": "src/host/io-worker.ts",
+      "sha256": "e27e43e0eb9bdc0bde151b818d74ac90740a57e67690f6aadc6a7249b7dcd187"
+    },
+    {
+      "path": "src/host/process.ts",
+      "sha256": "e1c6391d1c64619e9e20e28b4b09f94618eacbe3e2ade0ac28f0128a4ff8e585"
+    },
+    {
+      "path": "src/host/proto.ts",
+      "sha256": "406d81e3deb87b88af6902a75bf188b10c7faa6652945a98c55ea8e8d680e436"
+    },
+    {
+      "path": "src/host/tz.ts",
+      "sha256": "15f62c1255907f1b393c41485b717f506afe81a8d80e6f79c00dd872c0cac208"
+    },
+    {
+      "path": "src/input/gamepad.ts",
+      "sha256": "669df70994abeed679d402ae057bd6f8713d35fac2b63b6e4f5b6841fd66e1bb"
+    },
+    {
+      "path": "src/input/index.ts",
+      "sha256": "8167e6774eb7ca19690b089f14669a0a1bfdfd44801bc316cf77d918278214fd"
+    },
+    {
+      "path": "src/input/keymap.ts",
+      "sha256": "ce8636f450a253cfa3574613377081013a0f5c9e2157c20b34dd5a52d29b7bec"
+    },
+    {
+      "path": "src/input/proto.ts",
+      "sha256": "ed335035964338069aa164409755e7997e4e09df8f68e29c9416b60971f6433a"
+    },
+    {
+      "path": "src/input/synth.ts",
+      "sha256": "28617de1fa07c2374752607c03de3d4910c6ef00a6d2b6e9223d3da723e22f16"
+    },
+    {
+      "path": "src/input/wheel.ts",
+      "sha256": "85b944eec868dfb6ef0c31f5d7fbb5a5d6fad3f9486af411c28c33971afd027d"
+    },
+    {
+      "path": "src/net/index.ts",
+      "sha256": "54ef8307c7255a4fe78983b2c518b66273a84afa0638421043e612ecda70a8ba"
+    },
+    {
+      "path": "src/net/proto.ts",
+      "sha256": "d6a7c68fd0e2db24ba763cd1912a395290e37f8b319730d2b18c94224bc8c4b2"
+    },
+    {
+      "path": "src/app/display.ts",
+      "sha256": "154053cdd451cae93d6d1f107fafaf953468d1311d57cc74a2859538e3e8189a"
+    }
+  ]
+}

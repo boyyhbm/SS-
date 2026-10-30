@@ -1,3 +1,4 @@
+import { undergroundOrigin } from './games/underground/origin';
 import { getToken } from 'next-auth/jwt';
 import { NextResponse, type NextRequest } from 'next/server';
 export async function proxy(request: NextRequest) {
@@ -26,7 +27,9 @@ export async function proxy(request: NextRequest) {
     `connect-src 'self' blob: ${realtimeOrigin} ${realtimeHttp}${dev ? ' ws: wss:' : ''}`,
     "media-src 'self' blob:",
     "worker-src 'self' blob:",
-    "frame-src 'none'",
+    request.nextUrl.pathname === '/play/need-for-speed-underground'
+      ? `frame-src ${undergroundOrigin(request.nextUrl.origin)}/nfsu/`
+      : "frame-src 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
     "base-uri 'self'",
@@ -37,6 +40,15 @@ export async function proxy(request: NextRequest) {
   headers.set('Content-Security-Policy', policy);
   const response = NextResponse.next({ request: { headers } });
   response.headers.set('Content-Security-Policy', policy);
+  if (request.nextUrl.pathname === '/play/need-for-speed-underground') {
+    const runtime = undergroundOrigin(request.nextUrl.origin);
+    response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+    response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
+    response.headers.set(
+      'Permissions-Policy',
+      `camera=(), microphone=(), geolocation=(), cross-origin-isolated=(self "${runtime}"), fullscreen=(self "${runtime}"), gamepad=(self "${runtime}")`,
+    );
+  }
   return response;
 }
 export const config = {

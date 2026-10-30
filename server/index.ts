@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { undergroundStatic } from './underground-static';
 import { selectRoute } from '../src/games/route-registry';
 import { randomUUID } from 'node:crypto';
 import { Server, matchMaker } from '@colyseus/core';
@@ -74,6 +75,7 @@ const gameServer = new Server({
   }),
   express(app) {
     app.disable('x-powered-by');
+    app.use('/nfsu', undergroundStatic(allowedOrigin));
     app.use((req, res, next) => {
       const origin = req.get('origin');
       if (origin && origin !== allowedOrigin) return void res.status(403).end();

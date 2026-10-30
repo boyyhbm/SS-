@@ -35,6 +35,23 @@ export interface FutureRuntimeAdapter {
 }
 // Only explicitly registered, reviewed internal modules can run. No dynamic user paths.
 export const runtimeRegistry: Record<string, GameManifest> = {
+  'nfs-underground': {
+    id: 'nfs-underground',
+    slug: 'need-for-speed-underground',
+    title: 'Need for Speed: Underground',
+    description:
+      'Experimental 2003 PC port. Requires your own SPEED.EXE 1.4 and locally prepared Wasm/data. No game content is distributed.',
+    genre: 'racing',
+    cover: '/art/underground-local.svg',
+    banner: '/art/underground-local.svg',
+    screenshots: [],
+    runtimeType: 'wasm',
+    entrypoint: 'UndergroundLocalAdapter',
+    supportedInputs: ['keyboard', 'gamepad'],
+    supportedPlatforms: ['desktop'],
+    version: '0.1.0-experimental',
+    status: 'available',
+  },
   'fold-zero': {
     id: 'fold-zero',
     slug: 'fold-zero',

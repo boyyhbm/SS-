@@ -15,6 +15,7 @@ export default async function Play({ params }: { params: Promise<{ slug: string 
   const saves = await db.gameSave.findMany({ where: { userId: user.id, gameId: entry.gameId } });
   return (
     <GameRuntimeHost
+      accountId={user.id}
       gameId={entry.gameId}
       title={entry.game.title}
       language={user.settings?.language === 'en' ? 'en' : 'ru'}

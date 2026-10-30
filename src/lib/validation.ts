@@ -58,13 +58,13 @@ export const gameSchema = z
     cover: assetSchema,
     banner: assetSchema,
     status: z.enum(['DRAFT', 'COMING_SOON', 'AVAILABLE']),
-    runtimeKey: z.enum(['midnight-outlaws', 'fold-zero', '']).nullable(),
+    runtimeKey: z.enum(['midnight-outlaws', 'fold-zero', 'nfs-underground', '']).nullable(),
     sortOrder: z.number().int().min(0).max(10000),
     published: z.boolean(),
   })
   .refine(
     (v) =>
-      v.status !== 'AVAILABLE' || ['midnight-outlaws', 'fold-zero'].includes(v.runtimeKey ?? ''),
+      v.status !== 'AVAILABLE' || ['midnight-outlaws', 'fold-zero', 'nfs-underground'].includes(v.runtimeKey ?? ''),
     {
       message: 'runtimeRequired',
     },

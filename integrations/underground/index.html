@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="nexus-parent-origin" content="__NEXUS_ORIGIN__" />
+    <title>Underground · Experimental NEXUS Runtime</title>
+    <link rel="stylesheet" href="/nfsu/runtime.css" />
+  </head>
+  <body>
+    <header>
+      <span>NEXUS / LOCAL RUNTIME</span><button id="return" data-nfsu2-ui>Вернуться в NEXUS</button>
+    </header>
+    <main>
+      <p class="eyebrow">EXPERIMENTAL PORT · 2003 · STAGE A</p>
+      <h1>Need for Speed:<br /><em>Underground</em></h1>
+      <p class="lead">Ваша копия. Локальные файлы. Оригинальный runtime.</p>
+      <p id="status" role="status">Подключение к запуску NEXUS…</p>
+      <div id="setup" hidden>
+        <section>
+          <h2>01 / Подготовка</h2>
+          <p id="compatibility">Проверяем браузер…</p>
+          <p>
+            Нужна собственная совместимая установка с SPEED.EXE 1.4. Сначала локальная утилита
+            рекомпилирует её в WASM. Выбор обычной папки игры эту стадию не заменяет.
+          </p>
+          <a href="/nfsu/prepare-underground.mjs" download>Скачать локальную утилиту подготовки</a>
+          <pre>node prepare-underground.mjs --help</pre>
+          <label class="file"
+            >Выбрать подготовленную папку<input
+              id="package-input"
+              type="file"
+              webkitdirectory
+              multiple
+          /></label>
+          <p id="package"></p>
+          <button id="persist">Запросить постоянное локальное хранение</button
+          ><small
+            >Файлы остаются в браузере. Импорт не отправляет WASM или ресурсы на сервер.</small
+          >
+        </section>
+        <section>
+          <h2>02 / Запуск</h2>
+          <div class="options">
+            <label
+              >Разрешение<select id="resolution">
+                <option>1280x720</option>
+                <option>1600x900</option>
+                <option>1920x1080</option>
+                <option>960x540</option>
+              </select></label
+            ><label
+              >Частота кадров<select id="fps">
+                <option value="auto">Auto</option>
+                <option>30</option>
+                <option>60</option>
+                <option>120</option>
+              </select></label
+            ><label><input id="sound" type="checkbox" checked /> Звук</label>
+          </div>
+          <p id="controller"></p>
+          <p>
+            Стрелки / WASD · E / Z — передачи · Enter / Esc — меню. Переназначение контроллера — в
+            разделе Controllers NEXUS перед запуском.
+          </p>
+          <button id="play" class="primary" disabled>Запустить локальный runtime</button
+          ><button id="stop" hidden>Завершить игру</button
+          ><small
+            >Разрешение, звук и FPS применяются при следующем запуске. Online и LAN в этой
+            интеграции отключены.</small
+          >
+        </section>
+        <section>
+          <h2>03 / Сохранения на этом устройстве</h2>
+          <p id="save-empty">Сохранений пока нет. Профиль создаётся в оригинальном меню игры.</p>
+          <ul id="save-list"></ul>
+          <div class="actions">
+            <button id="export">Экспорт сохранений</button
+            ><button id="backup">Создать резервную копию</button
+            ><label class="file"
+              >Импорт сохранений<input id="save-input" type="file" accept=".json,application/json"
+            /></label>
+          </div>
+          <label>Локальные резервные копии<select id="backups"></select></label
+          ><button id="restore">Восстановить выбранную копию</button
+          ><small
+            >Импорт доступен после остановки игры. Исходные .usr, .opt, .cfg и .ugd сохраняются без
+            изменения формата. Облачная синхронизация игровых файлов выключена.</small
+          >
+        </section>
+        <section class="notice">
+          <h2>Что проверено</h2>
+          <p>
+            Этот экран не подтверждает работоспособность вашей копии. Без законно предоставленных
+            совместимых файлов игровые режимы, звук и FPS не тестируются. Поддержка Gamepad API не
+            является сертификацией Xbox, DualSense или DualShock 4.
+          </p>
+          <a href="/nfsu/LICENSE.txt">Лицензия открытого браузерного слоя</a>
+          <p>
+            Неофициальная экспериментальная интеграция. Название используется для идентификации.
+            Electronic Arts не связана с NEXUS. Права на оригинальную игру и её ресурсы не
+            предоставляются лицензией MIT.
+          </p>
+        </section>
+      </div>
+      <section id="stage" hidden>
+        <canvas id="game" aria-label="Оригинальная игра через WebGPU"></canvas>
+        <div class="actions" data-nfsu2-ui>
+          <button id="fullscreen">Полный экран</button><button id="unlock">Включить звук</button>
+        </div>
+        <output id="metrics">Измерения появятся после реальных кадров игры.</output>
+      </section>
+    </main>
+    <script type="module" src="/nfsu/runtime.js"></script>
+  </body>
+</html>

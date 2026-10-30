@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-30T19:57:57.540Z",
+  "scope": "Infrastructure/capability probe, not game performance or gameplay.",
+  "system": {
+    "os": "Linux",
+    "release": "6.18.55",
+    "arch": "x64",
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "memoryGiB": 33,
+    "node": "v24.19.0",
+    "chromium": "154.0.8037.57",
+    "rendering": "Headless Chromium; software WebGL flags. WebGPU adapter unavailable on this worker."
+  },
+  "capability": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "secure": true,
+    "crossOriginIsolated": true,
+    "wasm": true,
+    "sharedMemory": true,
+    "waitAsync": true,
+    "opfs": true,
+    "webgpuAdapter": false
+  },
+  "gameplayTested": false,
+  "gamePerformance": {
+    "wasmLoadMs": null,
+    "runtimePrepareMs": null,
+    "wasmMemoryMiB": null,
+    "averageFPS": null,
+    "onePercentLowFPS": null,
+    "frameTimeMs": null,
+    "inputLatencyMs": null,
+    "audioStability": null,
+    "longSession": null
+  }
+}

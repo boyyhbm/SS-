@@ -1,0 +1,52 @@
+{
+  "format": "nexus-nfsu-tools/v1",
+  "upstreamRevision": "327b22c39041f197a4cfdf2544f81799b332b6c7",
+  "containsOriginalGameContent": false,
+  "resources": [
+    {
+      "path": "LICENSE.txt",
+      "bytes": 3525,
+      "sha256": "b75880a57d0f92ddb3939682164f89d18f4e87483e055731361d1555f138f622"
+    },
+    {
+      "path": "audio/worklet.js",
+      "bytes": 1320,
+      "sha256": "34aded49b0ba4af7108ddd1bd94cf5d521726b8b55c2cc1aed745bc65fcca20d"
+    },
+    {
+      "path": "gpu/png-worker.js",
+      "bytes": 743,
+      "sha256": "28e269824405fafba1a0628ab659a20125c6c832403ac63c8b7d9b2d27cb8af8"
+    },
+    {
+      "path": "host/game-worker.js",
+      "bytes": 6149,
+      "sha256": "b8a87828c7d92759fb45a8531952a118e42088f9784b937b9bad9bb8dbd8ce92"
+    },
+    {
+      "path": "host/io-worker.js",
+      "bytes": 15169,
+      "sha256": "df872d56604f23636bd31bf0bdae166f97d2642d9f5fd351ff0c8818829dc978"
+    },
+    {
+      "path": "index.html",
+      "bytes": 6380,
+      "sha256": "ae405cce48e3d8a76ee9497ef9471a966391b9e7564e72e1d235fc43801839e3"
+    },
+    {
+      "path": "prepare-underground.mjs",
+      "bytes": 12796,
+      "sha256": "05332d4d63e010acd4052b2a49f2b1a30cd38b38f5a1cb13ed0b84ea552c31ed"
+    },
+    {
+      "path": "runtime.css",
+      "bytes": 2712,
+      "sha256": "6713c9f1e0898c113151de31a3ee64a21e9a81cf20d180a38a2fe49e36bc609c"
+    },
+    {
+      "path": "runtime.js",
+      "bytes": 594029,
+      "sha256": "616afae557a436ab91c53a7504f4e183dd2c74a34f03bed82d2b5c0b2b9405b0"
+    }
+  ]
+}

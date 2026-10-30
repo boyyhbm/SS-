@@ -39,6 +39,7 @@ export default async function OnlinePage({
     });
     return (
       <FoldPlayer
+        accountId={user.id}
         gameId={entry.gameId}
         title={entry.game.title}
         language={user.settings?.language === 'en' ? 'en' : 'ru'}

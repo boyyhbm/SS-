@@ -6,6 +6,8 @@ export default defineConfig([
   ...nextTs,
   globalIgnores([
     '.next/**',
+    'vendor/nfsu1-web/**',
+    'public/nfsu-runtime/**',
     '.asset-cache/**',
     '.asset-tools/**',
     'public/game-assets/basis-r186/**',

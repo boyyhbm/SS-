@@ -200,6 +200,7 @@ export function AdminPanel({
                 >
                   <option value="">{t('noRuntime')}</option>
                   <option value="midnight-outlaws">MIDNIGHT OUTLAWS / Three.js</option>
+                  <option value="nfs-underground">Underground / Local Experimental Adapter</option>
                   <option value="fold-zero">FOLD: ZERO / NEXUS FORGE</option>
                 </select>
               </label>

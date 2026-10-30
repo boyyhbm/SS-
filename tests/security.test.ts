@@ -55,6 +55,10 @@ describe('account and manifest boundaries', () => {
     expect(isPlayable({ ...game, runtimeKey: 'unknown' })).toBe(false);
     expect(isPlayable({ ...game, status: 'COMING_SOON' })).toBe(false);
     expect(isPlayable({ ...game, published: false })).toBe(false);
-    expect(Object.keys(runtimeRegistry).sort()).toEqual(['fold-zero', 'midnight-outlaws']);
+    expect(Object.keys(runtimeRegistry).sort()).toEqual([
+      'fold-zero',
+      'midnight-outlaws',
+      'nfs-underground',
+    ]);
   });
 });

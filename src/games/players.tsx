@@ -5,6 +5,7 @@ import type { ComponentType } from 'react';
 import type { Language } from '@/lib/i18n';
 import { ROUTE_IDS } from './route-registry';
 export interface GameRuntimeContext {
+  accountId: string;
   gameId: string;
   title: string;
   language: Language;
@@ -13,6 +14,10 @@ export interface GameRuntimeContext {
 const MidnightPlayer = dynamic(() => import('@/components/game-player').then((m) => m.GamePlayer), {
   ssr: false,
 });
+const UndergroundPlayer = dynamic(
+  () => import('@/components/underground-player').then((m) => m.UndergroundPlayer),
+  { ssr: false },
+);
 const FoldPlayer = dynamic(() => import('@/components/fold-player').then((m) => m.FoldPlayer), {
   ssr: false,
 });
@@ -58,4 +63,5 @@ function MidnightAdapter({ gameId, title, language, initialSaves }: GameRuntimeC
 export const registeredPlayers: Record<string, ComponentType<GameRuntimeContext>> = {
   'midnight-outlaws': MidnightAdapter,
   'fold-zero': FoldPlayer,
+  'nfs-underground': UndergroundPlayer,
 };
