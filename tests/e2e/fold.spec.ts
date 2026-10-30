@@ -1,5 +1,5 @@
 import { test, expect, chromium, type Page } from '@playwright/test';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -76,7 +76,9 @@ test('two independent accounts play a server-verified Fold duel with different i
     videoMatchEndSeconds: 0,
     audioRecording: null as { path: string; offsetSeconds: number } | null,
     startClicks: 0,
-    graphics: artCapture ? 'Medium client A / Competitive client B; reduced software backing resolution' : 'Competitive; functional software-GPU verification',
+    graphics: artCapture
+      ? 'Medium client A / Competitive client B; reduced software backing resolution'
+      : 'Competitive; functional software-GPU verification',
     foldTransitions: [new Set<string>(), new Set<string>()],
     screenshots: [] as string[],
   };
@@ -216,7 +218,40 @@ test('two independent accounts play a server-verified Fold duel with different i
       );
       expect(
         (
-          await post(p, '/api/fold-settings', { ...defaultForgeSettings, quality: artCapture && i === 0 ? 'medium' : 'competitive' })
+          await post(p, '/api/fold-settings', {
+            ownerId: ids[i],
+            expectedRevision: 0,
+            mutationId: randomUUID(),
+            settings: {
+              ...defaultForgeSettings,
+              mouse: {
+                ...defaultForgeSettings.mouse,
+                sensitivity: 1.2,
+                x: 1.3,
+                y: 0.7,
+                ads: 0.5,
+                invertY: true,
+              },
+              keys: {
+                ...defaultForgeSettings.keys,
+                forward: { kind: 'key', code: 'KeyI' },
+                fold: { kind: 'key', code: 'KeyG' },
+                fire: { kind: 'key', code: 'KeyH' },
+              },
+              controller: {
+                ...defaultForgeSettings.controller,
+                bindings: {
+                  ...defaultForgeSettings.controller.bindings,
+                  fold: { kind: 'button', index: 11 },
+                  fire: { kind: 'button', index: 12 },
+                },
+              },
+              graphics: {
+                ...defaultForgeSettings.graphics,
+                quality: artCapture && i === 0 ? 'medium' : 'competitive',
+              },
+            },
+          })
         ).status(),
       ).toBe(200);
       await p.goto('/play/fold-zero');
@@ -287,9 +322,115 @@ test('two independent accounts play a server-verified Fold duel with different i
     // The keyboard client captures the mouse through the real Pointer Lock API.
     await b.locator('.forge-viewport canvas').click({ position: { x: 400, y: 300 }, force: true });
     await b.waitForFunction(() => !!document.pointerLockElement);
+    // Opening the real settings screen must neutralize only this client. The
+    // authoritative server and the other browser keep running throughout.
+    await b.waitForFunction(
+      () => (window as unknown as { forgeState: ForgeState }).forgeState?.phase === 'active',
+    );
+    await b.keyboard.press('Escape');
+    await b.getByRole('button', { name: 'Настройки', exact: true }).click();
+    const tickBeforeMenu = await b.evaluate(
+      () => (window as unknown as { forgeState: ForgeState }).forgeState.tick,
+    );
+    await b.keyboard.down('i');
+    await b.waitForFunction(
+      (tick) => (window as unknown as { forgeState: ForgeState }).forgeState.tick > tick + 60,
+      tickBeforeMenu,
+    );
+    await expect(b.getByRole('dialog', { name: 'Настройки FOLD ZERO' })).toBeVisible();
+    await b.getByRole('button', { name: 'Закрыть настройки' }).click();
+    const menuPose = await b.evaluate((id) => {
+      const p = (window as unknown as { forgeState: ForgeState }).forgeState.players.find(
+        (p) => p.id === id,
+      )!;
+      return { x: p.x, z: p.z };
+    }, ids[1]);
+    await b.getByRole('button', { name: 'Продолжить', exact: true }).click();
+    await b.waitForFunction(() => !!document.pointerLockElement);
+    await b.waitForTimeout(350);
+    const resumedPose = await b.evaluate((id) => {
+      const p = (window as unknown as { forgeState: ForgeState }).forgeState.players.find(
+        (p) => p.id === id,
+      )!;
+      return { x: p.x, z: p.z };
+    }, ids[1]);
+    expect(Math.hypot(resumedPose.x - menuPose.x, resumedPose.z - menuPose.z)).toBeLessThan(0.08);
+    await b.keyboard.up('i');
+    await b.keyboard.down('i');
+    await b.waitForFunction(
+      ({ id, pose }) => {
+        const p = (window as unknown as { forgeState: ForgeState }).forgeState.players.find(
+          (p) => p.id === id,
+        )!;
+        return Math.hypot(p.x - pose.x, p.z - pose.z) > 0.3;
+      },
+      { id: ids[1], pose: resumedPose },
+    );
+    await b.keyboard.up('i');
+    report.checks.push(
+      'Remapped keyboard movement and custom gamepad/fire/Fold bindings; settings during a live duel keep server ticks advancing and both clients connected; held-key release gate and Pointer Lock resume verified',
+    );
+    // Observe view angles, but change them only with normal mouse events under
+    // actual Pointer Lock. Independent X/Y, inversion and ADS must affect them.
+    await b.evaluate(() =>
+      window.dispatchEvent(new MouseEvent('mousemove', { movementX: 0, movementY: 0 })),
+    );
+    const beforeAim = await b.evaluate(() => ({
+      ...(window as unknown as { forgeAim: { yaw: number; pitch: number } }).forgeAim,
+    }));
+    await b.evaluate(() =>
+      window.dispatchEvent(new MouseEvent('mousemove', { movementX: 20, movementY: 10 })),
+    );
+    await b.waitForFunction(
+      (before) =>
+        Math.abs((window as unknown as { forgeAim: { yaw: number } }).forgeAim.yaw - before) > 0.02,
+      beforeAim.yaw,
+    );
+    const afterAim = await b.evaluate(() => ({
+      ...(window as unknown as { forgeAim: { yaw: number; pitch: number } }).forgeAim,
+    }));
+    expect(
+      Math.atan2(Math.sin(afterAim.yaw - beforeAim.yaw), Math.cos(afterAim.yaw - beforeAim.yaw)),
+    ).toBeCloseTo(-0.0624, 3);
+    expect(afterAim.pitch - beforeAim.pitch).toBeCloseTo(0.0168, 3);
+    await b.evaluate(() => {
+      document
+        .querySelector('.forge-viewport canvas')!
+        .dispatchEvent(new MouseEvent('mousedown', { button: 2, bubbles: true }));
+      window.dispatchEvent(new MouseEvent('mousemove', { movementX: 20, movementY: 10 }));
+      window.dispatchEvent(new MouseEvent('mouseup', { button: 2, bubbles: true }));
+    });
+    await b.waitForFunction(
+      (before) =>
+        Math.abs((window as unknown as { forgeAim: { yaw: number } }).forgeAim.yaw - before) > 0.01,
+      afterAim.yaw,
+    );
+    const adsAim = await b.evaluate(() => ({
+      ...(window as unknown as { forgeAim: { yaw: number; pitch: number } }).forgeAim,
+    }));
+    expect(
+      Math.atan2(Math.sin(adsAim.yaw - afterAim.yaw), Math.cos(adsAim.yaw - afterAim.yaw)),
+    ).toBeCloseTo(-0.0312, 3);
+    expect(adsAim.pitch - afterAim.pitch).toBeCloseTo(0.0084, 3);
+    report.checks.push(
+      'Measured actual view-angle changes confirm independent mouse X/Y, inversion and 0.5 ADS multiplier under real Pointer Lock',
+    );
     console.log(JSON.stringify({ forgeStage: 'duel started' }));
     for (const [slot, p] of pages.entries())
-      await p.evaluate(installForgeBrowserDriver, { id: ids[slot], slot, tour: artCapture });
+      await p.evaluate(installForgeBrowserDriver, {
+        id: ids[slot],
+        slot,
+        tour: artCapture,
+        controls: {
+          forward: 'KeyI',
+          fold: 'KeyG',
+          fire: 'KeyH',
+          padFold: 11,
+          padFire: 12,
+          mouseX: 1.56,
+          mouseY: -0.84,
+        },
+      });
     const started = Date.now();
     let lastProbe = 0;
     let previousRound = 0;
@@ -313,12 +454,13 @@ test('two independent accounts play a server-verified Fold duel with different i
         }
       }
       if (artCapture && clients[0].game?.phase === 'active') {
-        const p = clients[0].game.players.find(p => p.id === ids[0]);
-        const zone = p ? p.x < -15 ? 'industrial' : p.x > 15 ? 'research' : 'central' : null;
-        if (zone && !report.screenshots.some(path => path.endsWith(zone + '.png'))) {
+        const p = clients[0].game.players.find((p) => p.id === ids[0]);
+        const zone = p ? (p.x < -15 ? 'industrial' : p.x > 15 ? 'research' : 'central') : null;
+        if (zone && !report.screenshots.some((path) => path.endsWith(zone + '.png'))) {
           await fs.mkdir('public/reports/fold-controls/gameplay', { recursive: true });
           const path = 'public/reports/fold-controls/gameplay/' + zone + '.png';
-          await a.screenshot({ path }); report.screenshots.push(path);
+          await a.screenshot({ path });
+          report.screenshots.push(path);
         }
       }
       if (clients[0].game?.round !== previousRound) {
@@ -350,7 +492,7 @@ test('two independent accounts play a server-verified Fold duel with different i
     report.lastRoundReason = outcomes[0].reason;
     expect(shots.size).toBeGreaterThan(0);
     expect(hits.size).toBeGreaterThan(0);
-    expect(report.foldTransitions.every(nodes => nodes.has('shutter:1'))).toBe(true);
+    expect(report.foldTransitions.every((nodes) => nodes.has('shutter:1'))).toBe(true);
     const records = await db.matchParticipant.findMany({
       where: { userId: { in: ids }, match: { game: { slug: 'fold-zero' }, status: 'FINISHED' } },
       include: { result: true },
@@ -424,7 +566,14 @@ test('two independent accounts play a server-verified Fold duel with different i
         const path = await p.video()?.path();
         if (path) report.recordedFiles.push(path);
       }
-    await fs.writeFile('docs/fold-controls/gameplay.json', JSON.stringify({ ...report, foldTransitions: report.foldTransitions.map(nodes => [...nodes]) }, null, 2) + '\n');
+    await fs.writeFile(
+      'docs/fold-controls/gameplay.json',
+      JSON.stringify(
+        { ...report, foldTransitions: report.foldTransitions.map((nodes) => [...nodes]) },
+        null,
+        2,
+      ) + '\n',
+    );
     for (const b of browsers) await b.close();
   }
 });

@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-27T19:02:57.323Z",
+  "passed": true,
+  "origin": "http://localhost:3001",
+  "applicationCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
+  "scope": "Local isolated production build, two authenticated Chromium processes with normal keyboard and Pointer Lock input for both players. This is not public HTTPS/WSS or physical hardware evidence.",
+  "checks": [
+    "Existing NEXUS authentication, independent libraries and real runtime loading",
+    "Private friend invitation, shared lobby, ready and synchronized start",
+    "Ordered five-round duel, live Fold transformation, authoritative hits and identical PostgreSQL results",
+    "Rematch lobby and explicit exit for both clients"
+  ],
+  "websocketOrigins": ["ws://localhost:2568"],
+  "shots": 38,
+  "hits": 15,
+  "score": [5, 0],
+  "records": [
+    {
+      "matchId": "cmvr20nvk000iaomjo2sycava",
+      "place": 1,
+      "serverVerified": true,
+      "didFinish": true,
+      "score": [5, 0]
+    },
+    {
+      "matchId": "cmvr20nvk000iaomjo2sycava",
+      "place": 2,
+      "serverVerified": true,
+      "didFinish": true,
+      "score": [5, 0]
+    }
+  ],
+  "errors": [],
+  "stage": "duel"
+}

@@ -9,7 +9,7 @@ permissions:
 jobs:
   checks:
     runs-on: ubuntu-24.04
-    timeout-minutes: 50 # Includes two real browser clients on every published track.
+    timeout-minutes: 70 # Two browser clients per track plus account/settings fault scenarios.
     env:
       NPM_CONFIG_CACHE: /home/runner/.npm
       E2E_SOFTWARE_DPR: '0.15'

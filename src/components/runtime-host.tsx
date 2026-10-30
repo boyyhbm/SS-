@@ -18,5 +18,5 @@ export function GameRuntimeHost({
       </div>
     );
   }
-  return <Player {...context} />;
+  return <Player key={context.accountId + ':' + context.gameId} {...context} />;
 }

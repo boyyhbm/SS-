@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-28T17:30:22.245Z",
+  "passed": true,
+  "filename": "duel.mp4",
+  "durationSeconds": 317.72,
+  "bytes": 14342349,
+  "sha256": "8a80b00f1999a5a8248a629c1e75e8050910b0da7046c26dad5d8eadcb6803f0",
+  "scope": "One uninterrupted actual five-round match between two independent authenticated browsers, automated normal keyboard/Pointer Lock and virtual Gamepad API inputs, real authoritative Fold transitions and persisted results. Original speed, live Web Audio bus from the same recording with approximate subsecond alignment. Reduced software-GPU backing resolution is disclosed; no frame interpolation, generated images or replacement soundtrack.",
+  "shots": 81,
+  "hits": 10,
+  "foldTransitions": [
+    [
+      "shutter:1"
+    ],
+    [
+      "shutter:1"
+    ]
+  ]
+}

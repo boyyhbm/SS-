@@ -14,13 +14,17 @@ export class ForgeEffects {
   private particles = new Float32Array(32 * 7);
   private cursor = 0;
   private dummy = new Object3D();
+  private count = 4;
+  setQuality(quality: 'low' | 'medium' | 'high') {
+    this.count = quality === 'low' ? 1 : quality === 'medium' ? 3 : 5;
+  }
   constructor() {
     this.mesh.frustumCulled = false;
     this.root.add(this.mesh);
     for (let i = 0; i < 32; i++) this.particles[i * 7 + 6] = -1;
   }
   emit(p: Vector3Like) {
-    for (let k = 0; k < 4; k++) {
+    for (let k = 0; k < this.count; k++) {
       const i = (this.cursor++ % 32) * 7;
       this.particles[i] = p.x;
       this.particles[i + 1] = p.y;

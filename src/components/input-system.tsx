@@ -10,6 +10,16 @@ import { inputText } from '@/input/i18n';
 import { useUI, playSound } from '@/lib/ui-store';
 import type { InputAction } from '@/input/profiles';
 import { Modal } from './modal';
+function navigationFeedback(kind: 'confirm' | 'focus') {
+  const game = document.querySelector('[data-game-ui-feedback]');
+  if (game) {
+    // An embedded game owns its own UI mixer and vibration preferences.
+    game.dispatchEvent(new CustomEvent('nexus-game-ui-feedback', { detail: kind }));
+    return;
+  }
+  if (kind === 'confirm') void nexusInput.haptic('confirm');
+  playSound(kind);
+}
 export function InputGlyph({ action, fallback }: { action: InputAction; fallback: string }) {
   const state = useSyncExternalStore(
     nexusInput.subscribe,
@@ -118,8 +128,7 @@ export function InputSystem() {
         return;
       }
       el.click();
-      void nexusInput.haptic('confirm');
-      playSound('confirm');
+      navigationFeedback('confirm');
     };
     const off = nexusInput.on((event) => {
       if (event.type === 'connected' || event.type === 'disconnected') {
@@ -183,7 +192,7 @@ export function InputSystem() {
         } else if (event.time - repeat.at > (event.time - repeat.started < 450 ? 350 : 130)) {
           repeat.at = event.time;
           spatialFocus.move(direction);
-          playSound('focus');
+          navigationFeedback('focus');
         }
       } else lastRepeat.current.direction = '';
       if (pressed('confirm')) confirm();

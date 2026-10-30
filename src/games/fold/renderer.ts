@@ -9,6 +9,7 @@ import { ForgeAnimation } from './animation';
 import { ForgeCamera } from './camera';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { FoundryArt } from './foundry-art';
+import { ForgePostProcessing } from './post-processing';
 const presets = {
   competitive: { scale: 1, shadows: 0 },
   low: { scale: 0.6, shadows: 0 },
@@ -23,6 +24,7 @@ export class ForgeRenderer {
   readonly camera = this.cameraController.camera;
   readonly assets = new ForgeAssets();
   readonly architecture: FoundryArt;
+  readonly pipeline: ForgePostProcessing;
   private environment: T.WebGLRenderTarget | null = null;
   private modules = new Map<string, T.Object3D>();
   private moduleSlots = new Map<string, number>();
@@ -39,6 +41,8 @@ export class ForgeRenderer {
   private sun = new T.DirectionalLight('#ffe7c8', 1.9);
   private size = { w: 1, h: 1 };
   private currentQuality = '';
+  private graphicsSignature = '';
+  private resolutionScale = 1;
   private autoQuality: 'low' | 'competitive' | 'medium' = 'medium';
   private canvas: HTMLCanvasElement;
   private muzzle: T.Mesh | null = null;
@@ -49,7 +53,7 @@ export class ForgeRenderer {
     public settings: ForgeSettings,
   ) {
     this.renderer = new T.WebGLRenderer({
-      antialias: true,
+      antialias: false,
       alpha: false,
       powerPreference: 'high-performance',
     });
@@ -60,6 +64,7 @@ export class ForgeRenderer {
     this.renderer.outputColorSpace = T.SRGBColorSpace;
     this.renderer.toneMapping = T.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 0.95;
+    this.renderer.info.autoReset = false;
     this.renderer.shadowMap.type = T.PCFSoftShadowMap;
     this.renderer.shadowMap.needsUpdate = true;
     this.scene.background = new T.Color('#30445e');
@@ -91,6 +96,7 @@ export class ForgeRenderer {
     this.scene.add(this.camera);
     this.architecture = new FoundryArt(this.renderer);
     this.scene.add(this.architecture.root);
+    this.pipeline = new ForgePostProcessing(this.renderer, this.scene, this.camera);
     this.updateSettings(settings);
     this.resize();
   }
@@ -305,37 +311,68 @@ export class ForgeRenderer {
     );
     this.scene.add(warmup);
     this.weapon.visible = true;
+    await this.renderer.compileAsync(this.scene, this.camera);
+    if (this.disposed) return;
+    const environment = this.scene.environment;
+    this.scene.environment = environment ? null : this.environment!.texture;
+    await this.renderer.compileAsync(this.scene, this.camera);
+    if (this.disposed) return;
+    this.scene.environment = environment;
+    this.pipeline.prewarm();
+    this.renderer.shadowMap.needsUpdate = true;
     this.weapon.visible = false;
     this.scene.remove(warmup);
   }
   get element() {
     return this.canvas;
   }
+  get effectiveQuality() {
+    return this.currentQuality;
+  }
   resize() {
     const { width, height } = this.host.getBoundingClientRect();
     this.size = { w: Math.max(1, width), h: Math.max(1, height) };
     this.camera.aspect = this.size.w / this.size.h;
     this.camera.updateProjectionMatrix();
+    const requested = Math.min(window.devicePixelRatio, 1.5) * this.resolutionScale;
+    const ratio = Math.min(requested, Math.sqrt(8294400 / (this.size.w * this.size.h)));
+    this.renderer.setPixelRatio(ratio);
     this.renderer.setSize(this.size.w, this.size.h);
+    this.pipeline.resize(this.size.w, this.size.h, ratio);
   }
   updateSettings(s: ForgeSettings, autoQuality?: 'low' | 'competitive' | 'medium') {
     this.settings = s;
     if (autoQuality) this.autoQuality = autoQuality;
-    const key = s.quality === 'auto' ? this.autoQuality : s.quality;
-    if (key === this.currentQuality) return;
+    const g = s.graphics;
+    const key = g.quality === 'auto' ? this.autoQuality : g.quality;
+    const signature = key + JSON.stringify(g);
+    if (signature === this.graphicsSignature) return;
+    this.graphicsSignature = signature;
     this.currentQuality = key;
     const p = presets[key];
     this.architecture.setDetail(key === 'low' || key === 'competitive' ? 'low' : 'high');
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5) * p.scale);
-    this.renderer.shadowMap.enabled = p.shadows > 0;
-    this.sun.shadow.mapSize.setScalar(p.shadows || 256);
-    this.sun.shadow.map?.dispose();
-    this.sun.shadow.map = null;
+    this.architecture.setTextureQuality(g.texture);
+    this.architecture.contacts.visible =
+      g.ao === 'contact' || (g.ao === 'ssao' && !this.pipeline.capabilities.ssao);
+    this.resolutionScale = p.scale * g.renderScale;
+    const shadows =
+      g.shadows === 'preset'
+        ? p.shadows
+        : { off: 0, low: 512, medium: 1024, high: 2048 }[g.shadows];
+    this.renderer.shadowMap.enabled = shadows > 0;
+    if (this.sun.shadow.mapSize.x !== (shadows || 256)) {
+      this.sun.shadow.mapSize.setScalar(shadows || 256);
+      this.sun.shadow.map?.dispose();
+      this.sun.shadow.map = null;
+    }
+    this.scene.environment = g.reflections ? (this.environment?.texture ?? null) : null;
+    this.pipeline.configure(g);
     this.renderer.shadowMap.needsUpdate = true;
     this.resize();
   }
   private pilot(p: ForgePlayer) {
-    let actor = this.pilots.get(p.id);
+    const slotKey = String(p.slot);
+    let actor = this.pilots.get(slotKey);
     if (!actor) {
       const { object, clips } = this.assets.instance(p.slot ? 'pilot-coral' : 'pilot-cyan');
       const marker = new T.Mesh(
@@ -348,7 +385,7 @@ export class ForgeRenderer {
       object.add(contact);
       this.scene.add(object);
       actor = { object, marker, contact, animation: new ForgeAnimation(object, clips) };
-      this.pilots.set(p.id, actor);
+      this.pilots.set(slotKey, actor);
     }
     return actor;
   }
@@ -371,6 +408,7 @@ export class ForgeRenderer {
       this.core.rotation.y = time * 0.5;
       this.core.position.y = 1.2 + Math.sin(time) * 0.1;
     }
+    for (const actor of this.pilots.values()) actor.object.visible = false;
     if (state) {
       for (const n of state.nodes) {
         const d = foldDefinitions.find((d) => d.id === n.id)!,
@@ -411,9 +449,10 @@ export class ForgeRenderer {
       menu,
       time,
       dt,
-      this.settings.headBob,
+      this.settings.graphics.headBob,
       state?.players.find((p) => p.id === localId),
       aim,
+      this.settings.graphics.fov,
     );
     if (this.weapon) {
       this.weapon.visible = !!local && !menu;
@@ -427,7 +466,8 @@ export class ForgeRenderer {
       this.weapon.rotation.z = p?.reload ? Math.sin(p.reload * 3) * 0.2 : 0;
     }
     if (this.muzzle) this.muzzle.visible = !!local && !menu && time - shotAt < 0.035;
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.info.reset();
+    this.pipeline.render(dt);
   }
   dispose() {
     this.disposed = true;
@@ -437,6 +477,7 @@ export class ForgeRenderer {
     this.moduleBatches.length = 0;
     this.assets.dispose();
     this.architecture.dispose();
+    this.pipeline.dispose();
     for (const g of this.ownedGeometries) g.dispose();
     for (const m of this.ownedMaterials) m.dispose();
     this.environment?.dispose();

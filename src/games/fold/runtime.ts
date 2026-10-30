@@ -10,6 +10,7 @@ import type { ForgeSettings } from './settings';
 import { balance, FOLD_DT } from './config';
 import { ForgeUIBridge, type ForgeFrameStats } from './ui-bridge';
 import { nexusInput } from '@/input/manager';
+import { ForgeRenderPacer } from './render-pacer';
 export type { ForgeFrameStats } from './ui-bridge';
 // Owns the only visual transform writer and render RAF for this runtime. The
 // root NEXUS input poll does not own any transforms or another simulation.
@@ -43,8 +44,17 @@ export class NexusForgeRuntime {
   private menu = true;
   private benchmarkFrames: number[] = [];
   private benchmarkDone = false;
+  private benchmarkSeconds = 0;
   private lastHud = 0;
   private remoteSteps = new Map<string, number>();
+  private pacer = new ForgeRenderPacer();
+  private feedbackTarget: HTMLElement | null;
+  private uiFeedback = (event: Event) => {
+    const kind = (event as CustomEvent).detail;
+    if (kind !== 'confirm' && kind !== 'focus') return;
+    this.audio.play('ui');
+    if (kind === 'confirm') this.haptic('confirm');
+  };
   set onStats(value: (stats: ForgeFrameStats, hit: boolean) => void) {
     this.ui.onFrame = value;
   }
@@ -60,6 +70,9 @@ export class NexusForgeRuntime {
     this.input = new ForgeInput(this.renderer.element, settings);
     this.input.onMenu = () => this.onMenu();
     this.audio = new ForgeAudio(settings);
+    this.feedbackTarget = host.closest<HTMLElement>('[data-game-ui-feedback]');
+    this.feedbackTarget?.addEventListener('nexus-game-ui-feedback', this.uiFeedback);
+    this.effects.setQuality(settings.graphics.effects);
     this.input.onUnlock = () => void this.audio.activate();
     this.resizing = new ResizeObserver(() => this.renderer.resize());
     this.resizing.observe(host);
@@ -72,16 +85,43 @@ export class NexusForgeRuntime {
     this.timer = setInterval(this.simulate, 1000 / 60);
     this.raf = requestAnimationFrame(this.render);
   }
+  resetSession() {
+    this.latest = null;
+    this.snapshots.length = 0;
+    this.visual = null;
+    this.lastRound = this.lastEvent = this.seq = 0;
+    this.prediction?.dispose();
+    this.prediction = null;
+    this.input.clear();
+    this.audio.setMenu(true);
+  }
   setMenu(menu: boolean) {
+    // Resume is immediate in the user gesture; React later publishes the same
+    // menu state. Reapplying it must not clear a newly pressed movement key.
+    if (this.menu === menu) return;
     this.menu = menu;
     this.input.enabled = !menu;
-    this.input.clear();
     if (menu && document.pointerLockElement === this.renderer.element) document.exitPointerLock();
   }
   updateSettings(settings: ForgeSettings) {
-    this.input.settings = settings;
+    if (
+      settings.graphics.quality === 'auto' &&
+      this.renderer.settings.graphics.quality !== 'auto'
+    ) {
+      this.benchmarkFrames.length = 0;
+      this.benchmarkDone = false;
+      this.benchmarkSeconds = 0;
+    }
+    this.input.configure(settings);
     this.audio.update(settings);
+    this.effects.setQuality(settings.graphics.effects);
+    if (!settings.controller.vibration || !settings.controller.vibrationIntensity)
+      void nexusInput.resetHaptics();
     this.renderer.updateSettings(settings);
+  }
+  private haptic(event: Parameters<typeof nexusInput.haptic>[0]) {
+    const c = this.renderer.settings.controller;
+    if (c.vibration) void nexusInput.haptic(event, c.vibrationIntensity);
   }
   receive(snapshot: ForgeSnapshot) {
     this.latest = snapshot;
@@ -90,6 +130,7 @@ export class NexusForgeRuntime {
     this.snapshots.push(snapshot);
     if (this.snapshots.length > 10) this.snapshots.shift();
     const game = snapshot.game;
+    this.audio.setMenu(!game);
     if (!game) {
       this.visual = null;
       this.lastEvent = 0;
@@ -131,14 +172,13 @@ export class NexusForgeRuntime {
           this.audio.play(event.type, local ? undefined : event);
         }
         if (event.type === 'hit') {
-          if (event.targetId === this.network.userId) void nexusInput.haptic('collision');
+          if (event.targetId === this.network.userId) this.haptic('collision');
           if (event.playerId === this.network.userId) this.hitAt = performance.now();
           const target = game.players.find((p) => p.id === event.targetId);
           if (target) this.effects.emit(target);
         }
-        if (event.type === 'round') void nexusInput.haptic('start');
-        if (event.type === 'fold' && event.playerId === this.network.userId)
-          void nexusInput.haptic('confirm');
+        if (event.type === 'round') this.haptic('start');
+        if (event.type === 'fold' && event.playerId === this.network.userId) this.haptic('confirm');
         this.lastEvent = Math.max(this.lastEvent, event.id);
       }
   }
@@ -239,6 +279,12 @@ export class NexusForgeRuntime {
   }
   private render = (now: number) => {
     if (this.disposed) return;
+    const graphics = this.renderer.settings.graphics;
+    const calibrating = !this.latest?.game && !this.benchmarkDone && graphics.quality === 'auto';
+    if (!this.pacer.ready(now, calibrating ? 0 : graphics.fpsLimit)) {
+      this.raf = requestAnimationFrame(this.render);
+      return;
+    }
     const rawDt = Math.max(0, (now - this.lastFrame) / 1000),
       dt = Math.min(0.1, rawDt);
     this.lastFrame = now;
@@ -257,7 +303,7 @@ export class NexusForgeRuntime {
       dt,
       now / 1000,
       this.shotAt,
-      this.menu,
+      !visual,
       this.input.aiming,
     );
     this.performance.renderMs = performance.now() - start;
@@ -293,9 +339,10 @@ export class NexusForgeRuntime {
           this.audio.play('step', p, !!hit && hit.id !== p.id);
         }
     // Calibrate only before combat; no surprise preset swaps during an exchange.
-    if (this.menu && !this.benchmarkDone && this.renderer.settings.quality === 'auto') {
+    if (calibrating) {
       this.benchmarkFrames.push(rawDt);
-      if (this.benchmarkFrames.length >= 90 || this.clock > 7) {
+      this.benchmarkSeconds += rawDt;
+      if (this.benchmarkFrames.length >= 90 || this.benchmarkSeconds > 7) {
         const mean = this.benchmarkFrames.reduce((a, b) => a + b, 0) / this.benchmarkFrames.length;
         this.renderer.updateSettings(
           this.renderer.settings,
@@ -328,6 +375,7 @@ export class NexusForgeRuntime {
     cancelAnimationFrame(this.raf);
     if (this.timer) clearInterval(this.timer);
     this.resizing.disconnect();
+    this.feedbackTarget?.removeEventListener('nexus-game-ui-feedback', this.uiFeedback);
     this.input.dispose();
     this.audio.dispose();
     this.prediction?.dispose();

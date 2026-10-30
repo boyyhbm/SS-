@@ -7,11 +7,21 @@ export function installForgeBrowserDriver({
   slot,
   device,
   tour = false,
+  controls,
 }: {
   id: string;
   slot: number;
   device?: 'gamepad' | 'keyboard';
   tour?: boolean;
+  controls?: {
+    forward?: string;
+    fold?: string;
+    fire?: string;
+    padFire?: number;
+    padFold?: number;
+    mouseX?: number;
+    mouseY?: number;
+  };
 }) {
   const inputDevice = device ?? (slot === 0 ? 'gamepad' : 'keyboard');
   const w = window as unknown as {
@@ -63,34 +73,35 @@ export function installForgeBrowserDriver({
         index = 0;
         foldStage = slot === 0 && !folded;
         const sign = p.z > 0 ? 1 : -1;
-        points = foldStage && tour && p.z > 0
-          ? [
-              { x: -18.5, z: 13 },
-              { x: -18.5, z: 2 },
-              { x: -18.5, z: 13 },
-              { x: -3.5, z: 13 },
-              { x: -3.5, z: 6 },
-              { x: -6, z: 6 },
-            ]
-          : foldStage && p.z < 0
+        points =
+          foldStage && tour && p.z > 0
             ? [
-                { x: -3.5, z: -13 },
-                { x: -19.5, z: -13 },
-                { x: -19.5, z: 13 },
+                { x: -18.5, z: 13 },
+                { x: -18.5, z: 2 },
+                { x: -18.5, z: 13 },
                 { x: -3.5, z: 13 },
                 { x: -3.5, z: 6 },
                 { x: -6, z: 6 },
               ]
-          : foldStage
-          ? [
-              { x: -3.5, z: 13 },
-              { x: -3.5, z: 6 },
-              { x: -6, z: 6 },
-            ]
-          : [
-              { x: 19.5, z: sign * 13 },
-              { x: 19.5, z: sign * 4 },
-            ];
+            : foldStage && p.z < 0
+              ? [
+                  { x: -3.5, z: -13 },
+                  { x: -19.5, z: -13 },
+                  { x: -19.5, z: 13 },
+                  { x: -3.5, z: 13 },
+                  { x: -3.5, z: 6 },
+                  { x: -6, z: 6 },
+                ]
+              : foldStage
+                ? [
+                    { x: -3.5, z: 13 },
+                    { x: -3.5, z: 6 },
+                    { x: -6, z: 6 },
+                  ]
+                : [
+                    { x: 19.5, z: sign * 13 },
+                    { x: 19.5, z: sign * 4 },
+                  ];
         mouseYaw = p.yaw;
         mousePitch = p.pitch;
       }
@@ -145,8 +156,8 @@ export function installForgeBrowserDriver({
         curve((-(desiredPitch - localAim.pitch) * 2) / 2.2),
       ];
       w.forgePad.buttons.fill(0);
-      w.forgePad.buttons[7] = fire ? 1 : 0;
-      w.forgePad.buttons[5] = fold ? 1 : 0;
+      w.forgePad.buttons[controls?.padFire ?? 7] = fire ? 1 : 0;
+      w.forgePad.buttons[controls?.padFold ?? 5] = fold ? 1 : 0;
       w.forgePad.buttons[2] = p.ammo === 0 ? 1 : 0;
     } else {
       const observed = w.forgeAim;
@@ -158,8 +169,8 @@ export function installForgeBrowserDriver({
       if (['active', 'overtime'].includes(s.phase))
         window.dispatchEvent(
           new MouseEvent('mousemove', {
-            movementX: -dy / 0.002,
-            movementY: -(desiredPitch - mousePitch) / 0.002,
+            movementX: -dy / (0.002 * (controls?.mouseX ?? 1)),
+            movementY: -(desiredPitch - mousePitch) / (0.002 * (controls?.mouseY ?? 1)),
           }),
         );
       mouseYaw = desiredYaw;
@@ -168,9 +179,10 @@ export function installForgeBrowserDriver({
         sz = worldX * Math.sin(desiredYaw) + worldZ * Math.cos(desiredYaw),
         pulse = (pulses++ % 10) / 10;
       const next = new Set<string>();
-      if (fold) next.add('KeyF');
+      if (fold) next.add(controls?.fold ?? 'KeyF');
       if (p.ammo === 0) next.add('KeyR');
-      if (fire !== firing) {
+      if (controls?.fire && fire) next.add(controls.fire);
+      if (!controls?.fire && fire !== firing) {
         const canvas = document.querySelector('.forge-viewport canvas');
         (canvas ?? window).dispatchEvent(
           new MouseEvent(fire ? 'mousedown' : 'mouseup', { button: 0, bubbles: true }),
@@ -178,7 +190,8 @@ export function installForgeBrowserDriver({
         firing = fire;
       }
       if (Math.abs(sx) > 0.04 && pulse < Math.abs(sx)) next.add(sx > 0 ? 'KeyD' : 'KeyA');
-      if (Math.abs(sz) > 0.04 && pulse < Math.abs(sz)) next.add(sz > 0 ? 'KeyS' : 'KeyW');
+      if (Math.abs(sz) > 0.04 && pulse < Math.abs(sz))
+        next.add(sz > 0 ? 'KeyS' : (controls?.forward ?? 'KeyW'));
       for (const key of keys)
         if (!next.has(key)) window.dispatchEvent(new KeyboardEvent('keyup', { code: key }));
       for (const key of next)

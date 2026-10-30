@@ -1,0 +1,123 @@
+{
+  "observedAt": "2026-10-27T19:32:43.913Z",
+  "passed": true,
+  "sourceCommit": "5bfa6c3478e0cea7b95cb173fb5e30de444701cd",
+  "id": 40564108744,
+  "url": "https://github.com/boyyhbm/SS-/actions/runs/40564108744",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "checks",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare isolated CI database",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run lint",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run assets:check",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run typecheck",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate backup restore and multiplayer ownership",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Prepare browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Start production build for browser tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Real browser scenarios",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Authoritative Forge duels and network faults",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Publish redacted browser failure summaries",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Stop only this CI database and services",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

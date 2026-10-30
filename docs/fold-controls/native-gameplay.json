@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-28T17:33:50.142Z",
+  "passed": false,
+  "scope": "Actual High native-resolution gameplay. Two independently authenticated browser processes; the second player remains idle. Camera movement uses only keyboard/Pointer Lock device events. These are live match screenshots, not renders from a separate scene.",
+  "hardware": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "memoryBytes": 35743760384
+  },
+  "scenes": []
+}

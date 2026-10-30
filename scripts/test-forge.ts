@@ -242,5 +242,6 @@ try {
   await db.user.deleteMany({ where: { id: { in: ids }, username: { startsWith: 'forgetest_' } } });
   await db.$disconnect();
   await fs.mkdir('docs/fold-zero', { recursive: true });
-  await fs.writeFile('docs/fold-zero/network.json', JSON.stringify(report, null, 2) + '\n');
+  await fs.mkdir('docs/fold-controls', { recursive: true });
+  await fs.writeFile('docs/fold-controls/network.json', JSON.stringify(report, null, 2) + '\n');
 }

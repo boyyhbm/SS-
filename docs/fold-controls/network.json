@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-28T16:54:52.894Z",
+  "passed": true,
+  "scope": "Real SDK clients, signed NEXUS admission, normal inputs only. Application-message delay/loss emulation; not geographic TCP tests.",
+  "cases": [
+    {
+      "profile": {
+        "rtt": 20,
+        "jitter": 0,
+        "loss": 0
+      },
+      "independentClients": 2,
+      "score": [
+        5,
+        0
+      ],
+      "rounds": 5,
+      "serverVerifiedResults": 2,
+      "foldSynchronized": true,
+      "resultsAgreed": true,
+      "reconnections": 1,
+      "duplicateStartBlocked": true,
+      "privateAdmissionBlocked": true,
+      "rematch": true
+    },
+    {
+      "profile": {
+        "rtt": 50,
+        "jitter": 0,
+        "loss": 0
+      },
+      "independentClients": 2,
+      "score": [
+        5,
+        0
+      ],
+      "rounds": 5,
+      "serverVerifiedResults": 2,
+      "foldSynchronized": true,
+      "resultsAgreed": true,
+      "reconnections": 0,
+      "duplicateStartBlocked": true,
+      "privateAdmissionBlocked": true,
+      "rematch": true
+    },
+    {
+      "profile": {
+        "rtt": 100,
+        "jitter": 0,
+        "loss": 0
+      },
+      "independentClients": 2,
+      "score": [
+        5,
+        0
+      ],
+      "rounds": 5,
+      "serverVerifiedResults": 2,
+      "foldSynchronized": true,
+      "resultsAgreed": true,
+      "reconnections": 0,
+      "duplicateStartBlocked": true,
+      "privateAdmissionBlocked": true,
+      "rematch": true
+    },
+    {
+      "profile": {
+        "rtt": 150,
+        "jitter": 15,
+        "loss": 0.02
+      },
+      "independentClients": 2,
+      "score": [
+        5,
+        0
+      ],
+      "rounds": 5,
+      "serverVerifiedResults": 2,
+      "foldSynchronized": true,
+      "resultsAgreed": true,
+      "reconnections": 0,
+      "duplicateStartBlocked": true,
+      "privateAdmissionBlocked": true,
+      "rematch": true
+    }
+  ]
+}

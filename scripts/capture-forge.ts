@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import assert from 'node:assert/strict';
 import { chromium } from '@playwright/test';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import sharp from 'sharp';
@@ -22,7 +22,7 @@ const page = await browser.newPage({
   deviceScaleFactor: 1,
 });
 page.setDefaultTimeout(90000);
-const out = 'public/reports/fold-zero';
+const out = 'public/reports/fold-controls/final';
 await fs.mkdir(out, { recursive: true });
 let userId = '';
 const report = {
@@ -70,7 +70,18 @@ try {
   assert.equal((await post('/api/library', { action: 'add', gameId: game.id })).status(), 200);
   for (const quality of ['high', 'ultra'] as const) {
     assert.equal(
-      (await post('/api/fold-settings', { ...defaultForgeSettings, quality })).status(),
+      (
+        await post('/api/fold-settings', {
+          ownerId: userId,
+          expectedRevision: (await (await page.request.get(origin + '/api/fold-settings')).json())
+            .revision,
+          mutationId: randomUUID(),
+          settings: {
+            ...defaultForgeSettings,
+            graphics: { ...defaultForgeSettings.graphics, quality },
+          },
+        })
+      ).status(),
       200,
     );
     await page.goto(origin + '/play/fold-zero');
@@ -97,6 +108,25 @@ try {
     });
     report.presets.push({ quality, ...measured });
     console.log(JSON.stringify({ captured: quality, renderBuffer: measured.renderBuffer }));
+    if (quality === 'high') {
+      await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+      await page.screenshot({ path: out + '/settings-mouse.png' });
+      for (const [name, filename] of [
+        [/Клавиши/, 'settings-keys'],
+        [/Геймпад/, 'settings-controller'],
+        [/Прицел/, 'settings-crosshair'],
+        [/Графика/, 'settings-graphics'],
+        [/Звук/, 'settings-audio'],
+      ] as const) {
+        await page.getByRole('tab', { name }).click();
+        await page.screenshot({ path: out + '/' + filename + '.png' });
+      }
+      await page.getByRole('tab', { name: /Клавиши/ }).click();
+      await page.getByRole('button', { name: 'Назначить: Вперёд', exact: true }).click();
+      await page.screenshot({ path: out + '/key-capture.png' });
+      await page.keyboard.press('Escape');
+      await page.getByRole('button', { name: 'Закрыть настройки' }).click();
+    }
   }
   await sharp(out + '/high-menu.png')
     .webp({ quality: 90 })
@@ -115,6 +145,6 @@ try {
   if (userId)
     await db.user.deleteMany({ where: { id: userId, username: { startsWith: 'forgecap_' } } });
   await db.$disconnect();
-  await fs.mkdir('docs/fold-zero', { recursive: true });
-  await fs.writeFile('docs/fold-zero/capture.json', JSON.stringify(report, null, 2) + '\n');
+  await fs.mkdir('docs/fold-controls', { recursive: true });
+  await fs.writeFile('docs/fold-controls/capture.json', JSON.stringify(report, null, 2) + '\n');
 }

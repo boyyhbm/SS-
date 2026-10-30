@@ -161,6 +161,11 @@ export class NexusInputManager {
   raw() {
     return this.pad;
   }
+  get gamepadReady() {
+    return (
+      !!this.pad && !this.lost && !this.suppressUntilNeutral && !this.unarmed.has(this.pad.index)
+    );
+  }
   read() {
     return this.lost ? zero() : this.values;
   }
@@ -505,6 +510,7 @@ export class NexusInputManager {
   }
   async haptic(
     event: 'confirm' | 'collision' | 'accelerate' | 'boost' | 'start' | 'finish' | 'test',
+    scale = 1,
   ) {
     const pad = this.pad as RumblePad | null,
       config = this.state.config;
@@ -540,11 +546,14 @@ export class NexusInputManager {
         await pad.vibrationActuator.playEffect('dual-rumble', {
           duration,
           startDelay: 0,
-          strongMagnitude: strong * config.vibrationIntensity,
-          weakMagnitude: weak * config.vibrationIntensity,
+          strongMagnitude: strong * config.vibrationIntensity * Math.max(0, Math.min(1, scale)),
+          weakMagnitude: weak * config.vibrationIntensity * Math.max(0, Math.min(1, scale)),
         });
       else if (pad.hapticActuators?.[0]?.pulse)
-        await pad.hapticActuators[0].pulse(strong * config.vibrationIntensity, duration);
+        await pad.hapticActuators[0].pulse(
+          strong * config.vibrationIntensity * Math.max(0, Math.min(1, scale)),
+          duration,
+        );
       else return false;
       return true;
     } catch {

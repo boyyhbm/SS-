@@ -5,6 +5,7 @@ import type { ComponentType } from 'react';
 import type { Language } from '@/lib/i18n';
 import { ROUTE_IDS } from './route-registry';
 export interface GameRuntimeContext {
+  accountId: string;
   gameId: string;
   title: string;
   language: Language;

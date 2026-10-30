@@ -28,21 +28,21 @@ export default async function OnlinePage({
   )
     notFound();
   if (entry.game.runtimeKey === 'fold-zero') {
-    const settings = await db.gameSave.findUnique({
+    const settings = await db.gameSave.findMany({
       where: {
-        userId_gameId_saveKey: {
-          userId: user.id,
-          gameId: entry.gameId,
-          saveKey: 'forge-settings-v1',
-        },
+        userId: user.id,
+        gameId: entry.gameId,
+        saveKey: { in: ['forge-settings-v1', 'forge-settings-v2'] },
       },
     });
     return (
       <FoldPlayer
+        key={user.id + ':' + entry.gameId}
+        accountId={user.id}
         gameId={entry.gameId}
         title={entry.game.title}
         language={user.settings?.language === 'en' ? 'en' : 'ru'}
-        initialSaves={settings ? { 'forge-settings-v1': settings.saveData } : {}}
+        initialSaves={Object.fromEntries(settings.map((s) => [s.saveKey, s.saveData]))}
         initialRoom={query.room?.slice(0, 64)}
       />
     );

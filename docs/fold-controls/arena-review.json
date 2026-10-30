@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-28T15:58:12.305Z",
+  "scope": "Actual running Foundry main-menu environment, native CSS/DPR1, software GPU. These are not combat screenshots or a gaming-PC benchmark.",
+  "hardware": {
+    "cpu": "INTEL(R) XEON(R) PLATINUM 8573C",
+    "logicalCpus": 5,
+    "memoryBytes": 35743760384
+  },
+  "presets": [
+    {
+      "quality": "high",
+      "viewport": {
+        "width": 1280,
+        "height": 720,
+        "dpr": 1
+      },
+      "renderBuffer": {
+        "width": 1280,
+        "height": 720
+      },
+      "gpu": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "samples": [
+        {
+          "fps": 0,
+          "frameMs": 0,
+          "onePercentLow": 0,
+          "p99Ms": 0,
+          "physicsMs": 0,
+          "renderMs": 945,
+          "drawCalls": 67
+        },
+        {
+          "fps": 0.24490595904151127,
+          "frameMs": 4083.199951171875,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0.09999999403953552,
+          "renderMs": 5.4000000059604645,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.32521911896187455,
+          "frameMs": 3074.8499755859375,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0.6000000089406967,
+          "renderMs": 5.5999999940395355,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.3666092323142111,
+          "frameMs": 2727.699991861979,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0.6000000089406967,
+          "renderMs": 5.200000002980232,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.39089603049542554,
+          "frameMs": 2558.2250061035156,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 3.5999999940395355,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.41097804637752805,
+          "frameMs": 2433.2199951171874,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 4.100000008940697,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.4270614612619666,
+          "frameMs": 2341.5833333333335,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 1.7000000029802322,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.43843166729299765,
+          "frameMs": 2280.8571428571427,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 2.5999999940395355,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.4481968468295893,
+          "frameMs": 2231.1625061035156,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 4.299999997019768,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.4511436480463726,
+          "frameMs": 2216.5888943142363,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 3.0999999940395355,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.4535311948798631,
+          "frameMs": 2204.9199951171877,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 2.7999999970197678,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.45930936573552134,
+          "frameMs": 2177.181818181818,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 7.100000008940697,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.46423459321443766,
+          "frameMs": 2154.0833333333335,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 2.2999999970197678,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.47046561703273554,
+          "frameMs": 2125.5538423978364,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 1.800000011920929,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.47139951705060296,
+          "frameMs": 2121.34286063058,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 3.0999999940395355,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.4754554059335759,
+          "frameMs": 2103.2466715494793,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 2.2000000029802322,
+          "drawCalls": 50
+        },
+        {
+          "fps": 0.47858339140880524,
+          "frameMs": 2089.5000076293945,
+          "onePercentLow": 0.24490595904151127,
+          "p99Ms": 4083.199951171875,
+          "physicsMs": 0,
+          "renderMs": 1.7999999970197678,
+          "drawCalls": 50
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

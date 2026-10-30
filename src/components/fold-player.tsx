@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -21,13 +21,15 @@ import { ForgeNetworking } from '@/games/fold/networking';
 import { NexusForgeRuntime, type ForgeFrameStats } from '@/games/fold/runtime';
 import type { ForgeSnapshot } from '@/games/fold/contracts';
 import { balance } from '@/games/fold/config';
-import {
-  defaultForgeSettings,
-  forgeSettingsSchema,
-  type ForgeSettings,
-} from '@/games/fold/settings';
+import type { ForgeSettings } from '@/games/fold/settings';
+import { ForgeSettingsStore } from '@/games/fold/settings-store';
+import type { ForgePointerStatus } from '@/games/fold/input';
+import { nexusInput } from '@/input/manager';
+import { buttonLabel, detectLayout } from '@/input/profiles';
+import { forgeBindingLabel, resolvePadBinding } from '@/games/fold/bindings';
+import { ForgeSettingsScreen } from './forge-settings';
+import { ForgeCrosshair } from './forge-crosshair';
 import { InputNavigation } from './input-navigation';
-import { InputGlyph } from './input-system';
 import './fold-player.css';
 type Profile = {
   stats: { matches: number; wins: number };
@@ -46,6 +48,7 @@ const emptyStats = {
   drawCalls: 0,
 };
 export function FoldPlayer({
+  accountId,
   gameId,
   initialRoom,
   initialSaves,
@@ -60,11 +63,23 @@ export function FoldPlayer({
     [panel, setPanel] = useState<'main' | 'settings' | 'profile' | 'friends' | 'pause' | 'none'>(
       'main',
     );
-  const [settings, setSettings] = useState<ForgeSettings>(() => {
-      const saved = forgeSettingsSchema.safeParse(initialSaves['forge-settings-v1']);
-      return saved.success ? saved.data : defaultForgeSettings;
-    }),
-    settingsRef = useRef(settings);
+  const [store] = useState(() => new ForgeSettingsStore(accountId, initialSaves));
+  const sync = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getServerSnapshot);
+  const [preview, setPreview] = useState<ForgeSettings | null>(null);
+  const settings = useMemo(
+    () =>
+      preview
+        ? { ...sync.settings, crosshair: preview.crosshair, audio: preview.audio }
+        : sync.settings,
+    [preview, sync.settings],
+  );
+  const [scoreboard, setScoreboard] = useState(false);
+  const [pointerStatus, setPointerStatus] = useState<ForgePointerStatus>('idle');
+  const inputState = useSyncExternalStore(
+    nexusInput.subscribe,
+    nexusInput.getSnapshot,
+    nexusInput.getServerSnapshot,
+  );
   const [stats, setStats] = useState<ForgeFrameStats>(emptyStats),
     [hit, setHit] = useState(false),
     [debug, setDebug] = useState(false);
@@ -88,15 +103,16 @@ export function FoldPlayer({
     if (!r.ok) return;
     const data = await r.json();
     setProfile(data);
-    const parsed = forgeSettingsSchema.safeParse(data.settings);
-    if (parsed.success) setSettings(parsed.data);
   }
+  useEffect(() => store.start(), [store]);
   useEffect(() => {
-    if (!mount.current) return;
+    if (!mount.current || !sync.ready) return;
     let cancelled = false;
-    const r = new NexusForgeRuntime(mount.current, network, settingsRef.current);
+    const r = new NexusForgeRuntime(mount.current, network, store.getSnapshot().settings);
     runtime.current = r;
     r.onMenu = () => setPanel('pause');
+    r.input.onScoreboard = setScoreboard;
+    r.input.onPointerStatus = setPointerStatus;
     r.onError = setNotice;
     r.onStats = (s, h) => {
       setStats(s);
@@ -135,9 +151,8 @@ export function FoldPlayer({
       r.dispose();
       runtime.current = null;
     };
-  }, [network]);
+  }, [network, store, sync.ready]);
   useEffect(() => {
-    settingsRef.current = settings;
     runtime.current?.updateSettings(settings);
   }, [settings]);
   useEffect(() => {
@@ -173,22 +188,10 @@ export function FoldPlayer({
     setBusy(true);
     try {
       await network.leave();
+      runtime.current?.resetSession();
       setSnapshot(null);
       setPanel('main');
       previousPhase.current = '';
-    } finally {
-      setBusy(false);
-    }
-  }
-  async function save() {
-    setBusy(true);
-    try {
-      const r = await fetch('/api/fold-settings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(settings),
-      });
-      setNotice(r.ok ? 'Настройки сохранены в аккаунте' : 'Не удалось сохранить настройки');
     } finally {
       setBusy(false);
     }
@@ -205,12 +208,42 @@ export function FoldPlayer({
     void runtime.current?.audio.activate();
     runtime.current?.audio.play('ui');
   };
-  const change = <K extends keyof ForgeSettings>(key: K, value: ForgeSettings[K]) =>
-    setSettings((s) => ({ ...s, [key]: value }));
+  const fullscreen = () => {
+    if (
+      !document.fullscreenEnabled ||
+      typeof mount.current?.parentElement?.requestFullscreen !== 'function'
+    ) {
+      setNotice('Полный экран недоступен в этом браузере.');
+      return;
+    }
+    const request = document.fullscreenElement
+      ? document.exitFullscreen()
+      : mount.current?.parentElement?.requestFullscreen();
+    void request?.catch(() => setNotice('Полный экран недоступен в этом браузере.'));
+  };
+  const resume = () => {
+    activate();
+    if (nexusInput.getSnapshot().method !== 'gamepad') void runtime.current?.input.capturePointer();
+    runtime.current?.setMenu(false);
+    setPanel('none');
+  };
+  const hint = (action: 'reload' | 'fold' | 'impulse') => {
+    if (inputState.method !== 'gamepad') return forgeBindingLabel(settings.keys[action]);
+    const pad = nexusInput.raw();
+    const layout =
+      inputState.config.layout === 'auto'
+        ? detectLayout(pad?.id ?? '', pad?.mapping ?? '')
+        : inputState.config.layout;
+    return buttonLabel(
+      resolvePadBinding(settings.controller.bindings[action], inputState.config, pad),
+      layout,
+    );
+  };
   const active = game?.phase === 'active' || game?.phase === 'overtime';
   return (
     <main
       className="forge"
+      data-game-ui-feedback="forge"
       data-testid="fold-player"
       data-phase={snapshot?.phase ?? 'menu'}
       data-game-phase={game?.phase ?? ''}
@@ -227,16 +260,9 @@ export function FoldPlayer({
         </span>
         <div>
           <button aria-label="Показатели производительности" onClick={() => setDebug((v) => !v)}>
-            FORGE / 01
+            FORGE / 02
           </button>
-          <button
-            aria-label="Полный экран"
-            onClick={() => {
-              void (document.fullscreenElement
-                ? document.exitFullscreen()
-                : mount.current?.parentElement?.requestFullscreen());
-            }}
-          >
+          <button aria-label="Полный экран" onClick={fullscreen}>
             <Maximize2 size={17} />
           </button>
           {inMatch && (
@@ -266,7 +292,7 @@ export function FoldPlayer({
           <span>Собираем THE FOUNDRY</span>
         </div>
       )}
-      {ready && menu && snapshot?.phase !== 'results' && (
+      {ready && menu && panel !== 'settings' && snapshot?.phase !== 'results' && (
         <div className="forge-menu">
           <section className="forge-intro">
             <span className="forge-kicker">THE FOUNDRY · 1V1</span>
@@ -285,90 +311,15 @@ export function FoldPlayer({
             </span>
           </section>
           <section className="forge-panel" onPointerDown={activate}>
-            {panel === 'settings' ? (
-              <>
-                <div className="forge-panel-title">
-                  <h2>Настройки</h2>
-                  <button aria-label="Назад" onClick={() => setPanel(inMatch ? 'pause' : 'main')}>
-                    <X />
-                  </button>
-                </div>
-                <label>
-                  Графика
-                  <select
-                    aria-label="Графика FOLD"
-                    value={settings.quality}
-                    onChange={(e) => change('quality', e.target.value as ForgeSettings['quality'])}
-                  >
-                    {['auto', 'competitive', 'low', 'medium', 'high', 'ultra'].map((q) => (
-                      <option key={q} value={q}>
-                        {q.toUpperCase()}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                {(
-                  [
-                    'mouseSensitivity',
-                    'aimSensitivity',
-                    'responseCurve',
-                    'master',
-                    'weapons',
-                    'environment',
-                    'effects',
-                  ] as const
-                ).map((key, i) => (
-                  <label key={key}>
-                    {
-                      [
-                        'Мышь',
-                        'Скорость обзора геймпада',
-                        'Кривая стика',
-                        'Общая громкость',
-                        'Оружие',
-                        'Окружение',
-                        'Эффекты',
-                      ][i]
-                    }
-                    <input
-                      aria-label={key}
-                      type="range"
-                      min={key === 'responseCurve' ? 1 : key.includes('Sensitivity') ? 0.2 : 0}
-                      max={key === 'responseCurve' ? 2.5 : key.includes('Sensitivity') ? 3 : 1}
-                      step=".05"
-                      value={settings[key]}
-                      onChange={(e) => change(key, Number(e.target.value))}
-                    />
-                  </label>
-                ))}
-                <label className="forge-check">
-                  <input
-                    type="checkbox"
-                    checked={settings.invertY}
-                    onChange={(e) => change('invertY', e.target.checked)}
-                  />
-                  Инверсия вертикального обзора
-                </label>
-                <label className="forge-check">
-                  <input
-                    type="checkbox"
-                    checked={settings.headBob}
-                    onChange={(e) => change('headBob', e.target.checked)}
-                  />
-                  Лёгкое покачивание камеры
-                </label>
-                <Link href="/controllers" className="forge-text-link">
-                  Deadzone, переназначение и вибрация <ArrowUpRight size={15} />
-                </Link>
-                <button className="forge-primary" disabled={busy} onClick={() => void save()}>
-                  Сохранить
-                </button>
-              </>
-            ) : panel === 'profile' ? (
+            {panel === 'profile' ? (
               <>
                 <div className="forge-panel-title">
                   <h2>Твои дуэли</h2>
-                  <button aria-label="Назад" onClick={() => setPanel(inMatch ? 'pause' : 'main')}>
+                  <button
+                    data-game-back
+                    aria-label="Назад"
+                    onClick={() => setPanel(inMatch ? 'pause' : 'main')}
+                  >
                     <X />
                   </button>
                 </div>
@@ -407,7 +358,11 @@ export function FoldPlayer({
               <>
                 <div className="forge-panel-title">
                   <h2>Пригласить друга</h2>
-                  <button aria-label="Назад" onClick={() => setPanel(inMatch ? 'pause' : 'main')}>
+                  <button
+                    data-game-back
+                    aria-label="Назад"
+                    onClick={() => setPanel(inMatch ? 'pause' : 'main')}
+                  >
                     <X />
                   </button>
                 </div>
@@ -441,13 +396,7 @@ export function FoldPlayer({
                 <span className="forge-kicker">МАТЧ ПРОДОЛЖАЕТСЯ</span>
                 <h2>На паузе — только ты.</h2>
                 <p>Сервер продолжает дуэль. Пока меню открыто, передаётся нейтральный ввод.</p>
-                <button
-                  className="forge-primary"
-                  onClick={() => {
-                    activate();
-                    setPanel('none');
-                  }}
-                >
+                <button className="forge-primary" data-game-back data-game-resume onClick={resume}>
                   Продолжить
                 </button>
                 <button className="forge-secondary" onClick={() => setPanel('settings')}>
@@ -525,6 +474,10 @@ export function FoldPlayer({
                 <button className="forge-text-link" onClick={() => void openFriends()}>
                   <Users size={16} />
                   Пригласить друга
+                </button>
+                <button className="forge-text-link" onClick={() => setPanel('settings')}>
+                  <Settings2 size={16} />
+                  Настройки
                 </button>
                 <p className="forge-small">До 5 побед · VECTOR R9 · Core через 45 секунд</p>
               </>
@@ -612,12 +565,11 @@ export function FoldPlayer({
             </div>
             <b className="team-1">{game.score[1]}</b>
           </div>
-          <div className={`forge-crosshair ${hit ? 'hit' : ''}`} aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-          </div>
+          <ForgeCrosshair
+            settings={settings.crosshair}
+            hit={hit}
+            spread={Math.hypot(player.vx, player.vz) * 0.5 + (hit ? 2 : 0)}
+          />
           <div className="forge-core">
             <span className={roundElapsed >= balance.coreUnlock ? 'active' : ''} />
             {roundElapsed < balance.coreUnlock
@@ -646,19 +598,19 @@ export function FoldPlayer({
                 'ПЕРЕЗАРЯДКА…'
               ) : (
                 <>
-                  <InputGlyph action="handbrake" fallback="R" /> ПЕРЕЗАРЯДКА
+                  <span className="input-glyph">{hint('reload')}</span> ПЕРЕЗАРЯДКА
                 </>
               )}
             </p>
           </div>
           <div className="forge-tools">
             <div>
-              <InputGlyph action="nextSection" fallback="F" />
+              <span className="input-glyph">{hint('fold')}</span>
               <b>{player.foldCharges}</b>
               <span>FOLD</span>
             </div>
             <div>
-              <InputGlyph action="previousSection" fallback="Q" />
+              <span className="input-glyph">{hint('impulse')}</span>
               <b>{Math.max(0, Math.ceil(player.impulseReady - game.tick / 60)) || '✓'}</b>
               <span>IMPULSE</span>
             </div>
@@ -689,17 +641,73 @@ export function FoldPlayer({
             <div className="forge-capture-hint">
               {player.holdingNode ? (
                 <>
-                  <InputGlyph action="nextSection" fallback="F" /> УДЕРЖИВАЙ · ПЕРЕСТРОИТЬ
+                  <span className="input-glyph">{hint('fold')}</span> УДЕРЖИВАЙ · ПЕРЕСТРОИТЬ
                 </>
               ) : (
                 <>
-                  <span>WASD · МЫШЬ / ГЕЙМПАД</span>
+                  <span>
+                    {inputState.method === 'gamepad'
+                      ? 'LS · ДВИЖЕНИЕ / RS · ОБЗОР'
+                      : ['forward', 'left', 'backward', 'right']
+                          .map((a) => forgeBindingLabel(settings.keys[a as 'forward']))
+                          .join(' / ') + ' · МЫШЬ'}
+                  </span>
                   <small>Клик по сцене — захват мыши</small>
                 </>
               )}
             </div>
           )}
         </>
+      )}
+      {ready && panel === 'settings' && (
+        <ForgeSettingsScreen
+          sync={sync}
+          inMatch={inMatch}
+          pointerStatus={pointerStatus}
+          capabilities={
+            runtime.current?.renderer.pipeline.capabilities ?? {
+              msaaSamples: 0,
+              ssao: false,
+              bloom: false,
+            }
+          }
+          onPreview={setPreview}
+          onApply={(value) => {
+            void store.apply(value);
+          }}
+          onClose={() => {
+            setPreview(null);
+            setPanel(inMatch ? 'pause' : 'main');
+          }}
+          onUseCloud={() => store.useCloud()}
+          onKeepLocal={(value) => {
+            void store.keepLocal(value);
+          }}
+          onRetry={() => {
+            void store.refresh();
+          }}
+          onFullscreen={fullscreen}
+          onTestAudio={() => {
+            void runtime.current?.audio.activate().then(() => runtime.current?.audio.play('ui'));
+          }}
+          onTestVibration={(intensity) => {
+            void nexusInput.haptic('confirm', intensity);
+          }}
+        />
+      )}
+      {scoreboard && !menu && game && (
+        <aside className="forge-scoreboard" aria-label="Таблица счёта">
+          <h2>THE FOUNDRY / РАУНД {game.round}</h2>
+          {snapshot?.players.map((p) => (
+            <div key={p.id}>
+              <strong className={'team-' + p.slot}>{p.username}</strong>
+              <span>
+                {game.score[p.slot]} · {p.connected ? 'В матче' : 'Переподключение'}
+              </span>
+            </div>
+          ))}
+          <small>Ваш RTT: {network.rtt.toFixed(0)} мс · до пяти побед</small>
+        </aside>
       )}
       {snapshot?.phase === 'results' && game && (
         <div className="forge-results">

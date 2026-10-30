@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-28T17:30:25.750Z",
+  "passed": true,
+  "checks": [
+    "Independent X/Y/master/ADS/invert mouse settings applied to the account",
+    "Keyboard and fire remap, conflict swap, per-key reset, Escape cancels capture without closing settings",
+    "Separate per-game pad sensitivity, deadzone/curve, button mapping, RB tab navigation, live crosshair preview",
+    "Graphics apply changes actual backing-buffer dimensions; FXAA, FPS cap and FOV persist",
+    "Auto samples real uncapped pre-match frames and reduces the actual buffer under software-GPU load",
+    "Actual live Web Audio output responds to mute/unmute without restarting",
+    "Reload preserves all categories; owner mismatch rejected; offline cache survives reload and resynchronizes",
+    "Concurrent account revision raises conflict; explicit cloud choice updates the visible editor"
+  ],
+  "scope": "Real browser UI, virtual Gamepad API, digital Web Audio analysis. No physical mouse/controller/speaker or gaming-GPU certification.",
+  "errors": []
+}

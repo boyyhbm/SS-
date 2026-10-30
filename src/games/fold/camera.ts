@@ -13,6 +13,7 @@ export class ForgeCamera {
     headBob: boolean,
     player?: ForgePlayer,
     aim = false,
+    fieldOfView = 76,
   ) {
     if (pose && !menu) {
       const bob =
@@ -28,7 +29,8 @@ export class ForgeCamera {
       this.camera.position.set(17 + Math.sin(time * 0.06) * 0.6, 4.3, 14.5);
       this.camera.lookAt(-1, 1.5, -1);
     }
-    const fov = menu || !aim ? 76 : 64;
+    const base = Math.max(60, Math.min(105, fieldOfView));
+    const fov = menu || !aim ? base : base * (64 / 76);
     if (Math.abs(this.camera.fov - fov) > 0.005) {
       this.camera.fov += (fov - this.camera.fov) * (1 - Math.exp(-14 * dt));
       this.camera.updateProjectionMatrix();
