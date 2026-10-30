@@ -24,7 +24,7 @@ The local NEXUS preparer pins that source revision, requires a clean checkout, d
 
 DirectSound-compatible mixing feeds a shared PCM ring consumed by the browser AudioWorklet. NEXUS creates/resumes AudioContext in the actual Play gesture, offers a resume button, closes it on stop, and can pass `NOSOUND=1`. Engine sound stability requires actual game assets and a real race; not tested here.
 
-`input/` translates keyboard scan codes, characters and mouse coordinates into the original input mailbox. The game itself renders/owns its menus. Gamepad API snapshots map sticks, analog triggers and buttons to the virtual DirectInput device with a seqlock; family identification changes prompts, not hardware certification. NEXUS applies its existing saved per-user controller profile before mailbox publication and scales/disables vibration according to that profile. Original in-game assignments remain authoritative. Pointer lock/fullscreen stay within the runtime frame. No original menu is recreated in React.
+`input/` translates keyboard scan codes, characters and mouse coordinates into the original input mailbox. The game itself renders/owns its menus. Gamepad API snapshots map sticks, analog triggers and buttons to the virtual DirectInput device with a seqlock; family identification changes prompts, not hardware certification. NEXUS applies its existing saved per-user controller profile before mailbox publication and scales/disables vibration according to that profile. Original in-game assignments remain authoritative. Pointer lock/fullscreen stay within the runtime frame. No original menu is recreated in React. The isolated browser bundle disables optional Zod JavaScript JIT; it keeps a strict CSP with wasm-unsafe-eval and does not enable JavaScript unsafe-eval.
 
 ## Files and saves
 
@@ -34,7 +34,7 @@ Native `showDirectoryPicker()` requires a user gesture and browser permission an
 
 NEXUS imports the verified prepared folder into a fresh OPFS cache directory, prepopulates all cache blocks and `.have` maps, stores the game module locally and atomically publishes the account's install record. The manifest is a local Blob URL. A cache miss with `dataBase: nexus-local:` fails before any network request. There is no server fallback for original game data.
 
-`app/ug1save.ts` documents the original profile family: `NFS Underground/Profiles.usr` (count + 32-byte profile names), `<NAME>.opt`, `.cfg`, `<NAME>_<slot>.ugd`. `.opt/.ugd` start with version `0x13`. NEXUS preserves full bytes, verifies known headers for imports, uses a per-account namespace and a Web Lock, and disallows save import/export while the game's synchronous I/O handles are open. An interrupted import cannot publish a partial save overlay. Cloud vault/service-worker features from upstream are not included.
+`app/ug1save.ts` documents the original profile family: `NFS Underground/Profiles.usr` (count + 32-byte profile names), `<NAME>.opt`, `.cfg`, `<NAME>_<slot>.ugd`. `.opt/.ugd` start with version `0x13`. NEXUS preserves full bytes, canonicalizes only the Windows save-directory casing for OPFS, verifies known headers for imports, uses a per-account namespace and a Web Lock, and disallows save import/export while the game's synchronous I/O handles are open. An interrupted import cannot publish a partial save overlay. Cloud vault/service-worker features from upstream are not included.
 
 ## Isolation and NEXUS integration
 

@@ -1,26 +1,36 @@
 {
-  "scope": "Real Chromium launcher/OPFS/bridge tests using authored format fixtures. Not original gameplay.",
-  "startedAt": "2026-10-30T19:55:02.659Z",
-  "durationMs": 23886.506,
+  "scope": "Real Chromium launcher/OPFS/shared WASI I/O worker/bridge tests with authored format fixtures. Not original gameplay.",
+  "startedAt": "2026-10-30T20:20:43.319Z",
+  "durationMs": 28282.184,
   "passed": 3,
   "failed": 0,
   "tests": [
     {
       "title": "real NEXUS library launch uses isolated two-origin iframe and never shares account credentials",
       "status": "passed",
-      "durationMs": 5870
+      "durationMs": 5590
     },
     {
       "title": "OPFS prepared-folder verification preserves the previous installation after corrupt replacement, without uploads",
       "status": "passed",
-      "durationMs": 4939
+      "durationMs": 7304
     },
     {
       "title": "local save import/export/backup survives reload, rolls back an I/O failure, and separates accounts",
       "status": "passed",
-      "durationMs": 10444
+      "durationMs": 13023
     }
   ],
+  "mixedCaseSaveRetest": {
+    "startedAt": "2026-10-30T20:26:10.114Z",
+    "tests": [
+      {
+        "title": "local save import/export/backup survives reload, rolls back an I/O failure, and separates accounts",
+        "status": "passed",
+        "durationMs": 19065
+      }
+    ]
+  },
   "originalGameFilesProvided": false,
   "gameplayTested": false,
   "physicalControllersTested": false

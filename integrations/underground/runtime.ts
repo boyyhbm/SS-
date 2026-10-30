@@ -1,3 +1,4 @@
+import './schema-policy';
 import { GameSession } from '../../vendor/nfsu1-web/src/app/game';
 import { measureRefresh, enterFullscreen } from '../../vendor/nfsu1-web/src/app/display';
 import {
@@ -364,7 +365,7 @@ el('play').addEventListener('click', () => {
       await refresh().catch(fail);
     });
 });
-el('stop').addEventListener('click', () => {
+function requestStop() {
   const active = session,
     attempt = boot;
   if (active?.canQuit()) {
@@ -373,16 +374,27 @@ el('stop').addEventListener('click', () => {
       if (session === active && boot === attempt) void stop();
     }, 1800);
   } else void stop();
-});
+}
+for (const id of ['stop', 'stop-active']) el(id).addEventListener('click', requestStop);
 el('unlock').addEventListener('click', () => {
   void currentAudio?.resume().catch(fail);
 });
 el('fullscreen').addEventListener('click', () => {
   void fullscreen().catch(fail);
 });
-el('return').addEventListener('click', () => {
-  void stop().then(() => send('exit'));
-});
+async function leaveRuntime() {
+  const active = session;
+  if (active?.canQuit()) {
+    active.requestQuit();
+    await Promise.race([active.exited, new Promise<void>((resolve) => setTimeout(resolve, 1800))]);
+  }
+  await stop();
+  send('exit');
+}
+for (const id of ['return', 'return-active'])
+  el(id).addEventListener('click', () => {
+    void leaveRuntime().catch(fail);
+  });
 el('export').addEventListener('click', () => {
   void exclusive(async () =>
     download(

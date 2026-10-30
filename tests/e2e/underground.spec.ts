@@ -273,7 +273,10 @@ test('OPFS prepared-folder verification preserves the previous installation afte
   const frame = await launch(page),
     namespace = await injectStorage(frame);
   const uploaded: string[] = [];
+  const gameFetches: string[] = [];
   page.context().on('request', (request) => {
+    if (/^nexus-local:|\/data(?:\/|-blocks|-manifest)/.test(request.url()))
+      gameFetches.push(request.url());
     if (new URL(request.url()).origin === new URL(frame.url()).origin && request.method() !== 'GET')
       uploaded.push(request.url());
   });
@@ -282,11 +285,14 @@ test('OPFS prepared-folder verification preserves the previous installation afte
   await expect(frame.locator('#package')).toContainText('1 файлов');
   const before = await frame.evaluate(async (ns) => {
     const data = await window.__nfsuStorageTest.cachedPackage(ns);
+    if (!data) throw Error('Verified local fixture was not readable after import');
     return {
       dir: data?.dataDir,
       hash: data ? await window.__nfsuStorageTest.digest(data.module) : null,
     };
   }, namespace);
+  expect(before.dir).toMatch(/^nexus-nfsu-data-/);
+  expect(before.hash).toMatch(/^[a-f0-9]{64}$/);
   const hostIO = await frame.evaluate(
     async ({ ns, layout }) => {
       // Real MIT I/O worker and shared WASI mailbox; authored bytes only, no game Wasm or game simulation.
@@ -412,6 +418,7 @@ test('OPFS prepared-folder verification preserves the previous installation afte
   }, namespace);
   expect(after).toEqual(before);
   expect(uploaded).toEqual([]);
+  expect(gameFetches).toEqual([]);
   // No actual game is started from this empty authored Wasm fixture.
   await page.reload();
   await expect(page.locator('#package')).toContainText('Комплект найден');
@@ -426,7 +433,16 @@ test('local save import/export/backup survives reload, rolls back an I/O failure
   const namespace = await injectStorage(frame);
   const archive = saveArchive(),
     file = path.join(fixtureRoot, 'owned-save-format.json');
-  await fs.writeFile(file, JSON.stringify(archive));
+  await fs.writeFile(
+    file,
+    JSON.stringify({
+      ...archive,
+      files: archive.files.map((f) => ({
+        ...f,
+        path: f.path.replace('NFS Underground/', 'nfs underground/'),
+      })),
+    }),
+  );
   await frame.locator('#save-input').setInputFiles(file);
   await expect(frame.locator('#status')).toContainText('Сохранения импортированы');
   await expect(frame.locator('#save-list li')).toHaveCount(3);

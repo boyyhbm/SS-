@@ -211,6 +211,27 @@ describe('Underground local package boundaries (not gameplay)', () => {
       );
       expect(r.status).toBe(1);
       expect(r.stderr).toContain('Unsupported executable');
+      await fs.writeFile(path.join(temp, 'SPEED.EXE'), header());
+      for (const name of ['CARS', 'TRACKS', 'GLOBAL', 'FRONTEND'])
+        await fs.mkdir(path.join(temp, name));
+      const refused = spawnSync(
+        process.execPath,
+        [
+          'scripts/prepare-underground.mjs',
+          '--game',
+          temp,
+          '--wasi',
+          path.join(temp, 'unused-sdk'),
+          '--out',
+          path.join(process.cwd(), 'must-not-create-nfsu-data'),
+        ],
+        { encoding: 'utf8' },
+      );
+      expect(refused.status).toBe(1);
+      expect(refused.stderr).toContain('outside the NEXUS repository');
+      await expect(
+        fs.access(path.join(process.cwd(), 'must-not-create-nfsu-data')),
+      ).rejects.toThrow();
     } finally {
       await fs.rm(temp, { recursive: true, force: true });
     }

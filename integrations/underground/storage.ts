@@ -1,3 +1,4 @@
+import './schema-policy';
 import { sha256 } from '@noble/hashes/sha2.js';
 import {
   packageSchema,
@@ -232,7 +233,9 @@ export async function importSaves(
       const problem = badFile(profile.kind, profile.name, bytes);
       if (problem) throw Error(problem);
     }
-    decoded.push({ path: entry.path, bytes });
+    // Windows save paths share one case-insensitive directory. OPFS must not
+    // split a profile across two folders when an imported archive changes case.
+    decoded.push({ path: canonical, bytes });
   }
   const base = await root(namespace),
     backup = await exportSaves(namespace);
@@ -247,7 +250,10 @@ export async function importSaves(
     const combined = new Map<string, { path: string; bytes: Uint8Array }>(
       (options.replace ? [] : backup.files).map((f) => [
         f.path.toLowerCase(),
-        { path: f.path, bytes: Uint8Array.from(atob(f.base64), (c) => c.charCodeAt(0)) },
+        {
+          path: f.path.replace(/^nfs underground\//i, 'NFS Underground/'),
+          bytes: Uint8Array.from(atob(f.base64), (c) => c.charCodeAt(0)),
+        },
       ]),
     );
     for (const entry of decoded) combined.set(entry.path.toLowerCase(), entry);

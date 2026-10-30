@@ -7,7 +7,7 @@ The launcher, local package importer, original-format save manager, isolated bri
 ## For a player
 
 1. Open the NEXUS catalog → **Need for Speed: Underground** → **Add to Library** → **Setup / Launch**. Use desktop Chrome 140+ with a working WebGPU adapter. The launcher checks the actual browser capabilities.
-2. On your own computer, prepare your own installed PC copy (`SPEED.EXE` 1.4). Download the local utility from the launcher. Install Node 24+, Python 3 with venv, bash and a compatible [wasi-sdk](https://github.com/WebAssembly/wasi-sdk/releases). Windows requires WSL2. The cloud NEXUS website does not perform this compilation for you.
+2. On your own computer, prepare your own installed PC copy (`SPEED.EXE` 1.4). Download the local utility from the launcher. Install Node 24+, Python 3 with venv, bash and a compatible [wasi-sdk](https://github.com/WebAssembly/wasi-sdk/releases). Windows requires WSL2. Both the build checkout and output must stay outside the NEXUS repository and web-serving directories. The cloud NEXUS website does not perform this compilation for you.
 3. Check the executable first:
 
    ```sh
@@ -28,7 +28,7 @@ On mobile/cloud-only devices without a compatible local installation and build e
 
 ## Saves and controls
 
-Create the profile in the **original game menu**. Its `.usr`, `.opt`, `.cfg` and `.ugd` files remain byte-for-byte in an account-scoped OPFS save overlay. Stop the game before export/import/backup. The JSON export is a container for the original bytes, paths, sizes and SHA-256; it does not convert the save format. Imports verify size/hash and known Underground 1.4 profile headers, stage the complete overlay, and publish its pointer only on success. A backup is created before import. Backups and saves never use NEXUS cloud-save APIs.
+Create the profile in the **original game menu**. Its `.usr`, `.opt`, `.cfg` and `.ugd` files remain byte-for-byte in an account-scoped OPFS save overlay. Stop the game before export/import/backup. The directory spelling is normalized to NFS Underground on import because OPFS is case sensitive; original file bytes are unchanged. The JSON export is a container for the original bytes, paths, sizes and SHA-256; it does not convert the save format. Imports verify size/hash and known Underground 1.4 profile headers, stage the complete overlay, and publish its pointer only on success. A backup is created before import. Backups and saves never use NEXUS cloud-save APIs.
 
 Use **Continue / Load Driver Profile** inside the original menu after relaunch. Clearing site storage, changing the runtime origin or using another browser/profile can make local data unavailable. Export important saves; requesting persistent storage is subject to the browser's decision.
 

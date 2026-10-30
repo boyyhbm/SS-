@@ -30,13 +30,13 @@
     },
     {
       "path": "index.html",
-      "bytes": 6380,
-      "sha256": "ae405cce48e3d8a76ee9497ef9471a966391b9e7564e72e1d235fc43801839e3"
+      "bytes": 6526,
+      "sha256": "fa025f44cc006e3c264ba67242e153de402cb26016c0ffd6f989e838de53a6ac"
     },
     {
       "path": "prepare-underground.mjs",
-      "bytes": 12796,
-      "sha256": "05332d4d63e010acd4052b2a49f2b1a30cd38b38f5a1cb13ed0b84ea552c31ed"
+      "bytes": 12884,
+      "sha256": "1807852a18e0ec39fa2fff82d3a02fd0eb6584d77ede6acfc7a273770dc963d2"
     },
     {
       "path": "runtime.css",
@@ -45,8 +45,8 @@
     },
     {
       "path": "runtime.js",
-      "bytes": 594029,
-      "sha256": "616afae557a436ab91c53a7504f4e183dd2c74a34f03bed82d2b5c0b2b9405b0"
+      "bytes": 594308,
+      "sha256": "5970f3c77d74e3fb4ded3f31ac75a52245fc9d0b8cac4f6f332681fdea165726"
     }
   ]
 }

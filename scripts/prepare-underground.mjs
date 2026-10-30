@@ -6,7 +6,6 @@ import path from 'node:path';
 import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
 const REV = '327b22c39041f197a4cfdf2544f81799b332b6c7',
   REPO = 'https://github.com/lguilherme44/nfsu1-web.git';
 const args = process.argv.slice(2),
@@ -60,6 +59,22 @@ const within = (root, file) => {
   const rel = path.relative(root, file);
   return rel === '' || (!rel.startsWith('..' + path.sep) && rel !== '..' && !path.isAbsolute(rel));
 };
+async function privateBuildPath(location) {
+  if (/(?:^|[\\/])(public|htdocs|wwwroot|dist|deploy)(?:[\\/]|$)/i.test(location))
+    throw Error('Choose a private build/output folder outside web-serving directories.');
+  let current = location;
+  for (;;) {
+    let pkg;
+    try {
+      pkg = JSON.parse(await fs.readFile(path.join(current, 'package.json'), 'utf8'));
+    } catch {}
+    if (pkg?.name === 'nexus-console')
+      throw Error('Build source and output must be outside the NEXUS repository.');
+    const parent = path.dirname(current);
+    if (parent === current) break;
+    current = parent;
+  }
+}
 try {
   if (!options['--game']) throw Error('--game is required');
   const game = await fs.realpath(path.resolve(options['--game']));
@@ -121,19 +136,7 @@ try {
     /(?:^|[\\/])(public|htdocs|wwwroot|dist|deploy)(?:[\\/]|$)/i.test(canonicalOut)
   )
     throw Error('Choose a private output folder outside the game and web/public directories.');
-  let repoRoot = path.dirname(fileURLToPath(import.meta.url));
-  for (let i = 0; i < 6; i++) {
-    try {
-      const pkg = JSON.parse(await fs.readFile(path.join(repoRoot, 'package.json'), 'utf8'));
-      if (pkg.name === 'nexus-console' && within(repoRoot, canonicalOut))
-        throw Error('Output must be outside the NEXUS repository.');
-    } catch (e) {
-      if (e.message === 'Output must be outside the NEXUS repository.') throw e;
-    }
-    const parent = path.dirname(repoRoot);
-    if (parent === repoRoot) break;
-    repoRoot = parent;
-  }
+  await privateBuildPath(canonicalOut);
   try {
     if ((await fs.readdir(canonicalOut)).length)
       throw Error('Output directory must be empty; existing data is never deleted.');
@@ -151,6 +154,7 @@ try {
     await run('git', ['fetch', '--depth=1', 'origin', REV], source);
     await run('git', ['checkout', '--detach', '--quiet', 'FETCH_HEAD'], source);
   }
+  await privateBuildPath(source);
   if (
     (await capture('git', ['rev-parse', 'HEAD'], source)) !== REV ||
     (await capture('git', ['status', '--porcelain'], source))

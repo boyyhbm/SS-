@@ -1,0 +1,141 @@
+{
+  "scope": "Existing NEXUS/Midnight/Fold regression only. Does not test Underground gameplay or certify GPU FPS.",
+  "initialBatch": {
+    "passed": 13,
+    "failed": 2,
+    "failures": [
+      {
+        "title": "controller only: registration/OSK → catalog → library/context actions → race → restored focus",
+        "status": "failed",
+        "durationMs": 57917
+      },
+      {
+        "title": "two independent accounts play a server-verified Fold duel with different input devices",
+        "status": "failed",
+        "durationMs": 118096
+      }
+    ]
+  },
+  "retests": {
+    "controller": {
+      "tests": [
+        {
+          "title": "controller only: registration/OSK → catalog → library/context actions → race → restored focus",
+          "status": "passed",
+          "durationMs": 78777
+        }
+      ],
+      "expectTimeoutSeconds": 90,
+      "productionCodeChanged": false
+    },
+    "fold": {
+      "tests": [
+        {
+          "title": "two independent accounts play a server-verified Fold duel with different input devices",
+          "status": "passed",
+          "durationMs": 214161
+        }
+      ],
+      "nativeTestUnchanged": true,
+      "priorRetryInterruptedByEnvironment": true
+    }
+  },
+  "finalUniqueTests": [
+    {
+      "title": "A — real registration, empty library, discovery and add to Home",
+      "status": "passed",
+      "durationMs": 5342
+    },
+    {
+      "title": "B — logout/login preserves library, favorite and settings",
+      "status": "passed",
+      "durationMs": 5489
+    },
+    {
+      "title": "C — real WebGL, driving, pause and persistent launch history",
+      "status": "passed",
+      "durationMs": 18980
+    },
+    {
+      "title": "D — separate accounts, forged identifiers and server authorization",
+      "status": "passed",
+      "durationMs": 5481
+    },
+    {
+      "title": "E — ADMIN creates, publishes, edits and safely deletes a catalog game",
+      "status": "passed",
+      "durationMs": 6198
+    },
+    {
+      "title": "F — mobile registration, catalog and personal library without overflow",
+      "status": "passed",
+      "durationMs": 5651
+    },
+    {
+      "title": "removing membership preserves saves and best lap on re-add",
+      "status": "passed",
+      "durationMs": 2800
+    },
+    {
+      "title": "locale persists in PostgreSQL and recovery has no fictitious link",
+      "status": "passed",
+      "durationMs": 27613
+    },
+    {
+      "title": "database-backed login throttling and no unauthorized admin access",
+      "status": "passed",
+      "durationMs": 8980
+    },
+    {
+      "title": "a complete lap through Gamepad API saves a real personal best",
+      "status": "passed",
+      "durationMs": 82467
+    },
+    {
+      "title": "password reset tokens expire, are single-use and revoke existing sessions",
+      "status": "passed",
+      "durationMs": 3828
+    },
+    {
+      "title": "keyboard focus and gamepad Library/Back work inside console dialogs",
+      "status": "passed",
+      "durationMs": 2908
+    },
+    {
+      "title": "controller only: registration/OSK → catalog → library/context actions → race → restored focus",
+      "status": "passed",
+      "durationMs": 78777
+    },
+    {
+      "title": "device discovery, input hints, saved remapping/profiles and ownership",
+      "status": "passed",
+      "durationMs": 9643
+    },
+    {
+      "title": "two independent accounts play a server-verified Fold duel with different input devices",
+      "status": "passed",
+      "durationMs": 214161
+    }
+  ],
+  "passedUnique": 15,
+  "failedUnique": 0,
+  "fold": {
+    "passed": true,
+    "independentAccounts": 2,
+    "independentBrowserProcesses": 2,
+    "scope": "Virtual standard Gamepad API and normal keyboard/Pointer Lock mouse events; read-only server-state observations, no pose/health/result injection. Not physical hardware or real-player skill testing.",
+    "checks": [
+      "NEXUS registration, personal library, runtime launch and saved settings",
+      "Friend request, acceptance, private invitation and common lobby",
+      "Synchronized start, two different input paths, real movement, fold geometry, server hit registration, five rounds, identical persisted results",
+      "Return to lobby",
+      "Actual Web Audio output is non-silent and has digital headroom",
+      "Saved match statistics refresh in the in-game profile"
+    ],
+    "observedShots": 88,
+    "observedHits": 15,
+    "lastRoundReason": "elimination",
+    "realVideo": false
+  },
+  "hardwareNote": "Functional checks used E2E_SOFTWARE_DPR=0.15 / SwiftShader. No hardware FPS certification."
+}
