@@ -1,10 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
 import sharp from 'sharp';
 import { requireAdmin } from '@/lib/auth';
 import { api, assertSameOrigin, ApiError, rateLimit, readLimitedBody } from '@/lib/security';
-import { uploadDirectory } from '@/lib/uploads';
+import { MediaStorageFullError, saveUploadedImage } from '@/lib/uploads';
 export async function POST(request: Request) {
   return api(async () => {
     assertSameOrigin(request);
@@ -36,9 +34,12 @@ export async function POST(request: Request) {
       throw new ApiError(400, 'imageInvalid');
     }
     const name = `${randomUUID()}.webp`;
-    const folder = uploadDirectory();
-    await mkdir(folder, { recursive: true });
-    await writeFile(path.join(folder, name), output, { flag: 'wx' });
+    try {
+      await saveUploadedImage(name, output);
+    } catch (error) {
+      if (error instanceof MediaStorageFullError) throw new ApiError(507, 'uploadStorageFull');
+      throw error;
+    }
     return Response.json({ url: `/api/media/${name}` });
   });
 }

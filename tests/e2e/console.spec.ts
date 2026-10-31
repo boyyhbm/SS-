@@ -7,6 +7,7 @@ import { test, expect } from './fixtures';
 import type { Page } from '@playwright/test';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { uploadDirectory } from '../../src/lib/uploads';
 import { createHash, randomBytes } from 'node:crypto';
 const run = `qa_${Date.now().toString(36)}_${randomBytes(2).toString('hex')}`;
 const db = new PrismaClient({
@@ -179,7 +180,9 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
   expect(asset.url).toMatch(/^\/api\/media\/[a-f0-9-]+\.webp$/);
   const media = await page.request.get(asset.url);
   expect(media.headers()['content-type']).toBe('image/webp');
-  await unlink(path.join(process.cwd(), 'storage/uploads', path.basename(asset.url)));
+  if (process.env.NEXUS_MEDIA_STORE === 'database')
+    await db.uploadedImage.delete({ where: { file: path.basename(asset.url) } });
+  else await unlink(path.join(uploadDirectory(), path.basename(asset.url)));
   expect(
     (
       await page.request.post('/api/admin/images', {

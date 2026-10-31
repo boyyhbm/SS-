@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-31T00:27:35.527Z",
+  "scope": "LOCAL deployment rehearsal, not a public hosting verification",
+  "passed": true,
+  "checks": [
+    "Private backup restored; every public table row count and content fingerprint matches",
+    "Concurrent Web/Multiplayer pre-deploy migrations and idempotent seed preserve restored data",
+    "Production launcher binds host PORT and reports database-aware readiness",
+    "Standby is live but not ready; does not abort the active process matches",
+    "Untrusted browser origin and unsigned control requests rejected",
+    "SIGTERM releases ownership; standby recovers unfinished race without a fabricated result",
+    "Accounts, libraries, settings, controller profiles, saves, friends and existing results survive restarts unchanged"
+  ],
+  "tableCount": 24,
+  "source": "Fresh dump of the isolated local hosting QA database, not a Render production export"
+}

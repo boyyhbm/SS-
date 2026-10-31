@@ -36,6 +36,11 @@ jobs:
       - run: npm run nfsu:bundle && npm run nfsu:check
       - run: npm run typecheck
       - run: npm test
+      - name: Verify database media without a persistent web volume
+        env:
+          NEXUS_MEDIA_STORE: database
+          NEXUS_MEDIA_LIMIT_BYTES: '52428800'
+        run: npm run test:media
       - run: npm run build
       - name: Validate backup restore and multiplayer ownership
         run: |

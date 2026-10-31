@@ -3,7 +3,7 @@ import { createServer } from 'node:http';
 import { mkdir, access, readFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { deploymentEnvironment, isPreparation } from './deployment-env.mjs';
+import { deploymentEnvironment, isMigrationHold, isPreparation } from './deployment-env.mjs';
 import { validateProductionConfig } from './production-config.mjs';
 
 export function hasMount(mountinfo, target) {
@@ -20,7 +20,7 @@ async function start(service) {
   const env = deploymentEnvironment({ ...process.env, NEXUS_SERVICE: service });
   const port = Number(env.PORT);
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw Error('A valid PORT is required');
-  if (isPreparation(env)) {
+  if (isMigrationHold(env) || isPreparation(env)) {
     const server = createServer((req, res) => {
       res.setHeader('Cache-Control', 'no-store');
       res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -40,7 +40,7 @@ async function start(service) {
     return;
   }
   validateProductionConfig(env, service);
-  if (service === 'web') {
+  if (service === 'web' && env.NEXUS_MEDIA_STORE !== 'database') {
     if (
       env.NEXUS_DEPLOYMENT === 'render' &&
       !hasMount(await readFile('/proc/self/mountinfo', 'utf8'), '/var/data')

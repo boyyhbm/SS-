@@ -193,6 +193,16 @@ model RateLimit {
   @@index([expiresAt])
 }
 
+// Optional small admin-uploaded images. Serverless/ephemeral hosts can preserve
+// existing /api/media URLs in the same database without a separate paid volume.
+model UploadedImage {
+  file      String   @id
+  content   Bytes
+  size      Int
+  sha256    String
+  createdAt DateTime @default(now())
+}
+
 model Friendship {
   id        String   @id @default(cuid())
   userAId   String

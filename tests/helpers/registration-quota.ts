@@ -8,7 +8,9 @@ export async function isolateRegistrationQuota(db: PrismaClient) {
   const database = new URL(process.env.DATABASE_URL!),
     origin = new URL(process.env.TEST_BASE_URL ?? 'http://localhost:3000');
   const local = (hostname: string) => ['localhost', '127.0.0.1'].includes(hostname);
-  const scratch = /^\/nexus_(?:gameplay|underground)_qa_[a-f0-9]{8}$/.test(database.pathname);
+  const scratch =
+    /^\/nexus_(?:gameplay|underground)_qa_[a-f0-9]{8}$/.test(database.pathname) ||
+    /^\/nexus_hosting_qa_[a-f0-9]{12}$/.test(database.pathname);
   const ciDatabase = process.env.CI === 'true' && database.pathname === '/nexus';
   if (!local(database.hostname) || !local(origin.hostname) || (!scratch && !ciDatabase))
     throw Error('Registration fixture requires an explicitly disposable local database');

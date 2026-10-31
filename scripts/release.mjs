@@ -1,10 +1,10 @@
 import { Client } from 'pg';
 import { spawn } from 'node:child_process';
 import { validateProductionConfig } from './production-config.mjs';
-import { deploymentEnvironment, isPreparation } from './deployment-env.mjs';
+import { deploymentEnvironment, isMigrationHold, isPreparation } from './deployment-env.mjs';
 
 Object.assign(process.env, deploymentEnvironment(process.env));
-if (isPreparation(process.env)) {
+if (isMigrationHold(process.env) || isPreparation(process.env)) {
   console.log('Preparation release: existing data untouched; migrations and seed not run.');
   process.exit(0);
 }

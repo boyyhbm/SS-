@@ -1,9 +1,14 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { isMigrationHold } from './deployment-env.mjs';
 
 const loopback = (host) => ['localhost', '127.0.0.1', '[::1]'].includes(host);
+// Northflank documents project-private addresses as service-name:port. Require
+// the dashboard-provided single-label hostname, never its public code.run URL.
+const projectPrivate = (host) => /^[a-z][a-z0-9-]*$/.test(host) && !loopback(host);
 
 export function validateProductionConfig(env, service, { volume = true } = {}) {
+  isMigrationHold(env);
   const errors = [];
   for (const name of [
     'DATABASE_URL',
@@ -16,6 +21,19 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
   if (!['web', 'multiplayer'].includes(service)) errors.push('Unknown service');
   if (env.NEXUS_DEPLOYMENT === 'render' && env.RENDER !== 'true')
     errors.push('Render deployment requires the host-provided RENDER marker');
+  if (env.NEXUS_DEPLOYMENT === 'northflank' && (!env.NF_PROJECT_ID || !env.NF_OBJECT_ID))
+    errors.push('Northflank deployment requires host-provided project and object markers');
+  if (env.NEXUS_MEDIA_STORE && !['filesystem', 'database'].includes(env.NEXUS_MEDIA_STORE))
+    errors.push('NEXUS_MEDIA_STORE must be filesystem or database');
+  if (env.NEXUS_MEDIA_STORE === 'database') {
+    const limit = Number(env.NEXUS_MEDIA_LIMIT_BYTES);
+    if (
+      !/^\d+$/.test(env.NEXUS_MEDIA_LIMIT_BYTES ?? '') ||
+      !Number.isSafeInteger(limit) ||
+      limit < 1
+    )
+      errors.push('Database media storage requires a positive NEXUS_MEDIA_LIMIT_BYTES');
+  }
   if ((env.MULTIPLAYER_SECRET?.length ?? 0) < 64) errors.push('MULTIPLAYER_SECRET is too short');
   if (service === 'web' && (env.NEXTAUTH_SECRET?.length ?? 0) < 64)
     errors.push('NEXTAUTH_SECRET needs at least 64 characters');
@@ -56,6 +74,8 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
       errors.push('Railway DATABASE_URL must use private networking');
     if (env.NEXUS_DEPLOYMENT === 'render' && !/^dpg-[a-z0-9-]+$/.test(database.hostname))
       errors.push('Render DATABASE_URL must use its private database hostname');
+    if (env.NEXUS_DEPLOYMENT === 'northflank' && !projectPrivate(database.hostname))
+      errors.push('Northflank DATABASE_URL must use its project-private database hostname');
   } catch {
     errors.push('DATABASE_URL must be PostgreSQL');
   }
@@ -77,10 +97,18 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
         (!/^[a-z][a-z0-9-]+$/.test(internal.hostname) || loopback(internal.hostname))
       )
         errors.push('MULTIPLAYER_INTERNAL_URL must use Render private networking');
+      if (
+        env.NEXUS_DEPLOYMENT === 'northflank' &&
+        (!projectPrivate(internal.hostname) ||
+          internal.pathname !== '/' ||
+          internal.search ||
+          internal.hash)
+      )
+        errors.push('MULTIPLAYER_INTERNAL_URL must use Northflank project-private networking');
     } catch {
       errors.push('MULTIPLAYER_INTERNAL_URL is required');
     }
-    if (volume && env.NEXUS_DEPLOYMENT === 'railway') {
+    if (volume && env.NEXUS_MEDIA_STORE !== 'database' && env.NEXUS_DEPLOYMENT === 'railway') {
       const root = env.RAILWAY_VOLUME_MOUNT_PATH;
       const folder = env.NEXUS_UPLOAD_DIR;
       if (
@@ -96,6 +124,7 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
     }
     if (
       volume &&
+      env.NEXUS_MEDIA_STORE !== 'database' &&
       env.NEXUS_DEPLOYMENT === 'render' &&
       (!env.NEXUS_UPLOAD_DIR ||
         !path.isAbsolute(env.NEXUS_UPLOAD_DIR) ||
@@ -103,6 +132,10 @@ export function validateProductionConfig(env, service, { volume = true } = {}) {
         path.relative('/var/data', env.NEXUS_UPLOAD_DIR).startsWith('..'))
     )
       errors.push('NEXUS_UPLOAD_DIR must be inside the Render /var/data disk');
+    if (env.NEXUS_DEPLOYMENT === 'northflank' && env.NEXUS_MEDIA_STORE !== 'database')
+      errors.push(
+        'The Northflank Sandbox migration requires database media storage; no paid volume',
+      );
   }
   if (errors.length) throw new Error([...new Set(errors)].join('; '));
 }

@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-31T00:34:30.080Z",
+  "scope": "LOCAL migration preparation. Not a Northflank deployment or current production data restore.",
+  "baseCommit": "b6231ce4ac16b4c988f2bb55cb1754030eb8eb9b",
+  "branch": "free-hosting-migration",
+  "localChecksPassed": true,
+  "configuration": {
+    "node": "24.19.0",
+    "platform": "linux",
+    "architecture": "x64",
+    "browser": "Chromium 154.0.8037.57 built on Debian GNU/Linux 13 (trixie)",
+    "viewport": [1440, 1000],
+    "deviceScaleFactor": 0.15,
+    "graphics": "Software rendering functional checks; no gaming GPU benchmark",
+    "database": "Isolated loopback PostgreSQL 16; database media mode; 50 MiB image payload quota"
+  },
+  "checks": {
+    "productionBuild": "PASSED",
+    "typecheck": "PASSED",
+    "eslint": "PASSED",
+    "unit": {
+      "files": 33,
+      "passed": 192,
+      "failed": 0
+    },
+    "postgresMedia": {
+      "passed": true,
+      "checks": [
+        "Byte-for-byte WebP roundtrip with immutable public headers",
+        "Concurrent uploads cannot exceed image quota",
+        "Conflicting batch rollback and idempotent verified import",
+        "CLI dry run leaves DB untouched; apply rejects a changed backup"
+      ]
+    },
+    "browser": {
+      "passed": 11,
+      "groups": [
+        {
+          "passed": 8,
+          "scope": "Registration, login, accounts isolation, library, saves, locale, auth throttling, admin catalog/media and actual image decoding"
+        },
+        {
+          "passed": 3,
+          "scope": "Isolated Underground launcher/OPFS/save I/O with authored format fixtures; not original NFS gameplay"
+        }
+      ]
+    },
+    "backupRestore": {
+      "passed": true,
+      "tables": 24,
+      "report": "northflank-restore-tests.json",
+      "source": "Local QA data only"
+    },
+    "migrationHold": "Both HTTP services reject registration/control/game paths and skip release DB access while held",
+    "existingRenderAndRailwayValidation": "PASSED; existing filesystem storage and Blueprint remain supported"
+  },
+  "failuresResolvedDuringVerification": [
+    "Registration-heavy test fixture did not recognize the new isolated hosting QA database name; added its explicit disposable prefix",
+    "Container listener hostname differed from canonical app origin, blocking the isolated Underground iframe via CSP; canonical origin now used, restrictions retained",
+    "Software rendering fixture touched localStorage inside opaque child frames; scoped its preset injection to HTTP(S) top-level documents"
+  ],
+  "target": {
+    "provider": "Northflank Developer Sandbox",
+    "ownerAccountReady": true,
+    "verificationCardPermitted": true,
+    "provisioned": false,
+    "publicCutoverCompleted": false,
+    "newPublicUrl": null,
+    "accountQuotasAndPricesVerified": false,
+    "paidProvisioningActionsTaken": 0
+  },
+  "source": {
+    "provider": "Render",
+    "currentAvailability": "Suspension page reported by owner",
+    "apiAccess": "Blocked by environment HTTPS proxy (403)",
+    "freshProductionBackupObtained": false,
+    "sourceServicesDeleted": false
+  },
+  "unverified": [
+    "Northflank free resource eligibility, build/storage/traffic quotas and zero-cost estimate",
+    "Fresh Render production export and upload backup",
+    "Public HTTPS/WSS/auth/game acceptance on the new host",
+    "CPU/RAM headroom and multiplayer load on free compute",
+    "Actual NFS gameplay: no lawfully supplied original game files"
+  ],
+  "nextSteps": [
+    "Link GitHub repository boyyhbm/SS- in the owner Northflank account",
+    "Confirm zero-price resources and provision two services plus PostgreSQL 16 in hold mode",
+    "Obtain and verify current Render database/uploads backup",
+    "Restore, migrate and verify data; only then lift migration hold",
+    "Test public games, WSS matches, restart persistence and resource limits before declaring migration complete"
+  ]
+}

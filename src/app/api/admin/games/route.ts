@@ -7,6 +7,7 @@ import { requireAdmin } from '@/lib/auth';
 import { gameSchema } from '@/lib/validation';
 import { api, assertSameOrigin, ApiError } from '@/lib/security';
 import { z } from 'zod';
+import { uploadedImageExists } from '@/lib/uploads';
 export async function GET() {
   return api(async () => {
     await requireAdmin();
@@ -19,11 +20,10 @@ export async function POST(request: Request) {
     await requireAdmin();
     const { id, ...input } = gameSchema.parse(await readJson(request));
     for (const image of [input.cover, input.banner]) {
-      const file = image.startsWith('/art/')
-        ? path.join(process.cwd(), 'public', image.slice(1))
-        : path.join(process.cwd(), 'storage/uploads', path.basename(image));
       try {
-        await access(file);
+        if (image.startsWith('/art/'))
+          await access(path.join(process.cwd(), 'public', image.slice(1)));
+        else if (!(await uploadedImageExists(path.basename(image)))) throw Error();
       } catch {
         throw new ApiError(400, 'imageInvalid');
       }

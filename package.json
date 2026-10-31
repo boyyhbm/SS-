@@ -23,6 +23,8 @@
     "assets:prepare": "python3 scripts/fetch-bistro-assets.py && node --use-env-proxy --use-system-ca scripts/prepare-visual-assets.mjs",
     "visual:qa": "node scripts/visual-qa.mjs",
     "production:backup": "node scripts/backup-local.mjs",
+    "production:import-media": "tsx scripts/import-media.ts",
+    "test:media": "tsx scripts/test-media-storage.ts",
     "test:deployment": "tsx scripts/test-deployment.ts",
     "test:production": "tsx scripts/test-production.ts",
     "test:city-multiplayer": "tsx scripts/test-city-multiplayer.ts",

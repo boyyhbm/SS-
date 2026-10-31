@@ -11,6 +11,6 @@ RUN --mount=type=cache,target=/root/.npm --mount=type=secret,id=environment_prox
     if [ -f /tmp/environment-proxy-ca.crt ]; then export NODE_EXTRA_CA_CERTS=/tmp/environment-proxy-ca.crt; fi; \
     apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && \
     rm -r /var/lib/apt/lists/* && npm ci --include=dev && node scripts/build-production.mjs
-# Runtime requires the host's persistent uploads mount.
+# Filesystem media requires the host's persistent mount. Database media does not.
 EXPOSE 3000
 CMD ["sh", "deploy/start-web.sh"]
