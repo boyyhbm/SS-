@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-31T00:28:17.856Z",
+  "updatedAt": "2026-10-31T05:54:29.586Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
@@ -50,7 +50,7 @@
   "physicalControllers": "UNVERIFIED",
   "blockers": [
     "Fresh production PostgreSQL and uploads backup not obtained",
-    "Northflank provisioning access and zero-cost quotas not verified"
+    "Northflank verification requires EUR 1 available balance; no-card alternative not yet validated"
   ],
   "prepared": [
     "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
@@ -198,13 +198,19 @@
   },
   "migration": {
     "target": "Northflank Developer Sandbox",
-    "status": "PREPARED_LOCALLY_NOT_PROVISIONED",
+    "status": "BLOCKED_CARD_VERIFICATION_BALANCE",
     "ownerAccountReady": true,
     "ownerPermittedVerificationCard": true,
     "paidResourcesAuthorized": false,
     "publicCutoverCompleted": false,
     "sourceDeleted": false,
     "runbook": "northflank-migration.md",
-    "report": "northflank-local-tests.json"
+    "report": "northflank-local-tests.json",
+    "githubAccessGrantedByOwner": true,
+    "cardVerification": {
+      "status": "NOT_COMPLETED",
+      "reason": "Owner reports a required EUR 1 card verification and no available balance"
+    },
+    "nextHostingConstraint": "No card verification, no authorization charge, no paid trial; confirm free eligibility before provisioning"
   }
 }
