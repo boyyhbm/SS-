@@ -7,6 +7,7 @@ import { test, expect } from './fixtures';
 import type { Page } from '@playwright/test';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { uploadDirectory } from '../../src/lib/uploads';
 import { createHash, randomBytes } from 'node:crypto';
 const run = `qa_${Date.now().toString(36)}_${randomBytes(2).toString('hex')}`;
 const db = new PrismaClient({
@@ -179,7 +180,6 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
   expect(asset.url).toMatch(/^\/api\/media\/[a-f0-9-]+\.webp$/);
   const media = await page.request.get(asset.url);
   expect(media.headers()['content-type']).toBe('image/webp');
-  await unlink(path.join(process.cwd(), 'storage/uploads', path.basename(asset.url)));
   expect(
     (
       await page.request.post('/api/admin/images', {
@@ -209,6 +209,18 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
   await page.getByRole('button', { name: 'Сохранить игру', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Сохранить игру', exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /NEXUS QA CIRCUIT/ })).toBeVisible();
+  // On Render uploads live on /var/data, outside the checkout. Exercise the
+  // catalog validation against the same directory as the upload/media routes.
+  const created = await db.game.findUniqueOrThrow({
+    where: { slug: `${run.replaceAll('_', '-')}-circuit` },
+  });
+  const assigned = await post(page, '/api/admin/games', {
+    ...created,
+    cover: asset.url,
+    banner: asset.url,
+  });
+  expect(assigned.status()).toBe(200);
+  expect((await db.game.findUniqueOrThrow({ where: { id: created.id } })).cover).toBe(asset.url);
   await page.goto('/discover');
   await expect(page.getByRole('heading', { name: 'NEXUS QA CIRCUIT' })).toBeVisible();
   await page.goto('/admin');
@@ -230,6 +242,7 @@ test('E — ADMIN creates, publishes, edits and safely deletes a catalog game', 
     .getByRole('button', { name: 'Подтвердить', exact: true })
     .click();
   await expect(page.getByRole('button', { name: /NEXUS QA CIRCUIT/ })).toHaveCount(0);
+  await unlink(path.join(uploadDirectory(), path.basename(asset.url)));
 });
 test('F — mobile registration, catalog and personal library without overflow', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });

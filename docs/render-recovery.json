@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-02T08:44:55.006Z",
+  "scope": "Local correction of the failed main CI browser cases; public Render verification blocked by environment policy",
+  "baseCommit": "b6231ce4ac16b4c988f2bb55cb1754030eb8eb9b",
+  "previousCi": {
+    "run": "https://github.com/boyyhbm/SS-/actions/runs/41125728851",
+    "commit": "b6231ce4ac16b4c988f2bb55cb1754030eb8eb9b",
+    "status": "FAILURE",
+    "reportedBrowserFailures": [
+      "underground.spec.ts:180",
+      "underground.spec.ts:269",
+      "underground.spec.ts:427"
+    ]
+  },
+  "fixes": [
+    "Resolve isolated iframe CSP/permissions against canonical NEXTAUTH_URL instead of container listener address",
+    "Keep software-rendering preset injection outside opaque/cross-origin child frames",
+    "Use NEXUS_UPLOAD_DIR consistently when assigning uploaded images to catalog games"
+  ],
+  "validation": {
+    "build": "PASSED",
+    "typecheck": "PASSED",
+    "eslint": "PASSED",
+    "unitFiles": 31,
+    "unitPassed": 173,
+    "openRuntimeAssetCheck": "PASSED: 9 MIT browser/tool resources; no original game content",
+    "browser": [
+      {
+        "title": "A — real registration, empty library, discovery and add to Home",
+        "status": "passed",
+        "durationMs": 4643
+      },
+      {
+        "title": "B — logout/login preserves library, favorite and settings",
+        "status": "passed",
+        "durationMs": 6801
+      },
+      {
+        "title": "C — real WebGL, driving, pause and persistent launch history",
+        "status": "passed",
+        "durationMs": 22342
+      },
+      {
+        "title": "D — separate accounts, forged identifiers and server authorization",
+        "status": "passed",
+        "durationMs": 5513
+      },
+      {
+        "title": "E — ADMIN creates, publishes, edits and safely deletes a catalog game",
+        "status": "passed",
+        "durationMs": 9163
+      },
+      {
+        "title": "F — mobile registration, catalog and personal library without overflow",
+        "status": "passed",
+        "durationMs": 4550
+      },
+      {
+        "title": "removing membership preserves saves and best lap on re-add",
+        "status": "passed",
+        "durationMs": 2623
+      },
+      {
+        "title": "locale persists in PostgreSQL and recovery has no fictitious link",
+        "status": "passed",
+        "durationMs": 18779
+      },
+      {
+        "title": "database-backed login throttling and no unauthorized admin access",
+        "status": "passed",
+        "durationMs": 2830
+      },
+      {
+        "title": "real NEXUS library launch uses isolated two-origin iframe and never shares account credentials",
+        "status": "passed",
+        "durationMs": 5097
+      },
+      {
+        "title": "OPFS prepared-folder verification preserves the previous installation after corrupt replacement, without uploads",
+        "status": "passed",
+        "durationMs": 4919
+      },
+      {
+        "title": "local save import/export/backup survives reload, rolls back an I/O failure, and separates accounts",
+        "status": "passed",
+        "durationMs": 9983
+      }
+    ],
+    "stats": {
+      "startTime": "2026-11-02T08:41:04.025Z",
+      "duration": 100524.278,
+      "expected": 12,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "customUploadDirectory": "Outside the checkout, as on the Render persistent disk",
+    "database": "Isolated disposable loopback PostgreSQL 16",
+    "node": "24.19.0",
+    "softwareDpr": 0.15
+  },
+  "render": {
+    "ownerReportedCause": "Unpaid invoice",
+    "invoiceSettlement": "NOT_INDEPENDENTLY_CONFIRMED",
+    "healthChecks": "NOT_RUN: managed proxy denies Render destinations with CONNECT 403 before contacting the services",
+    "deployment": "NOT_VERIFIED",
+    "billingOperationsTaken": 0,
+    "resourcesCreated": 0,
+    "sourceDataReset": false
+  },
+  "environment": {
+    "networkDraftSaved": true,
+    "requiresPublish": true,
+    "requiredHosts": [
+      "api.render.com",
+      "api.github.com",
+      "nexus-web-ylcv.onrender.com",
+      "nexus-multiplayer.onrender.com"
+    ],
+    "appliedPolicy": "Restricted package-manager destinations only, spec revision 1"
+  },
+  "limitations": [
+    "Original NFS gameplay was not tested: lawfully supplied original game files and a usable WebGPU adapter are still absent",
+    "No public HTTPS/WSS or actual Render deployment verification in this run",
+    "No gaming GPU/controller or original-game FPS claims",
+    "Unfinished Foundry controls and migration content remain on their existing separate branches"
+  ]
+}

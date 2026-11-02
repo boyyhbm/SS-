@@ -1,26 +1,29 @@
 {
-  "updatedAt": "2026-10-27T05:37:56.696Z",
+  "updatedAt": "2026-11-02T08:44:55.019Z",
   "provider": "Render",
   "providerSwitchApproved": true,
   "publicUrl": "https://nexus-web-ylcv.onrender.com",
   "deploymentCompleted": true,
   "services": {
     "web": {
-      "status": "LIVE",
+      "status": "PENDING_RECHECK",
       "url": "https://nexus-web-ylcv.onrender.com",
-      "readinessPath": "/api/health"
+      "readinessPath": "/api/health",
+      "lastVerifiedStatus": "LIVE"
     },
     "multiplayer": {
-      "status": "LIVE",
+      "status": "PENDING_RECHECK",
       "url": "https://nexus-multiplayer.onrender.com",
       "readinessPath": "/health",
-      "livenessPath": "/live"
+      "livenessPath": "/live",
+      "lastVerifiedStatus": "LIVE"
     },
     "postgresql": {
-      "status": "AVAILABLE",
+      "status": "PENDING_RECHECK",
       "version": "16",
       "region": "Frankfurt",
-      "externalConnections": "DISABLED"
+      "externalConnections": "DISABLED",
+      "lastVerifiedStatus": "AVAILABLE"
     }
   },
   "hostBackups": {
@@ -36,7 +39,8 @@
       "createdAt": "2026-10-25T21:19:00Z",
       "exportUrlIssued": true,
       "downloadAndManagedRestoreTested": false
-    }
+    },
+    "scope": "Historical verification; current backup availability not rechecked"
   },
   "publicAcceptanceTests": {
     "status": "PASSED_ALL_SEVEN_ROUTES_AND_PERSISTENCE_ACROSS_ACTUAL_ROLLOUT",
@@ -44,7 +48,10 @@
     "historicalReport": "graphics-next/production.json"
   },
   "physicalControllers": "UNVERIFIED",
-  "blockers": [],
+  "blockers": [
+    "The active environment does not allow Render HTTP/API destinations; review and publish the saved network configuration",
+    "Current Render deployment and invoice settlement are not independently verified"
+  ],
   "prepared": [
     "render.yaml: two paid web services, private PostgreSQL 16 and persistent uploads in Frankfurt",
     "Safe preparation mode: no registration, gameplay, migrations or seed before data import",
@@ -77,7 +84,8 @@
     "privateDataImportRequired": false,
     "sourceDatabaseAndPrivateBackupPreserved": true,
     "catalogSnapshot": "../prisma/catalog.snapshot.json",
-    "freshSeedVerification": "render-catalog-seed-tests.json"
+    "freshSeedVerification": "render-catalog-seed-tests.json",
+    "scope": "Historical first local-to-Render preflight, not the current production user dataset"
   },
   "github": {
     "branch": "main",
@@ -180,5 +188,20 @@
     "publicEvidenceUrl": "https://nexus-web-ylcv.onrender.com/reports/racing-experience/index.html",
     "fullVisualAndHardwareAcceptanceComplete": false,
     "publicVehicleContactsEnabled": false
+  },
+  "lastPublicVerificationAt": "2026-10-27T05:37:56.696Z",
+  "currentAvailability": {
+    "status": "PENDING_PUBLIC_RECHECK",
+    "lastOwnerReportedSymptom": "Render suspension page",
+    "ownerReportedCause": "Unpaid Render invoice",
+    "invoiceSettlement": "NOT_CONFIRMED",
+    "independentCheck": "BLOCKED_BY_MANAGED_ENVIRONMENT_NETWORK_POLICY"
+  },
+  "recovery": {
+    "status": "LOCAL_FIXES_VERIFIED",
+    "report": "render-recovery.json",
+    "hosting": "Continue the existing Render installation",
+    "providerMigration": "NOT_PERFORMED",
+    "billingActionsTaken": 0
   }
 }

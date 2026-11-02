@@ -7,6 +7,7 @@ import { requireAdmin } from '@/lib/auth';
 import { gameSchema } from '@/lib/validation';
 import { api, assertSameOrigin, ApiError } from '@/lib/security';
 import { z } from 'zod';
+import { uploadDirectory } from '@/lib/uploads';
 export async function GET() {
   return api(async () => {
     await requireAdmin();
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     for (const image of [input.cover, input.banner]) {
       const file = image.startsWith('/art/')
         ? path.join(process.cwd(), 'public', image.slice(1))
-        : path.join(process.cwd(), 'storage/uploads', path.basename(image));
+        : path.join(uploadDirectory(), path.basename(image));
       try {
         await access(file);
       } catch {

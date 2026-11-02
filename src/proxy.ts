@@ -18,6 +18,10 @@ export async function proxy(request: NextRequest) {
   const realtime = new URL(process.env.NEXT_PUBLIC_MULTIPLAYER_URL ?? 'ws://localhost:2567');
   const realtimeOrigin = ['ws:', 'wss:'].includes(realtime.protocol) ? realtime.origin : '';
   const realtimeHttp = realtimeOrigin.replace(/^ws/, 'http');
+  // Behind a container listener nextUrl can use 0.0.0.0. Resolve the isolated
+  // runtime against the same canonical public origin as auth and the MP host,
+  // so CSP agrees with the iframe URL generated in the browser.
+  const appOrigin = process.env.NEXTAUTH_URL ?? request.nextUrl.origin;
   const policy = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'wasm-unsafe-eval'${dev ? " 'unsafe-eval'" : ''}`,
@@ -28,7 +32,7 @@ export async function proxy(request: NextRequest) {
     "media-src 'self' blob:",
     "worker-src 'self' blob:",
     request.nextUrl.pathname === '/play/need-for-speed-underground'
-      ? `frame-src ${undergroundOrigin(request.nextUrl.origin)}/nfsu/`
+      ? `frame-src ${undergroundOrigin(appOrigin)}/nfsu/`
       : "frame-src 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
@@ -41,7 +45,7 @@ export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request: { headers } });
   response.headers.set('Content-Security-Policy', policy);
   if (request.nextUrl.pathname === '/play/need-for-speed-underground') {
-    const runtime = undergroundOrigin(request.nextUrl.origin);
+    const runtime = undergroundOrigin(appOrigin);
     response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
     response.headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
     response.headers.set(
